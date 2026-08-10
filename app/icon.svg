@@ -1,0 +1,43 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-label="Jordan Marketing Consultants">
+  <!--
+    Browser tab icon. The header mark at favicon scale: the brand block holding
+    the gradient JMC lettering.
+
+    Two details worth keeping:
+
+    1. textLength + lengthAdjust pin the lettering to an exact width. A favicon
+       renders with whatever font the operating system has, and Barlow Condensed
+       is not one of them — without this, a machine falling back to a wider face
+       pushes the C off the edge of the block.
+
+    2. The block flips to white in a dark browser theme, matching the footer
+       logo's onDark variant. A near-black square on a dark tab strip reads as
+       an empty tab.
+  -->
+  <defs>
+    <linearGradient id="jmc" x1="8" y1="24" x2="56" y2="42" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#36D1DC" />
+      <stop offset="1" stop-color="#5B86E5" />
+    </linearGradient>
+    <style>
+      .block { fill: #0A0A0A; }
+      @media (prefers-color-scheme: dark) {
+        .block { fill: #FFFFFF; }
+      }
+    </style>
+  </defs>
+
+  <rect class="block" width="64" height="64" rx="13" />
+
+  <text
+    x="32"
+    y="40.5"
+    text-anchor="middle"
+    textLength="44"
+    lengthAdjust="spacingAndGlyphs"
+    font-family="'Barlow Condensed','Arial Narrow','Helvetica Neue',Arial,sans-serif"
+    font-weight="700"
+    font-size="24"
+    fill="url(#jmc)"
+  >JMC</text>
+</svg>
