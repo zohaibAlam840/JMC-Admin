@@ -1,0 +1,32 @@
+import { SiteHeader } from "@/components/layout/site-header";
+import { SiteFooter } from "@/components/layout/site-footer";
+import { PageLoader } from "@/components/layout/page-loader";
+import { ScrollProgress } from "@/components/motion/parallax";
+import { getSiteConfig } from "@/lib/content";
+
+/**
+ * The public site's chrome.
+ *
+ * Lives in its own component rather than in the root layout because /admin
+ * shares the root layout (fonts, tokens) but must not inherit the marketing
+ * header, footer, or intro loader. It is also reused by the global 404, which
+ * Next renders against the root layout and would otherwise show unstyled.
+ *
+ * Navigation and contact details are read here once per request and handed down
+ * as props, so the client can rename a nav item in /admin without a deploy.
+ */
+export async function SiteChrome({ children }: { children: React.ReactNode }) {
+  const { site, primaryCta, mainNav, footerNav } = await getSiteConfig();
+
+  return (
+    <>
+      <PageLoader />
+      <ScrollProgress />
+      <SiteHeader nav={mainNav} primaryCta={primaryCta} />
+      <main id="main" className="flex-1">
+        {children}
+      </main>
+      <SiteFooter site={site} nav={footerNav} />
+    </>
+  );
+}

@@ -1,0 +1,277 @@
+@import "tailwindcss";
+@import "tw-animate-css";
+
+/* ==========================================================================
+   JMC design system
+
+   Two token sets live here and deliberately stay separate:
+
+   1. JMC brand tokens — approved values from Branding Guidelines.pdf and the
+      SaaS04 Implementation Brief §5. These are the source of truth.
+   2. shadcn/ui semantic tokens — background / foreground / primary / etc.
+      Every one is mapped onto a JMC brand value, so shadcn components inherit
+      the brand rather than shipping their default slate palette.
+   ========================================================================== */
+
+@theme {
+  /* --- Brand ------------------------------------------------------------ */
+  --color-teal: #36d1dc;
+  --color-blue: #5b86e5;
+  --color-brand-black: #0a0a0a;
+
+  /* Teal fails AA as text on white. These are the legible type variants. */
+  --color-teal-ink: #14707c;
+  --color-blue-ink: #3a63bd;
+
+  /* --- Text ------------------------------------------------------------- */
+  --color-ink: #2c2c2c;
+  --color-ink-strong: #12181d;
+  --color-subtle: #6b7280;
+
+  /* --- Surfaces --------------------------------------------------------- */
+  --color-surface: #f4f6f9;
+  --color-surface-2: #fafbfc;
+  /* Airier tint for bento cards, so stacked cards read apart from the band. */
+  --color-mist: #f7f9fb;
+  --color-line: #e5e7eb;
+  --color-line-strong: #d3dae3;
+
+  /* --- Type ------------------------------------------------------------- */
+  --font-display: var(--font-barlow-condensed), "Arial Narrow", sans-serif;
+  --font-body: var(--font-montserrat), system-ui, sans-serif;
+
+  /* --- Radii — larger than the launch build, matching the softer direction */
+  --radius-card: 1rem;
+  --radius-bento: 1.5rem;
+  --radius-pill: 999px;
+
+  /* --- Elevation — wide and soft, never a hard drop shadow -------------- */
+  --shadow-soft: 0 1px 2px rgba(18, 24, 29, 0.04),
+    0 12px 32px -14px rgba(18, 24, 29, 0.14);
+  --shadow-lift: 0 2px 4px rgba(18, 24, 29, 0.05),
+    0 24px 48px -20px rgba(18, 24, 29, 0.22);
+  --shadow-float: 0 18px 40px -18px rgba(18, 24, 29, 0.28);
+
+  /* --- Motion ----------------------------------------------------------- */
+  --ease-out-soft: cubic-bezier(0.22, 1, 0.36, 1);
+  --ease-in-out-soft: cubic-bezier(0.65, 0, 0.35, 1);
+
+  --animate-accordion-down: accordion-down 0.32s cubic-bezier(0.22, 1, 0.36, 1);
+  --animate-accordion-up: accordion-up 0.28s cubic-bezier(0.22, 1, 0.36, 1);
+  --animate-marquee: marquee 38s linear infinite;
+
+  /* --- shadcn/ui semantic tokens, mapped to JMC ------------------------- */
+  --color-background: #ffffff;
+  --color-foreground: #12181d;
+  --color-card: #ffffff;
+  --color-card-foreground: #12181d;
+  --color-popover: #ffffff;
+  --color-popover-foreground: #12181d;
+  --color-primary: #0a0a0a;
+  --color-primary-foreground: #ffffff;
+  --color-secondary: #f4f6f9;
+  --color-secondary-foreground: #12181d;
+  --color-muted: #f1f4f8;
+  --color-muted-foreground: #6b7280;
+  --color-accent: #f4f6f9;
+  --color-accent-foreground: #12181d;
+  --color-destructive: #b3261e;
+  --color-destructive-foreground: #ffffff;
+  --color-border: #e5e7eb;
+  --color-input: #e5e7eb;
+  --color-ring: #14707c;
+}
+
+/* --------------------------------------------------------------------------
+   Base
+   -------------------------------------------------------------------------- */
+
+/*
+ * Everything below MUST stay inside @layer base.
+ *
+ * Unlayered CSS beats every layered rule in the cascade, and Tailwind puts its
+ * utilities in @layer utilities. An unlayered `h2 { color: ... }` therefore
+ * overrides `text-white` on that heading — which is exactly what made the
+ * headings on the dark roadmap band render near-black and unreadable.
+ */
+@layer base {
+  :root {
+    --gradient-brand: linear-gradient(
+      100deg,
+      var(--color-teal) 0%,
+      var(--color-blue) 100%
+    );
+    --radius: 1rem;
+  }
+
+  * {
+    border-color: var(--color-line);
+  }
+
+  html {
+    scroll-behavior: smooth;
+    -webkit-text-size-adjust: 100%;
+    /*
+     * Scroll-reveal elements that slide in horizontally sit outside the
+     * viewport until they enter view, which lets the page scroll sideways on
+     * mobile. `clip` contains that without creating a scroll container, so the
+     * sticky header keeps working — `hidden` would break it.
+     */
+    overflow-x: clip;
+  }
+
+  body {
+    background: var(--color-background);
+    color: var(--color-ink);
+    font-family: var(--font-body);
+    font-size: 1rem;
+    line-height: 1.65;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4 {
+    font-family: var(--font-display);
+    color: var(--color-ink-strong);
+    font-weight: 700;
+    line-height: 1.02;
+    text-wrap: balance;
+    letter-spacing: 0.005em;
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--color-teal-ink);
+    outline-offset: 2px;
+    border-radius: 4px;
+  }
+
+  /* Locks scrolling while the intro loader is on screen. */
+  body[data-loading="true"] {
+    overflow: hidden;
+  }
+}
+
+/* --------------------------------------------------------------------------
+   Utilities
+   -------------------------------------------------------------------------- */
+
+@utility gradient-brand {
+  background-image: var(--gradient-brand);
+}
+
+@utility gradient-text {
+  background-image: var(--gradient-brand);
+  background-clip: text;
+  -webkit-background-clip: text;
+  color: transparent;
+}
+
+@utility eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-family: var(--font-body);
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--color-teal-ink);
+}
+
+/* Small dot that precedes an eyebrow, borrowed from the pricing sheets. */
+@utility eyebrow-dot {
+  &::before {
+    content: "";
+    width: 0.4rem;
+    height: 0.4rem;
+    border-radius: 999px;
+    background-image: var(--gradient-brand);
+  }
+}
+
+/* Hairline grid used behind hero sections. Structure, not decoration. */
+@utility grid-backdrop {
+  background-image:
+    linear-gradient(to right, rgba(18, 24, 29, 0.045) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(18, 24, 29, 0.045) 1px, transparent 1px);
+  background-size: 64px 64px;
+}
+
+/* Grid backdrop for dark bands. Light hairlines instead of dark ones —
+   inverting the light version lands at ~0.3% alpha and disappears. */
+@utility grid-backdrop-dark {
+  background-image:
+    linear-gradient(to right, rgba(255, 255, 255, 0.055) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(255, 255, 255, 0.055) 1px, transparent 1px);
+  background-size: 64px 64px;
+}
+
+/* Soft brand glow behind bento compositions. */
+@utility brand-glow {
+  &::before {
+    content: "";
+    position: absolute;
+    inset: -20% 10% 40% 10%;
+    background: radial-gradient(
+      60% 60% at 50% 50%,
+      rgba(54, 209, 220, 0.16) 0%,
+      rgba(91, 134, 229, 0.12) 45%,
+      transparent 72%
+    );
+    filter: blur(48px);
+    z-index: 0;
+    pointer-events: none;
+  }
+}
+
+/* --------------------------------------------------------------------------
+   Keyframes
+   -------------------------------------------------------------------------- */
+
+@keyframes accordion-down {
+  from {
+    height: 0;
+    opacity: 0;
+  }
+  to {
+    height: var(--radix-accordion-content-height);
+    opacity: 1;
+  }
+}
+
+@keyframes accordion-up {
+  from {
+    height: var(--radix-accordion-content-height);
+    opacity: 1;
+  }
+  to {
+    height: 0;
+    opacity: 0;
+  }
+}
+
+@keyframes marquee {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
