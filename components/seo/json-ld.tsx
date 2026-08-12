@@ -80,6 +80,60 @@ export function serviceSchema({
   };
 }
 
+export function articleSchema({
+  title,
+  description,
+  url,
+  publishedAt,
+  updatedAt,
+  author,
+  imageUrl,
+  site = fileSite,
+}: {
+  title: string;
+  description: string;
+  url: string;
+  publishedAt: string | null;
+  updatedAt: string;
+  author?: string;
+  imageUrl?: string;
+  site?: SiteDetails;
+}) {
+  return {
+    "@context": "https://schema.org",
+    "@type": "Article",
+    headline: title,
+    description,
+    url: `${site.url}${url}`,
+    mainEntityOfPage: { "@type": "WebPage", "@id": `${site.url}${url}` },
+    ...(publishedAt ? { datePublished: publishedAt } : {}),
+    dateModified: updatedAt,
+    ...(imageUrl ? { image: [imageUrl] } : {}),
+    author: {
+      "@type": author ? "Person" : "Organization",
+      name: author || site.name,
+      ...(author ? {} : { "@id": `${site.url}/#organization` }),
+    },
+    publisher: { "@id": `${site.url}/#organization` },
+  };
+}
+
+export function breadcrumbSchema(
+  trail: { name: string; url: string }[],
+  site: SiteDetails = fileSite
+) {
+  return {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    itemListElement: trail.map((item, i) => ({
+      "@type": "ListItem",
+      position: i + 1,
+      name: item.name,
+      item: `${site.url}${item.url}`,
+    })),
+  };
+}
+
 export function faqSchema(items: FaqItem[]) {
   return {
     "@context": "https://schema.org",

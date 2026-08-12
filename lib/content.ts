@@ -11,7 +11,13 @@ import {
   primaryCta as filePrimaryCta,
   site as fileSite,
 } from "@/content/site";
-import type { NavItem, Package, Section } from "@/lib/types";
+import type {
+  NavItem,
+  Package,
+  Post,
+  PostSummary,
+  Section,
+} from "@/lib/types";
 
 /**
  * The public site's data layer.
@@ -172,6 +178,119 @@ export async function getPackages(): Promise<Package[]> {
     return filePackages.filter((p) => p.visible !== false);
   }
   return rows.map(toPackage);
+}
+
+/* --------------------------------------------------------------- articles -- */
+
+type PostRow = {
+  id: string;
+  slug: string;
+  title: string;
+  excerpt: string;
+  body: string;
+  category: string;
+  tags: string[];
+  author: string;
+  cover_image_url: string | null;
+  cover_image_alt: string | null;
+  seo_title: string;
+  meta_description: string;
+  published: boolean;
+  published_at: string | null;
+  updated_at: string;
+};
+
+function toPost(row: PostRow): Post {
+  return {
+    id: row.id,
+    slug: row.slug,
+    title: row.title,
+    excerpt: row.excerpt,
+    body: row.body,
+    category: row.category,
+    tags: row.tags ?? [],
+    author: row.author,
+    ...(row.cover_image_url ? { coverImageUrl: row.cover_image_url } : {}),
+    ...(row.cover_image_alt ? { coverImageAlt: row.cover_image_alt } : {}),
+    // Falling back here rather than in the renderer means an article is never
+    // published with an empty <title>, however little the author filled in.
+    seoTitle: row.seo_title || row.title,
+    metaDescription: row.meta_description || row.excerpt,
+    published: row.published,
+    publishedAt: row.published_at,
+    updatedAt: row.updated_at,
+  };
+}
+
+const SUMMARY_SELECT =
+  "slug,title,excerpt,category,published_at,cover_image_url,cover_image_alt";
+
+/**
+ * Published articles, newest first.
+ *
+ * Scheduling is enforced in the database, not here: the RLS policy hides a post
+ * whose publish date has not arrived, so a future-dated article cannot leak
+ * through any read path.
+ */
+export async function getPosts({
+  limit = 12,
+  category,
+  excludeSlug,
+}: { limit?: number; category?: string; excludeSlug?: string } = {}): Promise<
+  PostSummary[]
+> {
+  const filters = [
+    "published=is.true",
+    `select=${SUMMARY_SELECT}`,
+    "order=published_at.desc",
+    // One extra, so dropping the article you are currently reading still
+    // leaves a full row of related links.
+    `limit=${limit + (excludeSlug ? 1 : 0)}`,
+  ];
+  if (category) filters.push(`category=eq.${encodeURIComponent(category)}`);
+
+  const rows = await restGet<
+    (Pick<PostRow, "slug" | "title" | "excerpt" | "category" | "published_at"> & {
+      cover_image_url: string | null;
+      cover_image_alt: string | null;
+    })[]
+  >(`posts?${filters.join("&")}`, { tags: [tags.posts] });
+
+  if (!rows) return [];
+
+  return rows
+    .filter((r) => r.slug !== excludeSlug)
+    .slice(0, limit)
+    .map((r) => ({
+      slug: r.slug,
+      title: r.title,
+      excerpt: r.excerpt,
+      category: r.category,
+      publishedAt: r.published_at,
+      ...(r.cover_image_url ? { coverImageUrl: r.cover_image_url } : {}),
+      ...(r.cover_image_alt ? { coverImageAlt: r.cover_image_alt } : {}),
+    }));
+}
+
+export async function getPost(slug: string): Promise<Post | null> {
+  const rows = await restGet<PostRow[]>(
+    `posts?slug=eq.${encodeURIComponent(slug)}&select=*&limit=1`,
+    { tags: [tags.posts, tags.post(slug)] }
+  );
+
+  const row = rows?.[0];
+  return row ? toPost(row) : null;
+}
+
+/** Slugs for the static params and the sitemap. */
+export async function getPublishedPostSlugs(): Promise<
+  { slug: string; updatedAt: string }[]
+> {
+  const rows = await restGet<{ slug: string; updated_at: string }[]>(
+    "posts?published=is.true&select=slug,updated_at&order=published_at.desc",
+    { tags: [tags.posts] }
+  );
+  return (rows ?? []).map((r) => ({ slug: r.slug, updatedAt: r.updated_at }));
 }
 
 /* ------------------------------------------------------- nav and settings -- */

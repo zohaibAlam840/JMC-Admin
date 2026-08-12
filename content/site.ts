@@ -83,7 +83,10 @@ export const mainNav: NavItem[] = [
   },
   { label: "Resources", href: "/resources" },
   { label: "About", href: "/about" },
-  { label: "Contact", href: "/contact" },
+  // No Contact item on purpose. The header CTA already goes to /contact, and
+  // two controls side by side pointing at the same page splits the click
+  // rather than adding a route. It stays in the footer, where people look for
+  // it once they have finished reading.
 ];
 
 export const footerNav: { heading: string; links: { label: string; href: string }[] }[] = [

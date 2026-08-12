@@ -44,4 +44,6 @@ export const tags = {
   packages: "packages",
   nav: "nav",
   settings: "settings",
+  posts: "posts",
+  post: (slug: string) => `post:${slug}`,
 } as const;

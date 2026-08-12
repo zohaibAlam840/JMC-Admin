@@ -6,12 +6,15 @@ import { usePathname } from "next/navigation";
 import {
   ArrowUpRight,
   FileText,
+  Images,
   Inbox,
+  Newspaper,
   LayoutDashboard,
   LogOut,
   Menu,
   Navigation,
   Settings,
+  Share2,
   Signpost,
   Tags,
   X,
@@ -21,10 +24,13 @@ import { cn } from "@/lib/utils";
 const nav = [
   { href: "/admin", label: "Overview", icon: LayoutDashboard, exact: true },
   { href: "/admin/pages", label: "Pages", icon: FileText },
+  { href: "/admin/articles", label: "Articles", icon: Newspaper },
+  { href: "/admin/media", label: "Images", icon: Images },
   { href: "/admin/packages", label: "Packages & pricing", icon: Tags },
   { href: "/admin/navigation", label: "Navigation", icon: Navigation },
   { href: "/admin/leads", label: "Enquiries", icon: Inbox },
   { href: "/admin/redirects", label: "Redirects", icon: Signpost },
+  { href: "/admin/sitemap", label: "Sitemap", icon: Share2 },
   { href: "/admin/settings", label: "Site details", icon: Settings },
 ];
 

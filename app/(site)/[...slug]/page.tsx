@@ -1,6 +1,6 @@
 import { notFound } from "next/navigation";
 import { buildMetadata, RenderPage } from "@/lib/page-helpers";
-import { getPackages, getPage, getPublishedPages } from "@/lib/content";
+import { getPackages, getPage, getPosts, getPublishedPages } from "@/lib/content";
 
 /**
  * Every content page is served from here.
@@ -32,12 +32,16 @@ export async function generateMetadata({ params }: PageProps<"/[...slug]">) {
 
 export default async function Page({ params }: PageProps<"/[...slug]">) {
   const { slug } = await params;
-  const [page, packages] = await Promise.all([
+  // Fetched together rather than conditionally on the page's contents: all
+  // three are cached and tagged, so this is one round trip shared across every
+  // page rather than a waterfall per request.
+  const [page, packages, posts] = await Promise.all([
     getPage(toSlug(slug)),
     getPackages(),
+    getPosts({ limit: 12 }),
   ]);
 
   if (!page) notFound();
 
-  return <RenderPage page={page} packages={packages} />;
+  return <RenderPage page={page} packages={packages} posts={posts} />;
 }

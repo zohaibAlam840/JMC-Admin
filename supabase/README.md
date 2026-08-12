@@ -1,15 +1,31 @@
 # Database setup
 
-One-time, in this order.
+## A brand new project — two files
 
-## 1. Create the schema
+1. **Structure.** SQL Editor → New query → paste all of
+   [`setup.sql`](./setup.sql) → Run.
+2. **Content.** New query → paste all of [`seed.sql`](./seed.sql) → Run.
 
-Open the Supabase project → **SQL Editor** → **New query**. Paste the whole of
-[`schema.sql`](./schema.sql) and run it.
+Then create an account (step 2 below) and sign in. That is the whole thing.
 
-It creates the tables, the enums, the row level security policies, and two
-functions (`is_admin`, `claim_admin`). It is safe to run more than once — every
-object is created conditionally, and it never drops content.
+`setup.sql` is generated from `schema.sql` plus every migration, so it is always
+the current structure in one paste. Regenerate it after changing either:
+
+```bash
+npm run sql:bundle      # rebuilds setup.sql
+npm run seed:generate   # rebuilds seed.sql from content/
+```
+
+## An existing project — run the pieces
+
+Use these when the database already has content you do not want to disturb.
+Each is safe to run more than once.
+
+| File | Adds |
+| --- | --- |
+| [`schema.sql`](./schema.sql) | Tables, enums, row level security, `is_admin`, `claim_admin` |
+| [`migrations/002_posts.sql`](./migrations/002_posts.sql) | Articles for the Resources hub, plus the "Latest articles" block type |
+| [`migrations/003_media.sql`](./migrations/003_media.sql) | Image uploads — the Storage bucket, its access rules, and the image catalogue |
 
 ## 2. Create the first admin account
 
@@ -31,7 +47,7 @@ select id, email, 'editor' from auth.users where email = 'someone@example.com';
 
 ## 4. Import the launch content
 
-Either route loads the same thing: 8 pages, 69 sections, 12 packages, 39 menu
+Either route loads the same thing: 8 pages, 70 sections, 12 packages, 39 menu
 items, the site details, and the three known legacy redirects.
 
 **From the admin** — `/admin` offers an **Import launch content** button while

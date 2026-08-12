@@ -29,6 +29,12 @@ content/pages/*.ts         the approved launch content, and the fallback
 lib/content.ts             reads Supabase, falls back to the files
 ```
 
+Articles are the exception: they live in their own `posts` table because they
+are one body of long-form writing, not a stack of layout sections. The body is
+markdown, rendered to React elements by `react-markdown` — there is no
+`dangerouslySetInnerHTML` on that path, so raw HTML inside a post is escaped
+rather than executed.
+
 Adding a section type is three edits: the union in `lib/types.ts`, a renderer in
 `components/blocks/sections.tsx` (the switch has an exhaustiveness check, so a
 missing renderer is a compile error), and an entry in `lib/section-schema.ts`.
@@ -39,6 +45,8 @@ missing renderer is a compile error), and an entry in `lib/section-schema.ts`.
 | --- | --- |
 | `app/(site)/page.tsx` | Home. Its content is the page with slug `/`. |
 | `app/(site)/[...slug]/` | Every other content page, resolved from the database. |
+| `app/(site)/resources/[slug]` | Articles. Takes precedence over the catch-all, so a page and an article can't collide. |
+| `app/(site)/resources/feed.xml` | RSS for the Resources hub. |
 | `app/(site)/contact`, `/thank-you` | Hand-built — they do more than render sections. |
 | `app/(admin)/admin/` | The admin. Excluded in `robots.ts` and `noindex` in its layout. |
 

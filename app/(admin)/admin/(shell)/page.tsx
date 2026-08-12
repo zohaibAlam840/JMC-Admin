@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { FileText, Inbox, Tags } from "lucide-react";
+import { FileText, Inbox, Newspaper, Tags } from "lucide-react";
 import {
   adminButton,
   EmptyState,
@@ -84,7 +84,15 @@ export default async function AdminHome({ searchParams }: PageProps<"/admin">) {
         </Panel>
       ) : null}
 
-      <div className="grid gap-4 sm:grid-cols-3">
+      {overview.postsTableMissing ? (
+        <Notice tone="warning">
+          Articles are not set up yet. Run{" "}
+          <code>supabase/migrations/002_posts.sql</code> in the Supabase SQL
+          editor to add them.
+        </Notice>
+      ) : null}
+
+      <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
         <StatCard
           href="/admin/pages"
           icon={<FileText size={17} />}
@@ -94,6 +102,17 @@ export default async function AdminHome({ searchParams }: PageProps<"/admin">) {
             unpublished.length
               ? `${unpublished.length} not published`
               : "All published"
+          }
+        />
+        <StatCard
+          href="/admin/articles"
+          icon={<Newspaper size={17} />}
+          value={overview.posts}
+          label="Articles"
+          note={
+            overview.draftPosts
+              ? `${overview.draftPosts} in draft`
+              : "None in draft"
           }
         />
         <StatCard

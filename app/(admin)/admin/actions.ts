@@ -500,6 +500,164 @@ export async function deleteRedirect(form: FormData): Promise<void> {
   redirect("/admin/redirects");
 }
 
+/* -------------------------------------------------------------- articles -- */
+
+export async function createPost(form: FormData): Promise<void> {
+  const supabase = await adminClient();
+
+  const title = text(form, "title") || "Untitled article";
+  // Slugs are permanent-ish — a published article's address should not move —
+  // so it is derived once here and then only changed deliberately.
+  const slug = keyify(text(form, "slug") || title);
+
+  const { data, error } = await supabase
+    .from("posts")
+    .insert({
+      slug,
+      title,
+      author: text(form, "author"),
+      category: text(form, "category"),
+      published: false,
+    })
+    .select("id")
+    .single();
+
+  if (error || !data) {
+    redirect(
+      `/admin/articles?error=${encodeURIComponent(
+        error?.code === "23505"
+          ? "An article already uses that address. Pick a different one."
+          : (error?.message ?? "Could not create the article.")
+      )}`
+    );
+  }
+
+  bust(tags.posts);
+  redirect(`/admin/articles/${data.id}`);
+}
+
+export async function savePost(form: FormData): Promise<void> {
+  const supabase = await adminClient();
+  const id = text(form, "id");
+  const previousSlug = text(form, "previous_slug");
+  const slug = keyify(text(form, "slug"));
+
+  const publishedAt = text(form, "published_at");
+
+  const patch = {
+    slug,
+    title: text(form, "title"),
+    excerpt: text(form, "excerpt"),
+    body: (form.get("body") as string | null) ?? "",
+    category: text(form, "category"),
+    tags: text(form, "tags")
+      .split(",")
+      .map((t) => t.trim())
+      .filter(Boolean),
+    author: text(form, "author"),
+    cover_image_url: text(form, "cover_image_url") || null,
+    cover_image_alt: text(form, "cover_image_alt") || null,
+    seo_title: text(form, "seo_title"),
+    meta_description: text(form, "meta_description"),
+    published: bool(form, "published"),
+    // Blank hands the date back to the database trigger, which stamps it the
+    // first time the article goes live.
+    ...(publishedAt ? { published_at: new Date(publishedAt).toISOString() } : {}),
+  };
+
+  const { data, error } = await supabase
+    .from("posts")
+    .update(patch)
+    .eq("id", id)
+    .select("id");
+
+  const failure =
+    error?.code === "23505"
+      ? "Another article already uses that address. Pick a different one."
+      : writeFailure({ data, error });
+
+  if (failure) {
+    redirect(`/admin/articles/${id}?error=${encodeURIComponent(failure)}`);
+  }
+
+  bust(tags.posts, tags.post(previousSlug), tags.post(slug));
+  revalidatePath("/", "layout");
+  redirect(`/admin/articles/${id}?saved=1`);
+}
+
+export async function deletePost(form: FormData): Promise<void> {
+  const supabase = await adminClient();
+  const slug = text(form, "slug");
+
+  await supabase.from("posts").delete().eq("id", text(form, "id"));
+
+  bust(tags.posts, tags.post(slug));
+  revalidatePath("/", "layout");
+  redirect("/admin/articles");
+}
+
+/* ----------------------------------------------------------------- media -- */
+
+/**
+ * Files are uploaded straight from the browser to Supabase Storage — routing
+ * megabytes through a Server Action would be slower and would hit the body
+ * size limit. This records the result afterwards so the media library has
+ * something to list, and so alt text written once is offered again on reuse.
+ */
+export async function recordUpload(file: {
+  path: string;
+  url: string;
+  alt: string;
+  fileName: string;
+  mimeType: string;
+  sizeBytes: number;
+  width: number | null;
+  height: number | null;
+}): Promise<ActionResult> {
+  const supabase = await adminClient();
+
+  const { error } = await supabase.from("media").upsert(
+    {
+      path: file.path,
+      url: file.url,
+      alt: file.alt,
+      file_name: file.fileName,
+      mime_type: file.mimeType,
+      size_bytes: file.sizeBytes,
+      width: file.width,
+      height: file.height,
+    },
+    { onConflict: "path" }
+  );
+
+  if (error) return { ok: false, message: error.message };
+  return { ok: true };
+}
+
+export async function updateMediaAlt(form: FormData): Promise<void> {
+  const supabase = await adminClient();
+  await supabase
+    .from("media")
+    .update({ alt: text(form, "alt") })
+    .eq("id", text(form, "id"));
+  redirect("/admin/media?saved=1");
+}
+
+export async function deleteMedia(form: FormData): Promise<void> {
+  const supabase = await adminClient();
+  const path = text(form, "path");
+
+  // Storage first. If the row went first and this failed, the file would be
+  // orphaned in the bucket with nothing left pointing at it.
+  const { error } = await supabase.storage.from("media").remove([path]);
+  if (error) {
+    redirect(`/admin/media?error=${encodeURIComponent(error.message)}`);
+  }
+
+  await supabase.from("media").delete().eq("id", text(form, "id"));
+  redirect("/admin/media");
+}
+
 /* ----------------------------------------------------------------- leads -- */
 
 export async function setLeadStatus(form: FormData): Promise<void> {

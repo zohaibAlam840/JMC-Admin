@@ -101,6 +101,22 @@ export const resourcesPage: PageContent = {
     },
 
     {
+      id: "articles",
+      type: "postList",
+      tone: "surface",
+      eyebrow: "Articles",
+      heading: "Latest From the Resources Hub",
+      body: "Plain-English explainers, written as the questions come up.",
+      limit: 6,
+      // The Master Brief forbids placeholder content, so before the first
+      // article is published this says so honestly rather than showing an
+      // empty grid or invented posts.
+      emptyMessage:
+        "The first articles are being written now. In the meantime, ask us the question directly — we answer it either way.",
+      cta: { label: "Ask an SEO Question", href: "/contact" },
+    },
+
+    {
       id: "final-cta",
       type: "finalCta",
       heading: "Have a Question We Haven't Written About Yet?",

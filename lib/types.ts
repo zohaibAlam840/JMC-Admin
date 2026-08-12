@@ -190,6 +190,24 @@ export type FinalCtaSection = Base & {
   secondaryCta?: CTA;
 };
 
+/**
+ * Latest articles. The only section whose content is not authored inside it —
+ * it queries `posts`, so a page carrying one stays current on its own.
+ */
+export type PostListSection = Base & {
+  type: "postList";
+  eyebrow?: string;
+  heading: string;
+  body?: string;
+  /** How many to show. */
+  limit: number;
+  /** Blank shows every category. */
+  category?: string;
+  cta?: CTA;
+  /** Copy shown when no article matches yet. */
+  emptyMessage?: string;
+};
+
 export type Section =
   | HeroSplitSection
   | HeroCenteredSection
@@ -200,7 +218,8 @@ export type Section =
   | PricingCardsSection
   | CalloutBannerSection
   | FaqSection
-  | FinalCtaSection;
+  | FinalCtaSection
+  | PostListSection;
 
 export type PageContent = {
   slug: string;
@@ -236,6 +255,36 @@ export type Package = {
   /** Surfaces a "pricing not yet set" warning in the admin. */
   pricingPending?: boolean;
 };
+
+/* -------------------------------------------------------------------------- */
+/*  Articles                                                                   */
+/* -------------------------------------------------------------------------- */
+
+export type Post = {
+  id: string;
+  slug: string;
+  title: string;
+  excerpt: string;
+  /** Markdown. Rendered to React elements — never inserted as HTML. */
+  body: string;
+  category: string;
+  tags: string[];
+  author: string;
+  coverImageUrl?: string;
+  coverImageAlt?: string;
+  seoTitle: string;
+  metaDescription: string;
+  published: boolean;
+  /** ISO string. Null until the post is first published. */
+  publishedAt: string | null;
+  updatedAt: string;
+};
+
+/** Listing shape — everything a card needs, without hauling the whole body. */
+export type PostSummary = Pick<
+  Post,
+  "slug" | "title" | "excerpt" | "category" | "publishedAt" | "coverImageUrl" | "coverImageAlt"
+>;
 
 /* -------------------------------------------------------------------------- */
 /*  Navigation                                                                 */

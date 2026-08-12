@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { Sections } from "@/components/blocks/sections";
 import { JsonLd, faqSchema, serviceSchema } from "@/components/seo/json-ld";
 import type { ResolvedPage } from "@/lib/content";
-import type { Package } from "@/lib/types";
+import type { Package, PostSummary } from "@/lib/types";
 
 export function buildMetadata(page: ResolvedPage): Metadata {
   return {
@@ -25,9 +25,11 @@ export function buildMetadata(page: ResolvedPage): Metadata {
 export function RenderPage({
   page,
   packages,
+  posts,
 }: {
   page: ResolvedPage;
   packages: Package[];
+  posts?: PostSummary[];
 }) {
   const faq = page.sections.find((s) => s.type === "faq");
 
@@ -43,7 +45,7 @@ export function RenderPage({
         />
       ) : null}
       {faq ? <JsonLd data={faqSchema(faq.items)} /> : null}
-      <Sections sections={page.sections} packages={packages} />
+      <Sections sections={page.sections} packages={packages} posts={posts} />
     </>
   );
 }

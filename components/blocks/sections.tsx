@@ -18,9 +18,10 @@ import { Reveal, Stagger, StaggerItem } from "@/components/motion/reveal";
 import { ShowcaseCard } from "@/components/blocks/hero-showcase";
 import { ProcessRoadmap } from "@/components/blocks/process-roadmap";
 import { Icon, IconTile } from "@/components/blocks/icon";
+import { PostCard } from "@/components/blocks/post-card";
 import { packages as filePackages } from "@/content/packages";
 import { cn } from "@/lib/utils";
-import type { Package } from "@/lib/types";
+import type { Package, PostSummary } from "@/lib/types";
 import type {
   CalloutBannerSection,
   CardGridSection,
@@ -30,6 +31,7 @@ import type {
   FullWidthTextSection,
   HeroCenteredSection,
   HeroSplitSection,
+  PostListSection,
   PricingCardsSection,
   Section,
 } from "@/lib/types";
@@ -752,10 +754,79 @@ function FinalCta({ section }: { section: FinalCtaSection }) {
 }
 
 /* -------------------------------------------------------------------------- */
+/*  13 · PostList                                                              */
+/* -------------------------------------------------------------------------- */
+
+function PostList({
+  section,
+  posts,
+}: {
+  section: PostListSection;
+  posts: PostSummary[];
+}) {
+  // Filtered here rather than in a second query: the caller fetches one page of
+  // recent posts, and a page carrying two of these blocks should not mean two
+  // round trips.
+  const items = (
+    section.category
+      ? posts.filter((p) => p.category === section.category)
+      : posts
+  ).slice(0, section.limit ?? 3);
+
+  return (
+    <Band id={section.id} tone={section.tone}>
+      <SectionHeader
+        eyebrow={section.eyebrow}
+        heading={section.heading}
+        body={section.body}
+      />
+
+      {items.length === 0 ? (
+        <Reveal className="mt-10">
+          <p className="rounded-bento border border-dashed border-line-strong px-6 py-12 text-center text-[0.95rem] text-subtle">
+            {section.emptyMessage ??
+              "The first articles are being written now — check back shortly."}
+          </p>
+        </Reveal>
+      ) : (
+        <Stagger
+          className={cn(
+            "mt-12 grid items-stretch gap-5",
+            items.length === 1
+              ? "sm:max-w-xl"
+              : items.length === 2
+                ? "sm:grid-cols-2"
+                : "sm:grid-cols-2 lg:grid-cols-3"
+          )}
+        >
+          {items.map((post) => (
+            <StaggerItem key={post.slug} className="h-full">
+              <PostCard post={post} />
+            </StaggerItem>
+          ))}
+        </Stagger>
+      )}
+
+      {section.cta ? (
+        <Reveal className="mt-12">
+          <Button href={section.cta.href} variant="secondary" size="lg">
+            {section.cta.label}
+          </Button>
+        </Reveal>
+      ) : null}
+    </Band>
+  );
+}
+
+/* -------------------------------------------------------------------------- */
 /*  Renderer                                                                    */
 /* -------------------------------------------------------------------------- */
 
-function renderSection(section: Section, packages: Package[]) {
+function renderSection(
+  section: Section,
+  packages: Package[],
+  posts: PostSummary[]
+) {
   switch (section.type) {
     case "heroSplit":
       return <HeroSplit key={section.id} section={section} />;
@@ -779,6 +850,8 @@ function renderSection(section: Section, packages: Package[]) {
       return <Faq key={section.id} section={section} />;
     case "finalCta":
       return <FinalCta key={section.id} section={section} />;
+    case "postList":
+      return <PostList key={section.id} section={section} posts={posts} />;
     default: {
       // Exhaustiveness check — adding a section type without a renderer
       // becomes a compile error rather than a blank space on the page.
@@ -791,11 +864,16 @@ function renderSection(section: Section, packages: Package[]) {
 export function Sections({
   sections,
   packages,
+  posts = [],
 }: {
   sections: Section[];
   /** Live package list. Falls back to the content file when not supplied. */
   packages?: Package[];
+  /** Recent articles, for any "Latest articles" block on the page. */
+  posts?: PostSummary[];
 }) {
   const resolved = packages ?? filePackages.filter((p) => p.visible !== false);
-  return <>{sections.map((section) => renderSection(section, resolved))}</>;
+  return (
+    <>{sections.map((section) => renderSection(section, resolved, posts))}</>
+  );
 }

@@ -415,6 +415,53 @@ export const SECTION_SCHEMAS: SectionSchema[] = [
   },
 
   {
+    type: "postList",
+    label: "Latest articles",
+    description:
+      "Pulls the newest published articles. Add it once and the page keeps itself current as you write.",
+    supportsTone: true,
+    fields: [
+      eyebrow,
+      heading,
+      body(true),
+      {
+        name: "limit",
+        label: "How many to show",
+        kind: "select",
+        numeric: true,
+        options: [
+          { value: "3", label: "3" },
+          { value: "6", label: "6" },
+          { value: "9", label: "9" },
+          { value: "12", label: "12" },
+        ],
+      },
+      {
+        name: "category",
+        label: "Only this category",
+        kind: "text",
+        optional: true,
+        placeholder: "Leave blank for all",
+        help: "Must match the category on the articles exactly.",
+      },
+      {
+        name: "emptyMessage",
+        label: "If there are no articles yet",
+        kind: "text",
+        optional: true,
+        help: "Shown instead of an empty space before the first article is published.",
+      },
+      sectionCta,
+    ],
+    defaults: {
+      eyebrow: "Latest",
+      heading: "Recent Articles",
+      limit: 3,
+      emptyMessage: "The first articles are being written now — check back shortly.",
+    },
+  },
+
+  {
     type: "finalCta",
     label: "Closing CTA",
     description: "Full-width brand band. Every page should end with one.",
