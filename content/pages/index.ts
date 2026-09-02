@@ -7,6 +7,7 @@ import { seoPackagesPage } from "./seo-packages";
 import { launchSprintsPage } from "./launch-sprints";
 import { aboutPage } from "./about";
 import { resourcesPage } from "./resources";
+import { linksPage } from "./links";
 
 /**
  * The launch content, as approved.
@@ -29,6 +30,7 @@ export const filePages: PageContent[] = [
   launchSprintsPage,
   aboutPage,
   resourcesPage,
+  linksPage,
 ];
 
 /** Pages that emit Service structured data. */
@@ -38,8 +40,20 @@ export const servicePageSlugs = new Set([
   "/real-estate-seo",
 ]);
 
+/**
+ * Pages that seed as drafts rather than live.
+ *
+ * The link hub carries placeholder social addresses until Wendell confirms the
+ * real ones, and the Master Brief forbids placeholder content on a live page.
+ *
+ * Real Estate SEO is cut from scope by Page Spec 01 §2. Unpublished rather than
+ * deleted: the cut comes from a Decisions Record we have only seen quoted, and
+ * the page plus its two packages come straight back if that changes.
+ */
+export const draftPageSlugs = new Set(["/links", "/real-estate-seo"]);
+
 /** Pages whose route is hand-built, so the slug must never change. */
-export const systemPageSlugs = new Set(["/"]);
+export const systemPageSlugs = new Set(["/", "/links"]);
 
 const bySlug = new Map(filePages.map((p) => [p.slug, p]));
 

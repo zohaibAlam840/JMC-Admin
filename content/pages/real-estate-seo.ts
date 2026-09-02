@@ -266,7 +266,7 @@ export const realEstateSeoPage: PageContent = {
         {
           question: "Is SEO worth it for an individual agent?",
           answer:
-            "It can be, if you work defined neighborhoods and want visibility that does not stop the moment you stop paying for ads. SEO builds slowly and compounds. If you need volume this month, paid channels will move faster — the two solve different problems.",
+            "It can be, if you work defined neighborhoods and want visibility that does not stop the moment you stop paying for ads. SEO builds slowly and compounds. If you need volume this month, paid channels will move faster, the two solve different problems.",
         },
         {
           question: "How is this different for teams and brokerages?",

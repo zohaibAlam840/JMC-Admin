@@ -28,7 +28,7 @@ do $$ begin
   create type section_type as enum (
     'heroSplit', 'heroCentered', 'cardGrid', 'processSteps', 'fullWidthText',
     'featureSplit', 'pricingCards', 'calloutBanner', 'faq', 'finalCta',
-    'postList'
+    'postList', 'linkStack', 'reportingBlock', 'industryGrid'
   );
 exception when duplicate_object then null; end $$;
 
@@ -218,6 +218,8 @@ create table if not exists public.leads (
   -- actually converting" without needing analytics.
   page_path  text,
   source_cta text,
+  -- Which pricing card the visitor came from, via ?tier= on the CTA.
+  tier       text,
   status     lead_status not null default 'new',
   notes      text,
   created_at timestamptz not null default now()

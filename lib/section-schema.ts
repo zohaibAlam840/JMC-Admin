@@ -143,7 +143,7 @@ const showcaseCards: Field = {
 
 /* --------------------------------------------------------------- schemas -- */
 
-export const SECTION_SCHEMAS: SectionSchema[] = [
+export const SECTION_SCHEMAS = [
   {
     type: "heroSplit",
     label: "Hero with showcase",
@@ -241,6 +241,13 @@ export const SECTION_SCHEMAS: SectionSchema[] = [
         itemLabel: "Card",
         fields: [
           { name: "title", label: "Title", kind: "text" },
+          {
+            name: "meta",
+            label: "Price line",
+            kind: "text",
+            optional: true,
+            help: "Shown above the body in the accent colour. Keep it to a price or a short qualifier.",
+          },
           { name: "body", label: "Body", kind: "textarea", optional: true },
           { name: "icon", label: "Icon", kind: "icon", optional: true },
           { name: "cta", label: "Card link", kind: "cta", optional: true },
@@ -297,9 +304,25 @@ export const SECTION_SCHEMAS: SectionSchema[] = [
   {
     type: "fullWidthText",
     label: "Statement",
-    description: "One centred paragraph. Used to break up a run of grids.",
+    description:
+      "One centred paragraph. Set the treatment to Dark band for the transparency statement — solid ink, large type, nothing else on screen.",
     supportsTone: true,
-    fields: [eyebrow, heading, body(), sectionCta],
+    fields: [
+      eyebrow,
+      heading,
+      body(),
+      {
+        name: "treatment",
+        label: "Treatment",
+        kind: "select",
+        options: [
+          { value: "default", label: "Standard — on the section background" },
+          { value: "statement", label: "Dark band — solid ink, large type, no icons" },
+        ],
+        help: "The dark band is meant to be rare. Two on one page and neither reads as a peak.",
+      },
+      sectionCta,
+    ],
     defaults: {
       heading: "A statement worth its own section",
       body: "One paragraph. Keep it short — this section works because it is the only thing on screen.",
@@ -462,6 +485,242 @@ export const SECTION_SCHEMAS: SectionSchema[] = [
   },
 
   {
+    type: "industryGrid",
+    label: "Industries, bucketed",
+    description:
+      "Eight industries in two labelled groups of four, each group tied to the service line it feeds. The canonical industry component.",
+    supportsTone: true,
+    fields: [
+      eyebrow,
+      heading,
+      body(true),
+      {
+        name: "groups",
+        label: "Groups",
+        kind: "repeater",
+        itemLabel: "Group",
+        max: 2,
+        help: "Two groups of four. The 4/4 symmetry is the point — an odd count breaks the rows.",
+        fields: [
+          {
+            name: "label",
+            label: "Group label",
+            kind: "text",
+            help: "Visitor-facing. How the buyer would describe themselves, not internal vocabulary.",
+          },
+          { name: "serviceLine", label: "Service line", kind: "text" },
+          { name: "serviceHref", label: "Service line links to", kind: "text" },
+          {
+            name: "cards",
+            label: "Industries",
+            kind: "repeater",
+            itemLabel: "Industry",
+            max: 4,
+            fields: [
+              { name: "title", label: "Industry", kind: "text" },
+              {
+                name: "body",
+                label: "One line",
+                kind: "textarea",
+                help: "Name the kind of business. Never claim expertise in it.",
+              },
+              { name: "icon", label: "Icon", kind: "icon", optional: true },
+              { name: "href", label: "Links to", kind: "text", optional: true },
+            ],
+          },
+        ],
+      },
+      {
+        name: "escapeHatch",
+        label: "Line under the grid",
+        kind: "textarea",
+        optional: true,
+        help: "For the visitor whose industry is not listed. A line, never a ninth card.",
+      },
+      sectionCta,
+    ],
+    defaults: {
+      eyebrow: "Industries",
+      heading: "Where This Method Gets Pointed",
+      groups: [],
+      escapeHatch:
+        "The method does not change with the industry. If yours is not listed, it probably still applies.",
+    },
+  },
+
+  {
+    type: "reportingBlock",
+    label: "Monthly Recap",
+    description:
+      "The four reporting cards. Their titles are fixed sitewide and cannot be edited — only the sentence under each one.",
+    supportsTone: true,
+    fields: [
+      eyebrow,
+      heading,
+      body(true),
+      {
+        name: "did",
+        label: "Under “What We Did”",
+        kind: "textarea",
+        optional: true,
+      },
+      {
+        name: "why",
+        label: "Under “Why We Did It”",
+        kind: "textarea",
+        optional: true,
+      },
+      {
+        name: "changed",
+        label: "Under “What Changed”",
+        kind: "textarea",
+        optional: true,
+      },
+      {
+        name: "next",
+        label: "Under “Where We’re Headed”",
+        kind: "textarea",
+        optional: true,
+      },
+      sectionCta,
+    ],
+    defaults: {
+      eyebrow: "Clear Reporting",
+      heading: "What You Get Every Month",
+      did: "A plain summary of the SEO work completed, in language you do not need a glossary for.",
+      why: "The reasoning behind each piece of work and how it supports visibility.",
+      changed: "What moved, what did not, and what we are still watching.",
+      next: "The priorities for the coming month, in order.",
+      cta: {
+        label: "See How JMC Reports SEO Progress",
+        href: "/seo-reporting",
+      },
+    },
+  },
+
+  {
+    type: "linkStack",
+    label: "Link hub",
+    description:
+      "The link-in-bio page: a mark, one line of positioning, and a stack of big tappable buttons. Point social profiles here instead of a link aggregator.",
+    supportsTone: false,
+    fields: [
+      { ...eyebrow, placeholder: "@htxseo" },
+      { name: "heading", label: "Name", kind: "text" },
+      {
+        name: "body",
+        label: "One-line positioning",
+        kind: "textarea",
+        optional: true,
+        help: "Kept to a sentence. This page is scanned on a phone, not read.",
+      },
+      {
+        name: "avatarUrl",
+        label: "Profile image address",
+        kind: "text",
+        optional: true,
+        help: "Optional. Leave blank to show the JMC mark instead.",
+      },
+      { name: "avatarAlt", label: "Profile image description", kind: "text", optional: true },
+      {
+        name: "theme",
+        label: "Page style",
+        kind: "select",
+        options: [
+          { value: "dark", label: "Brand gradient — white type, like a profile" },
+          { value: "light", label: "Light — white background, like the rest of the site" },
+        ],
+      },
+      {
+        name: "socials",
+        label: "Social icons",
+        kind: "repeater",
+        itemLabel: "Icon",
+        help: "A row of small marks under the name. Keep the buttons below for things people should actually tap.",
+        fields: [
+          {
+            name: "platform",
+            label: "Platform",
+            kind: "select",
+            options: [
+              { value: "instagram", label: "Instagram" },
+              { value: "facebook", label: "Facebook" },
+              { value: "linkedin", label: "LinkedIn" },
+              { value: "x", label: "X" },
+              { value: "youtube", label: "YouTube" },
+              { value: "tiktok", label: "TikTok" },
+              { value: "email", label: "Email" },
+              { value: "phone", label: "Phone" },
+              { value: "website", label: "Website" },
+            ],
+          },
+          {
+            name: "href",
+            label: "Links to",
+            kind: "text",
+            help: "The full profile address. For email use mailto:…, for phone use tel:…",
+          },
+        ],
+      },
+      {
+        name: "links",
+        label: "Buttons",
+        kind: "repeater",
+        itemLabel: "Button",
+        help: "Order matters — the top two get most of the taps. Put the thing you actually want people to do first.",
+        fields: [
+          { name: "label", label: "Button text", kind: "text" },
+          {
+            name: "href",
+            label: "Links to",
+            kind: "text",
+            help: "A full address for anything off-site (https://instagram.com/...), or a path like /seo-packages for a page on this site.",
+          },
+          { name: "description", label: "Second line", kind: "text", optional: true },
+          { name: "icon", label: "Icon", kind: "icon", optional: true },
+          {
+            name: "featured",
+            label: "Highlight this one",
+            kind: "boolean",
+            optional: true,
+            help: "Solid black instead of outlined. Use it once — highlighting everything highlights nothing.",
+          },
+        ],
+      },
+      {
+        name: "footnote",
+        label: "Small print",
+        kind: "text",
+        optional: true,
+      },
+    ],
+    defaults: {
+      eyebrow: "@htxseo",
+      heading: "Houston's SEO Agency",
+      theme: "dark",
+      socials: [
+        { platform: "instagram", href: "https://instagram.com/" },
+        { platform: "facebook", href: "https://facebook.com/" },
+        { platform: "linkedin", href: "https://linkedin.com/" },
+      ],
+      body: "Houston-area SEO. Practical strategy, local optimization, and reporting you can actually read.",
+      links: [
+        {
+          label: "Request a Visibility Review",
+          href: "/contact",
+          description: "Where you show up now, and what to fix first",
+          icon: "target",
+          featured: true,
+        },
+        { label: "SEO Packages & Pricing", href: "/seo-packages", icon: "layers" },
+        { label: "Instagram", href: "https://instagram.com/", icon: "message-square" },
+        { label: "Facebook", href: "https://facebook.com/", icon: "users" },
+      ],
+      footnote: "League City, TX · Serving the Greater Houston area",
+    },
+  },
+
+  {
     type: "finalCta",
     label: "Closing CTA",
     description: "Full-width brand band. Every page should end with one.",
@@ -478,7 +737,21 @@ export const SECTION_SCHEMAS: SectionSchema[] = [
       primaryCta: CTA_DEFAULT,
     },
   },
-];
+] satisfies readonly SectionSchema[];
+
+/*
+ * Compile-time guarantee that every section type has an editor.
+ *
+ * Adding a type to lib/types.ts without adding it here would otherwise ship a
+ * block the client can see on the page but cannot edit in /admin, which fails
+ * silently. This makes it a type error instead.
+ */
+type EditableType = (typeof SECTION_SCHEMAS)[number]["type"];
+type EveryTypeIsEditable = Exclude<Section["type"], EditableType> extends never
+  ? true
+  : ["No admin editor for:", Exclude<Section["type"], EditableType>];
+const _everyTypeIsEditable: EveryTypeIsEditable = true;
+void _everyTypeIsEditable;
 
 const schemaByType = new Map(SECTION_SCHEMAS.map((s) => [s.type, s]));
 

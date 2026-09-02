@@ -20,7 +20,7 @@ export const resourcesPage: PageContent = {
       type: "heroCentered",
       eyebrow: "Resources",
       heading: "SEO, Explained Without the Jargon",
-      body: "Straight answers to the questions business owners actually ask about search visibility. We are building this out as we go — if something you need is missing, ask us directly.",
+      body: "Straight answers to the questions business owners actually ask about search visibility. We are building this out as we go. If something you need is missing, ask us directly.",
       primaryCta: { label: "Ask an SEO Question", href: "/contact" },
       secondaryCta: { label: "View SEO Packages", href: "/seo-packages" },
     },
@@ -112,7 +112,7 @@ export const resourcesPage: PageContent = {
       // article is published this says so honestly rather than showing an
       // empty grid or invented posts.
       emptyMessage:
-        "The first articles are being written now. In the meantime, ask us the question directly — we answer it either way.",
+        "The first articles are being written now. In the meantime, ask us the question directly. We answer it either way.",
       cta: { label: "Ask an SEO Question", href: "/contact" },
     },
 
@@ -120,7 +120,7 @@ export const resourcesPage: PageContent = {
       id: "final-cta",
       type: "finalCta",
       heading: "Have a Question We Haven't Written About Yet?",
-      body: "Ask it directly. If it is useful to you, it is probably useful to other businesses in the same position — and it may well become the next resource here.",
+      body: "Ask it directly. If it is useful to you, it is probably useful to other businesses in the same position, and it may well become the next resource here.",
       primaryCta: { label: "Request a Visibility Review", href: "/contact" },
       secondaryCta: { label: "View SEO Packages", href: "/seo-packages" },
     },

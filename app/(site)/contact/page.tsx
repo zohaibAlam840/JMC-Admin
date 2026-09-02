@@ -1,3 +1,4 @@
+import { Suspense } from "react";
 import type { Metadata } from "next";
 import { Mail, MapPin, Phone } from "lucide-react";
 import { Band, Card, Container } from "@/components/ui/layout";
@@ -37,7 +38,7 @@ export default async function Page() {
         <Container>
           <div className="max-w-3xl">
             <p className="eyebrow">Contact</p>
-            <h1 className="mt-3 text-4xl uppercase sm:text-5xl">
+            <h1 className="mt-3 text-4xl sm:text-5xl">
               Request a Visibility Review
             </h1>
             <p className="mt-5 text-[1.08rem] leading-relaxed text-ink">
@@ -52,17 +53,24 @@ export default async function Page() {
       <Band tone="white">
         <div className="grid gap-12 lg:grid-cols-[1.15fr_0.85fr] lg:gap-16">
           <div>
-            <h2 className="text-2xl uppercase sm:text-3xl">
+            <h2 className="text-2xl sm:text-3xl">
               Tell us about your business
             </h2>
             <div className="mt-8">
-              <LeadForm />
+              {/*
+               * The form reads ?tier= from the URL, which needs a boundary or
+               * the whole page opts out of static rendering. Wrapping it here
+               * keeps everything above the form prerendered.
+               */}
+              <Suspense fallback={null}>
+                <LeadForm />
+              </Suspense>
             </div>
           </div>
 
           <div className="flex flex-col gap-5">
             <Card className="gap-4">
-              <h2 className="text-lg uppercase">Reach us directly</h2>
+              <h2 className="text-lg">Reach us directly</h2>
               <div className="flex flex-col gap-3 text-[0.92rem]">
                 <a
                   href={`mailto:${site.email}`}
@@ -86,11 +94,11 @@ export default async function Page() {
             </Card>
 
             <Card className="gap-4">
-              <h2 className="text-lg uppercase">What a review includes</h2>
+              <h2 className="text-lg">What a review includes</h2>
               <ul className="flex flex-col gap-4">
                 {expectations.map((item) => (
                   <li key={item.title}>
-                    <p className="font-display text-base font-bold uppercase text-ink-strong">
+                    <p className="font-heading text-base font-bold text-ink-strong">
                       {item.title}
                     </p>
                     <p className="mt-1 text-[0.88rem] leading-relaxed text-subtle">

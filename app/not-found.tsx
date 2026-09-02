@@ -13,7 +13,7 @@ export default function NotFound() {
         <Container>
           <div className="mx-auto max-w-xl text-center">
             <p className="eyebrow">404</p>
-            <h1 className="mt-3 text-4xl uppercase sm:text-5xl">
+            <h1 className="mt-3 text-4xl sm:text-5xl">
               That Page Isn&apos;t Here
             </h1>
             <p className="mt-5 text-[1.02rem] leading-relaxed text-ink">

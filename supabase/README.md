@@ -26,6 +26,16 @@ Each is safe to run more than once.
 | [`schema.sql`](./schema.sql) | Tables, enums, row level security, `is_admin`, `claim_admin` |
 | [`migrations/002_posts.sql`](./migrations/002_posts.sql) | Articles for the Resources hub, plus the "Latest articles" block type |
 | [`migrations/003_media.sql`](./migrations/003_media.sql) | Image uploads — the Storage bucket, its access rules, and the image catalogue |
+| [`migrations/004_link_stack.sql`](./migrations/004_link_stack.sql) | The "Link hub" block type, for the link-in-bio page |
+| [`migrations/005_reporting_block.sql`](./migrations/005_reporting_block.sql) | The "Monthly Recap" block type, Build Spec §12 |
+| [`migrations/006_industry_grid.sql`](./migrations/006_industry_grid.sql) | The bucketed "Industries" block type, Page Spec 01 §5 |
+
+### One-off installers
+
+| File | When |
+| --- | --- |
+| [`add-link-hub.sql`](./add-link-hub.sql) | Adds the `/links` page to a database seeded before the link hub existed. Run **after** `004`, in a separate run — Postgres will not use a new enum value in the transaction that added it. |
+| [`apply-page-spec-01.sql`](./apply-page-spec-01.sql) | Rebuilds the homepage to the ten sections of Page Spec 01, in its order. Run **after** `005` and `006`, each in its own run. Replaces the homepage sections wholesale; touches nothing else. |
 
 ## 2. Create the first admin account
 

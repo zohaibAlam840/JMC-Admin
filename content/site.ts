@@ -53,24 +53,18 @@ export const mainNav: NavItem[] = [
   },
   {
     label: "Industries",
-    href: "/real-estate-seo",
+    // The Industries parent is clickable, unlike the other two dropdowns —
+    // Build Spec §7. It points at the homepage grid until /industries/ exists.
+    href: "/#industries",
     children: [
-      { label: "Real Estate SEO", href: "/real-estate-seo" },
-      // Launch routing approved in the homepage wireframe §7.
-      { label: "Home Services SEO", href: "/local-seo-services" },
-      {
-        label: "Commercial Construction SEO",
-        href: "/traditional-seo-services#industries",
-      },
-      { label: "Oil and Gas SEO", href: "/traditional-seo-services#industries" },
-      {
-        label: "Healthcare and Life Sciences SEO",
-        href: "/traditional-seo-services#industries",
-      },
-      {
-        label: "Hospitality and Tourism SEO",
-        href: "/traditional-seo-services#industries",
-      },
+      { label: "Home Services & Trades", href: "/local-seo-services" },
+      { label: "Healthcare & Wellness", href: "/local-seo-services" },
+      { label: "Hospitality & Attractions", href: "/local-seo-services" },
+      { label: "Professional Services", href: "/local-seo-services" },
+      { label: "Energy & Petrochemical", href: "/traditional-seo-services" },
+      { label: "Maritime & Logistics", href: "/traditional-seo-services" },
+      { label: "Commercial Construction", href: "/traditional-seo-services" },
+      { label: "Aerospace & Aviation", href: "/traditional-seo-services" },
     ],
   },
   {
@@ -99,32 +93,26 @@ export const footerNav: { heading: string; links: { label: string; href: string 
         label: "Google Business Profile Optimization",
         href: "/local-seo-services#includes",
       },
-      { label: "SEO Content Strategy", href: "/traditional-seo-services#includes" },
-      { label: "SEO Reporting", href: "/seo-packages#reporting" },
+      // Deliberately kept out of the main menu (Build Spec §7), which makes
+      // the footer one of only two places SEO Reporting is reachable.
+      { label: "SEO Reporting", href: "/#monthly-recap" },
     ],
   },
   {
     heading: "Industries",
     links: [
-      { label: "Real Estate SEO", href: "/real-estate-seo" },
-      { label: "Home Services SEO", href: "/local-seo-services" },
-      {
-        label: "Commercial Construction SEO",
-        href: "/traditional-seo-services#industries",
-      },
-      { label: "Oil and Gas SEO", href: "/traditional-seo-services#industries" },
-      {
-        label: "Healthcare and Life Sciences SEO",
-        href: "/traditional-seo-services#industries",
-      },
-      {
-        label: "Hospitality and Tourism SEO",
-        href: "/traditional-seo-services#industries",
-      },
+      { label: "Home Services & Trades", href: "/local-seo-services" },
+      { label: "Healthcare & Wellness", href: "/local-seo-services" },
+      { label: "Hospitality & Attractions", href: "/local-seo-services" },
+      { label: "Professional Services", href: "/local-seo-services" },
+      { label: "Energy & Petrochemical", href: "/traditional-seo-services" },
+      { label: "Maritime & Logistics", href: "/traditional-seo-services" },
+      { label: "Commercial Construction", href: "/traditional-seo-services" },
+      { label: "Aerospace & Aviation", href: "/traditional-seo-services" },
     ],
   },
   {
-    heading: "Pricing & More",
+    heading: "Company",
     links: [
       { label: "Monthly SEO Packages", href: "/seo-packages" },
       { label: "Launch Sprints", href: "/launch-sprints" },

@@ -20,7 +20,7 @@ export const traditionalSeoPage: PageContent = {
       type: "heroSplit",
       eyebrow: "Traditional SEO Services",
       heading: "Organic Search Strategy for Larger and More Competitive Markets",
-      body: "When your buyers are spread across regions, service lines, or a specialized industry, local tactics stop being enough. Traditional SEO builds visibility through search strategy, content structure, technical health, and competitor awareness — reported clearly every month.",
+      body: "When your buyers are spread across regions, service lines, or a specialized industry, local tactics stop being enough. Traditional SEO builds visibility through search strategy, content structure, technical health, and competitor awareness, reported clearly every month.",
       primaryCta: { label: "Request a Visibility Review", href: "/contact" },
       secondaryCta: {
         label: "View Traditional SEO Packages",

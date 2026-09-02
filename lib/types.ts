@@ -45,6 +45,12 @@ export type Card = {
   title: string;
   body?: string;
   icon?: IconName;
+  /**
+   * A short line above the body, set apart from it. Used for the entry price
+   * on the homepage packages preview, which Page Spec 01 §6 calls for as a
+   * distinct price line rather than a sentence.
+   */
+  meta?: string;
   /** Card-level link. Path sections use these instead of buttons. */
   cta?: CTA;
 };
@@ -143,6 +149,52 @@ export type FullWidthTextSection = Base & {
   heading: string;
   body: string;
   cta?: CTA;
+  /**
+   * "statement" is the solid-ink band from Page Spec 01 §3 — no cards, no
+   * icons, large type, high contrast. Deliberately a treatment rather than a
+   * tone: `tone` is constrained to white/surface by a check constraint in the
+   * database, and the whole point of this band is that it is neither.
+   */
+  treatment?: "default" | "statement";
+};
+
+/**
+ * The industry grid — Page Spec 01 §5, reused verbatim on Traditional SEO.
+ *
+ * Bucketed rather than flat on purpose. A flat grid of eight reads as "we do
+ * everything"; two labelled groups of four reinforce the routing from the
+ * growth-paths section and support the claim that one method is pointed at two
+ * different engines.
+ *
+ * Group labels must be visitor-facing. Nobody self-identifies as a "B2B and
+ * Industrial Engine" — that is internal vocabulary and must not reach the page.
+ */
+export type IndustryGridSection = Base & {
+  type: "industryGrid";
+  eyebrow?: string;
+  heading: string;
+  body?: string;
+  groups: {
+    /** Visitor-facing, e.g. "Businesses that serve a defined area". */
+    label: string;
+    /** The service line this bucket feeds, shown at the far right of the rule. */
+    serviceLine: string;
+    serviceHref: string;
+    cards: {
+      title: string;
+      /** One line naming the kind of business, never a claim of expertise. */
+      body: string;
+      icon?: IconName;
+      href?: string;
+    }[];
+  }[];
+  /**
+   * The line under the grid that turns "your industry is not listed" from a
+   * hole into a statement of the method. A line and a link, never a ninth card
+   * — a ninth card would break the 4/4 symmetry the buckets depend on.
+   */
+  escapeHatch?: string;
+  cta?: CTA;
 };
 
 export type FeatureSplitSection = Base & {
@@ -208,6 +260,80 @@ export type PostListSection = Base & {
   emptyMessage?: string;
 };
 
+
+/**
+ * The Monthly Recap block — Build Spec §12.
+ *
+ * The four card titles are locked and identical on every page that carries
+ * this. They are therefore NOT part of the data: they live in the renderer, and
+ * only the supporting sentence under each one is editable, which is exactly
+ * what §12 allows. Modelling it this way means the client cannot reword them
+ * from the admin, which is the point — the spec says this block replaces five
+ * conflicting versions found across the old wireframes.
+ */
+export type ReportingBlockSection = Base & {
+  type: "reportingBlock";
+  eyebrow?: string;
+  heading: string;
+  body?: string;
+  /** One supporting sentence per locked card, in the locked order. */
+  did?: string;
+  why?: string;
+  changed?: string;
+  next?: string;
+  cta?: CTA;
+};
+
+/** Platforms the link hub can show as an icon-only row. */
+export type SocialPlatform =
+  | "instagram"
+  | "facebook"
+  | "linkedin"
+  | "x"
+  | "youtube"
+  | "tiktok"
+  | "email"
+  | "phone"
+  | "website";
+
+/**
+ * Link hub — the "link in bio" page.
+ *
+ * A stack of large tappable buttons under a mark and one line of positioning.
+ * Exists so social profiles can point at our own domain instead of a link
+ * aggregator: the referral traffic, the analytics, and any link value from
+ * someone sharing the URL all stay with the site.
+ */
+export type LinkStackSection = Base & {
+  type: "linkStack";
+  /** Small line above the name. */
+  eyebrow?: string;
+  heading: string;
+  body?: string;
+  /** Optional round avatar above the heading. */
+  avatarUrl?: string;
+  avatarAlt?: string;
+  /**
+   * Page treatment. "dark" is the brand gradient with white type, which is
+   * what a link-in-bio page usually wants — it has to look like a profile,
+   * not like another page of the marketing site.
+   */
+  theme?: "light" | "dark";
+  /** Icon-only row under the name. Separate from the buttons below it. */
+  socials?: { platform: SocialPlatform; href: string }[];
+  links: {
+    label: string;
+    href: string;
+    /** Second line inside the button. */
+    description?: string;
+    icon?: IconName;
+    /** Filled treatment rather than outlined. Use for the one that matters. */
+    featured?: boolean;
+  }[];
+  /** Small print under the stack. */
+  footnote?: string;
+};
+
 export type Section =
   | HeroSplitSection
   | HeroCenteredSection
@@ -219,7 +345,10 @@ export type Section =
   | CalloutBannerSection
   | FaqSection
   | FinalCtaSection
-  | PostListSection;
+  | PostListSection
+  | LinkStackSection
+  | ReportingBlockSection
+  | IndustryGridSection;
 
 export type PageContent = {
   slug: string;

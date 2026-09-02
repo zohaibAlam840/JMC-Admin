@@ -191,7 +191,7 @@ export const localSeoPage: PageContent = {
       tone: "surface",
       eyebrow: "Houston-Area SEO Agency",
       heading: "Rooted in League City. Built for Houston-Area Growth.",
-      body: "JMC is based in League City and works with businesses across the Greater Houston area. Local SEO is not limited to one part of the map — the strategy is built around where your customers actually are and where your business is trying to grow.",
+      body: "JMC is based in League City and works with businesses across the Greater Houston area. Local SEO is not limited to one part of the map. The strategy is built around where your customers actually are and where your business is trying to grow.",
       cta: { label: "Learn More About JMC", href: "/about" },
     },
 

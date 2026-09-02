@@ -23,6 +23,12 @@ function NavigationMenu({
   return (
     <NavigationMenuPrimitive.Root
       data-slot="navigation-menu"
+      /*
+       * Build Spec §7. Without an intent delay a dropdown fires while the
+       * pointer is only passing over the trigger on its way somewhere else,
+       * which reads as the menu flickering at you.
+       */
+      delayDuration={150}
       className={cn("relative flex max-w-max flex-1 items-center", className)}
       {...props}
     >

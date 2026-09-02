@@ -1,7 +1,7 @@
 import { randomUUID } from "node:crypto";
 import { writeFileSync } from "node:fs";
 import { join } from "node:path";
-import { filePages, servicePageSlugs, systemPageSlugs } from "../content/pages";
+import { draftPageSlugs, filePages, servicePageSlugs, systemPageSlugs } from "../content/pages";
 import { packages } from "../content/packages";
 import { footerNav, mainNav, primaryCta, site } from "../content/site";
 
@@ -59,7 +59,7 @@ filePages.forEach((page, index) => {
   w(
     `insert into public.pages (slug, label, seo_title, meta_description, published, is_service, system, position) values (` +
       `${lit(page.slug)}, ${lit(page.label)}, ${lit(page.seoTitle)}, ${lit(page.metaDescription)}, ` +
-      `true, ${servicePageSlugs.has(page.slug)}, ${systemPageSlugs.has(page.slug)}, ${index})`
+      `${!draftPageSlugs.has(page.slug)}, ${servicePageSlugs.has(page.slug)}, ${systemPageSlugs.has(page.slug)}, ${index})`
   );
   w("on conflict (slug) do update set");
   w("  label = excluded.label,");

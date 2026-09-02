@@ -82,7 +82,9 @@ export function Icon({ name, size = 22 }: { name: IconName; size?: number }) {
 
 export function IconTile({ name }: { name: IconName }) {
   return (
-    <span className="mb-5 inline-flex size-12 items-center justify-center rounded-card border border-line bg-surface text-teal-ink transition-all duration-300 ease-out-soft group-hover:border-transparent group-hover:bg-brand-black group-hover:text-white">
+    // 40px icon in a teal-tinted circle: the recurring card motif, Build
+    // Spec §10. One library, one stroke weight, one circle, everywhere.
+    <span className="mb-5 inline-flex size-10 items-center justify-center rounded-full bg-teal/12 text-teal-ink transition-colors duration-200 group-hover:bg-teal/20">
       <Icon name={name} size={24} />
     </span>
   );

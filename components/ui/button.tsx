@@ -15,36 +15,39 @@ const buttonVariants = cva(
   // SEO Review") are wider than a 390px viewport and force the page to scroll
   // sideways. Labels wrap and centre instead; the header CTA opts back into
   // nowrap where there is room for it.
-  "relative inline-flex max-w-full items-center justify-center gap-2 text-balance text-center font-display font-bold uppercase tracking-wide leading-tight transition-all duration-300 ease-out-soft disabled:pointer-events-none disabled:opacity-60 [&_svg]:pointer-events-none [&_svg]:shrink-0 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-teal-ink",
+  "relative inline-flex max-w-full items-center justify-center gap-2 rounded-md text-balance text-center font-body font-semibold leading-none tracking-[0.01em] transition-all duration-200 ease-out disabled:pointer-events-none disabled:opacity-40 [&_svg]:pointer-events-none [&_svg]:shrink-0 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-ink",
   {
     variants: {
       variant: {
         /**
-         * Filled controls are solid brand black with white text — 21:1 contrast,
-         * and it reads as more premium than a colored fill. The brand gradient
-         * is deliberately NOT used behind button text: white on #36D1DC is only
-         * ~1.9:1 and fails AA, and black-on-gradient looks cheap. The gradient
-         * lives on text-free surfaces instead (rules, bars, glows, progress).
+         * Build Spec §6. Primary is the accessible blue, not flat --jmc-blue:
+         * white on #5B86E5 measures 3.51:1 and fails AA at body size, while
+         * white on #4D71C2 clears it at 4.71:1. Never use flat teal or flat
+         * blue as a button fill with white text.
+         *
+         * Hover darkens the fill about 8% and lifts 1px; active presses back
+         * down. Nothing else moves.
          */
         primary:
-          "bg-brand-black text-white shadow-soft hover:-translate-y-0.5 hover:bg-[#1c1c1c] hover:shadow-lift",
-        dark: "bg-brand-black text-white shadow-soft hover:-translate-y-0.5 hover:bg-[#1c1c1c] hover:shadow-lift",
+          "bg-blue-ink text-white hover:-translate-y-px hover:bg-[#4263ad]",
+        dark: "bg-brand-black text-white hover:-translate-y-px hover:bg-[#1c1c1c]",
         secondary:
-          "border border-line-strong bg-white text-ink-strong hover:-translate-y-0.5 hover:border-teal hover:text-teal-ink hover:shadow-soft",
+          "border-[1.5px] border-blue-ink bg-transparent text-blue-ink hover:-translate-y-px hover:bg-blue-ink/5",
         ghost: "text-ink hover:bg-surface hover:text-teal-ink",
-        /** Inverse of `primary`, for use on the dark roadmap band. */
+        /** Inverse of primary, for the dark transparency band. */
         light:
-          "bg-white text-brand-black shadow-soft hover:-translate-y-0.5 hover:bg-white/90 hover:shadow-lift",
+          "bg-white text-blue-ink hover:-translate-y-px hover:bg-white/90",
         onDark:
-          "border border-white/60 bg-transparent text-white hover:bg-white/10",
+          "border-[1.5px] border-white/70 bg-transparent text-white hover:bg-white/10",
         onBrand:
-          "border border-brand-black/35 bg-transparent text-brand-black hover:bg-brand-black/10",
+          "border-[1.5px] border-brand-black/40 bg-transparent text-brand-black hover:bg-brand-black/10",
       },
       size: {
-        sm: "rounded-pill px-4 py-2.5 text-[0.82rem]",
-        md: "rounded-pill px-5 py-3 text-[0.9rem]",
-        lg: "rounded-pill px-7 py-4 text-[0.95rem]",
-        icon: "size-11 rounded-pill",
+        // 48px desktop, 52px mobile, 16px label. Build Spec §6.
+        sm: "h-11 px-5 text-[0.9rem]",
+        md: "h-[52px] px-8 text-base sm:h-12",
+        lg: "h-[52px] px-8 text-base sm:h-12",
+        icon: "size-12 rounded-md",
       },
     },
     defaultVariants: { variant: "primary", size: "md" },
@@ -103,7 +106,8 @@ function ArrowLink({
     <Link
       href={href}
       className={cn(
-        "group/link inline-flex items-center gap-1.5 font-display text-[0.92rem] font-bold uppercase tracking-wide text-teal-ink transition-colors hover:text-blue-ink",
+        // Text-link variant, Build Spec §6: no fill, teal-ink, underline on hover.
+        "group/link inline-flex items-center gap-1.5 font-body text-[0.95rem] font-semibold text-teal-ink underline-offset-4 transition-colors hover:text-blue-ink hover:underline",
         className
       )}
     >

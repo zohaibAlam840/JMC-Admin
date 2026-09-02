@@ -2,7 +2,7 @@
 --  JMC — complete database setup
 --
 --  GENERATED FILE. Do not edit — run `npm run sql:bundle` instead.
---  Sources: supabase/schema.sql, migrations/002_posts.sql, migrations/003_media.sql
+--  Sources: supabase/schema.sql, migrations/002_posts.sql, migrations/003_media.sql, migrations/004_link_stack.sql, migrations/005_reporting_block.sql, migrations/006_industry_grid.sql, migrations/007_lead_tier.sql
 --
 --  For a brand new Supabase project: paste this whole file into the SQL editor
 --  and run it once. Then run supabase/seed.sql to load the launch content.
@@ -41,7 +41,7 @@ do $$ begin
   create type section_type as enum (
     'heroSplit', 'heroCentered', 'cardGrid', 'processSteps', 'fullWidthText',
     'featureSplit', 'pricingCards', 'calloutBanner', 'faq', 'finalCta',
-    'postList'
+    'postList', 'linkStack', 'reportingBlock', 'industryGrid'
   );
 exception when duplicate_object then null; end $$;
 
@@ -231,6 +231,8 @@ create table if not exists public.leads (
   -- actually converting" without needing analytics.
   page_path  text,
   source_cta text,
+  -- Which pricing card the visitor came from, via ?tier= on the CTA.
+  tier       text,
   status     lead_status not null default 'new',
   notes      text,
   created_at timestamptz not null default now()
@@ -502,3 +504,69 @@ alter table public.media enable row level security;
 drop policy if exists media_admin_all on public.media;
 create policy media_admin_all on public.media
   for all using (public.is_admin()) with check (public.is_admin());
+
+
+-- ############################################################################
+-- ##  004_link_stack.sql
+-- ############################################################################
+
+-- ============================================================================
+--  JMC — link hub block
+--
+--  Run after 003_media.sql. Safe to run more than once.
+--
+--  Adds the "Link hub" section type: the link-in-bio page that replaces
+--  linktr.ee, so social profiles point at our own domain.
+-- ============================================================================
+
+alter type section_type add value if not exists 'linkStack';
+
+
+-- ############################################################################
+-- ##  005_reporting_block.sql
+-- ############################################################################
+
+-- ============================================================================
+--  JMC — Monthly Recap block
+--
+--  Run after 004_link_stack.sql. Safe to run more than once.
+--
+--  Adds the "reportingBlock" section type: the four locked reporting cards from
+--  Build Spec §12, which replace the five conflicting versions found across the
+--  old wireframes.
+-- ============================================================================
+
+alter type section_type add value if not exists 'reportingBlock';
+
+
+-- ############################################################################
+-- ##  006_industry_grid.sql
+-- ############################################################################
+
+-- ============================================================================
+--  JMC — bucketed industry grid
+--
+--  Run after 005_reporting_block.sql. Safe to run more than once.
+--
+--  Adds the "industryGrid" section type: eight industries in two labelled
+--  groups of four, per Page Spec 01 §5. The canonical industry component,
+--  reused verbatim on the Traditional SEO page.
+-- ============================================================================
+
+alter type section_type add value if not exists 'industryGrid';
+
+
+-- ############################################################################
+-- ##  007_lead_tier.sql
+-- ############################################################################
+
+-- ============================================================================
+--  JMC — lead tier attribution
+--
+--  Run any time. Safe to run more than once.
+--
+--  Pricing card CTAs pass ?tier=neighborhood; Build Spec §13 wants that carried
+--  through to the enquiry so it is clear which package produced it.
+-- ============================================================================
+
+alter table public.leads add column if not exists tier text;

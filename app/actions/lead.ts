@@ -4,6 +4,7 @@ import { redirect } from "next/navigation";
 import { SERVICE_OPTIONS } from "@/lib/lead-options";
 import { createSupabaseServerClient } from "@/lib/supabase/server";
 import { supabaseConfigured } from "@/lib/supabase/config";
+import { notifyNewLead } from "@/lib/notify";
 
 export type LeadState = {
   errors?: Record<string, string>;
@@ -18,16 +19,31 @@ function str(data: FormData, key: string): string {
 /**
  * Visibility Review request.
  *
- * Phase 4 writes this to the `leads` table and sends the notification email.
- * Until then it validates, captures which CTA and page produced the request,
- * and hands off to the thank-you page where conversion tracking fires.
+ * Validates, stores the enquiry, emails Wendell, and hands off to the
+ * thank-you page where conversion tracking fires.
+ *
+ * Order matters: the database write comes first and is the only step allowed
+ * to fail the submission. Everything after it is best-effort, because a lead
+ * that is safely stored must never be lost to a mail outage.
  */
 export async function submitLead(
   _prev: LeadState,
   formData: FormData
 ): Promise<LeadState> {
-  // Honeypot. Bots fill hidden fields; humans never see this one.
+  /*
+   * Spam checks, Build Spec §13: a honeypot plus a timing check, and no
+   * CAPTCHA. Both fail silently to the thank-you page rather than explaining
+   * themselves, so a bot learns nothing from the response.
+   */
+
+  // Bots fill hidden fields; humans never see this one.
   if (str(formData, "company_website")) {
+    redirect("/thank-you");
+  }
+
+  // Nobody reads six fields and writes a paragraph in under three seconds.
+  const renderedAt = Number(str(formData, "renderedAt"));
+  if (Number.isFinite(renderedAt) && Date.now() - renderedAt < 3000) {
     redirect("/thank-you");
   }
 
@@ -41,6 +57,8 @@ export async function submitLead(
     message: str(formData, "message"),
     sourceCta: str(formData, "sourceCta"),
     sourcePage: str(formData, "sourcePage"),
+    // Arrives as ?tier=neighborhood from a pricing card CTA.
+    tier: str(formData, "tier"),
   };
 
   const errors: Record<string, string> = {};
@@ -79,6 +97,7 @@ export async function submitLead(
       message: values.message || null,
       page_path: values.sourcePage || null,
       source_cta: values.sourceCta || null,
+      tier: values.tier || null,
     });
 
     if (error) {
@@ -100,7 +119,15 @@ export async function submitLead(
     });
   }
 
-  // TODO(phase 4): notify wendell@ via Resend.
+  /*
+   * Awaited rather than fired and forgotten: a Server Action's runtime can be
+   * torn down the moment it returns, so an un-awaited send would be cancelled
+   * about half the time. notifyNewLead never throws and no-ops without a key,
+   * so this cannot fail the submission.
+   */
+  await notifyNewLead(values);
+
+  // TODO: post to Bigin once the API credentials and target pipeline arrive.
   redirect("/thank-you");
 }
 
