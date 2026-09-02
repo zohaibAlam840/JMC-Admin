@@ -252,7 +252,7 @@ export const seoPackagesPage: PageContent = {
         {
           question: "What is included in the Monthly Recap?",
           answer:
-            "A plain-English summary of what was completed, why it mattered, what changed, and what comes next — delivered by Loom or video call so you can ask questions rather than interpreting a PDF.",
+            "A plain-English summary of what was completed, why it mattered, what changed, and what comes next, delivered by Loom or video call so you can ask questions rather than interpreting a PDF.",
         },
         {
           question: "Do all packages include reporting?",
@@ -272,7 +272,7 @@ export const seoPackagesPage: PageContent = {
       id: "final-cta",
       type: "finalCta",
       heading: "Not Sure Which Package Fits? Start With a Visibility Review.",
-      body: "We will look at your market, your current visibility, and your goals, then recommend the package that actually fits — including telling you if the answer is a sprint instead.",
+      body: "We will look at your market, your current visibility, and your goals, then recommend the package that actually fits, including telling you if the answer is a sprint instead.",
       primaryCta: { label: "Request a Visibility Review", href: "/contact" },
       secondaryCta: { label: "View Launch Sprints", href: "/launch-sprints" },
     },

@@ -123,7 +123,7 @@ export default async function ArticlePage({
               ) : null}
             </div>
 
-            <h1 className="mt-4 text-[2.3rem] uppercase leading-[0.98] sm:text-[3rem]">
+            <h1 className="mt-4 text-[2.3rem] leading-[0.98] sm:text-[3rem]">
               {post.title}
             </h1>
 
@@ -175,7 +175,7 @@ export default async function ArticlePage({
         />
         <Container className="relative py-16 sm:py-20">
           <Reveal className="mx-auto flex max-w-2xl flex-col items-center gap-4 text-center">
-            <h2 className="text-[1.9rem] uppercase leading-[0.98] text-brand-black sm:text-[2.4rem]">
+            <h2 className="text-[1.9rem] leading-[0.98] text-brand-black sm:text-[2.4rem]">
               Want This Looked At For Your Business?
             </h2>
             <p className="text-[1rem] leading-relaxed text-brand-black/80">
@@ -194,7 +194,7 @@ export default async function ArticlePage({
       {/* -------------------------------------------------------- related -- */}
       {related.length > 0 ? (
         <Band tone="white">
-          <h2 className="text-[1.7rem] uppercase leading-tight sm:text-[2.1rem]">
+          <h2 className="text-[1.7rem] leading-tight sm:text-[2.1rem]">
             Keep Reading
           </h2>
           <Stagger className="mt-10 grid items-stretch gap-5 sm:grid-cols-2 lg:grid-cols-3">

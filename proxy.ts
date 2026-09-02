@@ -73,7 +73,18 @@ export async function proxy(request: NextRequest) {
 
   if (!supabaseConfigured) return NextResponse.next();
 
-  // Redirects first — a legacy URL should never reach a route handler.
+  /*
+   * Uppercase paths are 301'd to their lowercase form, per Build Spec §14.
+   * Done before anything else so the rest of the request only ever sees the
+   * canonical spelling. Query strings are carried across untouched.
+   */
+  if (/[A-Z]/.test(pathname)) {
+    const url = request.nextUrl.clone();
+    url.pathname = pathname.toLowerCase();
+    return NextResponse.redirect(url, 308);
+  }
+
+  // Redirects next — a legacy URL should never reach a route handler.
   if (!pathname.startsWith("/admin")) {
     const hit = (await getRedirects()).get(normalise(pathname));
     if (hit) {

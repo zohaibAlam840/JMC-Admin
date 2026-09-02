@@ -156,7 +156,7 @@ export const launchSprintsPage: PageContent = {
       id: "transition",
       type: "calloutBanner",
       tone: "white",
-      heading: "Sprint First, Then Monthly — With the Onboarding Fee Waived",
+      heading: "Sprint First, Then Monthly, With the Onboarding Fee Waived",
       body: "If you begin monthly service within 30 calendar days of completing your sprint, the one-time onboarding fee for the matching monthly package is waived. The sprint work carries directly into the monthly roadmap rather than being repeated.",
       primaryCta: { label: "View Monthly SEO Packages", href: "/seo-packages" },
       secondaryCta: { label: "Request a Visibility Review", href: "/contact" },
@@ -237,7 +237,7 @@ export const launchSprintsPage: PageContent = {
         {
           question: "Can the sprint cost be applied toward monthly service?",
           answer:
-            "The sprint fee itself is separate, but starting monthly service within 30 days of completing it waives the onboarding fee for the matching package — between $349 and $1,295 depending on the tier.",
+            "The sprint fee itself is separate, but starting monthly service within 30 days of completing it waives the onboarding fee for the matching package, between $349 and $1,295 depending on the tier.",
         },
       ],
       cta: { label: "Request a Sprint Consultation", href: "/contact" },

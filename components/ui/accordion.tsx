@@ -37,7 +37,7 @@ function AccordionTrigger({
       <AccordionPrimitive.Trigger
         data-slot="accordion-trigger"
         className={cn(
-          "flex flex-1 items-center justify-between gap-5 py-5 text-left font-display text-lg font-bold uppercase leading-tight text-ink-strong outline-none transition-colors hover:text-teal-ink sm:text-xl",
+          "flex flex-1 items-center justify-between gap-5 py-5 text-left font-heading text-lg font-bold uppercase leading-tight text-ink-strong outline-none transition-colors hover:text-teal-ink sm:text-xl",
           className
         )}
         {...props}
@@ -58,8 +58,16 @@ function AccordionContent({
 }: React.ComponentProps<typeof AccordionPrimitive.Content>) {
   return (
     <AccordionPrimitive.Content
+      /*
+       * Build Spec §11: never hide answers from crawlers with display:none on
+       * the server. Radix unmounts panel content by default, which is exactly
+       * that — and it would make the FAQPage schema claim answers the markup
+       * does not contain. forceMount keeps every answer in the DOM and the
+       * collapse is done with height alone.
+       */
+      forceMount
       data-slot="accordion-content"
-      className="overflow-hidden data-[state=closed]:animate-accordion-up data-[state=open]:animate-accordion-down"
+      className="overflow-hidden data-[state=closed]:h-0 data-[state=closed]:animate-accordion-up data-[state=open]:animate-accordion-down"
       {...props}
     >
       <div

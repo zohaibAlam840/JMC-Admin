@@ -14,72 +14,81 @@
    ========================================================================== */
 
 @theme {
-  /* --- Brand ------------------------------------------------------------ */
+  /* --- Brand ------------------------------------------------------------
+     Surfaces, gradients, accents, icons. NOT for text on white: teal on
+     white measures 1.86:1 and blue 3.51:1, both failing AA. Build Spec §2. */
   --color-teal: #36d1dc;
   --color-blue: #5b86e5;
-  --color-brand-black: #0a0a0a;
+  --color-brand-black: #000000;
 
-  /* Teal fails AA as text on white. These are the legible type variants. */
-  --color-teal-ink: #14707c;
-  --color-blue-ink: #3a63bd;
+  /* Accessible text variants, derived from the brand colors. Build Spec §2. */
+  --color-teal-ink: #207d84;   /* 4.85:1 on white — links, teal-colored text */
+  --color-blue-ink: #4d71c2;   /* white on it = 4.71:1 — primary button fill */
 
   /* --- Text ------------------------------------------------------------- */
-  --color-ink: #2c2c2c;
-  --color-ink-strong: #12181d;
-  --color-subtle: #6b7280;
+  --color-ink: #2c2c2c;        /* body, 13.97:1 */
+  --color-ink-strong: #2c2c2c; /* headings — the spec defines no darker step */
+  --color-subtle: #6b7280;     /* secondary, 4.83:1 */
 
   /* --- Surfaces --------------------------------------------------------- */
-  --color-surface: #f4f6f9;
-  --color-surface-2: #fafbfc;
-  /* Airier tint for bento cards, so stacked cards read apart from the band. */
+  --color-surface: #f4f6f9;    /* cards, callouts, pricing panels */
+  --color-surface-2: #fafbfc;  /* alternating section bands */
   --color-mist: #f7f9fb;
   --color-line: #e5e7eb;
   --color-line-strong: #d3dae3;
 
-  /* --- Type ------------------------------------------------------------- */
-  --font-display: var(--font-barlow-condensed), "Arial Narrow", sans-serif;
+  /* --- Type -------------------------------------------------------------
+     Anton is display only: one weight, very tight, for the hero H1 and price
+     figures. Archivo is a variable font — the condensed look comes from its
+     width axis, not from a separate "Archivo Condensed" family, which does
+     not exist. Build Spec §3. */
+  --font-display: var(--font-anton), "Arial Narrow", sans-serif;
+  --font-heading: var(--font-archivo), "Arial Narrow", sans-serif;
   --font-body: var(--font-montserrat), system-ui, sans-serif;
 
-  /* --- Radii — larger than the launch build, matching the softer direction */
-  --radius-card: 1rem;
-  --radius-bento: 1.5rem;
+  /* --- Radii — Build Spec §4 -------------------------------------------- */
+  --radius-sm: 6px;    /* pills, badges */
+  --radius-md: 8px;    /* buttons, inputs */
+  --radius-card: 12px; /* cards */
+  --radius-bento: 20px; /* hero panels, large callouts */
   --radius-pill: 999px;
 
-  /* --- Elevation — wide and soft, never a hard drop shadow -------------- */
-  --shadow-soft: 0 1px 2px rgba(18, 24, 29, 0.04),
-    0 12px 32px -14px rgba(18, 24, 29, 0.14);
-  --shadow-lift: 0 2px 4px rgba(18, 24, 29, 0.05),
-    0 24px 48px -20px rgba(18, 24, 29, 0.22);
-  --shadow-float: 0 18px 40px -18px rgba(18, 24, 29, 0.28);
+  /* --- Elevation — barely there. The demo defines cards with a hairline
+     border, not a shadow; shadows appear on hover only. Build Spec §1.5 --- */
+  --shadow-soft: 0 1px 3px rgba(0, 0, 0, 0.06), 0 1px 2px rgba(0, 0, 0, 0.04);
+  --shadow-lift: 0 8px 24px rgba(0, 0, 0, 0.1);
+  --shadow-float: 0 8px 24px rgba(0, 0, 0, 0.1);
 
-  /* --- Motion ----------------------------------------------------------- */
+  /* --- Motion -----------------------------------------------------------
+     200ms on hover, 300ms on accordion. Nothing else moves: no parallax, no
+     scroll effects, no entrance animation. Build Spec §4. */
   --ease-out-soft: cubic-bezier(0.22, 1, 0.36, 1);
   --ease-in-out-soft: cubic-bezier(0.65, 0, 0.35, 1);
 
-  --animate-accordion-down: accordion-down 0.32s cubic-bezier(0.22, 1, 0.36, 1);
-  --animate-accordion-up: accordion-up 0.28s cubic-bezier(0.22, 1, 0.36, 1);
+  --animate-accordion-down: accordion-down 0.3s cubic-bezier(0.22, 1, 0.36, 1);
+  --animate-accordion-up: accordion-up 0.3s cubic-bezier(0.22, 1, 0.36, 1);
   --animate-marquee: marquee 38s linear infinite;
 
   /* --- shadcn/ui semantic tokens, mapped to JMC ------------------------- */
   --color-background: #ffffff;
-  --color-foreground: #12181d;
+  --color-foreground: #2c2c2c;
   --color-card: #ffffff;
-  --color-card-foreground: #12181d;
+  --color-card-foreground: #2c2c2c;
   --color-popover: #ffffff;
-  --color-popover-foreground: #12181d;
-  --color-primary: #0a0a0a;
+  --color-popover-foreground: #2c2c2c;
+  --color-primary: #4d71c2;
   --color-primary-foreground: #ffffff;
   --color-secondary: #f4f6f9;
-  --color-secondary-foreground: #12181d;
-  --color-muted: #f1f4f8;
+  --color-secondary-foreground: #2c2c2c;
+  --color-muted: #f4f6f9;
   --color-muted-foreground: #6b7280;
   --color-accent: #f4f6f9;
-  --color-accent-foreground: #12181d;
+  --color-accent-foreground: #2c2c2c;
   --color-destructive: #b3261e;
   --color-destructive-foreground: #ffffff;
   --color-border: #e5e7eb;
   --color-input: #e5e7eb;
-  --color-ring: #14707c;
+  --color-ring: #4d71c2;
 }
 
 /* --------------------------------------------------------------------------
@@ -97,7 +106,7 @@
 @layer base {
   :root {
     --gradient-brand: linear-gradient(
-      100deg,
+      135deg,
       var(--color-teal) 0%,
       var(--color-blue) 100%
     );
@@ -112,10 +121,11 @@
     scroll-behavior: smooth;
     -webkit-text-size-adjust: 100%;
     /*
-     * Scroll-reveal elements that slide in horizontally sit outside the
-     * viewport until they enter view, which lets the page scroll sideways on
-     * mobile. `clip` contains that without creating a scroll container, so the
-     * sticky header keeps working — `hidden` would break it.
+     * Kept as a guard rather than a fix: with the entrance animations removed
+     * nothing sits off-screen deliberately, but a single over-wide element
+     * should still never make the whole page scroll sideways. `clip` contains
+     * that without creating a scroll container, so the sticky header keeps
+     * working — `hidden` would break it.
      */
     overflow-x: clip;
   }
@@ -130,16 +140,30 @@
     -moz-osx-font-smoothing: grayscale;
   }
 
+  /*
+   * Headings are Archivo at width 80, per Build Spec §3. Sentence case, not
+   * uppercase: the reference sets headings in sentence case and the width axis
+   * is what carries the condensed character.
+   *
+   * The hero H1 opts into Anton separately — it is display only and must never
+   * be used below 30px.
+   */
   h1,
   h2,
   h3,
   h4 {
-    font-family: var(--font-display);
+    font-family: var(--font-heading);
+    font-variation-settings: "wdth" 80;
     color: var(--color-ink-strong);
     font-weight: 700;
-    line-height: 1.02;
+    line-height: 1.15;
     text-wrap: balance;
-    letter-spacing: 0.005em;
+    letter-spacing: -0.005em;
+  }
+
+  h1 {
+    line-height: 1.05;
+    letter-spacing: -0.01em;
   }
 
   :focus-visible {
@@ -148,10 +172,6 @@
     border-radius: 4px;
   }
 
-  /* Locks scrolling while the intro loader is on screen. */
-  body[data-loading="true"] {
-    overflow: hidden;
-  }
 }
 
 /* --------------------------------------------------------------------------
@@ -179,8 +199,7 @@
   .article-body h2,
   .article-body h3,
   .article-body h4 {
-    text-transform: uppercase;
-    line-height: 1.08;
+    line-height: 1.15;
   }
 
   .article-body h2 {
@@ -333,9 +352,10 @@
   align-items: center;
   gap: 0.5rem;
   font-family: var(--font-body);
-  font-size: 0.72rem;
+  font-size: 0.8125rem; /* 13px — Build Spec §3 */
   font-weight: 600;
-  letter-spacing: 0.16em;
+  letter-spacing: 0.08em;
+  line-height: 1.4;
   text-transform: uppercase;
   color: var(--color-teal-ink);
 }

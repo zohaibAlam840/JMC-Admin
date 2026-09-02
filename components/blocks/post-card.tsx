@@ -52,7 +52,7 @@ export function PostCard({ post }: { post: PostSummary }) {
           ) : null}
         </div>
 
-        <h3 className="mt-3 text-[1.2rem] uppercase leading-tight transition-colors group-hover:text-teal-ink">
+        <h3 className="mt-3 text-[1.2rem] leading-tight transition-colors group-hover:text-teal-ink">
           {post.title}
         </h3>
 
@@ -62,7 +62,7 @@ export function PostCard({ post }: { post: PostSummary }) {
           </p>
         ) : null}
 
-        <span className="mt-auto pt-5 font-display text-[0.9rem] font-bold uppercase tracking-wide text-teal-ink">
+        <span className="mt-auto pt-5 font-body text-[0.95rem] font-semibold text-teal-ink">
           Read article{" "}
           <span
             aria-hidden="true"

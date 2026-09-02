@@ -1,21 +1,31 @@
 import type { Metadata } from "next";
-import { Barlow_Condensed, Montserrat } from "next/font/google";
+import { Anton, Archivo, Montserrat } from "next/font/google";
 import { site } from "@/content/site";
 import "./globals.css";
 
 /**
- * Barlow Condensed stands in for the logo face (Square 721 Cn BT), per the
- * implementation brief. Montserrat carries body copy. Both are self-hosted by
- * next/font — the site makes no external font requests.
+ * Type stack, per Build Spec §3.
  *
- * This layout deliberately holds nothing but the document, the fonts, and the
- * default metadata. The marketing header and footer live in the (site) group so
- * that /admin can share the type and tokens without inheriting the chrome.
+ * Anton is display only — one weight, very tight — and is reserved for the hero
+ * H1 and price figures. Archivo carries every other heading; the condensed look
+ * comes from its width axis, which is why `axes` is declared. Without that the
+ * axis is not loaded and the heading rule silently falls back to normal width.
+ * "Archivo Condensed" is not a real Google Fonts family and must not be used.
+ *
+ * All three are self-hosted by next/font, so the site makes no external font
+ * request and there is nothing render-blocking.
  */
-const barlowCondensed = Barlow_Condensed({
-  variable: "--font-barlow-condensed",
+const anton = Anton({
+  variable: "--font-anton",
   subsets: ["latin"],
-  weight: ["500", "600", "700"],
+  weight: "400",
+  display: "swap",
+});
+
+const archivo = Archivo({
+  variable: "--font-archivo",
+  subsets: ["latin"],
+  axes: ["wdth"],
   display: "swap",
 });
 
@@ -45,7 +55,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
     <html
       lang="en"
-      className={`${barlowCondensed.variable} ${montserrat.variable} h-full antialiased`}
+      className={`${anton.variable} ${archivo.variable} ${montserrat.variable} h-full antialiased`}
     >
       <body className="flex min-h-full flex-col bg-white">
         <a

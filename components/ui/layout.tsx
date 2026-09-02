@@ -9,7 +9,7 @@ export function Container({
   className?: string;
 }) {
   return (
-    <div className={cn("mx-auto w-full max-w-6xl px-5 sm:px-8", className)}>
+    <div className={cn("mx-auto w-full max-w-[1200px] px-6", className)}>
       {children}
     </div>
   );
@@ -34,8 +34,12 @@ export function Band({
     <section
       id={id}
       className={cn(
-        "scroll-mt-28 py-20 sm:py-24 lg:py-28",
-        tone === "surface" && "bg-surface",
+        // 48 / 64 / 96px vertical, Build Spec §4. Generous space between
+        // sections is the single trait the reference is most defined by.
+        "scroll-mt-24 py-12 md:py-16 lg:py-24",
+        // #FAFBFC. Build Spec §2 reserves the darker #F4F6F9 for cards,
+        // callouts and pricing panels, not for band alternation.
+        tone === "surface" && "bg-surface-2",
         tone === "mist" && "bg-mist",
         tone === "white" && "bg-white",
         className
@@ -46,12 +50,20 @@ export function Band({
   );
 }
 
-/** Eyebrow + headline + supporting copy. Every content section opens with it. */
+/**
+ * Eyebrow, headline and one line of supporting copy. Every content section
+ * opens with one.
+ *
+ * Centred by default, per Build Spec §1.5: the reference opens almost every
+ * section this way, and the consistency is a large part of why it reads the way
+ * it does. Pass align="left" for the handful of split layouts where the heading
+ * sits beside its content rather than above it.
+ */
 export function SectionHeader({
   eyebrow,
   heading,
   body,
-  align = "left",
+  align = "center",
   className,
 }: {
   eyebrow?: string;
@@ -69,7 +81,7 @@ export function SectionHeader({
       )}
     >
       {eyebrow ? <p className="eyebrow eyebrow-dot">{eyebrow}</p> : null}
-      <h2 className="text-[2.1rem] uppercase leading-[0.98] sm:text-[2.75rem] lg:text-[3.25rem]">
+      <h2 className="text-[1.875rem] sm:text-[2.25rem] lg:text-[2.625rem]">
         {heading}
       </h2>
       {body ? (

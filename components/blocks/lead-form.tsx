@@ -1,8 +1,9 @@
 "use client";
 
+import * as React from "react";
 import { useActionState } from "react";
 import { useFormStatus } from "react-dom";
-import { usePathname } from "next/navigation";
+import { usePathname, useSearchParams } from "next/navigation";
 import { ArrowRight, ChevronDown, Loader2 } from "lucide-react";
 import { submitLead, type LeadState } from "@/app/actions/lead";
 import { Input, Label, Select, Textarea } from "@/components/ui/form-controls";
@@ -52,6 +53,11 @@ export function LeadForm({
   sourceCta?: string;
 }) {
   const pathname = usePathname();
+  const params = useSearchParams();
+  const tier = params.get("tier") ?? "";
+  // Captured once on mount rather than read at submit time, so the value is
+  // the moment the form appeared rather than the moment it was sent.
+  const [renderedAt] = React.useState(() => String(Date.now()));
   const [state, action] = useActionState<LeadState, FormData>(submitLead, {});
   const v = state.values ?? {};
   const e = state.errors ?? {};
@@ -61,6 +67,16 @@ export function LeadForm({
       {/* Attribution — which CTA and page produced this request. */}
       <input type="hidden" name="sourceCta" value={sourceCta} />
       <input type="hidden" name="sourcePage" value={pathname} />
+      {/*
+       * Pricing card CTAs arrive as ?tier=neighborhood. Build Spec §13 wants
+       * that carried through for attribution.
+       */}
+      <input type="hidden" name="tier" value={tier} />
+      {/*
+       * Paired with the honeypot, per §13: a form completed in under three
+       * seconds was not filled in by a person. No CAPTCHA.
+       */}
+      <input type="hidden" name="renderedAt" value={renderedAt} />
 
       {/* Honeypot. Hidden from people, tempting to bots. */}
       <div aria-hidden="true" className="absolute left-[-9999px]">
@@ -153,7 +169,9 @@ export function LeadForm({
         </div>
 
         <div className="flex flex-col gap-2">
-          <Label htmlFor="service">What are you interested in?</Label>
+          <Label htmlFor="service">
+            What are you interested in?
+          </Label>
           <div className="relative">
             <Select
               id="service"

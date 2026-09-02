@@ -185,6 +185,8 @@ export const packages: Package[] = [
     ],
     cta: { label: "Request Agent SEO Review", href: "/contact" },
     pricingPending: true,
+    // Hidden with the Real Estate page — cut from scope by Page Spec 01 §2.
+    visible: false,
   },
   {
     id: "real-estate-team",
@@ -203,6 +205,7 @@ export const packages: Package[] = [
     ],
     cta: { label: "Request Team/Brokerage SEO Review", href: "/contact" },
     pricingPending: true,
+    visible: false,
   },
 
   /* -------------------------------------------------------------- sprints -- */

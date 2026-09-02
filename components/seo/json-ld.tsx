@@ -80,6 +80,10 @@ export function serviceSchema({
   };
 }
 
+/**
+ * BlogPosting rather than the more general Article: Build Spec §14 names it
+ * explicitly for Resources posts.
+ */
 export function articleSchema({
   title,
   description,
@@ -101,7 +105,7 @@ export function articleSchema({
 }) {
   return {
     "@context": "https://schema.org",
-    "@type": "Article",
+    "@type": "BlogPosting",
     headline: title,
     description,
     url: `${site.url}${url}`,

@@ -1,6 +1,14 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
+  /*
+   * One trailing-slash convention, enforced sitewide. Build Spec §14 writes
+   * every path with a trailing slash, and two spellings of the same page is
+   * how duplicate-content problems start on a site whose whole argument is
+   * that it does SEO properly. Next issues a 308 from the other form.
+   */
+  trailingSlash: true,
+
   /**
    * Legacy URL map, build-time copy.
    *

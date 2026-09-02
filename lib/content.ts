@@ -1,5 +1,6 @@
 import { restGet, tags } from "@/lib/supabase/rest";
 import {
+  draftPageSlugs,
   filePages,
   getFilePage,
   servicePageSlugs,
@@ -80,6 +81,17 @@ const PAGE_SELECT =
 function fromFile(slug: string): ResolvedPage | null {
   const page = getFilePage(slug);
   if (!page) return null;
+  /*
+   * Mirrors what a seeded database would serve: a page that seeds as a draft
+   * must not be publicly reachable through the fallback.
+   *
+   * Development is the exception, so a draft can be looked at on localhost
+   * before anyone decides to publish it. next build runs in production mode,
+   * so nothing draft is ever prerendered or deployed.
+   */
+  if (draftPageSlugs.has(slug) && process.env.NODE_ENV === "production") {
+    return null;
+  }
   return {
     slug: page.slug,
     label: page.label,
@@ -125,7 +137,9 @@ export async function getPublishedPages(): Promise<
   );
 
   if (!rows || rows.length === 0) {
-    return filePages.map((p) => ({ slug: p.slug, label: p.label }));
+    return filePages
+      .filter((p) => !draftPageSlugs.has(p.slug))
+      .map((p) => ({ slug: p.slug, label: p.label }));
   }
   return rows;
 }

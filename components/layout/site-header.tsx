@@ -3,8 +3,7 @@
 import * as React from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { motion, useScroll, useMotionValueEvent } from "motion/react";
-import { ArrowRight, Menu } from "lucide-react";
+import { ArrowRight, ChevronDown, Menu } from "lucide-react";
 import { Logo } from "@/components/ui/logo";
 import { Button } from "@/components/ui/button";
 import { Container } from "@/components/ui/layout";
@@ -31,6 +30,14 @@ import type { NavItem } from "@/lib/types";
  * Navigation arrives as props rather than being imported: it is editable in
  * /admin, so the server resolves it once per request and hands it down.
  */
+/*
+ * The current section's nav item carries a persistent teal underline, per
+ * Build Spec §7. decoration-2 with an offset so it reads as a deliberate rule
+ * rather than as a default link underline.
+ */
+const ACTIVE_LINK =
+  "text-teal-ink underline decoration-teal decoration-2 underline-offset-[6px]";
+
 export function SiteHeader({
   nav: mainNav,
   primaryCta,
@@ -41,12 +48,19 @@ export function SiteHeader({
   const pathname = usePathname();
   const [scrolled, setScrolled] = React.useState(false);
   const [mobileOpen, setMobileOpen] = React.useState(false);
-  const { scrollY } = useScroll();
 
-  // The header tightens and gains elevation once the hero is behind it.
-  useMotionValueEvent(scrollY, "change", (y) => {
-    setScrolled(y > 24);
-  });
+  /*
+   * The only thing scroll drives here is the bottom border, at 40px, per Build
+   * Spec §7. A plain listener rather than a motion value: the header no longer
+   * animates, so pulling in an animation library for one boolean would be the
+   * tail wagging the dog.
+   */
+  React.useEffect(() => {
+    const onScroll = () => setScrolled(window.scrollY > 40);
+    onScroll();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
+  }, []);
 
   const isActive = (href: string) => {
     const base = href.split("#")[0];
@@ -54,18 +68,12 @@ export function SiteHeader({
   };
 
   return (
-    <motion.header
-      initial={{ y: -80, opacity: 0 }}
-      animate={{ y: 0, opacity: 1 }}
-      transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1], delay: 0.05 }}
+    <header
       className={cn(
-        "sticky top-0 z-50 transition-all duration-300 ease-out-soft",
-        // Transparent at rest so the hero reads as one uncut surface. It only
-        // takes a background once content is scrolling underneath it, which is
-        // the point at which the nav would otherwise become unreadable.
-        scrolled
-          ? "border-b border-line bg-white/85 shadow-soft backdrop-blur-xl"
-          : "border-b border-transparent bg-transparent"
+        // Fixed 72px, solid white, with the border appearing after 40px of
+        // scroll. Build Spec §7. It no longer shrinks or animates in.
+        "sticky top-0 z-50 border-b bg-white transition-colors duration-200",
+        scrolled ? "border-line" : "border-transparent"
       )}
     >
       {/*
@@ -76,12 +84,7 @@ export function SiteHeader({
        * positioning on purpose: an absolutely centred nav cannot reflow, so at
        * ~1024px the links would slide underneath the CTA button.
        */}
-      <Container
-        className={cn(
-          "flex items-center gap-4 transition-all duration-300 ease-out-soft",
-          scrolled ? "h-[60px]" : "h-[72px]"
-        )}
-      >
+      <Container className="flex h-[72px] items-center gap-4">
         <div className="flex flex-1 justify-start">
           <Logo />
         </div>
@@ -92,7 +95,7 @@ export function SiteHeader({
               item.children?.length ? (
                 <NavigationMenuItem key={item.label}>
                   <NavigationMenuTrigger
-                    className={cn(isActive(item.href) && "text-teal-ink")}
+                    className={cn(isActive(item.href) && ACTIVE_LINK)}
                   >
                     {item.label}
                   </NavigationMenuTrigger>
@@ -115,7 +118,7 @@ export function SiteHeader({
                       href={item.href}
                       className={cn(
                         navigationMenuTriggerStyle(),
-                        isActive(item.href) && "text-teal-ink"
+                        isActive(item.href) && ACTIVE_LINK
                       )}
                     >
                       {item.label}
@@ -164,43 +167,83 @@ export function SiteHeader({
               className="flex-1 overflow-y-auto px-6 py-6"
             >
               <ul className="flex flex-col gap-1">
-                {mainNav.map((item) => (
-                  <li
-                    key={item.label}
-                    className="border-b border-line/70 pb-2 last:border-0"
-                  >
-                    <SheetClose asChild>
-                      <Link
-                        href={item.href}
-                        className={cn(
-                          "block py-2.5 font-display text-lg font-bold uppercase transition-colors",
-                          isActive(item.href)
-                            ? "text-teal-ink"
-                            : "text-ink-strong"
-                        )}
-                      >
-                        {item.label}
-                      </Link>
-                    </SheetClose>
+                {mainNav.map((item) =>
+                  item.children?.length ? (
+                    /*
+                     * Build Spec §7: tapping a dropdown parent must expand it
+                     * in place and never navigate. A <details> does that with
+                     * no state and keeps working with the keyboard.
+                     */
+                    <li
+                      key={item.label}
+                      className="border-b border-line/70 pb-2 last:border-0"
+                    >
+                      <details>
+                        <summary
+                          className={cn(
+                            "flex cursor-pointer items-center justify-between py-2.5 font-heading text-lg font-bold",
+                            isActive(item.href) ? "text-teal-ink" : "text-ink-strong"
+                          )}
+                        >
+                          {item.label}
+                          <ChevronDown
+                            size={18}
+                            aria-hidden="true"
+                            className="shrink-0 transition-transform"
+                          />
+                        </summary>
 
-                    {item.children?.length ? (
-                      <ul className="flex flex-col gap-0.5 pb-2 pl-3">
-                        {item.children.map((child) => (
-                          <li key={child.label}>
-                            <SheetClose asChild>
-                              <Link
-                                href={child.href}
-                                className="block py-1.5 text-[0.88rem] text-subtle transition-colors hover:text-teal-ink"
-                              >
-                                {child.label}
-                              </Link>
-                            </SheetClose>
-                          </li>
-                        ))}
-                      </ul>
-                    ) : null}
-                  </li>
-                ))}
+                        <ul className="flex flex-col gap-0.5 pb-2 pl-3">
+                          {item.children.map((child) => (
+                            <li key={child.label}>
+                              <SheetClose asChild>
+                                <Link
+                                  href={child.href}
+                                  className="block py-1.5 text-[0.88rem] text-subtle transition-colors hover:text-teal-ink"
+                                >
+                                  {child.label}
+                                </Link>
+                              </SheetClose>
+                            </li>
+                          ))}
+
+                          {/* Industries gets both a chevron and a way through
+                              to the overview, so the parent is never a
+                              dead end on a phone. */}
+                          {item.href && item.href !== "#" ? (
+                            <li>
+                              <SheetClose asChild>
+                                <Link
+                                  href={item.href}
+                                  className="block py-1.5 text-[0.88rem] font-semibold text-teal-ink"
+                                >
+                                  View all {item.label.toLowerCase()}
+                                </Link>
+                              </SheetClose>
+                            </li>
+                          ) : null}
+                        </ul>
+                      </details>
+                    </li>
+                  ) : (
+                    <li
+                      key={item.label}
+                      className="border-b border-line/70 pb-2 last:border-0"
+                    >
+                      <SheetClose asChild>
+                        <Link
+                          href={item.href}
+                          className={cn(
+                            "block py-2.5 font-heading text-lg font-bold transition-colors",
+                            isActive(item.href) ? "text-teal-ink" : "text-ink-strong"
+                          )}
+                        >
+                          {item.label}
+                        </Link>
+                      </SheetClose>
+                    </li>
+                  )
+                )}
               </ul>
             </nav>
 
@@ -215,6 +258,6 @@ export function SiteHeader({
           </Sheet>
         </div>
       </Container>
-    </motion.header>
+    </header>
   );
 }

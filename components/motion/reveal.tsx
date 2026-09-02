@@ -1,146 +1,37 @@
-"use client";
-
 import * as React from "react";
-import {
-  motion,
-  useReducedMotion,
-  type Variants,
-  type HTMLMotionProps,
-} from "motion/react";
 import { cn } from "@/lib/utils";
 
 /**
- * Scroll-reveal primitives.
+ * Layout wrappers that used to animate, and deliberately no longer do.
  *
- * These are client components that take children as a slot, so the content
- * inside them stays a Server Component. Sections pass rendered markup through;
- * only the animation wrapper ships JavaScript.
+ * Build Spec §4: "200ms ease-out on hover, 300ms on accordion expand. Nothing
+ * else moves. No parallax, no scroll-jacking, no entrance animations." The
+ * reference has no entrance animation anywhere, and that restraint is part of
+ * why it reads the way it does — §1.5 lists it as one of the defining traits.
  *
- * Everything collapses to a no-op opacity fade when the visitor has asked for
- * reduced motion.
+ * The components survive as plain elements rather than being deleted so the
+ * ~60 call sites across the section renderers keep working, and so the grid
+ * and flex classes they carry stay where they are. They render a single div
+ * and nothing else.
+ *
+ * If animation is ever reinstated, it goes back in here and nowhere else.
  */
 
-const DISTANCE = 22;
-
-function offset(direction: Direction) {
-  switch (direction) {
-    case "up":
-      return { y: DISTANCE, x: 0 };
-    case "down":
-      return { y: -DISTANCE, x: 0 };
-    case "left":
-      return { x: DISTANCE, y: 0 };
-    case "right":
-      return { x: -DISTANCE, y: 0 };
-    default:
-      return { x: 0, y: 0 };
-  }
-}
-
-type Direction = "up" | "down" | "left" | "right" | "none";
-
-export function Reveal({
-  children,
-  className,
-  direction = "up",
-  delay = 0,
-  duration = 0.65,
-  once = true,
-  as = "div",
-  ...rest
-}: {
+type WrapperProps = {
   children: React.ReactNode;
   className?: string;
-  direction?: Direction;
+  /** Some call sites need a list element rather than a div. */
+  as?: React.ElementType;
+  /** Accepted and ignored — kept so existing call sites still typecheck. */
+  direction?: "up" | "down" | "left" | "right" | "none";
   delay?: number;
   duration?: number;
-  once?: boolean;
-  as?: "div" | "section" | "li" | "span";
-} & Omit<HTMLMotionProps<"div">, "children">) {
-  const reduced = useReducedMotion();
-  const Cmp = motion[as] as typeof motion.div;
-  const { x, y } = reduced ? { x: 0, y: 0 } : offset(direction);
-
-  return (
-    <Cmp
-      className={cn(className)}
-      initial={{ opacity: 0, x, y }}
-      whileInView={{ opacity: 1, x: 0, y: 0 }}
-      viewport={{ once, amount: 0.25, margin: "0px 0px -80px 0px" }}
-      transition={{
-        duration: reduced ? 0.01 : duration,
-        delay: reduced ? 0 : delay,
-        ease: [0.22, 1, 0.36, 1],
-      }}
-      {...rest}
-    >
-      {children}
-    </Cmp>
-  );
-}
-
-/* -------------------------------------------------------------------------- */
-
-const containerVariants: Variants = {
-  hidden: {},
-  show: { transition: { staggerChildren: 0.09, delayChildren: 0.05 } },
 };
 
-const itemVariants: Variants = {
-  hidden: { opacity: 0, y: DISTANCE },
-  show: {
-    opacity: 1,
-    y: 0,
-    transition: { duration: 0.6, ease: [0.22, 1, 0.36, 1] },
-  },
-};
-
-const reducedItemVariants: Variants = {
-  hidden: { opacity: 0 },
-  show: { opacity: 1, transition: { duration: 0.01 } },
-};
-
-/** Parent for StaggerItem children. Cards enter in sequence, not all at once. */
-export function Stagger({
-  children,
-  className,
-  as = "div",
-}: {
-  children: React.ReactNode;
-  className?: string;
-  as?: "div" | "ul" | "ol";
-}) {
-  const Cmp = motion[as] as typeof motion.div;
-  return (
-    <Cmp
-      className={cn(className)}
-      variants={containerVariants}
-      initial="hidden"
-      whileInView="show"
-      viewport={{ once: true, amount: 0.15, margin: "0px 0px -60px 0px" }}
-    >
-      {children}
-    </Cmp>
-  );
+function Plain({ children, className, as: Tag = "div" }: WrapperProps) {
+  return <Tag className={cn(className)}>{children}</Tag>;
 }
 
-export function StaggerItem({
-  children,
-  className,
-  as = "div",
-}: {
-  children: React.ReactNode;
-  className?: string;
-  as?: "div" | "li";
-}) {
-  const reduced = useReducedMotion();
-  const Cmp = motion[as] as typeof motion.div;
-  return (
-    <Cmp
-      className={cn(className)}
-      variants={reduced ? reducedItemVariants : itemVariants}
-    >
-      {children}
-    </Cmp>
-  );
-}
+export const Reveal = Plain;
+export const Stagger = Plain;
+export const StaggerItem = Plain;

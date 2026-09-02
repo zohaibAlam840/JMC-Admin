@@ -58,7 +58,7 @@ export const aboutPage: PageContent = {
       tone: "surface",
       eyebrow: "Houston-Area SEO Agency",
       heading: "Rooted in League City. Built for Houston-Area Growth.",
-      body: "JMC is based in League City and works with businesses across the Greater Houston area and beyond. Being local matters for understanding a market, but it is not a boundary — traditional SEO clients compete regionally and nationally, and the work is built around where your customers actually are.",
+      body: "JMC is based in League City and works with businesses across the Greater Houston area and beyond. Being local matters for understanding a market, but it is not a boundary. Traditional SEO clients compete regionally and nationally, and the work is built around where your customers actually are.",
       cta: { label: "Explore SEO Services", href: "/local-seo-services" },
     },
 
@@ -127,7 +127,7 @@ export const aboutPage: PageContent = {
       id: "final-cta",
       type: "finalCta",
       heading: "Let's Look at Where Your Visibility Stands",
-      body: "A Visibility Review is the starting point for every JMC engagement — and it is useful even if you decide not to work with us.",
+      body: "A Visibility Review is the starting point for every JMC engagement, and it is useful even if you decide not to work with us.",
       primaryCta: { label: "Request a Visibility Review", href: "/contact" },
       secondaryCta: { label: "View SEO Packages", href: "/seo-packages" },
     },

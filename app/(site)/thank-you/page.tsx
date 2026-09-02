@@ -39,7 +39,7 @@ export default function Page() {
             <Check size={28} strokeWidth={3} aria-hidden="true" />
           </span>
 
-          <h1 className="mt-6 text-4xl uppercase sm:text-5xl">
+          <h1 className="mt-6 text-4xl sm:text-5xl">
             Request Received
           </h1>
           <p className="mt-5 text-[1.08rem] leading-relaxed text-ink">
@@ -57,7 +57,7 @@ export default function Page() {
                   {String(i + 1).padStart(2, "0")}
                 </span>
                 <div>
-                  <p className="font-display text-base font-bold uppercase text-ink-strong">
+                  <p className="font-heading text-base font-bold text-ink-strong">
                     {item.title}
                   </p>
                   <p className="mt-1 text-[0.9rem] leading-relaxed text-subtle">

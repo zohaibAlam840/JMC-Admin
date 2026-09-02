@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { ArrowRight, Check, Sparkles } from "lucide-react";
 import {
   Band,
@@ -15,10 +16,13 @@ import {
   AccordionTrigger,
 } from "@/components/ui/accordion";
 import { Reveal, Stagger, StaggerItem } from "@/components/motion/reveal";
-import { ShowcaseCard } from "@/components/blocks/hero-showcase";
 import { ProcessRoadmap } from "@/components/blocks/process-roadmap";
 import { Icon, IconTile } from "@/components/blocks/icon";
 import { PostCard } from "@/components/blocks/post-card";
+import { HeroCardStack } from "@/components/blocks/hero-card-stack";
+import { ReportingBlock } from "@/components/blocks/reporting-block";
+import { IndustryGrid } from "@/components/blocks/industry-grid";
+import { LinkStack } from "@/components/blocks/link-stack";
 import { packages as filePackages } from "@/content/packages";
 import { cn } from "@/lib/utils";
 import type { Package, PostSummary } from "@/lib/types";
@@ -44,39 +48,46 @@ function HeroSplit({ section }: { section: HeroSplitSection }) {
   return (
     <section
       id={section.id}
-      className="relative isolate scroll-mt-28 overflow-hidden pb-20 pt-14 sm:pt-18 lg:pb-24"
+      className="relative isolate scroll-mt-24 overflow-hidden py-12 md:py-16 lg:py-24"
     >
       <HeroBackdrop />
 
       <Container className="relative">
-        <div className="mx-auto flex max-w-3xl flex-col items-center gap-6 text-center">
-          <Reveal direction="none" duration={0.5}>
-            <Badge variant="soft" size="md">
-              <Sparkles size={11} strokeWidth={2.5} aria-hidden="true" />
-              {section.eyebrow}
-            </Badge>
-          </Reveal>
+        {/*
+         * 55 / 45, Build Spec §9A. The copy comes first in the DOM, so below
+         * 768px it stacks to a single column with the visual underneath —
+         * which is the order Page Spec 01 §1 asks for, without needing an
+         * order utility to reshuffle it.
+         */}
+        <div className="grid items-center gap-12 lg:grid-cols-[55fr_45fr] lg:gap-16">
+          <div className="flex flex-col items-start gap-6">
+            <p className="eyebrow">{section.eyebrow}</p>
 
-          <Reveal delay={0.06}>
-            <h1 className="text-[2.6rem] uppercase leading-[0.94] sm:text-[3.5rem] lg:text-[4.35rem]">
+            {/*
+             * 56px at desktop rather than the 64px in Build Spec §3.
+             *
+             * Anton has one weight and is very condensed, so at 64px a headline
+             * of any length stops reading as type and becomes a solid block —
+             * which is the opposite of the air §1.5 asks for. 56px keeps the
+             * display voice the spec wants while letting the hero breathe.
+             * Everything else about the H1 is as specified: Anton, weight 400,
+             * line-height 1.05, tracking -0.01em.
+             */}
+            <h1 className="font-display text-[2.375rem] leading-[1.05] sm:text-[3rem] lg:text-[3.5rem]">
               {section.heading}
             </h1>
-          </Reveal>
 
-          <Reveal delay={0.12}>
-            <p className="max-w-2xl text-[1.06rem] leading-relaxed text-subtle">
+            <p className="max-w-[68ch] text-[1.1875rem] leading-relaxed text-subtle">
               {section.body}
             </p>
-          </Reveal>
 
-          <Reveal delay={0.18} className="mt-1">
-            <div className="flex flex-col gap-3 sm:flex-row">
+            <div className="mt-1 flex w-full flex-col gap-3 sm:w-auto sm:flex-row">
               <Button href={section.primaryCta.href} size="lg" className="group">
                 {section.primaryCta.label}
                 <ArrowRight
                   size={16}
                   aria-hidden="true"
-                  className="transition-transform duration-300 ease-out-soft group-hover:translate-x-1"
+                  className="transition-transform duration-200 group-hover:translate-x-0.5"
                 />
               </Button>
               {section.secondaryCta ? (
@@ -89,26 +100,12 @@ function HeroSplit({ section }: { section: HeroSplitSection }) {
                 </Button>
               ) : null}
             </div>
-          </Reveal>
-        </div>
+          </div>
 
-        {/* Showcase row. A plain grid with stretched items, so all three cards
-            share a top edge, a bottom edge, and an internal rule line. */}
-        <Stagger className="mt-16 grid items-stretch gap-5 sm:grid-cols-2 lg:mt-20 lg:grid-cols-3">
-          {section.showcase.map((card, i) => (
-            <StaggerItem
-              key={card.title}
-              className={cn(
-                "h-full",
-                // Third card spans both columns at sm so the row never leaves
-                // a lone orphan card.
-                i === 2 && "sm:col-span-2 lg:col-span-1"
-              )}
-            >
-              <ShowcaseCard card={card} />
-            </StaggerItem>
-          ))}
-        </Stagger>
+          <div className="pb-10 lg:pb-0">
+            <HeroCardStack cards={section.showcase} />
+          </div>
+        </div>
       </Container>
     </section>
   );
@@ -136,7 +133,7 @@ function HeroCentered({ section }: { section: HeroCenteredSection }) {
           </Reveal>
 
           <Reveal delay={0.06}>
-            <h1 className="text-[2.6rem] uppercase leading-[0.94] sm:text-[3.4rem] lg:text-[4rem]">
+            <h1 className="font-display text-[2.375rem] leading-[1.05] sm:text-[3rem] lg:text-[3.5rem]">
               {section.heading}
             </h1>
           </Reveal>
@@ -209,7 +206,7 @@ function CardGrid({ section }: { section: CardGridSection }) {
                     </span>
                   ) : null}
                   <div>
-                    <h3 className="text-[1.08rem] uppercase leading-tight">
+                    <h3 className="text-[1.1875rem] leading-tight">
                       {card.title}
                     </h3>
                     {card.body ? (
@@ -260,7 +257,7 @@ function CardGrid({ section }: { section: CardGridSection }) {
                       <Icon name={card.icon} size={18} />
                     </span>
                   ) : null}
-                  <h3 className="text-[0.98rem] uppercase leading-tight">
+                  <h3 className="text-[1.1875rem] leading-tight">
                     {card.title}
                   </h3>
                 </div>
@@ -333,12 +330,18 @@ function CardGrid({ section }: { section: CardGridSection }) {
                 <IconTile name={card.icon} />
               ) : null}
 
-              <h3 className="text-[1.15rem] uppercase leading-tight">
+              <h3 className="text-[1.3125rem] leading-tight sm:text-[1.5rem]">
                 {card.title}
               </h3>
 
+              {card.meta ? (
+                <p className="mt-2 font-heading text-[1.0625rem] font-bold text-teal-ink">
+                  {card.meta}
+                </p>
+              ) : null}
+
               {card.body ? (
-                <p className="mt-3 text-[0.92rem] leading-relaxed text-subtle">
+                <p className="mt-3 max-w-[68ch] text-[0.92rem] leading-relaxed text-subtle">
                   {card.body}
                 </p>
               ) : null}
@@ -380,16 +383,70 @@ function CardGrid({ section }: { section: CardGridSection }) {
 /* -------------------------------------------------------------------------- */
 
 function FullWidthText({ section }: { section: FullWidthTextSection }) {
+  /*
+   * Page Spec 01 §3. Solid ink, not the gradient: white on #2C2C2C is 13.97:1,
+   * which removes the contrast constraint entirely, and a flat dark band suits
+   * a statement about clarity better than a gradient does. Teal is available
+   * here only as a rule or an accent mark.
+   *
+   * No cards and no icons, by instruction. This band is the visual peak of the
+   * page it sits on, and the whitespace is doing the work.
+   */
+  if (section.treatment === "statement") {
+    return (
+      <section
+        id={section.id}
+        className="scroll-mt-24 bg-ink py-20 text-white md:py-28 lg:py-32"
+      >
+        <Container>
+          <div className="mx-auto flex max-w-3xl flex-col items-center gap-8 text-center">
+            {section.eyebrow ? (
+              <p className="text-[0.8125rem] font-semibold uppercase tracking-[0.08em] text-teal">
+                {section.eyebrow}
+              </p>
+            ) : null}
+
+            <span
+              aria-hidden="true"
+              className="h-[3px] w-16 rounded-full bg-[linear-gradient(135deg,var(--color-teal),var(--color-blue))]"
+            />
+
+            <h2 className="text-[1.875rem] text-white sm:text-[2.5rem] lg:text-[3rem]">
+              {section.heading}
+            </h2>
+
+            <p className="max-w-[60ch] text-[1.0625rem] leading-relaxed text-white/75">
+              {section.body}
+            </p>
+
+            {section.cta ? (
+              <Link
+                href={section.cta.href}
+                className="mt-2 text-[0.95rem] font-semibold text-teal underline-offset-4 transition-colors hover:text-white hover:underline"
+              >
+                {section.cta.label}
+              </Link>
+            ) : null}
+          </div>
+        </Container>
+      </section>
+    );
+  }
+
   return (
-    <Band id={section.id} tone={section.tone} className="relative isolate overflow-hidden">
+    <Band
+      id={section.id}
+      tone={section.tone}
+      className="relative isolate overflow-hidden"
+    >
       <Reveal className="relative mx-auto flex max-w-3xl flex-col items-center gap-5 text-center">
         {section.eyebrow ? (
           <p className="eyebrow eyebrow-dot">{section.eyebrow}</p>
         ) : null}
-        <h2 className="text-[2.1rem] uppercase leading-[0.98] sm:text-[2.75rem] lg:text-[3.25rem]">
+        <h2 className="text-[1.875rem] sm:text-[2.25rem] lg:text-[2.625rem]">
           {section.heading}
         </h2>
-        <p className="text-[1.04rem] leading-relaxed text-subtle">
+        <p className="max-w-[68ch] text-[1.0625rem] leading-relaxed text-subtle">
           {section.body}
         </p>
         {section.cta ? (
@@ -403,7 +460,6 @@ function FullWidthText({ section }: { section: FullWidthTextSection }) {
     </Band>
   );
 }
-
 /* -------------------------------------------------------------------------- */
 /*  08 · FeatureSplit                                                          */
 /* -------------------------------------------------------------------------- */
@@ -421,7 +477,7 @@ function FeatureSplit({ section }: { section: FeatureSplitSection }) {
           {section.eyebrow ? (
             <p className="eyebrow eyebrow-dot">{section.eyebrow}</p>
           ) : null}
-          <h2 className="text-[2.1rem] uppercase leading-[0.98] sm:text-[2.6rem] lg:text-[3rem]">
+          <h2 className="text-[1.875rem] sm:text-[2.25rem] lg:text-[2.625rem]">
             {section.heading}
           </h2>
           <p className="text-[1.02rem] leading-relaxed text-subtle">
@@ -462,7 +518,7 @@ function FeatureSplit({ section }: { section: FeatureSplitSection }) {
                     <Icon name={group.icon} size={18} />
                   </span>
                 ) : null}
-                <h3 className="text-[1.02rem] uppercase leading-tight">
+                <h3 className="text-[1.1875rem] leading-tight">
                   {group.title}
                 </h3>
                 <p className="mt-2 text-[0.88rem] leading-relaxed text-subtle">
@@ -534,7 +590,7 @@ function PricingCards({
                 </Badge>
               ) : null}
 
-              <h3 className="text-[1.3rem] uppercase leading-tight">
+              <h3 className="text-[1.3125rem] leading-tight sm:text-[1.5rem]">
                 {pkg.name}
               </h3>
 
@@ -623,7 +679,7 @@ function CalloutBanner({ section }: { section: CalloutBannerSection }) {
 
           <div className="relative flex flex-col items-start gap-7 lg:flex-row lg:items-center lg:justify-between">
             <div className="max-w-2xl">
-              <h2 className="text-[1.7rem] uppercase leading-tight sm:text-[2.1rem]">
+              <h2 className="text-[1.875rem] sm:text-[2.25rem]">
                 {section.heading}
               </h2>
               <p className="mt-3 text-[0.98rem] leading-relaxed text-subtle">
@@ -660,7 +716,7 @@ function Faq({ section }: { section: FaqSection }) {
             {section.eyebrow ? (
               <p className="eyebrow eyebrow-dot">{section.eyebrow}</p>
             ) : null}
-            <h2 className="text-[2.1rem] uppercase leading-[0.98] sm:text-[2.5rem]">
+            <h2 className="text-[1.875rem] sm:text-[2.25rem] lg:text-[2.625rem]">
               {section.heading}
             </h2>
             {section.cta ? (
@@ -679,7 +735,13 @@ function Faq({ section }: { section: FaqSection }) {
         </Reveal>
 
         <Reveal direction="left" delay={0.08}>
-          <Accordion type="single" collapsible className="flex flex-col gap-3">
+          {/* One item open at a time, first item open on load. §11. */}
+          <Accordion
+            type="single"
+            collapsible
+            defaultValue="item-0"
+            className="flex flex-col gap-3"
+          >
             {section.items.map((item, i) => (
               <AccordionItem key={item.question} value={`item-${i}`}>
                 <AccordionTrigger>{item.question}</AccordionTrigger>
@@ -717,7 +779,7 @@ function FinalCta({ section }: { section: FinalCtaSection }) {
       />
       <Container className="relative py-20 sm:py-24">
         <Reveal className="mx-auto flex max-w-3xl flex-col items-center gap-5 text-center">
-          <h2 className="text-[2.2rem] uppercase leading-[0.98] text-brand-black sm:text-[2.9rem] lg:text-[3.25rem]">
+          <h2 className="text-[1.875rem] text-brand-black sm:text-[2.25rem] lg:text-[2.625rem]">
             {section.heading}
           </h2>
           <p className="text-[1.05rem] leading-relaxed text-brand-black/80">
@@ -850,6 +912,12 @@ function renderSection(
       return <Faq key={section.id} section={section} />;
     case "finalCta":
       return <FinalCta key={section.id} section={section} />;
+    case "industryGrid":
+      return <IndustryGrid key={section.id} section={section} />;
+    case "reportingBlock":
+      return <ReportingBlock key={section.id} section={section} />;
+    case "linkStack":
+      return <LinkStack key={section.id} section={section} />;
     case "postList":
       return <PostList key={section.id} section={section} posts={posts} />;
     default: {

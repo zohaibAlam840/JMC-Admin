@@ -6,7 +6,12 @@ import { adminClient, requireAdmin } from "@/lib/admin/guard";
 import { createSupabaseServerClient } from "@/lib/supabase/server";
 import { tags } from "@/lib/supabase/rest";
 import { getSectionSchema } from "@/lib/section-schema";
-import { filePages, servicePageSlugs, systemPageSlugs } from "@/content/pages";
+import {
+  draftPageSlugs,
+  filePages,
+  servicePageSlugs,
+  systemPageSlugs,
+} from "@/content/pages";
 import { packages as filePackages } from "@/content/packages";
 import {
   footerNav as fileFooterNav,
@@ -698,7 +703,7 @@ export async function seedFromCode(): Promise<void> {
           label: page.label,
           seo_title: page.seoTitle,
           meta_description: page.metaDescription,
-          published: true,
+          published: !draftPageSlugs.has(page.slug),
           is_service: servicePageSlugs.has(page.slug),
           system: systemPageSlugs.has(page.slug),
           position: index,

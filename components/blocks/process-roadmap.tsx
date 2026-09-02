@@ -75,7 +75,7 @@ export function ProcessRoadmap({ section }: { section: ProcessStepsSection }) {
               {section.eyebrow}
             </p>
           ) : null}
-          <h2 className="text-[2.1rem] uppercase leading-[0.98] text-white sm:text-[2.75rem] lg:text-[3.25rem]">
+          <h2 className="text-[2.1rem] leading-[0.98] text-white sm:text-[2.75rem] lg:text-[3.25rem]">
             {section.heading}
           </h2>
           {section.body ? (
@@ -139,7 +139,7 @@ export function ProcessRoadmap({ section }: { section: ProcessStepsSection }) {
                 </span>
 
                 <div className="rounded-bento border border-white/10 bg-white/[0.04] p-5 backdrop-blur-sm transition-colors duration-300 hover:border-teal/40 hover:bg-white/[0.07] lg:mt-7">
-                  <h3 className="text-[1.15rem] uppercase leading-tight text-white">
+                  <h3 className="text-[1.15rem] leading-tight text-white">
                     {step.title}
                   </h3>
                   <p className="mt-2.5 text-[0.92rem] leading-relaxed text-white/55">

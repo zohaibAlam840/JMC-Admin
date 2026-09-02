@@ -1,7 +1,5 @@
 import { SiteHeader } from "@/components/layout/site-header";
 import { SiteFooter } from "@/components/layout/site-footer";
-import { PageLoader } from "@/components/layout/page-loader";
-import { ScrollProgress } from "@/components/motion/parallax";
 import { getSiteConfig } from "@/lib/content";
 
 /**
@@ -14,14 +12,16 @@ import { getSiteConfig } from "@/lib/content";
  *
  * Navigation and contact details are read here once per request and handed down
  * as props, so the client can rename a nav item in /admin without a deploy.
+ *
+ * The intro loader and the scroll-progress bar were removed with the rest of
+ * the motion work: Build Spec §4 allows movement on hover and on the accordion,
+ * and nothing else.
  */
 export async function SiteChrome({ children }: { children: React.ReactNode }) {
   const { site, primaryCta, mainNav, footerNav } = await getSiteConfig();
 
   return (
     <>
-      <PageLoader />
-      <ScrollProgress />
       <SiteHeader nav={mainNav} primaryCta={primaryCta} />
       <main id="main" className="flex-1">
         {children}
