@@ -15,7 +15,7 @@ export const homePage: PageContent = {
   label: "Homepage",
   seoTitle: "Houston-Area SEO Agency | Jordan Marketing Consultants",
   metaDescription:
-    "Jordan Marketing Consultants helps Houston-area businesses improve search visibility through local SEO, traditional SEO, real estate SEO, content planning, and clear reporting.",
+    "Houston-area SEO from Jordan Marketing Consultants. Local and traditional SEO, content planning, and a plain monthly recap of what changed and why.",
   sections: [
 {
       id: "hero",

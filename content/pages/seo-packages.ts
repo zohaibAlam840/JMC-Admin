@@ -13,7 +13,7 @@ export const seoPackagesPage: PageContent = {
   label: "Monthly SEO Packages",
   seoTitle: "Monthly SEO Packages and Pricing",
   metaDescription:
-    "Monthly SEO packages from Jordan Marketing Consultants. Local SEO, traditional SEO, and real estate SEO options with clear pricing, deliverables, and monthly reporting.",
+    "Monthly SEO packages from $875, and fixed-scope Launch Sprints from $799. Real prices, defined scope, and reporting you can read.",
   sections: [
     {
       id: "hero",

@@ -13,7 +13,7 @@ export const resourcesPage: PageContent = {
   label: "Resources",
   seoTitle: "SEO Resources for Houston-Area Businesses",
   metaDescription:
-    "Plain-English SEO explainers from Jordan Marketing Consultants covering local search, organic search, reporting, and how AI-powered answer tools fit into modern SEO.",
+    "Plain-English SEO explainers covering local search, organic search, reporting, and how AI answer tools fit into modern SEO.",
   sections: [
     {
       id: "hero",

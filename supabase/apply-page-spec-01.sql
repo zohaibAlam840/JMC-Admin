@@ -31,7 +31,7 @@ begin;
 
 -- Keeps the page row current (title, description) without disturbing its id,
 -- so nothing that points at the homepage breaks.
-insert into public.pages (slug, label, seo_title, meta_description, published, is_service, system, position) values ('/', 'Homepage', 'Houston-Area SEO Agency | Jordan Marketing Consultants', 'Jordan Marketing Consultants helps Houston-area businesses improve search visibility through local SEO, traditional SEO, real estate SEO, content planning, and clear reporting.', true, false, true, 0)
+insert into public.pages (slug, label, seo_title, meta_description, published, is_service, system, position) values ('/', 'Homepage', 'Houston-Area SEO Agency | Jordan Marketing Consultants', 'Houston-area SEO from Jordan Marketing Consultants. Local and traditional SEO, content planning, and a plain monthly recap of what changed and why.', true, false, true, 0)
 on conflict (slug) do update set
   label = excluded.label,
   seo_title = excluded.seo_title,

@@ -13,7 +13,7 @@ export const traditionalSeoPage: PageContent = {
   label: "Traditional SEO Services",
   seoTitle: "Traditional SEO Services | Regional and National Organic SEO",
   metaDescription:
-    "Traditional SEO for businesses competing across regional, national, and industry-focused search markets. Strategy, strategic SEO pages, technical monitoring, and clear reporting.",
+    "Traditional SEO for regional, national, and industry-focused search. Strategy, strategic SEO pages, technical monitoring, and clear reporting.",
   sections: [
     {
       id: "hero",

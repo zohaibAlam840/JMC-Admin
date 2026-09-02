@@ -12,7 +12,7 @@ export const localSeoPage: PageContent = {
   label: "Local SEO Services",
   seoTitle: "Local SEO Services in the Houston Area",
   metaDescription:
-    "Local SEO services for Houston-area businesses. Google Business Profile support, local content, citations, review support, rank tracking, and clear monthly reporting.",
+    "Local SEO for Houston-area businesses. Google Business Profile, citations, local content, review support, and clear monthly reporting.",
   sections: [
     {
       id: "hero",

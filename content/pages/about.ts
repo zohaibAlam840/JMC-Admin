@@ -12,7 +12,7 @@ export const aboutPage: PageContent = {
   label: "About JMC",
   seoTitle: "About Jordan Marketing Consultants",
   metaDescription:
-    "Jordan Marketing Consultants is a Houston-area SEO agency rooted in League City, working with local, regional, and industry-focused businesses on practical SEO and clear reporting.",
+    "A Houston-area SEO agency rooted in League City. Practical strategy, local optimization, content planning, and reporting you can actually read.",
   sections: [
     {
       id: "hero",

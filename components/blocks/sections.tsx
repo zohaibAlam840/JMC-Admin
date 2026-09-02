@@ -7,7 +7,7 @@ import {
   HeroBackdrop,
   SectionHeader,
 } from "@/components/ui/layout";
-import { ArrowLink, Button } from "@/components/ui/button";
+import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import {
   Accordion,
@@ -175,8 +175,49 @@ function HeroCentered({ section }: { section: HeroCenteredSection }) {
 /*  05 · CardGrid — carries roughly 30 sections across the site                 */
 /* -------------------------------------------------------------------------- */
 
+/**
+ * The arrow label at the foot of a card.
+ *
+ * Rendered as a span rather than a link, because the card around it is already
+ * the click target. Nesting an anchor inside an anchor is invalid HTML and
+ * browsers unnest it silently, which breaks the outer link.
+ */
+function CardShell({
+  href,
+  className,
+  children,
+}: {
+  href?: string;
+  className: string;
+  children: React.ReactNode;
+}) {
+  return href ? (
+    <Link href={href} className={className}>
+      {children}
+    </Link>
+  ) : (
+    <div className={className}>{children}</div>
+  );
+}
+
+function CardArrow({ label }: { label: string }) {
+  return (
+    <span className="mt-auto inline-flex items-center gap-1.5 pt-6 font-body text-[0.95rem] font-semibold text-teal-ink">
+      {label}
+      <span
+        aria-hidden="true"
+        className="transition-transform duration-200 group-hover:translate-x-0.5"
+      >
+        &rarr;
+      </span>
+    </span>
+  );
+}
+
 const columnClass: Record<2 | 3 | 4, string> = {
-  2: "sm:grid-cols-2",
+  // Capped and centred, per Page Spec 01 §2: two cards across a 1200px
+  // container stretch thin and stop reading as a pair of choices.
+  2: "sm:grid-cols-2 mx-auto max-w-[960px]",
   3: "sm:grid-cols-2 lg:grid-cols-3",
   4: "sm:grid-cols-2 lg:grid-cols-4",
 };
@@ -199,7 +240,10 @@ function CardGrid({ section }: { section: CardGridSection }) {
           <Stagger className="flex flex-col divide-y divide-line border-y border-line">
             {section.cards.map((card) => (
               <StaggerItem key={card.title}>
-                <div className="group flex items-start gap-5 py-6">
+                <CardShell
+                  href={card.cta?.href}
+                  className="group flex items-start gap-5 py-6"
+                >
                   {card.icon ? (
                     <span className="inline-flex size-10 shrink-0 items-center justify-center rounded-card border border-line bg-white text-teal-ink transition-colors duration-300 group-hover:border-transparent group-hover:bg-brand-black group-hover:text-white">
                       <Icon name={card.icon} size={19} />
@@ -214,13 +258,9 @@ function CardGrid({ section }: { section: CardGridSection }) {
                         {card.body}
                       </p>
                     ) : null}
-                    {card.cta ? (
-                      <ArrowLink href={card.cta.href} className="mt-3">
-                        {card.cta.label}
-                      </ArrowLink>
-                    ) : null}
+                    {card.cta ? <CardArrow label={card.cta.label} /> : null}
                   </div>
-                </div>
+                </CardShell>
               </StaggerItem>
             ))}
           </Stagger>
@@ -250,7 +290,10 @@ function CardGrid({ section }: { section: CardGridSection }) {
         <Stagger className={cn("mt-12 grid gap-3", columnClass[section.columns])}>
           {section.cards.map((card) => (
             <StaggerItem key={card.title} className="h-full">
-              <div className="group flex h-full flex-col rounded-card border border-line bg-white p-5 transition-all duration-300 ease-out-soft hover:-translate-y-1 hover:border-teal/50 hover:shadow-soft">
+              <CardShell
+                href={card.cta?.href}
+                className="group flex h-full flex-col rounded-card border border-line bg-white p-5 transition-shadow duration-200 hover:shadow-lift"
+              >
                 <div className="flex items-center gap-3">
                   {card.icon ? (
                     <span className="inline-flex size-9 shrink-0 items-center justify-center rounded-[10px] bg-surface text-teal-ink transition-colors duration-300 group-hover:bg-brand-black group-hover:text-white">
@@ -266,12 +309,8 @@ function CardGrid({ section }: { section: CardGridSection }) {
                     {card.body}
                   </p>
                 ) : null}
-                {card.cta ? (
-                  <ArrowLink href={card.cta.href} className="mt-auto pt-4 text-[0.8rem]">
-                    {card.cta.label}
-                  </ArrowLink>
-                ) : null}
-              </div>
+                {card.cta ? <CardArrow label={card.cta.label} /> : null}
+              </CardShell>
             </StaggerItem>
           ))}
         </Stagger>
@@ -306,6 +345,7 @@ function CardGrid({ section }: { section: CardGridSection }) {
           <StaggerItem key={card.title} className="h-full">
             <Card
               interactive
+              href={card.cta?.href}
               className={cn(
                 "group relative overflow-hidden",
                 // Reporting sections are the site's differentiator, so they get
@@ -346,11 +386,7 @@ function CardGrid({ section }: { section: CardGridSection }) {
                 </p>
               ) : null}
 
-              {card.cta ? (
-                <ArrowLink href={card.cta.href} className="mt-auto pt-6">
-                  {card.cta.label}
-                </ArrowLink>
-              ) : null}
+              {card.cta ? <CardArrow label={card.cta.label} /> : null}
             </Card>
           </StaggerItem>
         ))}
