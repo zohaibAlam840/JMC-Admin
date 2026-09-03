@@ -565,6 +565,13 @@ function FullWidthText({ section }: { section: FullWidthTextSection }) {
 
 function FeatureSplit({ section }: { section: FeatureSplitSection }) {
   const copyFirst = section.align !== "right";
+  /*
+   * This is the one section whose copy regularly runs to two paragraphs, and
+   * a blank line typed in the admin has to survive as one. Rendered into a
+   * single <p> it collapses to a wall of text, which is exactly what the
+   * longer sections here are trying not to be.
+   */
+  const paragraphs = section.body.split(/\n\s*\n/).filter(Boolean);
 
   return (
     <Band id={section.id} tone={section.tone}>
@@ -579,9 +586,16 @@ function FeatureSplit({ section }: { section: FeatureSplitSection }) {
           <h2 className="text-[1.875rem] sm:text-[2.25rem] lg:text-[2.625rem]">
             {section.heading}
           </h2>
-          <p className="text-[1.02rem] leading-relaxed text-subtle">
-            {section.body}
-          </p>
+          <div className="flex flex-col gap-4">
+            {paragraphs.map((paragraph) => (
+              <p
+                key={paragraph.slice(0, 40)}
+                className="text-[1.02rem] leading-relaxed text-subtle"
+              >
+                {paragraph}
+              </p>
+            ))}
+          </div>
           {section.cta ? (
             <div className="mt-2">
               <Button href={section.cta.href} size="lg" className="group">

@@ -119,6 +119,32 @@ type Industry = {
   heroSub: string;
   seoTitle: string;
   metaDescription: string;
+  /**
+   * How this page opens, and how §2 is laid out.
+   *
+   * Page Spec 09 §1 asks for the same hero visual on all eight pages, and the
+   * reason it gives is "no per-industry illustration" — nothing on the page
+   * should imply JMC holds sector-specific assets or expertise. Eight pages
+   * opening with identical panels went further than that and made the set read
+   * as one page repeated, which is its own kind of dishonesty.
+   *
+   * The compromise: the same component and the same abstract vocabulary on
+   * every page, with the motif and the panel copy describing how buyers in
+   * that sector search. That is the subject §3 is built on, it is a statement
+   * about the buyer rather than about JMC, and nothing is drawn that depicts
+   * an industry.
+   */
+  style: {
+    motif: "report" | "coverage" | "roadmap" | "channels";
+    /** The hero panel. Behaviour, never a claim, and never a number. */
+    panel: { label: string; title: string; items: string[] };
+    aside: { label: string; title: string; items: string[] };
+    /** §2 heading and layout. Rotated so no two neighbours look alike. */
+    audienceHeading: string;
+    audienceVariant: "cards" | "compact" | "numbered" | "split";
+    /** §3 copy side, alternated down the set. */
+    searchAlign: "left" | "right";
+  };
   /** §2. One card per child business type. Counts are fixed by the spec. */
   children: { title: string; body: string; icon: IconName }[];
   /** §3. The section that earns each page its separate existence. */
@@ -144,6 +170,27 @@ const industries: Industry[] = [
     seoTitle: "Home Services & Trades SEO | Houston Area",
     metaDescription:
       "SEO for HVAC, roofing, plumbing, electrical and landscaping businesses in the Houston area. Local visibility, profile work, and clear monthly reporting.",
+    style: {
+      motif: "coverage",
+      panel: {
+        label: "How buyers search",
+        title: "Urgent and Nearby",
+        items: [
+          "On a phone",
+          "Outside business hours",
+          "Inside a drive-time radius",
+          "Decided in minutes",
+        ],
+      },
+      aside: {
+        label: "What it rests on",
+        title: "Profile and Listings",
+        items: ["Map pack", "Categories", "Reviews"],
+      },
+      audienceHeading: "The Trades This Applies To",
+      audienceVariant: "cards",
+      searchAlign: "left",
+    },
     children: [
       {
         title: "HVAC & Climate Control",
@@ -223,6 +270,27 @@ const industries: Industry[] = [
     seoTitle: "Healthcare & Wellness SEO | Houston Area",
     metaDescription:
       "SEO for dental, medical, therapy and wellness practices in the Houston area. Local visibility, profile and review support, and reporting you can actually read.",
+    style: {
+      motif: "channels",
+      panel: {
+        label: "How patients search",
+        title: "By Symptom, Not Specialty",
+        items: [
+          "What hurts, in plain words",
+          "Somewhere close by",
+          "Checked against reviews",
+          "Booked, or abandoned",
+        ],
+      },
+      aside: {
+        label: "What it rests on",
+        title: "Reputation and Access",
+        items: ["Reviews", "Photos", "Booking path"],
+      },
+      audienceHeading: "Practices This Applies To",
+      audienceVariant: "compact",
+      searchAlign: "right",
+    },
     children: [
       {
         title: "Dental Practices",
@@ -298,6 +366,27 @@ const industries: Industry[] = [
     seoTitle: "Hospitality & Attractions SEO | Houston Area",
     metaDescription:
       "SEO for hotels, restaurants, venues and attractions in the Houston area and beyond. Local and regional visibility, profile work, and clear monthly reporting.",
+    style: {
+      motif: "roadmap",
+      panel: {
+        label: "Two clocks at once",
+        title: "Now, and Six Weeks Out",
+        items: [
+          "Deciding on a street",
+          "Planning a weekend",
+          "Comparing across tabs",
+          "Booking direct, or not",
+        ],
+      },
+      aside: {
+        label: "What it rests on",
+        title: "Listings and Detail",
+        items: ["Hours", "Photos", "Menus and pages"],
+      },
+      audienceHeading: "Places This Applies To",
+      audienceVariant: "cards",
+      searchAlign: "left",
+    },
     children: [
       {
         title: "Hotels & Lodging",
@@ -372,6 +461,27 @@ const industries: Industry[] = [
     seoTitle: "Professional Services SEO | Houston Area",
     metaDescription:
       "SEO for legal, accounting, financial and consulting firms in the Houston area. Strategy, content built for how clients search, and clear monthly reporting.",
+    style: {
+      motif: "report",
+      panel: {
+        label: "How clients search",
+        title: "Quietly, Over Weeks",
+        items: [
+          "A practice area and a place",
+          "A situation in plain words",
+          "Several visits, no contact",
+          "One or two firms called",
+        ],
+      },
+      aside: {
+        label: "What it rests on",
+        title: "Specificity",
+        items: ["Service pages", "Named people", "Clear scope"],
+      },
+      audienceHeading: "Firms This Applies To",
+      audienceVariant: "numbered",
+      searchAlign: "right",
+    },
     children: [
       {
         title: "Legal Practices",
@@ -441,6 +551,27 @@ const industries: Industry[] = [
     seoTitle: "Energy & Petrochemical SEO | Houston Area",
     metaDescription:
       "SEO for energy and petrochemical service firms, suppliers and consultancies. Search built around specifications, procurement cycles, and clear reporting.",
+    style: {
+      motif: "channels",
+      panel: {
+        label: "How buyers search",
+        title: "By Specification",
+        items: [
+          "Standards and materials",
+          "Part numbers",
+          "Compliance requirements",
+          "Never adjectives",
+        ],
+      },
+      aside: {
+        label: "Who is searching",
+        title: "Three People, One Purchase",
+        items: ["Engineer", "Procurement", "Approver"],
+      },
+      audienceHeading: "Suppliers and Service Firms",
+      audienceVariant: "split",
+      searchAlign: "left",
+    },
     children: [
       {
         title: "Field & Industrial Services",
@@ -511,6 +642,27 @@ const industries: Industry[] = [
     seoTitle: "Maritime & Logistics SEO | Houston Area",
     metaDescription:
       "SEO for port services, freight operators, and marine repair and fabrication firms. Search built around routes, capability, and how logistics buyers search.",
+    style: {
+      motif: "roadmap",
+      panel: {
+        label: "How buyers search",
+        title: "By Route and Capability",
+        items: [
+          "A route and a mode",
+          "A port and a service",
+          "A vessel and a repair",
+          "Often under time pressure",
+        ],
+      },
+      aside: {
+        label: "What it rests on",
+        title: "Coverage and Compliance",
+        items: ["Ports served", "Certifications", "Response"],
+      },
+      audienceHeading: "Operators This Applies To",
+      audienceVariant: "compact",
+      searchAlign: "right",
+    },
     children: [
       {
         title: "Port & Terminal Services",
@@ -581,6 +733,27 @@ const industries: Industry[] = [
     seoTitle: "Commercial Construction SEO | Houston Area",
     metaDescription:
       "SEO for commercial contractors, civil and infrastructure firms, and building products suppliers. Search built around project type and qualification work.",
+    style: {
+      motif: "report",
+      panel: {
+        label: "How buyers search",
+        title: "To Qualify, Not to Enquire",
+        items: [
+          "Project type and sector",
+          "Scale and scope",
+          "Certifications held",
+          "Before any invitation",
+        ],
+      },
+      aside: {
+        label: "What it rests on",
+        title: "Evidence in Text",
+        items: ["Project pages", "Capability", "Standards met"],
+      },
+      audienceHeading: "Contractors and Suppliers",
+      audienceVariant: "numbered",
+      searchAlign: "left",
+    },
     children: [
       {
         title: "General & Specialty Contractors",
@@ -650,6 +823,27 @@ const industries: Industry[] = [
     seoTitle: "Aerospace & Aviation SEO | Houston Area",
     metaDescription:
       "SEO for aerospace manufacturers, MRO and ground service providers, and avionics suppliers. Search built around parts, certification and procurement work.",
+    style: {
+      motif: "coverage",
+      panel: {
+        label: "How buyers search",
+        title: "By Part and Approval",
+        items: [
+          "Part numbers",
+          "Materials and specifications",
+          "Certifications first",
+          "Across several weeks",
+        ],
+      },
+      aside: {
+        label: "What it rests on",
+        title: "Findable Detail",
+        items: ["Crawlable pages", "Named approvals", "Published ranges"],
+      },
+      audienceHeading: "Suppliers This Applies To",
+      audienceVariant: "split",
+      searchAlign: "right",
+    },
     children: [
       {
         title: "Parts & Component Manufacturers",
@@ -730,27 +924,12 @@ function industryPage(industry: Industry): PageContent {
           label: "View Monthly SEO Packages",
           href: "/monthly-seo-packages",
         },
-        // The same composition on all eight pages, by instruction. A
-        // per-industry illustration would be the first place a specialization
-        // claim crept back in.
+        // Same component and same abstract vocabulary on all eight, with
+        // the motif and the copy describing how buyers in this sector search.
+        // Nothing here depicts an industry or claims expertise in one.
         showcase: [
-          {
-            kind: "roadmap",
-            label: "Every engagement",
-            title: "The Same Method",
-            items: [
-              "Audit and technical foundation",
-              "On-page and content work",
-              "Visibility tracking",
-              "Monthly recap",
-            ],
-          },
-          {
-            kind: "coverage",
-            label: "What changes",
-            title: "Not the Method",
-            items: ["Search language", "Buying cycle", "Lead value"],
-          },
+          { kind: industry.style.motif, ...industry.style.panel },
+          { kind: "coverage", ...industry.style.aside },
         ],
       },
 
@@ -758,10 +937,10 @@ function industryPage(industry: Industry): PageContent {
         id: "who-this-is-for",
         type: "cardGrid",
         tone: "surface",
-        variant: "cards",
+        variant: industry.style.audienceVariant,
         columns,
         eyebrow: "Who This Is For",
-        heading: `Businesses Inside ${industry.name}`,
+        heading: industry.style.audienceHeading,
         body: "The kinds of business this applies to. Naming a category is not a claim of expertise in it.",
         // Deliberately no cta on any card: the child pages are phase two, and
         // the card already accepts one, so shipping them later is content
@@ -773,7 +952,7 @@ function industryPage(industry: Industry): PageContent {
         id: "search-behaviour",
         type: "featureSplit",
         tone: "white",
-        align: "left",
+        align: industry.style.searchAlign,
         eyebrow: "Search Behaviour",
         heading: industry.search.heading,
         body: industry.search.body,
