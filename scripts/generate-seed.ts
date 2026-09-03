@@ -104,11 +104,12 @@ for (const page of filePages) {
 w("-- ---------------------------------------------------------- packages ----");
 packages.forEach((pkg, position) => {
   w(
-    `insert into public.packages (id, group_key, name, price, price_unit, onboarding_fee, timeline, best_fit, deliverables, cta_label, cta_href, featured, visible, pricing_pending, position) values (`
+    `insert into public.packages (id, group_key, name, price, price_unit, onboarding_fee, term, positioning, timeline, best_fit, deliverables, cta_label, cta_href, featured, visible, pricing_pending, position) values (`
   );
   w(
     `  ${lit(pkg.id)}, ${lit(pkg.group)}, ${lit(pkg.name)}, ${lit(pkg.price)}, ` +
-      `${lit(pkg.priceUnit ?? null)}, ${lit(pkg.onboardingFee ?? null)}, ${lit(pkg.timeline ?? null)},`
+      `${lit(pkg.priceUnit ?? null)}, ${lit(pkg.onboardingFee ?? null)}, ` +
+      `${lit(pkg.term ?? null)}, ${lit(pkg.positioning ?? null)}, ${lit(pkg.timeline ?? null)},`
   );
   w(`  ${lit(pkg.bestFit)},`);
   w(`  ${textArray(pkg.deliverables)},`);
@@ -119,6 +120,7 @@ packages.forEach((pkg, position) => {
   w("on conflict (id) do update set");
   w("  group_key = excluded.group_key, name = excluded.name, price = excluded.price,");
   w("  price_unit = excluded.price_unit, onboarding_fee = excluded.onboarding_fee,");
+  w("  term = excluded.term, positioning = excluded.positioning,");
   w("  timeline = excluded.timeline, best_fit = excluded.best_fit,");
   w("  deliverables = excluded.deliverables, cta_label = excluded.cta_label,");
   w("  cta_href = excluded.cta_href, featured = excluded.featured,");
@@ -195,7 +197,9 @@ w("-- The three legacy URLs named in the keyword page map. The full inventory");
 w("-- from the old site is still outstanding — add the rest in /admin.");
 for (const [source, destination] of [
   ["/local-seo-service", "/local-seo-services"],
-  ["/seo-packages-pricing", "/seo-packages"],
+  ["/seo-packages-pricing", "/monthly-seo-packages"],
+  ["/seo-packages", "/monthly-seo-packages"],
+  ["/free-website-audit", "/google-business-profile-optimization"],
   ["/contact-us", "/contact"],
 ]) {
   w(

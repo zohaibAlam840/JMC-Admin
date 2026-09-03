@@ -39,7 +39,19 @@ export type IconName =
   | "calendar"
   | "shield-check"
   | "compass"
-  | "list-checks";
+  | "list-checks"
+  | "ship"
+  | "plane"
+  | "lightning"
+  | "image"
+  | "storefront"
+  | "phone"
+  | "envelope"
+  | "pencil"
+  | "code"
+  | "globe"
+  | "rocket"
+  | "warning";
 
 export type Card = {
   title: string;
@@ -53,6 +65,16 @@ export type Card = {
   meta?: string;
   /** Card-level link. Path sections use these instead of buttons. */
   cta?: CTA;
+  /**
+   * A code-built illustration drawn inside the card, below the copy.
+   *
+   * "searchGrid" is the local search grid from Page Spec 02 §4 — deliberately
+   * drawn rather than screenshotted: a real heatmap is client data, and a
+   * capture invites questions about whose account it is and whether it is
+   * typical. It carries a visible "Illustration only" label for the same
+   * reason.
+   */
+  visual?: "searchGrid";
 };
 
 export type Step = {
@@ -108,7 +130,12 @@ export type HeroCenteredSection = Base & {
   eyebrow: string;
   heading: string;
   body: string;
-  primaryCta: CTA;
+  /**
+   * Optional. Page Spec 08 §1 opens the Industries hub with no buttons at all,
+   * because the grid directly below it is the action and a button pointing at
+   * the next section is noise.
+   */
+  primaryCta?: CTA;
   secondaryCta?: CTA;
 };
 
@@ -118,8 +145,14 @@ export type CardGridSection = Base & {
   heading: string;
   body?: string;
   cards: Card[];
-  /** Desktop column count. Cards always stack on mobile. */
-  columns: 2 | 3 | 4;
+  /**
+   * Desktop column count. Cards always stack on mobile.
+   *
+   * Five lays out as 3 + 2 centred rather than five across, which Page Spec 02
+   * §4 asks for and which keeps the card width readable. Padding a five to a
+   * six with a filler card is forbidden.
+   */
+  columns: 2 | 3 | 4 | 5;
   cta?: CTA;
   /** Reporting sections get the accent treatment — the site's differentiator. */
   emphasis?: boolean;
@@ -132,6 +165,15 @@ export type CardGridSection = Base & {
    *  - split    borderless rows with rules, no card chrome
    */
   variant?: "cards" | "numbered" | "compact" | "split";
+  /**
+   * Full-width labels dropped into the grid before a given card.
+   *
+   * Page Spec 04 §5 needs one grid of six cards split visually between
+   * one-time foundation work and ongoing monthly work, because §6 offers two
+   * paths and each maps onto one of those halves. Two separate sections would
+   * lose the "this is one service" reading; a label spanning the row keeps it.
+   */
+  groupLabels?: { at: number | string; label: string }[];
 };
 
 export type ProcessStepsSection = Base & {
@@ -175,11 +217,13 @@ export type IndustryGridSection = Base & {
   heading: string;
   body?: string;
   groups: {
-    /** Visitor-facing, e.g. "Businesses that serve a defined area". */
+    /**
+     * Descriptive only, e.g. "Consumer & Community". Page Spec 01 §5 forbids
+     * naming a service line near it: every group contains both single-area
+     * operators and multi-market competitors, so a lane label would be wrong
+     * for half the cards under it.
+     */
     label: string;
-    /** The service line this bucket feeds, shown at the far right of the rule. */
-    serviceLine: string;
-    serviceHref: string;
     cards: {
       title: string;
       /** One line naming the kind of business, never a claim of expertise. */
@@ -204,6 +248,24 @@ export type FeatureSplitSection = Base & {
   body: string;
   cta?: CTA;
   groups: { title: string; body: string; icon?: IconName }[];
+  /**
+   * A comparison table drawn instead of the group cards.
+   *
+   * Two sections need one and neither can be expressed as cards. Page Spec 08
+   * §3 pairs "what stays constant" against "what varies by industry", where
+   * the pairing itself is the argument. Page Spec 03 §5 compares three tiers
+   * across three dimensions, and it is the one permitted table on a service
+   * page: it compares scale rather than packages, which is what lets the
+   * pricing cards below it stay light.
+   *
+   * When present, `groups` is ignored.
+   *
+   * Flat rather than a nested `{ headings, rows }` object so the admin form
+   * can address each part as a field of its own.
+   */
+  tableHeadings?: string[];
+  /** One entry per row. `cells` matches the headings, left to right. */
+  tableRows?: { cells: string[] }[];
   /** Which side the copy sits on. */
   align?: "left" | "right";
 };
@@ -334,6 +396,120 @@ export type LinkStackSection = Base & {
   footnote?: string;
 };
 
+/**
+ * The four questions, expanded — Page Spec 05 §2.
+ *
+ * Deliberately not the compact ReportingBlock. Every other page shows the four
+ * headings as four small cards; this is the one page where each one is argued,
+ * so each gets a paragraph and a short example line. The headings themselves
+ * live in the renderer, identical to ReportingBlock, because Page Spec 05
+ * calls them verbatim and locked.
+ */
+export type FourQuestionsSection = Base & {
+  type: "fourQuestions";
+  eyebrow?: string;
+  heading: string;
+  body?: string;
+  /** A paragraph per locked heading, in the locked order. */
+  did: string;
+  why: string;
+  changed: string;
+  next: string;
+  /** One short example line under each paragraph. */
+  didExample?: string;
+  whyExample?: string;
+  changedExample?: string;
+  nextExample?: string;
+  cta?: CTA;
+};
+
+/**
+ * A worked example of a monthly recap — Page Spec 05 §3.
+ *
+ * Drawn in HTML rather than shown as a screenshot, and carrying no numbers at
+ * all. The spec is emphatic about why: invented metrics on the page whose
+ * subject is honest reporting would be the worst contradiction on the site,
+ * and a real capture would be client data. Each line describes the kind of
+ * thing a recap contains, phrased as an action rather than an outcome.
+ */
+export type RecapExampleSection = Base & {
+  type: "recapExample";
+  eyebrow?: string;
+  heading: string;
+  body?: string;
+  /** Header row of the drawn panel. Never a real client or month. */
+  panelTitle: string;
+  panelMeta?: string;
+  /** Two or three example lines under each locked heading, in locked order. */
+  did: string[];
+  why: string[];
+  changed: string[];
+  next: string[];
+  /** Repeats the "Example" framing below the panel. */
+  caption: string;
+};
+
+/**
+ * The Free Visibility Audit band — Page Spec 04 §4.
+ *
+ * A second, lighter-weight lead form: a written report rather than a
+ * conversation, so it asks for five fields and no message box. The fields are
+ * fixed in the renderer rather than editable, because the form posts to a
+ * Server Action that has to know what it is receiving, and because §4 caps it
+ * at five to protect the conversion rate.
+ *
+ * Carries no turnaround time by decision. A stated deadline would have to hold
+ * on the worst week, not the average one, so the reassurance is moved to the
+ * confirmation page instead.
+ */
+export type AuditFormSection = Base & {
+  type: "auditForm";
+  eyebrow?: string;
+  heading: string;
+  body: string;
+  /** Short reassurance under the copy, e.g. "No call required." */
+  note?: string;
+  /** What the audit covers, as a short list beside the form. */
+  covers?: string[];
+  submitLabel: string;
+  /** Helper text under the optional profile-link field. */
+  profileHelp?: string;
+  /**
+   * Lead source tag. Keeps this separable from the Visibility Review form in
+   * the CRM, which §4 requires.
+   */
+  source: string;
+};
+
+/**
+ * The onboarding-fee waiver matrix — Page Spec 06 §7 and Page Spec 07 §6.
+ *
+ * The same three rows read from either side: the packages page shows what a
+ * sprint waives, the sprints page shows what a sprint unlocks. Headings are
+ * editable so the wording can face the right way; the rows must state
+ * identical terms on both pages.
+ *
+ * A table rather than a fourth pricing card, by instruction. Presenting it as
+ * a card would put a one-time fee next to three monthly ones.
+ */
+export type WaiverMatrixSection = Base & {
+  type: "waiverMatrix";
+  eyebrow?: string;
+  heading: string;
+  body?: string;
+  /**
+   * Column headings, flat rather than nested so the admin form can address
+   * each one as a field of its own.
+   */
+  sprintHeading: string;
+  priceHeading?: string;
+  waivesHeading: string;
+  rows: { sprint: string; price?: string; waives: string }[];
+  /** The 30-day condition. Stated identically on both pages. */
+  condition: string;
+  cta?: CTA;
+};
+
 export type Section =
   | HeroSplitSection
   | HeroCenteredSection
@@ -348,7 +524,11 @@ export type Section =
   | PostListSection
   | LinkStackSection
   | ReportingBlockSection
-  | IndustryGridSection;
+  | IndustryGridSection
+  | FourQuestionsSection
+  | RecapExampleSection
+  | AuditFormSection
+  | WaiverMatrixSection;
 
 export type PageContent = {
   slug: string;
@@ -369,10 +549,24 @@ export type Package = {
   id: string;
   group: PackageGroup;
   name: string;
+  /**
+   * A short line under the name, e.g. "Local Foundation". Page Spec 06 gives
+   * each tier one so the three read as an arc rather than as three prices.
+   */
+  positioning?: string;
   /** Display string, not a number — "$875" and "Contact for pricing" coexist. */
   price: string;
   priceUnit?: string;
   onboardingFee?: string;
+  /**
+   * The commitment, stated as a plain line rather than a badge.
+   *
+   * Page Spec 06 extends it past "12-month term" on purpose: that alone reads
+   * as rigid, and "then month to month" is both materially easier to accept
+   * and true. Hiding the second half was making the offer look worse than it
+   * is.
+   */
+  term?: string;
   /** Sprints show a window instead of an onboarding fee. */
   timeline?: string;
   bestFit: string;

@@ -1,3 +1,4 @@
+import * as React from "react";
 import Link from "next/link";
 import { ArrowRight, Check, Sparkles } from "lucide-react";
 import {
@@ -22,6 +23,11 @@ import { PostCard } from "@/components/blocks/post-card";
 import { HeroCardStack } from "@/components/blocks/hero-card-stack";
 import { ReportingBlock } from "@/components/blocks/reporting-block";
 import { IndustryGrid } from "@/components/blocks/industry-grid";
+import { SearchGrid } from "@/components/blocks/search-grid";
+import { FourQuestions } from "@/components/blocks/four-questions";
+import { RecapExample } from "@/components/blocks/recap-example";
+import { AuditForm } from "@/components/blocks/audit-form";
+import { WaiverMatrix } from "@/components/blocks/waiver-matrix";
 import { LinkStack } from "@/components/blocks/link-stack";
 import { packages as filePackages } from "@/content/packages";
 import { cn } from "@/lib/utils";
@@ -144,27 +150,33 @@ function HeroCentered({ section }: { section: HeroCenteredSection }) {
             </p>
           </Reveal>
 
-          <Reveal delay={0.18} className="mt-1">
-            <div className="flex flex-col gap-3 sm:flex-row">
-              <Button href={section.primaryCta.href} size="lg" className="group">
-                {section.primaryCta.label}
-                <ArrowRight
-                  size={16}
-                  aria-hidden="true"
-                  className="transition-transform duration-300 ease-out-soft group-hover:translate-x-1"
-                />
-              </Button>
-              {section.secondaryCta ? (
+          {section.primaryCta ? (
+            <Reveal delay={0.18} className="mt-1">
+              <div className="flex flex-col gap-3 sm:flex-row">
                 <Button
-                  href={section.secondaryCta.href}
-                  variant="secondary"
+                  href={section.primaryCta.href}
                   size="lg"
+                  className="group"
                 >
-                  {section.secondaryCta.label}
+                  {section.primaryCta.label}
+                  <ArrowRight
+                    size={16}
+                    aria-hidden="true"
+                    className="transition-transform duration-300 ease-out-soft group-hover:translate-x-1"
+                  />
                 </Button>
-              ) : null}
-            </div>
-          </Reveal>
+                {section.secondaryCta ? (
+                  <Button
+                    href={section.secondaryCta.href}
+                    variant="secondary"
+                    size="lg"
+                  >
+                    {section.secondaryCta.label}
+                  </Button>
+                ) : null}
+              </div>
+            </Reveal>
+          ) : null}
         </div>
       </Container>
     </section>
@@ -214,16 +226,55 @@ function CardArrow({ label }: { label: string }) {
   );
 }
 
-const columnClass: Record<2 | 3 | 4, string> = {
+const columnClass: Record<2 | 3 | 4 | 5, string> = {
   // Capped and centred, per Page Spec 01 §2: two cards across a 1200px
   // container stretch thin and stop reading as a pair of choices.
   2: "sm:grid-cols-2 mx-auto max-w-[960px]",
   3: "sm:grid-cols-2 lg:grid-cols-3",
   4: "sm:grid-cols-2 lg:grid-cols-4",
+  // Six tracks, each card spanning two. That is what makes 3 + 2 possible:
+  // the fourth card starts one track in and the last row centres itself.
+  5: "sm:grid-cols-2 lg:grid-cols-6 mx-auto max-w-[1100px]",
 };
+
+/**
+ * Per-card class for the five-column layout.
+ *
+ * Page Spec 02 §4: five across at full width leaves every card too narrow to
+ * read, so a five lays out as 3 + 2 centred. Padding to six with a filler card
+ * is explicitly forbidden, which is why this is a layout problem rather than a
+ * content one.
+ */
+function cellClass(columns: number, index: number, total: number) {
+  if (columns !== 5) return "h-full";
+  return cn(
+    "h-full lg:col-span-2",
+    total === 5 && index === 3 && "lg:col-start-2"
+  );
+}
+
+/**
+ * A full-width label inside the grid, marking the start of a run of cards.
+ * Spans every column so it reads as a divider rather than as a seventh card.
+ */
+function GroupLabel({ label }: { label: string }) {
+  return (
+    <div className="col-span-full flex items-center gap-4 pt-2 first:pt-0">
+      <span className="shrink-0 text-[0.75rem] font-semibold uppercase tracking-[0.08em] text-ink-strong">
+        {label}
+      </span>
+      <span aria-hidden="true" className="h-px flex-1 bg-line" />
+    </div>
+  );
+}
 
 function CardGrid({ section }: { section: CardGridSection }) {
   const variant = section.variant ?? "cards";
+  // Coerced, because the admin repeater stores every field as a string and
+  // "3" would never match the numeric index it is meant to sit before.
+  const labelAt = new Map(
+    (section.groupLabels ?? []).map((g) => [Number(g.at), g.label])
+  );
 
   /* -- split: borderless rows with rules. No card chrome at all. ----------- */
   if (variant === "split") {
@@ -288,8 +339,12 @@ function CardGrid({ section }: { section: CardGridSection }) {
         />
 
         <Stagger className={cn("mt-12 grid gap-3", columnClass[section.columns])}>
-          {section.cards.map((card) => (
-            <StaggerItem key={card.title} className="h-full">
+          {section.cards.map((card, i) => (
+            <React.Fragment key={card.title + i}>
+            {labelAt.has(i) ? <GroupLabel label={labelAt.get(i)!} /> : null}
+            <StaggerItem
+              className={cellClass(section.columns, i, section.cards.length)}
+            >
               <CardShell
                 href={card.cta?.href}
                 className="group flex h-full flex-col rounded-card border border-line bg-white p-5 transition-shadow duration-200 hover:shadow-lift"
@@ -312,6 +367,7 @@ function CardGrid({ section }: { section: CardGridSection }) {
                 {card.cta ? <CardArrow label={card.cta.label} /> : null}
               </CardShell>
             </StaggerItem>
+            </React.Fragment>
           ))}
         </Stagger>
 
@@ -342,7 +398,11 @@ function CardGrid({ section }: { section: CardGridSection }) {
 
       <Stagger className={cn("mt-12 grid gap-5", columnClass[section.columns])}>
         {section.cards.map((card, i) => (
-          <StaggerItem key={card.title} className="h-full">
+          <React.Fragment key={card.title + i}>
+          {labelAt.has(i) ? <GroupLabel label={labelAt.get(i)!} /> : null}
+          <StaggerItem
+            className={cellClass(section.columns, i, section.cards.length)}
+          >
             <Card
               interactive
               href={card.cta?.href}
@@ -386,9 +446,12 @@ function CardGrid({ section }: { section: CardGridSection }) {
                 </p>
               ) : null}
 
+              {card.visual === "searchGrid" ? <SearchGrid /> : null}
+
               {card.cta ? <CardArrow label={card.cta.label} /> : null}
             </Card>
           </StaggerItem>
+          </React.Fragment>
         ))}
       </Stagger>
 
@@ -533,6 +596,57 @@ function FeatureSplit({ section }: { section: FeatureSplitSection }) {
           ) : null}
         </Reveal>
 
+        {section.tableHeadings && section.tableRows ? (
+          /*
+           * A real table, not a grid of cards. Both sections that use it are
+           * making an argument out of the alignment: "this stays the same,
+           * that changes" on the industries hub, and "here is how coverage
+           * grows by tier" before the Traditional pricing cards. Cards would
+           * let the eye read down one column without ever lining the two up.
+           */
+          <Reveal
+            className={cn(
+              "overflow-x-auto rounded-bento border border-line bg-white",
+              !copyFirst && "lg:order-1"
+            )}
+          >
+            <table className="w-full border-collapse text-left">
+              <thead>
+                <tr className="border-b border-line bg-surface">
+                  {section.tableHeadings.map((h) => (
+                    <th
+                      key={h}
+                      scope="col"
+                      className="px-4 py-3 text-[0.72rem] font-semibold uppercase tracking-[0.08em] text-ink-strong sm:px-5"
+                    >
+                      {h}
+                    </th>
+                  ))}
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-line">
+                {section.tableRows.map((row) => (
+                  <tr key={row.cells[0]}>
+                    {row.cells.map((cell, i) => (
+                      <th
+                        key={cell + i}
+                        scope={i === 0 ? "row" : undefined}
+                        className={cn(
+                          "px-4 py-4 text-[0.88rem] leading-snug sm:px-5",
+                          i === 0
+                            ? "font-heading font-bold text-ink-strong"
+                            : "font-normal tabular-nums text-subtle"
+                        )}
+                      >
+                        {cell}
+                      </th>
+                    ))}
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </Reveal>
+        ) : (
         <Stagger
           className={cn(
             "grid gap-4 sm:grid-cols-2",
@@ -564,6 +678,7 @@ function FeatureSplit({ section }: { section: FeatureSplitSection }) {
             </StaggerItem>
           ))}
         </Stagger>
+        )}
       </div>
     </Band>
   );
@@ -606,7 +721,12 @@ function PricingCards({
               : "sm:grid-cols-2 lg:grid-cols-3"
         )}
       >
-        {items.map((pkg) => (
+        {items.map((pkg) => {
+          // Sprints run 8 to 10 deliverables against a monthly tier's 5 or 6.
+          // In one column that is a card twice the height of the ones beside
+          // it, so Page Spec 07 §4 splits the list in two on desktop.
+          const isSprint = pkg.group === "sprint";
+          return (
           <StaggerItem key={pkg.id} className="h-full">
             <div
               className={cn(
@@ -629,6 +749,12 @@ function PricingCards({
               <h3 className="text-[1.3125rem] leading-tight sm:text-[1.5rem]">
                 {pkg.name}
               </h3>
+
+              {pkg.positioning ? (
+                <p className="mt-1.5 text-[0.78rem] font-semibold uppercase tracking-[0.08em] text-teal-ink">
+                  {pkg.positioning}
+                </p>
+              ) : null}
 
               <p className="mt-4 flex items-baseline gap-1.5">
                 <span
@@ -653,15 +779,25 @@ function PricingCards({
               ) : null}
               {pkg.timeline ? (
                 <p className="mt-1.5 text-[0.82rem] text-subtle">
-                  {pkg.timeline} sprint window
+                  Completed within {pkg.timeline}
                 </p>
+              ) : null}
+              {pkg.term ? (
+                <p className="mt-1.5 text-[0.82rem] text-subtle">{pkg.term}</p>
               ) : null}
 
               <p className="mt-5 border-t border-line pt-5 text-[0.88rem] leading-relaxed text-subtle">
                 {pkg.bestFit}
               </p>
 
-              <ul className="mt-5 flex flex-1 flex-col gap-2.5">
+              <ul
+                className={cn(
+                  "mt-5 flex-1 gap-2.5",
+                  isSprint
+                    ? "grid content-start sm:grid-cols-2 sm:gap-x-5"
+                    : "flex flex-col"
+                )}
+              >
                 {pkg.deliverables.map((d) => (
                   <li key={d} className="flex gap-2.5 text-[0.86rem] leading-snug">
                     <span className="mt-0.5 inline-flex size-4 shrink-0 items-center justify-center rounded-pill bg-surface text-teal-ink">
@@ -681,7 +817,8 @@ function PricingCards({
               </Button>
             </div>
           </StaggerItem>
-        ))}
+        );
+      })}
       </Stagger>
 
       {section.cta ? (
@@ -954,6 +1091,14 @@ function renderSection(
       return <ReportingBlock key={section.id} section={section} />;
     case "linkStack":
       return <LinkStack key={section.id} section={section} />;
+    case "fourQuestions":
+      return <FourQuestions key={section.id} section={section} />;
+    case "recapExample":
+      return <RecapExample key={section.id} section={section} />;
+    case "auditForm":
+      return <AuditForm key={section.id} section={section} />;
+    case "waiverMatrix":
+      return <WaiverMatrix key={section.id} section={section} />;
     case "postList":
       return <PostList key={section.id} section={section} posts={posts} />;
     default: {

@@ -21,7 +21,7 @@ export const aboutPage: PageContent = {
       heading: "Practical SEO, Explained in Plain English",
       body: "Jordan Marketing Consultants is a Houston-area SEO agency rooted in League City, helping local, regional, and industry-focused businesses improve search visibility through practical SEO strategy, content planning, local optimization, and clear reporting.",
       primaryCta: { label: "Request a Visibility Review", href: "/contact" },
-      secondaryCta: { label: "View SEO Packages", href: "/seo-packages" },
+      secondaryCta: { label: "View SEO Packages", href: "/monthly-seo-packages" },
     },
 
     {
@@ -129,7 +129,7 @@ export const aboutPage: PageContent = {
       heading: "Let's Look at Where Your Visibility Stands",
       body: "A Visibility Review is the starting point for every JMC engagement, and it is useful even if you decide not to work with us.",
       primaryCta: { label: "Request a Visibility Review", href: "/contact" },
-      secondaryCta: { label: "View SEO Packages", href: "/seo-packages" },
+      secondaryCta: { label: "View SEO Packages", href: "/monthly-seo-packages" },
     },
   ],
 };

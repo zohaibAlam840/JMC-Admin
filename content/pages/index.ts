@@ -3,11 +3,14 @@ import { homePage } from "./home";
 import { localSeoPage } from "./local-seo";
 import { traditionalSeoPage } from "./traditional-seo";
 import { realEstateSeoPage } from "./real-estate-seo";
-import { seoPackagesPage } from "./seo-packages";
+import { seoPackagesPage } from "./monthly-seo-packages";
 import { launchSprintsPage } from "./launch-sprints";
 import { aboutPage } from "./about";
 import { resourcesPage } from "./resources";
 import { linksPage } from "./links";
+import { seoReportingPage } from "./seo-reporting";
+import { gbpOptimizationPage } from "./gbp-optimization";
+import { industriesIndexPage, industryPages } from "./industries";
 
 /**
  * The launch content, as approved.
@@ -31,6 +34,10 @@ export const filePages: PageContent[] = [
   aboutPage,
   resourcesPage,
   linksPage,
+  seoReportingPage,
+  gbpOptimizationPage,
+  industriesIndexPage,
+  ...industryPages,
 ];
 
 /** Pages that emit Service structured data. */
@@ -38,7 +45,15 @@ export const servicePageSlugs = new Set([
   "/local-seo-services",
   "/traditional-seo-services",
   "/real-estate-seo",
+  "/google-business-profile-optimization",
 ]);
+
+/*
+ * Deliberately absent from the set above: /seo-reporting and every industry
+ * page. Page Specs 05 and 09 both forbid Service schema on them, because one
+ * describes a method and the others describe an audience. Neither is something
+ * you can buy, and marking them up as a service would claim otherwise.
+ */
 
 /**
  * Pages that seed as drafts rather than live.

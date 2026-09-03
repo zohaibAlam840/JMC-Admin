@@ -84,7 +84,7 @@ export default async function RedirectsScreen({
               <Input name="source" required placeholder="/seo-packages-pricing" />
             </Field>
             <Field label="New address">
-              <Input name="destination" required placeholder="/seo-packages" />
+              <Input name="destination" required placeholder="/monthly-seo-packages" />
             </Field>
           </div>
 

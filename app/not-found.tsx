@@ -22,7 +22,7 @@ export default function NotFound() {
             </p>
             <div className="mt-8 flex flex-col justify-center gap-3 sm:flex-row sm:flex-wrap">
               <Button href="/">Home</Button>
-              <Button href="/seo-packages" variant="secondary">
+              <Button href="/monthly-seo-packages" variant="secondary">
                 SEO Packages
               </Button>
               <Button href="/contact" variant="secondary">

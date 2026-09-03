@@ -1,37 +1,57 @@
 -- ==========================================================================
---  JMC — launch content
+--  JMC — apply Page Specs 02 to 09 to an EXISTING database
 --
---  Generated from content/ by scripts/generate-seed.ts. Do not hand-edit:
---  regenerate it with `npm run seed:generate` instead.
+--  GENERATED FILE. Do not hand-edit — run `npm run sql:apply` instead.
 --
---  Run supabase/schema.sql first, then paste this into the SQL editor.
+--  Run these FIRST, each in its own separate run, and let each finish:
 --
---  Re-running is safe. Pages are matched on their address and their
---  sections replaced wholesale, packages and settings are upserted, and the
---  menus are rebuilt. It WILL overwrite edits made in /admin, so treat it as
---  a reset to the approved launch content rather than a merge.
+--      supabase/migrations/008_page_specs_02_09.sql
+--      supabase/migrations/009_package_positioning.sql
+--
+--  Postgres will not use a newly added enum value in the same transaction
+--  that added it, so 008 cannot be pasted together with this file.
+--
+--  What this does
+--  --------------
+--  Rebuilds these pages to their specs and creates the ones that are new:
+--
+--      /local-seo-services                            Local SEO Services
+--      /traditional-seo-services                      Traditional SEO Services
+--      /monthly-seo-packages                          Monthly SEO Packages
+--      /launch-sprints                                Launch Sprints
+--      /google-business-profile-optimization          Google Business Profile Optimization
+--      /seo-reporting                                 SEO Reporting
+--      /industries                                    Industries
+--      /industries/home-services-trades               Home Services & Trades
+--      /industries/healthcare-wellness                Healthcare & Wellness
+--      /industries/hospitality-attractions            Hospitality & Attractions
+--      /industries/professional-services              Professional Services
+--      /industries/energy-petrochemical               Energy & Petrochemical
+--      /industries/maritime-logistics                 Maritime & Logistics
+--      /industries/commercial-construction-infrastructure Commercial Construction & Infrastructure
+--      /industries/aerospace-aviation                 Aerospace & Aviation
+--
+--  It also refreshes the packages, the menus, and the legacy redirects,
+--  because /seo-packages has been renamed to /monthly-seo-packages and
+--  every link to it moved with it.
+--
+--  Sections on the pages above are REPLACED wholesale. Any edit made to one
+--  of them in /admin is overwritten. The homepage, articles, enquiries, and
+--  every other page are untouched.
 -- ==========================================================================
 
 begin;
 
 -- ------------------------------------------------------------- pages ----
-insert into public.pages (slug, label, seo_title, meta_description, published, is_service, system, position) values ('/', 'Homepage', 'Houston-Area SEO Agency | Jordan Marketing Consultants', 'Houston-area SEO from Jordan Marketing Consultants. Local and traditional SEO, content planning, and a plain monthly recap of what changed and why.', true, false, true, 0)
-on conflict (slug) do update set
-  label = excluded.label,
-  seo_title = excluded.seo_title,
-  meta_description = excluded.meta_description,
-  is_service = excluded.is_service,
-  system = excluded.system,
-  position = excluded.position;
-
+-- Position is left alone on update: the client may have reordered the page
+-- list in /admin, and this file has no business undoing that.
 insert into public.pages (slug, label, seo_title, meta_description, published, is_service, system, position) values ('/local-seo-services', 'Local SEO Services', 'Local SEO Services | Houston Area', 'Local SEO for Houston-area businesses. Google Business Profile, citations, reviews, local search grid tracking, and a monthly recap that says what actually changed.', true, true, false, 1)
 on conflict (slug) do update set
   label = excluded.label,
   seo_title = excluded.seo_title,
   meta_description = excluded.meta_description,
   is_service = excluded.is_service,
-  system = excluded.system,
-  position = excluded.position;
+  system = excluded.system;
 
 insert into public.pages (slug, label, seo_title, meta_description, published, is_service, system, position) values ('/traditional-seo-services', 'Traditional SEO Services', 'Traditional SEO Services | Multi-Market Search', 'SEO for businesses competing across multiple markets, service lines, or competitive search. Strategy, strategic pages, technical monitoring, and clear monthly reporting.', true, true, false, 2)
 on conflict (slug) do update set
@@ -39,17 +59,7 @@ on conflict (slug) do update set
   seo_title = excluded.seo_title,
   meta_description = excluded.meta_description,
   is_service = excluded.is_service,
-  system = excluded.system,
-  position = excluded.position;
-
-insert into public.pages (slug, label, seo_title, meta_description, published, is_service, system, position) values ('/real-estate-seo', 'Real Estate SEO', 'Real Estate SEO for Agents, Teams, and Brokerages', 'Real estate SEO for agents, teams, and brokerages. Neighborhood visibility, market content, and reporting that shows what changed.', false, true, false, 3)
-on conflict (slug) do update set
-  label = excluded.label,
-  seo_title = excluded.seo_title,
-  meta_description = excluded.meta_description,
-  is_service = excluded.is_service,
-  system = excluded.system,
-  position = excluded.position;
+  system = excluded.system;
 
 insert into public.pages (slug, label, seo_title, meta_description, published, is_service, system, position) values ('/monthly-seo-packages', 'Monthly SEO Packages', 'Monthly SEO Packages & Pricing | Houston Area', 'SEO pricing published in full. Local packages from $875 a month, Traditional from $2,295, with what each tier includes, what onboarding covers, and the terms.', true, false, false, 4)
 on conflict (slug) do update set
@@ -57,8 +67,7 @@ on conflict (slug) do update set
   seo_title = excluded.seo_title,
   meta_description = excluded.meta_description,
   is_service = excluded.is_service,
-  system = excluded.system,
-  position = excluded.position;
+  system = excluded.system;
 
 insert into public.pages (slug, label, seo_title, meta_description, published, is_service, system, position) values ('/launch-sprints', 'Launch Sprints', 'SEO Launch Sprints | One-Time, 30 Days', 'One-time SEO Launch Sprints from $799, completed within 30 days. A fixed scope, a full audit, foundational optimization, and a 30-day action roadmap at the end.', true, false, false, 5)
 on conflict (slug) do update set
@@ -66,44 +75,7 @@ on conflict (slug) do update set
   seo_title = excluded.seo_title,
   meta_description = excluded.meta_description,
   is_service = excluded.is_service,
-  system = excluded.system,
-  position = excluded.position;
-
-insert into public.pages (slug, label, seo_title, meta_description, published, is_service, system, position) values ('/about', 'About JMC', 'About Jordan Marketing Consultants', 'A Houston-area SEO agency rooted in League City. Practical strategy, local optimization, content planning, and reporting you can actually read.', true, false, false, 6)
-on conflict (slug) do update set
-  label = excluded.label,
-  seo_title = excluded.seo_title,
-  meta_description = excluded.meta_description,
-  is_service = excluded.is_service,
-  system = excluded.system,
-  position = excluded.position;
-
-insert into public.pages (slug, label, seo_title, meta_description, published, is_service, system, position) values ('/resources', 'Resources', 'SEO Resources for Houston-Area Businesses', 'Plain-English SEO explainers covering local search, organic search, reporting, and how AI answer tools fit into modern SEO.', true, false, false, 7)
-on conflict (slug) do update set
-  label = excluded.label,
-  seo_title = excluded.seo_title,
-  meta_description = excluded.meta_description,
-  is_service = excluded.is_service,
-  system = excluded.system,
-  position = excluded.position;
-
-insert into public.pages (slug, label, seo_title, meta_description, published, is_service, system, position) values ('/links', 'Link Hub', 'Jordan Marketing Consultants | Houston-Area SEO', 'Houston-area SEO from Jordan Marketing Consultants. Request a visibility review, see packages, or read the resources.', false, false, true, 8)
-on conflict (slug) do update set
-  label = excluded.label,
-  seo_title = excluded.seo_title,
-  meta_description = excluded.meta_description,
-  is_service = excluded.is_service,
-  system = excluded.system,
-  position = excluded.position;
-
-insert into public.pages (slug, label, seo_title, meta_description, published, is_service, system, position) values ('/seo-reporting', 'SEO Reporting', 'SEO Reporting You Can Actually Read', 'How JMC reports SEO progress: a monthly recap that answers what was done, why it was done, what changed, and what comes next. Plus a quarterly project update.', true, false, false, 9)
-on conflict (slug) do update set
-  label = excluded.label,
-  seo_title = excluded.seo_title,
-  meta_description = excluded.meta_description,
-  is_service = excluded.is_service,
-  system = excluded.system,
-  position = excluded.position;
+  system = excluded.system;
 
 insert into public.pages (slug, label, seo_title, meta_description, published, is_service, system, position) values ('/google-business-profile-optimization', 'Google Business Profile Optimization', 'Google Business Profile Optimization | Houston', 'Google Business Profile optimization for Houston-area businesses. Categories, services, citations, posts, reviews and local grid tracking, with a free visibility audit.', true, true, false, 10)
 on conflict (slug) do update set
@@ -111,8 +83,15 @@ on conflict (slug) do update set
   seo_title = excluded.seo_title,
   meta_description = excluded.meta_description,
   is_service = excluded.is_service,
-  system = excluded.system,
-  position = excluded.position;
+  system = excluded.system;
+
+insert into public.pages (slug, label, seo_title, meta_description, published, is_service, system, position) values ('/seo-reporting', 'SEO Reporting', 'SEO Reporting You Can Actually Read', 'How JMC reports SEO progress: a monthly recap that answers what was done, why it was done, what changed, and what comes next. Plus a quarterly project update.', true, false, false, 9)
+on conflict (slug) do update set
+  label = excluded.label,
+  seo_title = excluded.seo_title,
+  meta_description = excluded.meta_description,
+  is_service = excluded.is_service,
+  system = excluded.system;
 
 insert into public.pages (slug, label, seo_title, meta_description, published, is_service, system, position) values ('/industries', 'Industries', 'Industries | Houston Area SEO for Any Sector', 'JMC works across trades, healthcare, hospitality, professional services, energy, maritime, construction and aerospace. The method does not change with the industry.', true, false, false, 11)
 on conflict (slug) do update set
@@ -120,8 +99,7 @@ on conflict (slug) do update set
   seo_title = excluded.seo_title,
   meta_description = excluded.meta_description,
   is_service = excluded.is_service,
-  system = excluded.system,
-  position = excluded.position;
+  system = excluded.system;
 
 insert into public.pages (slug, label, seo_title, meta_description, published, is_service, system, position) values ('/industries/home-services-trades', 'Home Services & Trades', 'Home Services & Trades SEO | Houston Area', 'SEO for HVAC, roofing, plumbing, electrical, landscaping and exterior cleaning businesses in the Houston area. Local visibility, profile work, and clear monthly reporting.', true, false, false, 12)
 on conflict (slug) do update set
@@ -129,8 +107,7 @@ on conflict (slug) do update set
   seo_title = excluded.seo_title,
   meta_description = excluded.meta_description,
   is_service = excluded.is_service,
-  system = excluded.system,
-  position = excluded.position;
+  system = excluded.system;
 
 insert into public.pages (slug, label, seo_title, meta_description, published, is_service, system, position) values ('/industries/healthcare-wellness', 'Healthcare & Wellness', 'Healthcare & Wellness SEO | Houston Area', 'SEO for dental, medical, therapy and wellness practices in the Houston area. Local visibility, profile and review support, and reporting you can actually read.', true, false, false, 13)
 on conflict (slug) do update set
@@ -138,8 +115,7 @@ on conflict (slug) do update set
   seo_title = excluded.seo_title,
   meta_description = excluded.meta_description,
   is_service = excluded.is_service,
-  system = excluded.system,
-  position = excluded.position;
+  system = excluded.system;
 
 insert into public.pages (slug, label, seo_title, meta_description, published, is_service, system, position) values ('/industries/hospitality-attractions', 'Hospitality & Attractions', 'Hospitality & Attractions SEO | Houston Area', 'SEO for hotels, restaurants, venues and attractions in the Houston area and beyond. Local and regional visibility, profile work, and clear monthly reporting.', true, false, false, 14)
 on conflict (slug) do update set
@@ -147,8 +123,7 @@ on conflict (slug) do update set
   seo_title = excluded.seo_title,
   meta_description = excluded.meta_description,
   is_service = excluded.is_service,
-  system = excluded.system,
-  position = excluded.position;
+  system = excluded.system;
 
 insert into public.pages (slug, label, seo_title, meta_description, published, is_service, system, position) values ('/industries/professional-services', 'Professional Services', 'Professional Services SEO | Houston Area', 'SEO for legal, accounting, financial and consulting firms in the Houston area. Practical strategy, content built for how clients search, and clear monthly reporting.', true, false, false, 15)
 on conflict (slug) do update set
@@ -156,8 +131,7 @@ on conflict (slug) do update set
   seo_title = excluded.seo_title,
   meta_description = excluded.meta_description,
   is_service = excluded.is_service,
-  system = excluded.system,
-  position = excluded.position;
+  system = excluded.system;
 
 insert into public.pages (slug, label, seo_title, meta_description, published, is_service, system, position) values ('/industries/energy-petrochemical', 'Energy & Petrochemical', 'Energy & Petrochemical SEO | Houston Area', 'SEO for energy and petrochemical service firms, suppliers and technical consultancies. Search built around specifications, procurement cycles, and clear reporting.', true, false, false, 16)
 on conflict (slug) do update set
@@ -165,8 +139,7 @@ on conflict (slug) do update set
   seo_title = excluded.seo_title,
   meta_description = excluded.meta_description,
   is_service = excluded.is_service,
-  system = excluded.system,
-  position = excluded.position;
+  system = excluded.system;
 
 insert into public.pages (slug, label, seo_title, meta_description, published, is_service, system, position) values ('/industries/maritime-logistics', 'Maritime & Logistics', 'Maritime & Logistics SEO | Houston Area', 'SEO for port services, freight operators, and marine repair and fabrication businesses. Search built around routes, capabilities and how logistics buyers actually search.', true, false, false, 17)
 on conflict (slug) do update set
@@ -174,8 +147,7 @@ on conflict (slug) do update set
   seo_title = excluded.seo_title,
   meta_description = excluded.meta_description,
   is_service = excluded.is_service,
-  system = excluded.system,
-  position = excluded.position;
+  system = excluded.system;
 
 insert into public.pages (slug, label, seo_title, meta_description, published, is_service, system, position) values ('/industries/commercial-construction-infrastructure', 'Commercial Construction & Infrastructure', 'Commercial Construction SEO | Houston Area', 'SEO for commercial contractors, civil and infrastructure firms, and building products suppliers. Search built around project types, capability and procurement cycles.', true, false, false, 18)
 on conflict (slug) do update set
@@ -183,8 +155,7 @@ on conflict (slug) do update set
   seo_title = excluded.seo_title,
   meta_description = excluded.meta_description,
   is_service = excluded.is_service,
-  system = excluded.system,
-  position = excluded.position;
+  system = excluded.system;
 
 insert into public.pages (slug, label, seo_title, meta_description, published, is_service, system, position) values ('/industries/aerospace-aviation', 'Aerospace & Aviation', 'Aerospace & Aviation SEO | Houston Area', 'SEO for aerospace manufacturers, MRO and ground service providers, and avionics suppliers. Search built around parts, certifications and long procurement cycles.', true, false, false, 19)
 on conflict (slug) do update set
@@ -192,25 +163,16 @@ on conflict (slug) do update set
   seo_title = excluded.seo_title,
   meta_description = excluded.meta_description,
   is_service = excluded.is_service,
-  system = excluded.system,
-  position = excluded.position;
+  system = excluded.system;
+
+-- The renamed page. Its sections are rebuilt below under the new address,
+-- so the old row is removed rather than left behind as a duplicate.
+delete from public.pages where slug = '/seo-packages';
 
 -- ---------------------------------------------------------- sections ----
--- Replaced rather than merged: a section removed from the approved content
--- should disappear here too, not linger as an orphan.
-delete from public.sections where page_id in (select id from public.pages where slug in ('/', '/local-seo-services', '/traditional-seo-services', '/real-estate-seo', '/monthly-seo-packages', '/launch-sprints', '/about', '/resources', '/links', '/seo-reporting', '/google-business-profile-optimization', '/industries', '/industries/home-services-trades', '/industries/healthcare-wellness', '/industries/hospitality-attractions', '/industries/professional-services', '/industries/energy-petrochemical', '/industries/maritime-logistics', '/industries/commercial-construction-infrastructure', '/industries/aerospace-aviation'));
-
--- Homepage
-insert into public.sections (page_id, key, type, tone, data, position) select id, 'hero', 'heroSplit', NULL, '{"eyebrow":"SEO for local, regional, and industrial businesses","heading":"Search Visibility, Explained Every Month.","body":"Jordan Marketing Consultants does one thing: search visibility for local, regional, and industrial businesses. Every month you get a plain recap of what was done, why, and what changed.","primaryCta":{"label":"Request a Visibility Review","href":"/contact"},"secondaryCta":{"label":"See How JMC Reports SEO Progress","href":"/seo-reporting"},"showcase":[{"kind":"report","label":"Every month","title":"Monthly Recap","items":["What was done","Why it matters","What changed","What comes next"]},{"kind":"coverage","label":"Where you appear","title":"Search Visibility","items":["Search","Maps","Local grid"]},{"kind":"roadmap","label":"The plan","title":"SEO Roadmap","items":["Priorities set","Content queued","Technical fixes tracked"]}]}'::jsonb, 0 from public.pages where slug = '/';
-insert into public.sections (page_id, key, type, tone, data, position) select id, 'growth-paths', 'cardGrid', 'surface', '{"eyebrow":"SEO Growth Paths","heading":"Choose the SEO Path That Fits Where You Are Growing","body":"Different businesses need different SEO strategies. JMC helps visitors find the right path based on market size, competition, audience, and growth goals.","columns":3,"cards":[{"title":"Local SEO","icon":"map-pin","body":"For businesses that need stronger visibility in Google Search, Google Maps, and local service-area searches.","cta":{"label":"Explore Local SEO","href":"/local-seo-services"}},{"title":"Traditional SEO","icon":"trending-up","body":"For regional, national, and industry-focused companies competing across larger search markets.","cta":{"label":"Explore Traditional SEO","href":"/traditional-seo-services"}},{"title":"Real Estate SEO","icon":"home","body":"For agents, teams, and brokerages that want stronger local search presence and content that supports trust.","cta":{"label":"Explore Real Estate SEO","href":"/real-estate-seo"}}]}'::jsonb, 1 from public.pages where slug = '/';
-insert into public.sections (page_id, key, type, tone, data, position) select id, 'transparency', 'fullWidthText', NULL, '{"treatment":"statement","heading":"No Mystery SEO. No Confusing Reports. No Guessing What You Paid For.","body":"Most agencies keep the work behind a login and the reasoning to themselves. JMC does the opposite. You see what was done, why it was done, and what it changed, in language that does not need translating. That is how the work is run, not a reporting add-on.","cta":{"label":"See How JMC Reports SEO Progress","href":"/seo-reporting"}}'::jsonb, 2 from public.pages where slug = '/';
-insert into public.sections (page_id, key, type, tone, data, position) select id, 'services', 'cardGrid', 'white', '{"eyebrow":"SEO Services","heading":"SEO Work Built Around Strategy, Visibility, and Accountability","body":"JMC focuses on the pieces of SEO that help businesses become easier to find, easier to understand, and easier to trust in search.","columns":3,"cards":[{"title":"SEO Strategy","icon":"target","body":"Keyword priorities, search intent, competitor visibility, and roadmap planning."},{"title":"Local Optimization","icon":"map-pin","body":"Local search improvements that support visibility in Google Search, Google Maps, and service-area searches."},{"title":"Google Business Profile Support","icon":"star","body":"Profile optimization, post strategy, service alignment, and activity that supports local trust."},{"title":"SEO Content Planning","icon":"file-text","body":"Strategic SEO pages, content roadmaps, service page improvements, and search-focused messaging."},{"title":"Technical SEO Monitoring","icon":"wrench","body":"Ongoing review of technical issues that can affect crawling, indexing, visibility, and site performance."},{"title":"Reporting and Monthly Recaps","icon":"bar-chart","body":"Clear monthly updates that explain progress, priorities, and next steps without burying you in jargon."}],"cta":{"label":"Explore SEO Services","href":"/local-seo-services"}}'::jsonb, 3 from public.pages where slug = '/';
-insert into public.sections (page_id, key, type, tone, data, position) select id, 'industries', 'industryGrid', 'surface', '{"eyebrow":"Industries","heading":"Where This Method Gets Pointed","body":"One method, aimed at two different kinds of search problem.","groups":[{"label":"Consumer & Community","cards":[{"title":"Home Services & Trades","icon":"wrench","body":"Roofers, plumbers, electricians, and the trades that live on calls from a service area.","href":"/industries/home-services-trades"},{"title":"Healthcare & Wellness","icon":"heart-pulse","body":"Practices and clinics where people check credibility before they ever call.","href":"/industries/healthcare-wellness"},{"title":"Hospitality & Attractions","icon":"utensils","body":"Venues, parks, and places people search for by what they want to do, not by name.","href":"/industries/hospitality-attractions"},{"title":"Professional Services","icon":"briefcase","body":"Firms whose next client is comparing three local options in a single sitting.","href":"/industries/professional-services"}]},{"label":"Industrial & B2B","cards":[{"title":"Energy & Petrochemical","icon":"factory","body":"Operators and suppliers selling technical capability to a small, specific buyer pool.","href":"/industries/energy-petrochemical"},{"title":"Maritime & Logistics","icon":"network","body":"Port, freight, and supply chain businesses working across regions rather than a radius.","href":"/industries/maritime-logistics"},{"title":"Commercial Construction","icon":"hard-hat","body":"Contractors and infrastructure firms bidding well outside one city.","href":"/industries/commercial-construction-infrastructure"},{"title":"Aerospace & Aviation","icon":"compass","body":"Suppliers and services in a market where the search volume is low and the intent is high.","href":"/industries/aerospace-aviation"}]}],"escapeHatch":"The method does not change with the industry. If yours is not listed, it probably still applies.","cta":{"label":"Explore All Industries","href":"/industries"}}'::jsonb, 4 from public.pages where slug = '/';
-insert into public.sections (page_id, key, type, tone, data, position) select id, 'packages', 'cardGrid', 'white', '{"eyebrow":"SEO Packages","heading":"SEO Options Built for Different Growth Stages","body":"JMC offers structured SEO options for businesses that need ongoing monthly support or a focused starting point before moving into a longer campaign.","columns":3,"cards":[{"title":"Monthly Local SEO","icon":"map-pin","meta":"From $875/mo","body":"For businesses that need consistent local visibility support across search, maps, content, reviews, and reporting.","cta":{"label":"View Local SEO Packages","href":"/monthly-seo-packages#local"}},{"title":"Monthly Traditional SEO","icon":"trending-up","meta":"From $2,295/mo","body":"For businesses targeting regional, national, or competitive industry visibility with a larger search footprint.","cta":{"label":"View Traditional SEO Packages","href":"/monthly-seo-packages#traditional"}},{"title":"Launch Sprints","icon":"compass","meta":"From $799 one-time","body":"For businesses that need a fixed-scope SEO foundation before deciding on monthly service.","cta":{"label":"View Launch Sprints","href":"/launch-sprints"}}]}'::jsonb, 5 from public.pages where slug = '/';
-insert into public.sections (page_id, key, type, tone, data, position) select id, 'process', 'processSteps', 'surface', '{"eyebrow":"How It Works","heading":"A Clear SEO Process From Review to Recap","body":"SEO works better when the process is organized. JMC keeps the work focused around visibility, priorities, implementation, and clear communication.","steps":[{"title":"Visibility Review","body":"We review where your business currently shows up, where visibility is weak, and which opportunities are worth prioritizing."},{"title":"SEO Roadmap","body":"We organize the work around keyword priorities, content needs, local visibility, technical issues, and business goals."},{"title":"Implementation","body":"We complete the scoped SEO work, content updates, local optimization, and technical improvements tied to the plan."},{"title":"Monthly Recap","body":"You receive a clear summary of what was completed, what changed, and what should happen next."}],"cta":{"label":"Start with a Visibility Review","href":"/contact"}}'::jsonb, 6 from public.pages where slug = '/';
-insert into public.sections (page_id, key, type, tone, data, position) select id, 'monthly-recap', 'reportingBlock', 'white', '{"eyebrow":"Clear Reporting","heading":"What You Get Every Month","body":"SEO should not feel vague. Every month you get the same four answers, in the same order, in language that does not need a glossary.","did":"A plain summary of the SEO work completed: content, technical checks, local visibility tasks, and everything else inside the scope.","why":"The reasoning behind each piece of work, and how it supports visibility, relevance, or trust.","changed":"What moved, what did not, and what we are still watching.","next":"The priorities for the coming month, in order, so you always know where the campaign is heading.","cta":{"label":"See How JMC Reports SEO Progress","href":"/seo-reporting"}}'::jsonb, 7 from public.pages where slug = '/';
-insert into public.sections (page_id, key, type, tone, data, position) select id, 'houston', 'fullWidthText', 'surface', '{"eyebrow":"Houston-Area SEO Agency","heading":"Rooted in League City. Built for Houston-Area Growth.","body":"JMC is based in League City and works with businesses across the Houston area that need practical SEO strategy, stronger search visibility, and clearer reporting. Whether the goal is local visibility, regional growth, or a more focused real estate SEO strategy, the work starts with understanding where your business is trying to grow.","cta":{"label":"Learn More About JMC","href":"/about"}}'::jsonb, 8 from public.pages where slug = '/';
-insert into public.sections (page_id, key, type, tone, data, position) select id, 'final-cta', 'finalCta', NULL, '{"heading":"Not Sure Where Your SEO Is Stuck? Start with a Visibility Review.","body":"We will help you identify visibility gaps, priority opportunities, and the best next step based on your business, market, and goals.","primaryCta":{"label":"Request a Visibility Review","href":"/contact"},"secondaryCta":{"label":"View SEO Packages","href":"/monthly-seo-packages"}}'::jsonb, 9 from public.pages where slug = '/';
+-- Replaced rather than merged: a section dropped by the new spec should
+-- disappear here too, not linger as an orphan.
+delete from public.sections where page_id in (select id from public.pages where slug in ('/local-seo-services', '/traditional-seo-services', '/monthly-seo-packages', '/launch-sprints', '/google-business-profile-optimization', '/seo-reporting', '/industries', '/industries/home-services-trades', '/industries/healthcare-wellness', '/industries/hospitality-attractions', '/industries/professional-services', '/industries/energy-petrochemical', '/industries/maritime-logistics', '/industries/commercial-construction-infrastructure', '/industries/aerospace-aviation'));
 
 -- Local SEO Services
 insert into public.sections (page_id, key, type, tone, data, position) select id, 'hero', 'heroSplit', NULL, '{"eyebrow":"Local SEO Services","heading":"Get Found Where Your Customers Are Looking","body":"Local SEO is the work of appearing when somebody nearby searches for what you do. It runs across your Google Business Profile, your listings, your reviews and your service pages, and it is measured across your whole service area rather than as one number.","primaryCta":{"label":"Request a Visibility Review","href":"/contact"},"secondaryCta":{"label":"View Local SEO Packages","href":"/monthly-seo-packages#local"},"showcase":[{"kind":"coverage","label":"Where you appear","title":"Local Surfaces","items":["Google Search results","Google Maps and the map pack","Service-area searches","The profile panel itself"]},{"kind":"channels","label":"Three tiers","title":"Sized by Area","items":["Neighborhood","Citywide","Metro"]}]}'::jsonb, 0 from public.pages where slug = '/local-seo-services';
@@ -239,18 +201,6 @@ insert into public.sections (page_id, key, type, tone, data, position) select id
 insert into public.sections (page_id, key, type, tone, data, position) select id, 'faq', 'faq', 'white', '{"eyebrow":"Questions","heading":"Traditional SEO Questions","items":[{"question":"How long before there are results?","answer":"Longer than local, because the competing field is bigger and the buying cycles behind it are slower. Technical fixes can show within weeks, but movement on competitive terms is usually a matter of months, and it starts on the specific searches before the broad ones. The recap says which stage the work is at rather than implying steady progress."},{"question":"Is there a contract?","answer":"Yes. Twelve months, then month to month, with 30 days written notice to end it. The term exists because this work compounds and a short engagement cannot show what a full one can."},{"question":"What does the onboarding fee cover?","answer":"The technical and on-page audit, tracking setup across markets, competitor analysis, and the foundational fixes that have to happen once before the monthly work means anything."},{"question":"Do you build links?","answer":"No. JMC advises on authority building and does not sell or place links. Bought placements are a risk taken with your domain rather than with the agency''s, and the recommendations you get are the ones that would be given if the domain were ours."},{"question":"How is this different from Local SEO?","answer":"Local SEO is for businesses competing for customers in a defined area, however many locations they run in it. Traditional SEO is for businesses competing across markets, service lines or genuinely competitive search. It is a difference in reach, not in size, and a large single-area business is still a Local engagement."},{"question":"Do you guarantee rankings?","answer":"No, and anyone who does is guessing. What is guaranteed is the scope, the reporting, and knowing exactly what was done and why."}],"cta":{"label":"Request a Visibility Review","href":"/contact"}}'::jsonb, 10 from public.pages where slug = '/traditional-seo-services';
 insert into public.sections (page_id, key, type, tone, data, position) select id, 'final-cta', 'finalCta', NULL, '{"heading":"Start With a Visibility Review","body":"Where the business appears across its markets today, who is holding the space, and which gap is worth closing first.","primaryCta":{"label":"Request a Visibility Review","href":"/contact"},"secondaryCta":{"label":"View Traditional SEO Packages","href":"/monthly-seo-packages#traditional"}}'::jsonb, 11 from public.pages where slug = '/traditional-seo-services';
 
--- Real Estate SEO
-insert into public.sections (page_id, key, type, tone, data, position) select id, 'hero', 'heroSplit', NULL, '{"eyebrow":"Real Estate SEO","heading":"Be the Agent Your Market Finds First","body":"Real estate search is local, personal, and competitive. JMC builds SEO strategy around the neighborhoods you work, the buyers and sellers you want, and the content that makes you a credible choice before anyone picks up the phone.","primaryCta":{"label":"Request a Real Estate Visibility Review","href":"/contact"},"secondaryCta":{"label":"View Real Estate SEO Options","href":"#options"},"showcase":[{"kind":"channels","label":"Who is searching","title":"Both Sides of the Move","items":["Buyers researching a neighborhood","Sellers checking their market","Referrals looking you up by name"],"footnote":"Different intent, different pages"},{"kind":"coverage","label":"Your markets","title":"Neighborhood Reach","items":["Buyer intent","Seller intent","Market pages"]},{"kind":"report","label":"Every month","title":"Monthly Recap","items":["Market content published","Profile and review activity","Visibility movement","Next-step priorities"]}]}'::jsonb, 0 from public.pages where slug = '/real-estate-seo';
-insert into public.sections (page_id, key, type, tone, data, position) select id, 'audience-path', 'cardGrid', 'white', '{"eyebrow":"Where You Fit","heading":"SEO Works Differently for Agents, Teams, and Brokerages","body":"The right strategy depends on whether you are building a personal reputation, scaling one across several agents, or establishing a firm as the authority in a market.","columns":3,"cards":[{"title":"Individual Agents","icon":"users","body":"You are the brand. Visibility has to attach to your name and the neighborhoods you actually know.","cta":{"label":"Agent Growth SEO","href":"#options"}},{"title":"Real Estate Teams","icon":"layers","body":"Several agents, overlapping markets, one shared reputation to build and protect.","cta":{"label":"Team and Brokerage SEO","href":"#options"}},{"title":"Brokerages","icon":"building","body":"You need market-level authority that supports recruiting as much as it supports listings.","cta":{"label":"Team and Brokerage SEO","href":"#options"}}],"cta":{"label":"Find the Right Real Estate SEO Path","href":"/contact"}}'::jsonb, 1 from public.pages where slug = '/real-estate-seo';
-insert into public.sections (page_id, key, type, tone, data, position) select id, 'includes', 'cardGrid', 'surface', '{"variant":"split","eyebrow":"What''s Included","heading":"The Work Behind Real Estate Search Visibility","body":"Real estate SEO is less about chasing generic terms and more about owning the searches tied to your markets and your name.","columns":3,"cards":[{"title":"Local Visibility and Google Business Profile","icon":"star","body":"Profile optimization and local search work so you appear when someone searches an agent in your area."},{"title":"Neighborhood and Market Content","icon":"map-pin","body":"Pages built around the specific communities you serve, written for buyers and sellers researching a move."},{"title":"Website Structure and Service Pages","icon":"file-text","body":"Clear pages for buyers, sellers, and the markets you cover, organized so search engines understand your focus."},{"title":"Review and Trust Signals","icon":"message-square","body":"Review support and reputation work, because real estate decisions run on trust more than most industries."},{"title":"Search Visibility Tracking","icon":"gauge","body":"Tracking across your neighborhoods and market terms so you can see where you are gaining ground."},{"title":"Monthly Recaps and Reporting","icon":"clipboard-check","body":"A clear summary of the work, the movement, and the priorities queued next."}],"cta":{"label":"Explore Real Estate SEO Options","href":"#options"}}'::jsonb, 2 from public.pages where slug = '/real-estate-seo';
-insert into public.sections (page_id, key, type, tone, data, position) select id, 'growth-model', 'cardGrid', 'white', '{"variant":"compact","eyebrow":"Growth Model","heading":"The Strategy Changes With the Business Model","body":"Same market, same search results, very different SEO problems to solve.","columns":3,"cards":[{"title":"Agents Need Personal Visibility","icon":"users","body":"Your name, your neighborhoods, and your track record have to be findable and consistent. The goal is being recognized as the person who knows a specific area."},{"title":"Teams Need Scalable Visibility","icon":"layers","body":"Content and structure that support multiple agents without competing against each other for the same searches or splitting the team''s authority."},{"title":"Brokerages Need Market Authority","icon":"building","body":"Depth across markets, a site structure that holds up as agents come and go, and visibility that supports both listings and recruiting."}],"cta":{"label":"Request a Real Estate Visibility Review","href":"/contact"}}'::jsonb, 3 from public.pages where slug = '/real-estate-seo';
-insert into public.sections (page_id, key, type, tone, data, position) select id, 'neighborhood-authority', 'featureSplit', 'surface', '{"eyebrow":"Neighborhood Authority","heading":"Own the Searches That Come Before the Listing Search","body":"Long before someone searches for a specific address, they are searching for a neighborhood. What it is like to live there, what homes go for, what the schools and commute look like. Answering those questions well is how agents become the obvious local expert instead of one more name in the results.","cta":{"label":"Explore Real Estate SEO Options","href":"#options"},"groups":[{"title":"Neighborhood Content","icon":"map-pin","body":"Pages that genuinely answer what people ask about a community."},{"title":"Buyer and Seller Intent","icon":"target","body":"Separate paths, because the two search very differently."},{"title":"Local Search Presence","icon":"search","body":"Profile, listings, and local signals that reinforce your market."},{"title":"Trust Signals","icon":"shield-check","body":"Reviews and credibility markers that support the decision."}]}'::jsonb, 4 from public.pages where slug = '/real-estate-seo';
-insert into public.sections (page_id, key, type, tone, data, position) select id, 'options', 'pricingCards', 'white', '{"eyebrow":"Real Estate SEO Options","heading":"Two Paths Depending on How You Are Built","body":"Real estate SEO is scoped differently than standard local SEO packages. Reach out and we will size it against your markets and business model.","packageIds":["real-estate-agent","real-estate-team"],"cta":{"label":"Request a Real Estate Visibility Review","href":"/contact"}}'::jsonb, 5 from public.pages where slug = '/real-estate-seo';
-insert into public.sections (page_id, key, type, tone, data, position) select id, 'education', 'fullWidthText', 'surface', '{"eyebrow":"Continuing Education","heading":"SEO Education for Real Estate Professionals","body":"JMC teaches continuing education on search visibility for real estate professionals. If you would rather understand the fundamentals before hiring anyone, that is a reasonable place to start.","cta":{"label":"Ask About Upcoming Classes","href":"/contact"}}'::jsonb, 6 from public.pages where slug = '/real-estate-seo';
-insert into public.sections (page_id, key, type, tone, data, position) select id, 'reporting', 'cardGrid', 'white', '{"emphasis":true,"eyebrow":"Clear Reporting","heading":"Know Exactly What Your SEO Is Doing Each Month","body":"Real estate moves fast and marketing spend gets questioned. Reporting is how the work stays defensible.","columns":4,"cards":[{"title":"Visibility Movement","body":"Where you are gaining or losing ground across your neighborhoods and market terms."},{"title":"Content Progress","body":"The market and neighborhood content published or improved this month."},{"title":"Local Search Opportunities","body":"Openings in your markets worth pursuing next, and why they look reachable."},{"title":"Next-Step Recommendations","body":"The priorities queued for the coming month, in plain language."}],"cta":{"label":"See How JMC Reports SEO Progress","href":"/contact"}}'::jsonb, 7 from public.pages where slug = '/real-estate-seo';
-insert into public.sections (page_id, key, type, tone, data, position) select id, 'faq', 'faq', 'surface', '{"eyebrow":"Questions","heading":"Real Estate SEO Questions We Hear Often","items":[{"question":"Is SEO worth it for an individual agent?","answer":"It can be, if you work defined neighborhoods and want visibility that does not stop the moment you stop paying for ads. SEO builds slowly and compounds. If you need volume this month, paid channels will move faster, the two solve different problems."},{"question":"How is this different for teams and brokerages?","answer":"Individual agents need visibility tied to a personal brand and a handful of neighborhoods. Teams need content and site structure that support several agents without competing internally. Brokerages need market-level authority that holds up as the roster changes. The tactics overlap; the structure does not."},{"question":"Does a Google Business Profile matter for real estate?","answer":"Yes. Agents and brokerages appear in local search and map results, and profile completeness, activity, and reviews all influence whether you show up and whether someone contacts you."},{"question":"What does neighborhood visibility actually mean?","answer":"Appearing in searches tied to specific communities rather than only broad city-level terms. Those searches usually have less competition and much clearer intent, because someone researching a neighborhood is genuinely considering a move."},{"question":"How long before real estate SEO shows results?","answer":"Expect three to six months for meaningful movement in a moderately competitive market, longer where established agents and portals already dominate. Neighborhood content typically gains traction sooner than broad city terms."},{"question":"Who writes the content?","answer":"JMC plans and produces the content as part of your monthly scope. We will pull on your market knowledge where it makes the content genuinely better, but you are not being handed a writing assignment."}],"cta":{"label":"Request a Real Estate Visibility Review","href":"/contact"}}'::jsonb, 8 from public.pages where slug = '/real-estate-seo';
-insert into public.sections (page_id, key, type, tone, data, position) select id, 'final-cta', 'finalCta', NULL, '{"heading":"See How You Show Up in the Neighborhoods You Work","body":"A Real Estate Visibility Review looks at where you currently appear across your markets, where the gaps are, and what is worth prioritizing first.","primaryCta":{"label":"Request a Real Estate Visibility Review","href":"/contact"},"secondaryCta":{"label":"View Real Estate SEO Options","href":"#options"}}'::jsonb, 9 from public.pages where slug = '/real-estate-seo';
-
 -- Monthly SEO Packages
 insert into public.sections (page_id, key, type, tone, data, position) select id, 'hero', 'heroCentered', NULL, '{"eyebrow":"Monthly SEO Packages","heading":"The Prices Are on This Page","body":"Six monthly packages across two service lines, with what each one includes and what it costs. Nothing here is behind a call, because a price you have to ask for is a price that changes depending on who is asking."}'::jsonb, 0 from public.pages where slug = '/monthly-seo-packages';
 insert into public.sections (page_id, key, type, tone, data, position) select id, 'path', 'cardGrid', 'surface', '{"variant":"cards","columns":2,"eyebrow":"Start Here","heading":"Two Paths, Sorted by Reach","body":"Which one fits comes down to where a business competes, not how large it is.","cards":[{"title":"Local SEO","icon":"map-pin","meta":"From $875 a month","body":"For businesses competing for customers in a defined area, however many locations they run inside it.","cta":{"label":"See Local Packages","href":"#local"}},{"title":"Traditional SEO","icon":"globe","meta":"From $2,295 a month","body":"For businesses competing across multiple markets, multiple service lines, or genuinely competitive search.","cta":{"label":"See Traditional Packages","href":"#traditional"}}]}'::jsonb, 1 from public.pages where slug = '/monthly-seo-packages';
@@ -275,34 +225,6 @@ insert into public.sections (page_id, key, type, tone, data, position) select id
 insert into public.sections (page_id, key, type, tone, data, position) select id, 'faq', 'faq', 'surface', '{"eyebrow":"Questions","heading":"Sprint Questions","items":[{"question":"Is there any ongoing commitment?","answer":"None. A sprint is a one-time engagement with no term and no auto-renewal. When the 30 days are up, the work is delivered and the arrangement is over unless you decide otherwise."},{"question":"What happens after the 30 days?","answer":"The 30-Day Action Roadmap is handed over, along with everything completed during the sprint. Continuing into monthly service is optional and is a separate decision."},{"question":"How does the onboarding waiver work?","answer":"If monthly service starts within 30 calendar days of the sprint finishing, the onboarding fee on the matching package is waived. The Neighborhood sprint covers Neighborhood, Citywide or Metro; Regional covers Regional; National covers National or National+."},{"question":"Which sprint fits?","answer":"Neighborhood is local work, including the Google Business Profile, citations and a local grid baseline. Regional and National are technical and on-page work across multiple markets. The difference is what a business competes in, not how large it is."},{"question":"Can the roadmap be handled internally?","answer":"Yes. It is written to be actionable by whoever ends up doing it, and plenty of businesses take it and run it themselves. That is a legitimate outcome rather than a failed one."},{"question":"Is a sprint required before monthly service?","answer":"No. It is one route in, not a gate. Monthly packages can start directly, with the standard onboarding fee."}],"cta":{"label":"Request a Sprint Consultation","href":"/contact?type=sprint"}}'::jsonb, 7 from public.pages where slug = '/launch-sprints';
 insert into public.sections (page_id, key, type, tone, data, position) select id, 'final-cta', 'finalCta', NULL, '{"heading":"Start With a Sprint","body":"A fixed scope, thirty days, and a roadmap at the end of it that is yours whatever you decide to do next.","primaryCta":{"label":"Request a Sprint Consultation","href":"/contact?type=sprint"},"secondaryCta":{"label":"View Monthly SEO Packages","href":"/monthly-seo-packages"}}'::jsonb, 8 from public.pages where slug = '/launch-sprints';
 
--- About JMC
-insert into public.sections (page_id, key, type, tone, data, position) select id, 'hero', 'heroCentered', NULL, '{"eyebrow":"About JMC","heading":"Practical SEO, Explained in Plain English","body":"Jordan Marketing Consultants is a Houston-area SEO agency rooted in League City, helping local, regional, and industry-focused businesses improve search visibility through practical SEO strategy, content planning, local optimization, and clear reporting.","primaryCta":{"label":"Request a Visibility Review","href":"/contact"},"secondaryCta":{"label":"View SEO Packages","href":"/monthly-seo-packages"}}'::jsonb, 0 from public.pages where slug = '/about';
-insert into public.sections (page_id, key, type, tone, data, position) select id, 'approach', 'cardGrid', 'white', '{"variant":"split","eyebrow":"How We Work","heading":"SEO Should Be Understandable Before It Is Impressive","body":"Most businesses that have hired an SEO agency before describe the same experience: work happened, invoices arrived, and nobody could explain what changed. JMC is built around fixing that.","columns":3,"cards":[{"title":"Scope Before Work","icon":"list-checks","body":"You know what is included before anything starts. No discovering the boundaries of your package three months in."},{"title":"Roadmap Over Tasks","icon":"compass","body":"Work is sequenced against a documented plan tied to your goals, not pulled from a generic monthly checklist."},{"title":"Reporting You Read","icon":"bar-chart","body":"A Monthly Recap in plain language, delivered by Loom or a call, so you can ask questions instead of decoding a dashboard."}]}'::jsonb, 1 from public.pages where slug = '/about';
-insert into public.sections (page_id, key, type, tone, data, position) select id, 'houston', 'fullWidthText', 'surface', '{"eyebrow":"Houston-Area SEO Agency","heading":"Rooted in League City. Built for Houston-Area Growth.","body":"JMC is based in League City and works with businesses across the Greater Houston area and beyond. Being local matters for understanding a market, but it is not a boundary. Traditional SEO clients compete regionally and nationally, and the work is built around where your customers actually are.","cta":{"label":"Explore SEO Services","href":"/local-seo-services"}}'::jsonb, 2 from public.pages where slug = '/about';
-insert into public.sections (page_id, key, type, tone, data, position) select id, 'specialties', 'cardGrid', 'white', '{"eyebrow":"What We Focus On","heading":"Three Service Lanes, One Standard","body":"Different markets need different strategies. The commitment to clear scope, documented priorities, and honest reporting does not change between them.","columns":3,"cards":[{"title":"Local SEO","icon":"map-pin","body":"For businesses that need visibility in a defined city or service area.","cta":{"label":"Explore Local SEO","href":"/local-seo-services"}},{"title":"Traditional SEO","icon":"trending-up","body":"For businesses competing across regions, national markets, or specialized industries.","cta":{"label":"Explore Traditional SEO","href":"/traditional-seo-services"}},{"title":"Real Estate SEO","icon":"home","body":"For agents, teams, and brokerages building neighborhood-level visibility.","cta":{"label":"Explore Real Estate SEO","href":"/real-estate-seo"}}]}'::jsonb, 3 from public.pages where slug = '/about';
-insert into public.sections (page_id, key, type, tone, data, position) select id, 'process', 'processSteps', 'surface', '{"eyebrow":"The Process","heading":"A Clear SEO Process From Review to Recap","body":"The same four steps run every engagement, whether it is a local campaign or a national one.","steps":[{"title":"Visibility Review","body":"We review where your business currently shows up, where visibility is weak, and which opportunities are worth prioritizing."},{"title":"SEO Roadmap","body":"We organize the work around keyword priorities, content needs, local visibility, technical issues, and business goals."},{"title":"Implementation","body":"We complete the scoped SEO work, content updates, local optimization, and technical improvements tied to the plan."},{"title":"Monthly Recap","body":"You receive a clear summary of what was completed, what changed, and what should happen next."}],"cta":{"label":"Start with a Visibility Review","href":"/contact"}}'::jsonb, 4 from public.pages where slug = '/about';
-insert into public.sections (page_id, key, type, tone, data, position) select id, 'final-cta', 'finalCta', NULL, '{"heading":"Let''s Look at Where Your Visibility Stands","body":"A Visibility Review is the starting point for every JMC engagement, and it is useful even if you decide not to work with us.","primaryCta":{"label":"Request a Visibility Review","href":"/contact"},"secondaryCta":{"label":"View SEO Packages","href":"/monthly-seo-packages"}}'::jsonb, 5 from public.pages where slug = '/about';
-
--- Resources
-insert into public.sections (page_id, key, type, tone, data, position) select id, 'hero', 'heroCentered', NULL, '{"eyebrow":"Resources","heading":"SEO, Explained Without the Jargon","body":"Straight answers to the questions business owners actually ask about search visibility. We are building this out as we go. If something you need is missing, ask us directly.","primaryCta":{"label":"Ask an SEO Question","href":"/contact"},"secondaryCta":{"label":"View SEO Packages","href":"/monthly-seo-packages"}}'::jsonb, 0 from public.pages where slug = '/resources';
-insert into public.sections (page_id, key, type, tone, data, position) select id, 'topics', 'cardGrid', 'white', '{"variant":"compact","eyebrow":"Topics","heading":"What We Write About","body":"The areas where clear information saves businesses the most money.","columns":3,"cards":[{"title":"Local Search","icon":"map-pin","body":"How Google Business Profile, reviews, citations, and local content actually influence whether you show up nearby."},{"title":"Organic Search Strategy","icon":"trending-up","body":"How keyword strategy, content structure, and technical health work together across larger markets."},{"title":"SEO Reporting","icon":"bar-chart","body":"What to expect from an agency report, and the questions worth asking when something looks vague."},{"title":"Real Estate SEO","icon":"home","body":"How agents, teams, and brokerages build neighborhood visibility that compounds over time."},{"title":"Technical SEO","icon":"wrench","body":"The structural issues that quietly cap visibility, and how to tell whether yours are serious."},{"title":"AI and Answer Engines","icon":"search","body":"How search behavior is shifting, and which SEO fundamentals matter more because of it."}]}'::jsonb, 1 from public.pages where slug = '/resources';
-insert into public.sections (page_id, key, type, tone, data, position) select id, 'ai-search', 'featureSplit', 'surface', '{"eyebrow":"Search Is Changing","heading":"SEO Built for How People Search Now","body":"People search across Google, maps, organic results, and increasingly AI-powered answer tools. Nobody can guarantee placement inside an AI answer, and you should be skeptical of anyone who says otherwise. What does help is the same practical work that has always helped: clear service pages, strong site structure, sound internal linking, accurate schema, and content that establishes what you do and where you do it.","cta":{"label":"Talk Through Your SEO Strategy","href":"/contact"},"groups":[{"title":"Clear Service Pages","icon":"file-text","body":"Unambiguous answers about what you offer and to whom."},{"title":"Site Structure","icon":"network","body":"Organization that makes relationships between services obvious."},{"title":"Schema and Entities","icon":"layers","body":"Structured data that states who you are and where you work."},{"title":"Topical Authority","icon":"shield-check","body":"Depth in your actual subject area rather than thin coverage everywhere."}]}'::jsonb, 2 from public.pages where slug = '/resources';
-insert into public.sections (page_id, key, type, tone, data, position) select id, 'articles', 'postList', 'surface', '{"eyebrow":"Articles","heading":"Latest From the Resources Hub","body":"Plain-English explainers, written as the questions come up.","limit":6,"emptyMessage":"The first articles are being written now. In the meantime, ask us the question directly. We answer it either way.","cta":{"label":"Ask an SEO Question","href":"/contact"}}'::jsonb, 3 from public.pages where slug = '/resources';
-insert into public.sections (page_id, key, type, tone, data, position) select id, 'final-cta', 'finalCta', NULL, '{"heading":"Have a Question We Haven''t Written About Yet?","body":"Ask it directly. If it is useful to you, it is probably useful to other businesses in the same position, and it may well become the next resource here.","primaryCta":{"label":"Request a Visibility Review","href":"/contact"},"secondaryCta":{"label":"View SEO Packages","href":"/monthly-seo-packages"}}'::jsonb, 4 from public.pages where slug = '/resources';
-
--- Link Hub
-insert into public.sections (page_id, key, type, tone, data, position) select id, 'links', 'linkStack', NULL, '{"eyebrow":"@htxseo","theme":"dark","heading":"Houston’s SEO Agency","body":"Houston-area SEO. Practical strategy, local optimization, content planning, and reporting you can actually read.","socials":[{"platform":"instagram","href":"https://instagram.com/"},{"platform":"facebook","href":"https://facebook.com/"},{"platform":"linkedin","href":"https://linkedin.com/"}],"links":[{"label":"Request a Visibility Review","href":"/contact","description":"Where you show up now, and what to fix first","icon":"target","featured":true},{"label":"SEO Packages & Pricing","href":"/monthly-seo-packages","description":"Local, traditional, and launch sprints","icon":"layers"},{"label":"Local SEO Services","href":"/local-seo-services","description":"Google Business Profile, citations, local content","icon":"map-pin"},{"label":"SEO Resources","href":"/resources","description":"Plain-English explainers, no jargon","icon":"file-text"},{"label":"Call (281) 989-0468","href":"tel:+12819890468","icon":"message-square"}],"footnote":"League City, TX · Serving the Greater Houston area"}'::jsonb, 0 from public.pages where slug = '/links';
-
--- SEO Reporting
-insert into public.sections (page_id, key, type, tone, data, position) select id, 'hero', 'heroSplit', NULL, '{"eyebrow":"SEO Reporting","heading":"SEO Reporting That Answers Four Questions","body":"Most SEO reporting either buries the work in numbers or skips it entirely. JMC reports every month in the same shape, so you always know what was done, why it was the priority, and what it changed.","primaryCta":{"label":"Request a Visibility Review","href":"/contact"},"secondaryCta":{"label":"Explore Local SEO","href":"/local-seo-services"},"showcase":[{"kind":"report","label":"Every month","title":"Monthly Project Recap","items":["What We Did","Why We Did It","What Changed","Where We''re Headed"]},{"kind":"coverage","label":"Also included","title":"Quarterly Update","items":["Local","Traditional","Every tier"]}]}'::jsonb, 0 from public.pages where slug = '/seo-reporting';
-insert into public.sections (page_id, key, type, tone, data, position) select id, 'four-questions', 'fourQuestions', 'surface', '{"eyebrow":"The Shape of It","heading":"The Four Questions Every Recap Answers","body":"The same four headings every month, in the same order, on every package in both service lines.","did":"The actual work completed that month, listed as specific tasks rather than categories. Not “content optimization” but which pages were rewritten, which titles changed, and which listings were corrected.","didExample":"Rewrote service page titles and meta descriptions for four priority pages.","why":"The reasoning behind the order. SEO is a queue of things worth doing, and the useful part of a report is understanding why this month''s work went to the front of it rather than something else.","whyExample":"Those four pages already had impressions and no clear title, so they were the cheapest movement available.","changed":"Movement, reported honestly. Some months show clear change and some show very little, and the recap says which one it was. A report that reads like progress every single month is not a report.","changedExample":"Grid visibility for the primary service term, compared with last month.","next":"Next month''s priorities, written down before the month starts, so nothing in the following recap is a surprise. It also gives you somewhere to push back before the work happens rather than after.","nextExample":"Next: the two service pages with no dedicated content, then a citation audit."}'::jsonb, 1 from public.pages where slug = '/seo-reporting';
-insert into public.sections (page_id, key, type, tone, data, position) select id, 'example', 'recapExample', 'white', '{"eyebrow":"An Example","heading":"What a Recap Actually Looks Like","body":"The structure, drawn out. Every line below describes the kind of thing a recap contains.","panelTitle":"Monthly Project Recap","panelMeta":"Structure only. Not a real client report.","did":["Rewrote titles and meta descriptions for four priority service pages.","Corrected the business category and service list on the Google Business Profile.","Published one strategic SEO page for the highest-intent service term."],"why":["Those four pages already had impressions with no clear title, so they were the cheapest movement available.","The profile category was narrower than the services actually offered, which limits which searches it can appear for."],"changed":["Grid visibility for the primary service term, compared with last month.","Movement on the tracked keyword set, with the ones that moved named individually.","Where the month was quiet, the recap says so and says why."],"next":["The two service pages with no dedicated content.","A citation audit across the listings that carry an old address."],"caption":"An example of the structure, not a real client report. No figures appear in it because none of them would be real, and a page about honest reporting is the worst possible place for an invented number."}'::jsonb, 2 from public.pages where slug = '/seo-reporting';
-insert into public.sections (page_id, key, type, tone, data, position) select id, 'deliverables', 'cardGrid', 'surface', '{"variant":"cards","columns":3,"eyebrow":"What Arrives","heading":"What Arrives, and When","body":"Three deliverables, included in every package in both service lines.","cards":[{"title":"Monthly Reporting","icon":"bar-chart","body":"Detailed reporting on the work and the tracked keyword and competitor set. Traditional SEO packages add dashboard reporting on top of it."},{"title":"Monthly Project Recap","icon":"message-square","body":"Delivered by Loom or a video call. A person walking through what happened and answering questions, rather than a file dropped into an inbox."},{"title":"Quarterly Project Update","icon":"calendar","body":"A wider look every three months: what the quarter changed, what it taught, and where the next one is pointed."}]}'::jsonb, 3 from public.pages where slug = '/seo-reporting';
-insert into public.sections (page_id, key, type, tone, data, position) select id, 'standards', 'cardGrid', 'white', '{"variant":"numbered","columns":3,"eyebrow":"Editorial Discipline","heading":"What Gets Left Out","body":"A recap is more useful for what it leaves out than for what it piles in.","cards":[{"title":"Fewer Numbers, Better Ones","body":"A figure earns its place by informing a decision. Metrics that look impressive without changing what happens next are left out on purpose."},{"title":"Every Number Has a Reason","body":"Nothing appears in a recap without an explanation of why it is there and what it means. A number with no reading is decoration."},{"title":"Honest in Slow Months","body":"SEO has quiet months. When one happens, the recap says so, says why, and says what is being done about it."}]}'::jsonb, 4 from public.pages where slug = '/seo-reporting';
-insert into public.sections (page_id, key, type, tone, data, position) select id, 'by-lane', 'cardGrid', 'surface', '{"variant":"cards","columns":2,"eyebrow":"By Service","heading":"Reporting Differs by Where You Compete","body":"The four questions are the same in both lanes. What sits underneath them is not.","cards":[{"title":"Local SEO","icon":"map-pin","body":"Local search grid tracking, profile activity, review movement, and citation consistency. Visibility mapped across the service area rather than reduced to a single blended rank.","cta":{"label":"Explore Local SEO","href":"/local-seo-services"}},{"title":"Traditional SEO","icon":"globe","body":"Dashboard reporting, tracked keywords and competitors across markets, technical issues flagged as they appear, and how the strategic pages are performing.","cta":{"label":"Explore Traditional SEO","href":"/traditional-seo-services"}}]}'::jsonb, 5 from public.pages where slug = '/seo-reporting';
-insert into public.sections (page_id, key, type, tone, data, position) select id, 'faq', 'faq', 'white', '{"eyebrow":"Questions","heading":"Reporting Questions","items":[{"question":"How often do reports arrive?","answer":"A recap every month and a project update every quarter. Both are included in every package in both service lines, at every tier."},{"question":"Is the recap a document or a call?","answer":"A Loom video or a live video call, whichever suits you. Either way a person walks through the work rather than sending a file and hoping it gets read. Written reporting comes alongside it."},{"question":"What happens in a month where little moves?","answer":"The recap says so, and says why. SEO does not move in a straight line, and a report that reads like progress every single month is telling you less than one that admits a quiet stretch."},{"question":"Are rankings guaranteed?","answer":"No, and anyone guaranteeing them is guessing. What is guaranteed is the scope, the reporting, and knowing exactly what was done and why."},{"question":"Who else can see the reports?","answer":"Your call. The recap and the reporting are yours to share internally with whoever needs them, and the video format tends to make that easier rather than harder."},{"question":"What tools are used?","answer":"A mix of rank and grid tracking, Google Search Console, Google Analytics, and technical crawling. The tools matter less than the reading of them, which is the part the recap is for."}],"cta":{"label":"Request a Visibility Review","href":"/contact"}}'::jsonb, 6 from public.pages where slug = '/seo-reporting';
-insert into public.sections (page_id, key, type, tone, data, position) select id, 'final-cta', 'finalCta', NULL, '{"heading":"See What the First Report Would Say","body":"A visibility review covers where you appear now, what is holding it back, and which of those is worth acting on first.","primaryCta":{"label":"Request a Visibility Review","href":"/contact"},"secondaryCta":{"label":"View Monthly SEO Packages","href":"/monthly-seo-packages"}}'::jsonb, 7 from public.pages where slug = '/seo-reporting';
-
 -- Google Business Profile Optimization
 insert into public.sections (page_id, key, type, tone, data, position) select id, 'hero', 'heroSplit', NULL, '{"eyebrow":"Google Business Profile Optimization","heading":"Your Google Business Profile Is Doing More Work Than Your Website","body":"For most local searches the profile is what people see, read and act on, often without ever opening a website. Getting it right is the fastest visibility work available to a local business.","primaryCta":{"label":"Get a Free Visibility Audit","href":"#free-audit"},"secondaryCta":{"label":"Explore Local SEO","href":"/local-seo-services"},"showcase":[{"kind":"coverage","label":"What gets worked","title":"The Profile Itself","items":["Categories and services","Business information","Photos and posts","Reviews and replies"]},{"kind":"channels","label":"Where it shows","title":"Local Surfaces","items":["Map results","Local search","Profile panel"]}]}'::jsonb, 0 from public.pages where slug = '/google-business-profile-optimization';
 insert into public.sections (page_id, key, type, tone, data, position) select id, 'what-it-affects', 'cardGrid', 'surface', '{"variant":"cards","columns":3,"eyebrow":"Why It Matters","heading":"What the Profile Actually Affects","body":"Three things, none of which the website controls.","cards":[{"title":"Map Results","icon":"map-pin","body":"Where the business appears when somebody searches nearby. The profile is what is being ranked in that result, not the website behind it."},{"title":"First Impressions","icon":"storefront","body":"Hours, photos, services and reviews are read directly in the results. For a lot of searches that is the whole of what someone sees before deciding."},{"title":"Direct Actions","icon":"phone","body":"Calls, direction requests and website clicks all happen from the profile itself. A weak one loses those before a visit ever starts."}]}'::jsonb, 1 from public.pages where slug = '/google-business-profile-optimization';
@@ -313,6 +235,16 @@ insert into public.sections (page_id, key, type, tone, data, position) select id
 insert into public.sections (page_id, key, type, tone, data, position) select id, 'monthly-recap', 'reportingBlock', 'surface', '{"eyebrow":"Reporting","heading":"The Monthly Recap","body":"Profile work is easy to do invisibly, which is exactly why it gets reported the same way as everything else.","did":"The posts published, the listings corrected, the reviews replied to, named individually.","why":"Why that work was the priority, and what it was expected to affect.","changed":"Grid visibility across the service area, compared with last month, including the quiet ones.","next":"What is queued for the coming month, written down before it starts.","cta":{"label":"See How JMC Reports SEO Progress","href":"/seo-reporting"}}'::jsonb, 6 from public.pages where slug = '/google-business-profile-optimization';
 insert into public.sections (page_id, key, type, tone, data, position) select id, 'faq', 'faq', 'white', '{"eyebrow":"Questions","heading":"Profile Questions","items":[{"question":"Is this the same as Google My Business?","answer":"Yes. Google renamed Google My Business to Google Business Profile, and a lot of people still search for the old name. It is the same listing and the same work."},{"question":"Can this be done without a monthly package?","answer":"Yes. The Neighborhood Launch Sprint covers the foundation work as a one-time engagement and finishes with a 30-day roadmap, with no obligation to continue into a monthly package afterwards."},{"question":"How long before the profile improves?","answer":"Some changes show up almost immediately: corrected categories, services, hours and information can be reflected within days. Movement in map rankings is slower and depends on how competitive your area is, which is why the reporting separates the two rather than blending them."},{"question":"Who owns the profile?","answer":"You do, always. JMC requests manager access to a profile you own and never takes ownership of one. If the engagement ends, access is removed and nothing has to be handed back, because it was never held."},{"question":"Can suspended or duplicate profiles be fixed?","answer":"Duplicates can usually be merged or removed. Suspensions vary: some are caused by fixable information problems and some are not, and nobody can promise reinstatement. What JMC will do is look at the cause honestly and tell you whether it is worth pursuing."},{"question":"Does this help a business with no storefront?","answer":"Yes. A service-area business hides its address and is ranked against the area it covers, which makes categories, service definitions and listing consistency do more of the work. JMC is a service-area business itself and does not publish a street address."}],"cta":{"label":"Get a Free Visibility Audit","href":"#free-audit"}}'::jsonb, 7 from public.pages where slug = '/google-business-profile-optimization';
 insert into public.sections (page_id, key, type, tone, data, position) select id, 'final-cta', 'finalCta', NULL, '{"heading":"Start With the Profile","body":"A visibility review covers the profile, the site behind it, and which of the two is holding the other back.","primaryCta":{"label":"Request a Visibility Review","href":"/contact"},"secondaryCta":{"label":"View Launch Sprints","href":"/launch-sprints"}}'::jsonb, 8 from public.pages where slug = '/google-business-profile-optimization';
+
+-- SEO Reporting
+insert into public.sections (page_id, key, type, tone, data, position) select id, 'hero', 'heroSplit', NULL, '{"eyebrow":"SEO Reporting","heading":"SEO Reporting That Answers Four Questions","body":"Most SEO reporting either buries the work in numbers or skips it entirely. JMC reports every month in the same shape, so you always know what was done, why it was the priority, and what it changed.","primaryCta":{"label":"Request a Visibility Review","href":"/contact"},"secondaryCta":{"label":"Explore Local SEO","href":"/local-seo-services"},"showcase":[{"kind":"report","label":"Every month","title":"Monthly Project Recap","items":["What We Did","Why We Did It","What Changed","Where We''re Headed"]},{"kind":"coverage","label":"Also included","title":"Quarterly Update","items":["Local","Traditional","Every tier"]}]}'::jsonb, 0 from public.pages where slug = '/seo-reporting';
+insert into public.sections (page_id, key, type, tone, data, position) select id, 'four-questions', 'fourQuestions', 'surface', '{"eyebrow":"The Shape of It","heading":"The Four Questions Every Recap Answers","body":"The same four headings every month, in the same order, on every package in both service lines.","did":"The actual work completed that month, listed as specific tasks rather than categories. Not “content optimization” but which pages were rewritten, which titles changed, and which listings were corrected.","didExample":"Rewrote service page titles and meta descriptions for four priority pages.","why":"The reasoning behind the order. SEO is a queue of things worth doing, and the useful part of a report is understanding why this month''s work went to the front of it rather than something else.","whyExample":"Those four pages already had impressions and no clear title, so they were the cheapest movement available.","changed":"Movement, reported honestly. Some months show clear change and some show very little, and the recap says which one it was. A report that reads like progress every single month is not a report.","changedExample":"Grid visibility for the primary service term, compared with last month.","next":"Next month''s priorities, written down before the month starts, so nothing in the following recap is a surprise. It also gives you somewhere to push back before the work happens rather than after.","nextExample":"Next: the two service pages with no dedicated content, then a citation audit."}'::jsonb, 1 from public.pages where slug = '/seo-reporting';
+insert into public.sections (page_id, key, type, tone, data, position) select id, 'example', 'recapExample', 'white', '{"eyebrow":"An Example","heading":"What a Recap Actually Looks Like","body":"The structure, drawn out. Every line below describes the kind of thing a recap contains.","panelTitle":"Monthly Project Recap","panelMeta":"Structure only. Not a real client report.","did":["Rewrote titles and meta descriptions for four priority service pages.","Corrected the business category and service list on the Google Business Profile.","Published one strategic SEO page for the highest-intent service term."],"why":["Those four pages already had impressions with no clear title, so they were the cheapest movement available.","The profile category was narrower than the services actually offered, which limits which searches it can appear for."],"changed":["Grid visibility for the primary service term, compared with last month.","Movement on the tracked keyword set, with the ones that moved named individually.","Where the month was quiet, the recap says so and says why."],"next":["The two service pages with no dedicated content.","A citation audit across the listings that carry an old address."],"caption":"An example of the structure, not a real client report. No figures appear in it because none of them would be real, and a page about honest reporting is the worst possible place for an invented number."}'::jsonb, 2 from public.pages where slug = '/seo-reporting';
+insert into public.sections (page_id, key, type, tone, data, position) select id, 'deliverables', 'cardGrid', 'surface', '{"variant":"cards","columns":3,"eyebrow":"What Arrives","heading":"What Arrives, and When","body":"Three deliverables, included in every package in both service lines.","cards":[{"title":"Monthly Reporting","icon":"bar-chart","body":"Detailed reporting on the work and the tracked keyword and competitor set. Traditional SEO packages add dashboard reporting on top of it."},{"title":"Monthly Project Recap","icon":"message-square","body":"Delivered by Loom or a video call. A person walking through what happened and answering questions, rather than a file dropped into an inbox."},{"title":"Quarterly Project Update","icon":"calendar","body":"A wider look every three months: what the quarter changed, what it taught, and where the next one is pointed."}]}'::jsonb, 3 from public.pages where slug = '/seo-reporting';
+insert into public.sections (page_id, key, type, tone, data, position) select id, 'standards', 'cardGrid', 'white', '{"variant":"numbered","columns":3,"eyebrow":"Editorial Discipline","heading":"What Gets Left Out","body":"A recap is more useful for what it leaves out than for what it piles in.","cards":[{"title":"Fewer Numbers, Better Ones","body":"A figure earns its place by informing a decision. Metrics that look impressive without changing what happens next are left out on purpose."},{"title":"Every Number Has a Reason","body":"Nothing appears in a recap without an explanation of why it is there and what it means. A number with no reading is decoration."},{"title":"Honest in Slow Months","body":"SEO has quiet months. When one happens, the recap says so, says why, and says what is being done about it."}]}'::jsonb, 4 from public.pages where slug = '/seo-reporting';
+insert into public.sections (page_id, key, type, tone, data, position) select id, 'by-lane', 'cardGrid', 'surface', '{"variant":"cards","columns":2,"eyebrow":"By Service","heading":"Reporting Differs by Where You Compete","body":"The four questions are the same in both lanes. What sits underneath them is not.","cards":[{"title":"Local SEO","icon":"map-pin","body":"Local search grid tracking, profile activity, review movement, and citation consistency. Visibility mapped across the service area rather than reduced to a single blended rank.","cta":{"label":"Explore Local SEO","href":"/local-seo-services"}},{"title":"Traditional SEO","icon":"globe","body":"Dashboard reporting, tracked keywords and competitors across markets, technical issues flagged as they appear, and how the strategic pages are performing.","cta":{"label":"Explore Traditional SEO","href":"/traditional-seo-services"}}]}'::jsonb, 5 from public.pages where slug = '/seo-reporting';
+insert into public.sections (page_id, key, type, tone, data, position) select id, 'faq', 'faq', 'white', '{"eyebrow":"Questions","heading":"Reporting Questions","items":[{"question":"How often do reports arrive?","answer":"A recap every month and a project update every quarter. Both are included in every package in both service lines, at every tier."},{"question":"Is the recap a document or a call?","answer":"A Loom video or a live video call, whichever suits you. Either way a person walks through the work rather than sending a file and hoping it gets read. Written reporting comes alongside it."},{"question":"What happens in a month where little moves?","answer":"The recap says so, and says why. SEO does not move in a straight line, and a report that reads like progress every single month is telling you less than one that admits a quiet stretch."},{"question":"Are rankings guaranteed?","answer":"No, and anyone guaranteeing them is guessing. What is guaranteed is the scope, the reporting, and knowing exactly what was done and why."},{"question":"Who else can see the reports?","answer":"Your call. The recap and the reporting are yours to share internally with whoever needs them, and the video format tends to make that easier rather than harder."},{"question":"What tools are used?","answer":"A mix of rank and grid tracking, Google Search Console, Google Analytics, and technical crawling. The tools matter less than the reading of them, which is the part the recap is for."}],"cta":{"label":"Request a Visibility Review","href":"/contact"}}'::jsonb, 6 from public.pages where slug = '/seo-reporting';
+insert into public.sections (page_id, key, type, tone, data, position) select id, 'final-cta', 'finalCta', NULL, '{"heading":"See What the First Report Would Say","body":"A visibility review covers where you appear now, what is holding it back, and which of those is worth acting on first.","primaryCta":{"label":"Request a Visibility Review","href":"/contact"},"secondaryCta":{"label":"View Monthly SEO Packages","href":"/monthly-seo-packages"}}'::jsonb, 7 from public.pages where slug = '/seo-reporting';
 
 -- Industries
 insert into public.sections (page_id, key, type, tone, data, position) select id, 'hero', 'heroCentered', NULL, '{"eyebrow":"Industries","heading":"The Method Doesn''t Change With the Industry","body":"Eight sectors, one approach. What changes between them is the language buyers search in, how long they take to decide, and what a single lead is worth."}'::jsonb, 0 from public.pages where slug = '/industries';
@@ -395,270 +327,234 @@ insert into public.sections (page_id, key, type, tone, data, position) select id
 insert into public.sections (page_id, key, type, tone, data, position) select id, 'final-cta', 'finalCta', NULL, '{"heading":"Start With a Visibility Review","body":"Where the business appears today, which searches it is missing, and which of those gaps is worth closing first.","primaryCta":{"label":"Request a Visibility Review","href":"/contact"},"secondaryCta":{"label":"Explore Industries","href":"/industries"}}'::jsonb, 6 from public.pages where slug = '/industries/aerospace-aviation';
 
 -- ---------------------------------------------------------- packages ----
+-- Upserted, not deleted and rebuilt: a tier hidden or repriced in /admin
+-- keeps its row, and only the fields below are refreshed.
 insert into public.packages (id, group_key, name, price, price_unit, onboarding_fee, term, positioning, timeline, best_fit, deliverables, cta_label, cta_href, featured, visible, pricing_pending, position) values (
   'local-off-page-essentials', 'local', 'Off-Page Essentials', '$399', '/month', '$199 one-time', NULL, NULL, NULL,
-  'Best for businesses that need a stronger local visibility foundation without committing to a full local SEO campaign.',
-  ARRAY['Citation and business listing support', 'Google Business Profile support', 'NAP consistency cleanup and local presence maintenance', 'Foundational off-page SEO support', 'Monthly reporting and visibility summary']::text[],
+  'Best for businesses that need a stronger local visibility foundation without committing to a full local SEO campaign.', ARRAY['Citation and business listing support', 'Google Business Profile support', 'NAP consistency cleanup and local presence maintenance', 'Foundational off-page SEO support', 'Monthly reporting and visibility summary']::text[],
   'Request a Visibility Review', '/contact', false, false, false, 0)
 on conflict (id) do update set
-  group_key = excluded.group_key, name = excluded.name, price = excluded.price,
+  name = excluded.name, price = excluded.price,
   price_unit = excluded.price_unit, onboarding_fee = excluded.onboarding_fee,
   term = excluded.term, positioning = excluded.positioning,
   timeline = excluded.timeline, best_fit = excluded.best_fit,
-  deliverables = excluded.deliverables, cta_label = excluded.cta_label,
-  cta_href = excluded.cta_href, featured = excluded.featured,
-  visible = excluded.visible, pricing_pending = excluded.pricing_pending,
-  position = excluded.position;
+  deliverables = excluded.deliverables,
+  cta_label = excluded.cta_label, cta_href = excluded.cta_href,
+  featured = excluded.featured;
 
 insert into public.packages (id, group_key, name, price, price_unit, onboarding_fee, term, positioning, timeline, best_fit, deliverables, cta_label, cta_href, featured, visible, pricing_pending, position) values (
   'local-neighborhood', 'local', 'Neighborhood', '$875', '/month', '$349 one-time', '12-month term, then month to month', 'Local Foundation', NULL,
-  'Best for businesses focused on improving visibility in one primary service area.',
-  ARRAY['30 tracked keywords', '3 tracked competitors', '8 Google Business Profile posts per month', 'Up to 10 citations per month', '2 review request sends per month', 'Up to 15 review replies per month', 'Up to 2 Strategic SEO Pages per month', 'Local search grid tracking', 'Monthly Recap and Quarterly Project Update']::text[],
+  'Best for businesses focused on improving visibility in one primary service area.', ARRAY['30 tracked keywords', '3 tracked competitors', '8 Google Business Profile posts per month', 'Up to 10 citations per month', '2 review request sends per month', 'Up to 15 review replies per month', 'Up to 2 Strategic SEO Pages per month', 'Local search grid tracking', 'Monthly Recap and Quarterly Project Update']::text[],
   'Start with Neighborhood', '/contact?tier=neighborhood', false, true, false, 1)
 on conflict (id) do update set
-  group_key = excluded.group_key, name = excluded.name, price = excluded.price,
+  name = excluded.name, price = excluded.price,
   price_unit = excluded.price_unit, onboarding_fee = excluded.onboarding_fee,
   term = excluded.term, positioning = excluded.positioning,
   timeline = excluded.timeline, best_fit = excluded.best_fit,
-  deliverables = excluded.deliverables, cta_label = excluded.cta_label,
-  cta_href = excluded.cta_href, featured = excluded.featured,
-  visible = excluded.visible, pricing_pending = excluded.pricing_pending,
-  position = excluded.position;
+  deliverables = excluded.deliverables,
+  cta_label = excluded.cta_label, cta_href = excluded.cta_href,
+  featured = excluded.featured;
 
 insert into public.packages (id, group_key, name, price, price_unit, onboarding_fee, term, positioning, timeline, best_fit, deliverables, cta_label, cta_href, featured, visible, pricing_pending, position) values (
   'local-citywide', 'local', 'Citywide', '$1,165', '/month', '$449 one-time', '12-month term, then month to month', 'City-Level Growth', NULL,
-  'Best for businesses competing more aggressively across a city-level market with broader content and review support.',
-  ARRAY['45 tracked keywords', '5 tracked competitors', '12 Google Business Profile posts per month', 'Up to 15 citations per month', '4 review request sends per month', 'Up to 20 review replies per month', 'Up to 3 Strategic SEO Pages per month', 'Local search grid tracking', 'Monthly Recap and Quarterly Project Update']::text[],
+  'Best for businesses competing more aggressively across a city-level market with broader content and review support.', ARRAY['45 tracked keywords', '5 tracked competitors', '12 Google Business Profile posts per month', 'Up to 15 citations per month', '4 review request sends per month', 'Up to 20 review replies per month', 'Up to 3 Strategic SEO Pages per month', 'Local search grid tracking', 'Monthly Recap and Quarterly Project Update']::text[],
   'Start with Citywide', '/contact?tier=citywide', true, true, false, 2)
 on conflict (id) do update set
-  group_key = excluded.group_key, name = excluded.name, price = excluded.price,
+  name = excluded.name, price = excluded.price,
   price_unit = excluded.price_unit, onboarding_fee = excluded.onboarding_fee,
   term = excluded.term, positioning = excluded.positioning,
   timeline = excluded.timeline, best_fit = excluded.best_fit,
-  deliverables = excluded.deliverables, cta_label = excluded.cta_label,
-  cta_href = excluded.cta_href, featured = excluded.featured,
-  visible = excluded.visible, pricing_pending = excluded.pricing_pending,
-  position = excluded.position;
+  deliverables = excluded.deliverables,
+  cta_label = excluded.cta_label, cta_href = excluded.cta_href,
+  featured = excluded.featured;
 
 insert into public.packages (id, group_key, name, price, price_unit, onboarding_fee, term, positioning, timeline, best_fit, deliverables, cta_label, cta_href, featured, visible, pricing_pending, position) values (
   'local-metro', 'local', 'Metro', '$1,695', '/month', '$649 one-time', '12-month term, then month to month', 'Metro Expansion', NULL,
-  'Designed for businesses competing across multiple cities or high-demand metro areas where consistent content, visibility, and reputation signals are required to gain market share.',
-  ARRAY['60 tracked keywords', '5 tracked competitors', '16 Google Business Profile posts per month', 'Up to 25 citations per month', '4 review request sends per month', 'Up to 20 review replies per month', 'Up to 4 Strategic SEO Pages per month', 'Local search grid tracking', 'Monthly Recap and Quarterly Project Update']::text[],
+  'Designed for businesses competing across multiple cities or high-demand metro areas where consistent content, visibility, and reputation signals are required to gain market share.', ARRAY['60 tracked keywords', '5 tracked competitors', '16 Google Business Profile posts per month', 'Up to 25 citations per month', '4 review request sends per month', 'Up to 20 review replies per month', 'Up to 4 Strategic SEO Pages per month', 'Local search grid tracking', 'Monthly Recap and Quarterly Project Update']::text[],
   'Start with Metro', '/contact?tier=metro', false, true, false, 3)
 on conflict (id) do update set
-  group_key = excluded.group_key, name = excluded.name, price = excluded.price,
+  name = excluded.name, price = excluded.price,
   price_unit = excluded.price_unit, onboarding_fee = excluded.onboarding_fee,
   term = excluded.term, positioning = excluded.positioning,
   timeline = excluded.timeline, best_fit = excluded.best_fit,
-  deliverables = excluded.deliverables, cta_label = excluded.cta_label,
-  cta_href = excluded.cta_href, featured = excluded.featured,
-  visible = excluded.visible, pricing_pending = excluded.pricing_pending,
-  position = excluded.position;
+  deliverables = excluded.deliverables,
+  cta_label = excluded.cta_label, cta_href = excluded.cta_href,
+  featured = excluded.featured;
 
 insert into public.packages (id, group_key, name, price, price_unit, onboarding_fee, term, positioning, timeline, best_fit, deliverables, cta_label, cta_href, featured, visible, pricing_pending, position) values (
   'traditional-regional', 'traditional', 'Regional', '$2,295', '/month', '$895 one-time', '12-month term, then month to month', 'Multi-Market Foundation', NULL,
-  'Best for businesses targeting 1 to 3 priority markets or a defined regional service footprint.',
-  ARRAY['Up to 60 tracked keywords', 'Up to 5 tracked competitors', 'Up to 2 Strategic SEO Pages per month', 'Technical SEO monitoring and issue flagging', 'Authority-building strategy recommendations', 'Monthly dashboard reporting', 'Monthly Recap and Quarterly Project Update']::text[],
+  'Best for businesses targeting 1 to 3 priority markets or a defined regional service footprint.', ARRAY['Up to 60 tracked keywords', 'Up to 5 tracked competitors', 'Up to 2 Strategic SEO Pages per month', 'Technical SEO monitoring and issue flagging', 'Authority-building strategy recommendations', 'Monthly dashboard reporting', 'Monthly Recap and Quarterly Project Update']::text[],
   'Start with Regional', '/contact?tier=regional', false, true, false, 4)
 on conflict (id) do update set
-  group_key = excluded.group_key, name = excluded.name, price = excluded.price,
+  name = excluded.name, price = excluded.price,
   price_unit = excluded.price_unit, onboarding_fee = excluded.onboarding_fee,
   term = excluded.term, positioning = excluded.positioning,
   timeline = excluded.timeline, best_fit = excluded.best_fit,
-  deliverables = excluded.deliverables, cta_label = excluded.cta_label,
-  cta_href = excluded.cta_href, featured = excluded.featured,
-  visible = excluded.visible, pricing_pending = excluded.pricing_pending,
-  position = excluded.position;
+  deliverables = excluded.deliverables,
+  cta_label = excluded.cta_label, cta_href = excluded.cta_href,
+  featured = excluded.featured;
 
 insert into public.packages (id, group_key, name, price, price_unit, onboarding_fee, term, positioning, timeline, best_fit, deliverables, cta_label, cta_href, featured, visible, pricing_pending, position) values (
   'traditional-national', 'traditional', 'National', '$3,495', '/month', '$1,095 one-time', '12-month term, then month to month', 'National Growth', NULL,
-  'Best for businesses targeting broader multi-market visibility across larger service areas, multiple service lines, or more competitive search markets.',
-  ARRAY['Up to 75 tracked keywords', 'Up to 8 tracked competitors', 'Up to 3 Strategic SEO Pages per month', 'Technical SEO monitoring and issue flagging', 'Authority-building strategy recommendations', 'Monthly dashboard reporting', 'Monthly Recap and Quarterly Project Update']::text[],
+  'Best for businesses targeting broader multi-market visibility across larger service areas, multiple service lines, or more competitive search markets.', ARRAY['Up to 75 tracked keywords', 'Up to 8 tracked competitors', 'Up to 3 Strategic SEO Pages per month', 'Technical SEO monitoring and issue flagging', 'Authority-building strategy recommendations', 'Monthly dashboard reporting', 'Monthly Recap and Quarterly Project Update']::text[],
   'Start with National', '/contact?tier=national', true, true, false, 5)
 on conflict (id) do update set
-  group_key = excluded.group_key, name = excluded.name, price = excluded.price,
+  name = excluded.name, price = excluded.price,
   price_unit = excluded.price_unit, onboarding_fee = excluded.onboarding_fee,
   term = excluded.term, positioning = excluded.positioning,
   timeline = excluded.timeline, best_fit = excluded.best_fit,
-  deliverables = excluded.deliverables, cta_label = excluded.cta_label,
-  cta_href = excluded.cta_href, featured = excluded.featured,
-  visible = excluded.visible, pricing_pending = excluded.pricing_pending,
-  position = excluded.position;
+  deliverables = excluded.deliverables,
+  cta_label = excluded.cta_label, cta_href = excluded.cta_href,
+  featured = excluded.featured;
 
 insert into public.packages (id, group_key, name, price, price_unit, onboarding_fee, term, positioning, timeline, best_fit, deliverables, cta_label, cta_href, featured, visible, pricing_pending, position) values (
   'traditional-national-plus', 'traditional', 'National+', '$5,295', '/month', '$1,295 one-time', '12-month term, then month to month', 'Competitive Expansion', NULL,
-  'Best for larger brands, complex service organizations, or high-competition industries that need broader search coverage and a more aggressive growth plan.',
-  ARRAY['Up to 90 tracked keywords', 'Up to 10 tracked competitors', 'Up to 4 Strategic SEO Pages per month', 'Technical SEO monitoring and issue flagging', 'Authority-building strategy recommendations', 'Monthly dashboard reporting', 'Monthly Recap and Quarterly Project Update']::text[],
+  'Best for larger brands, complex service organizations, or high-competition industries that need broader search coverage and a more aggressive growth plan.', ARRAY['Up to 90 tracked keywords', 'Up to 10 tracked competitors', 'Up to 4 Strategic SEO Pages per month', 'Technical SEO monitoring and issue flagging', 'Authority-building strategy recommendations', 'Monthly dashboard reporting', 'Monthly Recap and Quarterly Project Update']::text[],
   'Start with National+', '/contact?tier=national-plus', false, true, false, 6)
 on conflict (id) do update set
-  group_key = excluded.group_key, name = excluded.name, price = excluded.price,
+  name = excluded.name, price = excluded.price,
   price_unit = excluded.price_unit, onboarding_fee = excluded.onboarding_fee,
   term = excluded.term, positioning = excluded.positioning,
   timeline = excluded.timeline, best_fit = excluded.best_fit,
-  deliverables = excluded.deliverables, cta_label = excluded.cta_label,
-  cta_href = excluded.cta_href, featured = excluded.featured,
-  visible = excluded.visible, pricing_pending = excluded.pricing_pending,
-  position = excluded.position;
+  deliverables = excluded.deliverables,
+  cta_label = excluded.cta_label, cta_href = excluded.cta_href,
+  featured = excluded.featured;
 
 insert into public.packages (id, group_key, name, price, price_unit, onboarding_fee, term, positioning, timeline, best_fit, deliverables, cta_label, cta_href, featured, visible, pricing_pending, position) values (
   'real-estate-agent', 'realEstate', 'Agent Growth SEO', 'Contact for pricing', NULL, NULL, NULL, NULL, NULL,
-  'Built for individual agents who need stronger personal visibility in their market and content that supports trust with buyers and sellers.',
-  ARRAY['Google Business Profile and local visibility support', 'Neighborhood and market content strategy', 'Agent website structure and page improvements', 'Review and trust signal support', 'Search visibility tracking', 'Monthly Recap and reporting']::text[],
+  'Built for individual agents who need stronger personal visibility in their market and content that supports trust with buyers and sellers.', ARRAY['Google Business Profile and local visibility support', 'Neighborhood and market content strategy', 'Agent website structure and page improvements', 'Review and trust signal support', 'Search visibility tracking', 'Monthly Recap and reporting']::text[],
   'Request Agent SEO Review', '/contact', false, false, true, 7)
 on conflict (id) do update set
-  group_key = excluded.group_key, name = excluded.name, price = excluded.price,
+  name = excluded.name, price = excluded.price,
   price_unit = excluded.price_unit, onboarding_fee = excluded.onboarding_fee,
   term = excluded.term, positioning = excluded.positioning,
   timeline = excluded.timeline, best_fit = excluded.best_fit,
-  deliverables = excluded.deliverables, cta_label = excluded.cta_label,
-  cta_href = excluded.cta_href, featured = excluded.featured,
-  visible = excluded.visible, pricing_pending = excluded.pricing_pending,
-  position = excluded.position;
+  deliverables = excluded.deliverables,
+  cta_label = excluded.cta_label, cta_href = excluded.cta_href,
+  featured = excluded.featured;
 
 insert into public.packages (id, group_key, name, price, price_unit, onboarding_fee, term, positioning, timeline, best_fit, deliverables, cta_label, cta_href, featured, visible, pricing_pending, position) values (
   'real-estate-team', 'realEstate', 'Team and Brokerage Growth SEO', 'Contact for pricing', NULL, NULL, NULL, NULL, NULL,
-  'Built for teams and brokerages that need scalable visibility across multiple agents, markets, and neighborhoods.',
-  ARRAY['Multi-market local visibility strategy', 'Neighborhood and market authority content', 'Site structure for teams and agent rosters', 'Review and reputation support at scale', 'Search visibility tracking across markets', 'Monthly Recap and reporting']::text[],
+  'Built for teams and brokerages that need scalable visibility across multiple agents, markets, and neighborhoods.', ARRAY['Multi-market local visibility strategy', 'Neighborhood and market authority content', 'Site structure for teams and agent rosters', 'Review and reputation support at scale', 'Search visibility tracking across markets', 'Monthly Recap and reporting']::text[],
   'Request Team/Brokerage SEO Review', '/contact', false, false, true, 8)
 on conflict (id) do update set
-  group_key = excluded.group_key, name = excluded.name, price = excluded.price,
+  name = excluded.name, price = excluded.price,
   price_unit = excluded.price_unit, onboarding_fee = excluded.onboarding_fee,
   term = excluded.term, positioning = excluded.positioning,
   timeline = excluded.timeline, best_fit = excluded.best_fit,
-  deliverables = excluded.deliverables, cta_label = excluded.cta_label,
-  cta_href = excluded.cta_href, featured = excluded.featured,
-  visible = excluded.visible, pricing_pending = excluded.pricing_pending,
-  position = excluded.position;
+  deliverables = excluded.deliverables,
+  cta_label = excluded.cta_label, cta_href = excluded.cta_href,
+  featured = excluded.featured;
 
 insert into public.packages (id, group_key, name, price, price_unit, onboarding_fee, term, positioning, timeline, best_fit, deliverables, cta_label, cta_href, featured, visible, pricing_pending, position) values (
   'sprint-neighborhood', 'sprint', 'Neighborhood Launch Sprint', '$799', 'one-time', NULL, NULL, NULL, '30 days',
-  'For businesses that need a stronger local SEO foundation before moving into ongoing monthly service.',
-  ARRAY['Kickoff and access setup', 'Local SEO audit with priority findings', 'Local keyword and competitor snapshot', 'Google Search Console and Bing setup or verification', 'Google Business Profile audit and core optimization', 'Citation audit and NAP standard', 'Schema, sitemap, and robots.txt review', 'Titles and meta descriptions for up to 5 priority pages', 'Local search grid baseline snapshot', '30-Day Action Roadmap']::text[],
+  'For businesses that need a stronger local SEO foundation before moving into ongoing monthly service.', ARRAY['Kickoff and access setup', 'Local SEO audit with priority findings', 'Local keyword and competitor snapshot', 'Google Search Console and Bing setup or verification', 'Google Business Profile audit and core optimization', 'Citation audit and NAP standard', 'Schema, sitemap, and robots.txt review', 'Titles and meta descriptions for up to 5 priority pages', 'Local search grid baseline snapshot', '30-Day Action Roadmap']::text[],
   'Start the Neighborhood Sprint', '/contact?type=sprint', false, true, false, 9)
 on conflict (id) do update set
-  group_key = excluded.group_key, name = excluded.name, price = excluded.price,
+  name = excluded.name, price = excluded.price,
   price_unit = excluded.price_unit, onboarding_fee = excluded.onboarding_fee,
   term = excluded.term, positioning = excluded.positioning,
   timeline = excluded.timeline, best_fit = excluded.best_fit,
-  deliverables = excluded.deliverables, cta_label = excluded.cta_label,
-  cta_href = excluded.cta_href, featured = excluded.featured,
-  visible = excluded.visible, pricing_pending = excluded.pricing_pending,
-  position = excluded.position;
+  deliverables = excluded.deliverables,
+  cta_label = excluded.cta_label, cta_href = excluded.cta_href,
+  featured = excluded.featured;
 
 insert into public.packages (id, group_key, name, price, price_unit, onboarding_fee, term, positioning, timeline, best_fit, deliverables, cta_label, cta_href, featured, visible, pricing_pending, position) values (
   'sprint-regional', 'sprint', 'Regional Launch Sprint', '$1,495', 'one-time', NULL, NULL, NULL, '30 days',
-  'For businesses targeting a broader service region or multiple markets that want a strong foundation before starting monthly service.',
-  ARRAY['Kickoff and access setup', 'Technical and on-page SEO audit', 'Regional keyword and competitor analysis', 'Google Search Console and Bing setup or verification', 'Schema, sitemap, and robots.txt review', 'Titles and meta descriptions for up to 10 priority pages', 'Backlink audit', '30-Day Roadmap and next-step recommendations']::text[],
+  'For businesses targeting a broader service region or multiple markets that want a strong foundation before starting monthly service.', ARRAY['Kickoff and access setup', 'Technical and on-page SEO audit', 'Regional keyword and competitor analysis', 'Google Search Console and Bing setup or verification', 'Schema, sitemap, and robots.txt review', 'Titles and meta descriptions for up to 10 priority pages', 'Backlink audit', '30-Day Roadmap and next-step recommendations']::text[],
   'Start the Regional Sprint', '/contact?type=sprint', false, true, false, 10)
 on conflict (id) do update set
-  group_key = excluded.group_key, name = excluded.name, price = excluded.price,
+  name = excluded.name, price = excluded.price,
   price_unit = excluded.price_unit, onboarding_fee = excluded.onboarding_fee,
   term = excluded.term, positioning = excluded.positioning,
   timeline = excluded.timeline, best_fit = excluded.best_fit,
-  deliverables = excluded.deliverables, cta_label = excluded.cta_label,
-  cta_href = excluded.cta_href, featured = excluded.featured,
-  visible = excluded.visible, pricing_pending = excluded.pricing_pending,
-  position = excluded.position;
+  deliverables = excluded.deliverables,
+  cta_label = excluded.cta_label, cta_href = excluded.cta_href,
+  featured = excluded.featured;
 
 insert into public.packages (id, group_key, name, price, price_unit, onboarding_fee, term, positioning, timeline, best_fit, deliverables, cta_label, cta_href, featured, visible, pricing_pending, position) values (
   'sprint-national', 'sprint', 'National Launch Sprint', '$2,295', 'one-time', NULL, NULL, NULL, '30 days',
-  'For businesses that need foundational technical and on-page SEO work in place before starting a national monthly campaign.',
-  ARRAY['Kickoff and access setup', 'Technical and on-page SEO audit', 'National keyword and competitor analysis', 'Google Search Console and Bing setup or verification', 'Schema, sitemap, and robots.txt review', 'Titles and meta descriptions for up to 15 priority pages', 'Backlink audit', '30-Day Roadmap and next-step recommendations']::text[],
+  'For businesses that need foundational technical and on-page SEO work in place before starting a national monthly campaign.', ARRAY['Kickoff and access setup', 'Technical and on-page SEO audit', 'National keyword and competitor analysis', 'Google Search Console and Bing setup or verification', 'Schema, sitemap, and robots.txt review', 'Titles and meta descriptions for up to 15 priority pages', 'Backlink audit', '30-Day Roadmap and next-step recommendations']::text[],
   'Start the National Sprint', '/contact?type=sprint', false, true, false, 11)
 on conflict (id) do update set
-  group_key = excluded.group_key, name = excluded.name, price = excluded.price,
+  name = excluded.name, price = excluded.price,
   price_unit = excluded.price_unit, onboarding_fee = excluded.onboarding_fee,
   term = excluded.term, positioning = excluded.positioning,
   timeline = excluded.timeline, best_fit = excluded.best_fit,
-  deliverables = excluded.deliverables, cta_label = excluded.cta_label,
-  cta_href = excluded.cta_href, featured = excluded.featured,
-  visible = excluded.visible, pricing_pending = excluded.pricing_pending,
-  position = excluded.position;
+  deliverables = excluded.deliverables,
+  cta_label = excluded.cta_label, cta_href = excluded.cta_href,
+  featured = excluded.featured;
 
--- -------------------------------------------------------- navigation ----
--- Rebuilt from scratch so ordering and nesting stay exact.
+-- ------------------------------------------------------------- menus ----
+-- Rebuilt wholesale. Every industry item and the Pricing dropdown changed
+-- address, so a merge would leave half the menu pointing at dead URLs.
 delete from public.nav_items;
 
-insert into public.nav_items (id, location, parent_id, label, href, position) values ('75b8f42e-e12d-4900-ab1f-f23345a59584', 'main', null, 'Home', '/', 0);
+insert into public.nav_items (id, location, parent_id, label, href, position) values ('babd46d9-6916-47d3-945e-4e5ec7c61952', 'main', null, 'Home', '/', 0);
 
-insert into public.nav_items (id, location, parent_id, label, href, position) values ('ccad9fb4-ce62-474f-abbd-fe288a8baa63', 'main', null, 'SEO Services', '/local-seo-services', 1);
-insert into public.nav_items (id, location, parent_id, label, href, position) values ('7b68b078-aef6-4a56-9e40-177a05d64460', 'main', 'ccad9fb4-ce62-474f-abbd-fe288a8baa63', 'Local SEO Services', '/local-seo-services', 0);
-insert into public.nav_items (id, location, parent_id, label, href, position) values ('cdc14097-9c74-4631-988f-7828e3b6416a', 'main', 'ccad9fb4-ce62-474f-abbd-fe288a8baa63', 'Traditional SEO Services', '/traditional-seo-services', 1);
-insert into public.nav_items (id, location, parent_id, label, href, position) values ('716fd635-5790-4c7f-8675-550958cb7672', 'main', 'ccad9fb4-ce62-474f-abbd-fe288a8baa63', 'Google Business Profile Optimization', '/google-business-profile-optimization', 2);
-insert into public.nav_items (id, location, parent_id, label, href, position) values ('037d5726-213f-4c26-b7db-67b35f8999d6', 'main', 'ccad9fb4-ce62-474f-abbd-fe288a8baa63', 'SEO Content Strategy', '/traditional-seo-services#includes', 3);
-insert into public.nav_items (id, location, parent_id, label, href, position) values ('d64a15db-64bf-408e-89e0-ce3686cf5074', 'main', 'ccad9fb4-ce62-474f-abbd-fe288a8baa63', 'SEO Reporting', '/seo-reporting', 4);
+insert into public.nav_items (id, location, parent_id, label, href, position) values ('d9d0fe20-8696-4ca8-a4ff-1af51d904d1f', 'main', null, 'SEO Services', '/local-seo-services', 1);
+insert into public.nav_items (id, location, parent_id, label, href, position) values ('efd3b69f-212b-40c9-ad9d-c148f5642ac6', 'main', 'd9d0fe20-8696-4ca8-a4ff-1af51d904d1f', 'Local SEO Services', '/local-seo-services', 0);
+insert into public.nav_items (id, location, parent_id, label, href, position) values ('1e6b0e92-d048-4d19-be35-bd9e555c3258', 'main', 'd9d0fe20-8696-4ca8-a4ff-1af51d904d1f', 'Traditional SEO Services', '/traditional-seo-services', 1);
+insert into public.nav_items (id, location, parent_id, label, href, position) values ('8f78610e-ea8c-4078-9bc8-a6015c76c4a8', 'main', 'd9d0fe20-8696-4ca8-a4ff-1af51d904d1f', 'Google Business Profile Optimization', '/google-business-profile-optimization', 2);
+insert into public.nav_items (id, location, parent_id, label, href, position) values ('50c92216-74f1-4ec3-9073-a9abfd6a7288', 'main', 'd9d0fe20-8696-4ca8-a4ff-1af51d904d1f', 'SEO Content Strategy', '/traditional-seo-services#includes', 3);
+insert into public.nav_items (id, location, parent_id, label, href, position) values ('e2483284-2078-4b88-93e2-84cabfa19e1d', 'main', 'd9d0fe20-8696-4ca8-a4ff-1af51d904d1f', 'SEO Reporting', '/seo-reporting', 4);
 
-insert into public.nav_items (id, location, parent_id, label, href, position) values ('d033985a-d05a-4606-a828-c0844542653c', 'main', null, 'Industries', '/industries', 2);
-insert into public.nav_items (id, location, parent_id, label, href, position) values ('3a7169fe-6f51-4e99-85e9-8741cd936eb0', 'main', 'd033985a-d05a-4606-a828-c0844542653c', 'All industries', '/industries', 0);
-insert into public.nav_items (id, location, parent_id, label, href, position) values ('e168cd88-ed46-40eb-8eec-6b297c00f95a', 'main', 'd033985a-d05a-4606-a828-c0844542653c', 'Home Services & Trades', '/industries/home-services-trades', 1);
-insert into public.nav_items (id, location, parent_id, label, href, position) values ('04fffc76-58e1-4ecb-b10c-e1753763f2d3', 'main', 'd033985a-d05a-4606-a828-c0844542653c', 'Healthcare & Wellness', '/industries/healthcare-wellness', 2);
-insert into public.nav_items (id, location, parent_id, label, href, position) values ('bd2883e9-21e0-4ac9-b8c6-2dc4931156bf', 'main', 'd033985a-d05a-4606-a828-c0844542653c', 'Hospitality & Attractions', '/industries/hospitality-attractions', 3);
-insert into public.nav_items (id, location, parent_id, label, href, position) values ('e0653e9e-5bc9-4522-af55-c2fec8f51a2c', 'main', 'd033985a-d05a-4606-a828-c0844542653c', 'Professional Services', '/industries/professional-services', 4);
-insert into public.nav_items (id, location, parent_id, label, href, position) values ('b335b46d-a65f-476d-89ce-1c04a8e6b2a7', 'main', 'd033985a-d05a-4606-a828-c0844542653c', 'Energy & Petrochemical', '/industries/energy-petrochemical', 5);
-insert into public.nav_items (id, location, parent_id, label, href, position) values ('47b17f03-582a-4e92-96c5-f56023cda68b', 'main', 'd033985a-d05a-4606-a828-c0844542653c', 'Maritime & Logistics', '/industries/maritime-logistics', 6);
-insert into public.nav_items (id, location, parent_id, label, href, position) values ('56667484-43bf-4d2d-8b79-b81e8b2422b1', 'main', 'd033985a-d05a-4606-a828-c0844542653c', 'Commercial Construction', '/industries/commercial-construction-infrastructure', 7);
-insert into public.nav_items (id, location, parent_id, label, href, position) values ('39c33f7f-5fc0-40cf-a9b6-45c3d5b80f14', 'main', 'd033985a-d05a-4606-a828-c0844542653c', 'Aerospace & Aviation', '/industries/aerospace-aviation', 8);
+insert into public.nav_items (id, location, parent_id, label, href, position) values ('feeb0a8b-28ce-4b69-a816-167107e7f6e6', 'main', null, 'Industries', '/industries', 2);
+insert into public.nav_items (id, location, parent_id, label, href, position) values ('4b58ba23-68fb-46ff-a496-f5c904e0c1be', 'main', 'feeb0a8b-28ce-4b69-a816-167107e7f6e6', 'All industries', '/industries', 0);
+insert into public.nav_items (id, location, parent_id, label, href, position) values ('270526e6-1332-4c40-a8b3-7fbb498918ab', 'main', 'feeb0a8b-28ce-4b69-a816-167107e7f6e6', 'Home Services & Trades', '/industries/home-services-trades', 1);
+insert into public.nav_items (id, location, parent_id, label, href, position) values ('b22bdafb-dca8-489e-be8d-9bb58ab5fede', 'main', 'feeb0a8b-28ce-4b69-a816-167107e7f6e6', 'Healthcare & Wellness', '/industries/healthcare-wellness', 2);
+insert into public.nav_items (id, location, parent_id, label, href, position) values ('d2006c49-7e50-4d90-8749-839779f92b3e', 'main', 'feeb0a8b-28ce-4b69-a816-167107e7f6e6', 'Hospitality & Attractions', '/industries/hospitality-attractions', 3);
+insert into public.nav_items (id, location, parent_id, label, href, position) values ('f2282767-a5a6-47b9-ba6c-17ab2e0cddcd', 'main', 'feeb0a8b-28ce-4b69-a816-167107e7f6e6', 'Professional Services', '/industries/professional-services', 4);
+insert into public.nav_items (id, location, parent_id, label, href, position) values ('e01e24ef-2526-47ec-ba4f-b790cd7071fa', 'main', 'feeb0a8b-28ce-4b69-a816-167107e7f6e6', 'Energy & Petrochemical', '/industries/energy-petrochemical', 5);
+insert into public.nav_items (id, location, parent_id, label, href, position) values ('ec5e7317-a8a2-4eb4-ac90-3be2d10a9698', 'main', 'feeb0a8b-28ce-4b69-a816-167107e7f6e6', 'Maritime & Logistics', '/industries/maritime-logistics', 6);
+insert into public.nav_items (id, location, parent_id, label, href, position) values ('18d0fa1f-b989-48b8-8bde-736d2db655d9', 'main', 'feeb0a8b-28ce-4b69-a816-167107e7f6e6', 'Commercial Construction', '/industries/commercial-construction-infrastructure', 7);
+insert into public.nav_items (id, location, parent_id, label, href, position) values ('240e9a5b-aa6a-4895-8743-1ce61f236ffe', 'main', 'feeb0a8b-28ce-4b69-a816-167107e7f6e6', 'Aerospace & Aviation', '/industries/aerospace-aviation', 8);
 
-insert into public.nav_items (id, location, parent_id, label, href, position) values ('e4b75dd0-ce09-472f-8865-142ed37a9ead', 'main', null, 'Pricing', '/monthly-seo-packages', 3);
-insert into public.nav_items (id, location, parent_id, label, href, position) values ('f8a97365-093c-456f-bcc7-1cf1299e20f5', 'main', 'e4b75dd0-ce09-472f-8865-142ed37a9ead', 'Monthly SEO Packages', '/monthly-seo-packages', 0);
-insert into public.nav_items (id, location, parent_id, label, href, position) values ('46dd76a6-11a2-4809-8d81-74427e1180bf', 'main', 'e4b75dd0-ce09-472f-8865-142ed37a9ead', 'Launch Sprints', '/launch-sprints', 1);
+insert into public.nav_items (id, location, parent_id, label, href, position) values ('9ba5ada3-d8ec-4a0c-bb58-c75ee3e624c4', 'main', null, 'Pricing', '/monthly-seo-packages', 3);
+insert into public.nav_items (id, location, parent_id, label, href, position) values ('55885638-e808-4c76-97ff-adaa6fb231d4', 'main', '9ba5ada3-d8ec-4a0c-bb58-c75ee3e624c4', 'Monthly SEO Packages', '/monthly-seo-packages', 0);
+insert into public.nav_items (id, location, parent_id, label, href, position) values ('f232c373-5d89-4d1a-89c5-6b3f724c8a97', 'main', '9ba5ada3-d8ec-4a0c-bb58-c75ee3e624c4', 'Launch Sprints', '/launch-sprints', 1);
 
-insert into public.nav_items (id, location, parent_id, label, href, position) values ('95a77e9d-0b12-489b-8afc-c7a20a428e1e', 'main', null, 'Resources', '/resources', 4);
+insert into public.nav_items (id, location, parent_id, label, href, position) values ('5809eef4-57f4-464d-a9c9-087597ebd7b7', 'main', null, 'Resources', '/resources', 4);
 
-insert into public.nav_items (id, location, parent_id, label, href, position) values ('adc5ae7a-a8bb-4fb0-98f2-2af8effd2c3e', 'main', null, 'About', '/about', 5);
+insert into public.nav_items (id, location, parent_id, label, href, position) values ('d0d6f759-2c2f-44bf-93ea-1b94cfb7c94f', 'main', null, 'About', '/about', 5);
 
-insert into public.nav_items (id, location, parent_id, label, href, position) values ('b016d6be-5443-452f-8aa4-0a367b213106', 'footer', null, 'SEO Services', '', 0);
-insert into public.nav_items (id, location, parent_id, label, href, position) values ('a5e4bd25-c656-4baa-842d-0751c093ec26', 'footer', 'b016d6be-5443-452f-8aa4-0a367b213106', 'Local SEO Services', '/local-seo-services', 0);
-insert into public.nav_items (id, location, parent_id, label, href, position) values ('436974b4-a6f1-4d38-8e8b-5c0e2f2225da', 'footer', 'b016d6be-5443-452f-8aa4-0a367b213106', 'Traditional SEO Services', '/traditional-seo-services', 1);
-insert into public.nav_items (id, location, parent_id, label, href, position) values ('d1fb308e-b9d6-4419-b7d9-66db9fa19818', 'footer', 'b016d6be-5443-452f-8aa4-0a367b213106', 'Google Business Profile Optimization', '/google-business-profile-optimization', 2);
-insert into public.nav_items (id, location, parent_id, label, href, position) values ('b86008c7-e36e-4cd0-9851-21f7e5ef821e', 'footer', 'b016d6be-5443-452f-8aa4-0a367b213106', 'SEO Reporting', '/seo-reporting', 3);
+insert into public.nav_items (id, location, parent_id, label, href, position) values ('74e77641-1015-4f9a-a4bf-4127c983dc76', 'footer', null, 'SEO Services', '', 0);
+insert into public.nav_items (id, location, parent_id, label, href, position) values ('e37989fb-85d7-4608-b423-e9c4ce5e222f', 'footer', '74e77641-1015-4f9a-a4bf-4127c983dc76', 'Local SEO Services', '/local-seo-services', 0);
+insert into public.nav_items (id, location, parent_id, label, href, position) values ('b64a7d0a-3d7e-4e11-9843-3fc6b83cf821', 'footer', '74e77641-1015-4f9a-a4bf-4127c983dc76', 'Traditional SEO Services', '/traditional-seo-services', 1);
+insert into public.nav_items (id, location, parent_id, label, href, position) values ('b2b1ce5a-917a-48ee-980f-f28f5cb73bc8', 'footer', '74e77641-1015-4f9a-a4bf-4127c983dc76', 'Google Business Profile Optimization', '/google-business-profile-optimization', 2);
+insert into public.nav_items (id, location, parent_id, label, href, position) values ('a00568ca-0ff0-4ee1-ad78-a6f936457c6b', 'footer', '74e77641-1015-4f9a-a4bf-4127c983dc76', 'SEO Reporting', '/seo-reporting', 3);
 
-insert into public.nav_items (id, location, parent_id, label, href, position) values ('b6032c14-deb1-4258-9f46-7a0cdb6cfaf8', 'footer', null, 'Industries', '', 1);
-insert into public.nav_items (id, location, parent_id, label, href, position) values ('957de2c2-c05e-4d17-ad6b-11130cfc1806', 'footer', 'b6032c14-deb1-4258-9f46-7a0cdb6cfaf8', 'Home Services & Trades', '/industries/home-services-trades', 0);
-insert into public.nav_items (id, location, parent_id, label, href, position) values ('d3ecbe12-c393-4ca5-9826-fab133363b8a', 'footer', 'b6032c14-deb1-4258-9f46-7a0cdb6cfaf8', 'Healthcare & Wellness', '/industries/healthcare-wellness', 1);
-insert into public.nav_items (id, location, parent_id, label, href, position) values ('70f4bde9-f8f2-4693-ac50-4f6a050d89e7', 'footer', 'b6032c14-deb1-4258-9f46-7a0cdb6cfaf8', 'Hospitality & Attractions', '/industries/hospitality-attractions', 2);
-insert into public.nav_items (id, location, parent_id, label, href, position) values ('3494c925-c5ea-4c14-ba83-b7f32fa2c0f6', 'footer', 'b6032c14-deb1-4258-9f46-7a0cdb6cfaf8', 'Professional Services', '/industries/professional-services', 3);
-insert into public.nav_items (id, location, parent_id, label, href, position) values ('ffc04642-2535-4fb2-b60d-c927b67bc94b', 'footer', 'b6032c14-deb1-4258-9f46-7a0cdb6cfaf8', 'Energy & Petrochemical', '/industries/energy-petrochemical', 4);
-insert into public.nav_items (id, location, parent_id, label, href, position) values ('3d2ead5d-3e76-41ed-952d-8fcc48cd9404', 'footer', 'b6032c14-deb1-4258-9f46-7a0cdb6cfaf8', 'Maritime & Logistics', '/industries/maritime-logistics', 5);
-insert into public.nav_items (id, location, parent_id, label, href, position) values ('8e40dcd8-3855-462d-a320-26575229efbc', 'footer', 'b6032c14-deb1-4258-9f46-7a0cdb6cfaf8', 'Commercial Construction', '/industries/commercial-construction-infrastructure', 6);
-insert into public.nav_items (id, location, parent_id, label, href, position) values ('70d08fbb-867d-416f-b56c-4f454b32c12e', 'footer', 'b6032c14-deb1-4258-9f46-7a0cdb6cfaf8', 'Aerospace & Aviation', '/industries/aerospace-aviation', 7);
+insert into public.nav_items (id, location, parent_id, label, href, position) values ('80c32bba-936f-4e6d-bc08-fcc9bd3829ee', 'footer', null, 'Industries', '', 1);
+insert into public.nav_items (id, location, parent_id, label, href, position) values ('5cb57922-4d0e-4d71-97b6-00265dbcb099', 'footer', '80c32bba-936f-4e6d-bc08-fcc9bd3829ee', 'Home Services & Trades', '/industries/home-services-trades', 0);
+insert into public.nav_items (id, location, parent_id, label, href, position) values ('065d4418-c24b-4ac5-b239-520f33f69230', 'footer', '80c32bba-936f-4e6d-bc08-fcc9bd3829ee', 'Healthcare & Wellness', '/industries/healthcare-wellness', 1);
+insert into public.nav_items (id, location, parent_id, label, href, position) values ('0ae1a685-ce3d-46b2-ba43-277274ab2c53', 'footer', '80c32bba-936f-4e6d-bc08-fcc9bd3829ee', 'Hospitality & Attractions', '/industries/hospitality-attractions', 2);
+insert into public.nav_items (id, location, parent_id, label, href, position) values ('f9751979-5d4b-42f1-a011-ad0f80b86718', 'footer', '80c32bba-936f-4e6d-bc08-fcc9bd3829ee', 'Professional Services', '/industries/professional-services', 3);
+insert into public.nav_items (id, location, parent_id, label, href, position) values ('7f9e804f-27e2-4f22-83c5-03eab16f09ea', 'footer', '80c32bba-936f-4e6d-bc08-fcc9bd3829ee', 'Energy & Petrochemical', '/industries/energy-petrochemical', 4);
+insert into public.nav_items (id, location, parent_id, label, href, position) values ('1a08ceea-a4fe-4f7b-b475-1fe499bc69a8', 'footer', '80c32bba-936f-4e6d-bc08-fcc9bd3829ee', 'Maritime & Logistics', '/industries/maritime-logistics', 5);
+insert into public.nav_items (id, location, parent_id, label, href, position) values ('b0c703aa-031c-4289-83a9-ad01fd3fa5ae', 'footer', '80c32bba-936f-4e6d-bc08-fcc9bd3829ee', 'Commercial Construction', '/industries/commercial-construction-infrastructure', 6);
+insert into public.nav_items (id, location, parent_id, label, href, position) values ('1d01d08b-f06a-46b3-921e-99867336a3da', 'footer', '80c32bba-936f-4e6d-bc08-fcc9bd3829ee', 'Aerospace & Aviation', '/industries/aerospace-aviation', 7);
 
-insert into public.nav_items (id, location, parent_id, label, href, position) values ('bf74af3a-02c4-4deb-a02e-f587adf0058f', 'footer', null, 'Company', '', 2);
-insert into public.nav_items (id, location, parent_id, label, href, position) values ('5b1e8ae3-d027-48d3-a309-2e8099ad49d8', 'footer', 'bf74af3a-02c4-4deb-a02e-f587adf0058f', 'Monthly SEO Packages', '/monthly-seo-packages', 0);
-insert into public.nav_items (id, location, parent_id, label, href, position) values ('275325a1-2104-4d32-8244-50834decf374', 'footer', 'bf74af3a-02c4-4deb-a02e-f587adf0058f', 'Launch Sprints', '/launch-sprints', 1);
-insert into public.nav_items (id, location, parent_id, label, href, position) values ('4983331d-223d-4a3d-921b-009e33a4f527', 'footer', 'bf74af3a-02c4-4deb-a02e-f587adf0058f', 'Resources', '/resources', 2);
-insert into public.nav_items (id, location, parent_id, label, href, position) values ('5a720382-c77b-46f6-852b-739f34987922', 'footer', 'bf74af3a-02c4-4deb-a02e-f587adf0058f', 'About', '/about', 3);
-insert into public.nav_items (id, location, parent_id, label, href, position) values ('3d11feb3-7774-4bd5-81bd-adced1505b65', 'footer', 'bf74af3a-02c4-4deb-a02e-f587adf0058f', 'Contact', '/contact', 4);
+insert into public.nav_items (id, location, parent_id, label, href, position) values ('c7f0f834-728c-410c-aaca-f78f5e5d3270', 'footer', null, 'Company', '', 2);
+insert into public.nav_items (id, location, parent_id, label, href, position) values ('059d194b-a4d4-4958-8b3f-2dd7c7be2d3c', 'footer', 'c7f0f834-728c-410c-aaca-f78f5e5d3270', 'Monthly SEO Packages', '/monthly-seo-packages', 0);
+insert into public.nav_items (id, location, parent_id, label, href, position) values ('ecc40983-828b-4142-98e6-31c47e226703', 'footer', 'c7f0f834-728c-410c-aaca-f78f5e5d3270', 'Launch Sprints', '/launch-sprints', 1);
+insert into public.nav_items (id, location, parent_id, label, href, position) values ('417d169a-c81d-48fd-8326-22bd07f5eb49', 'footer', 'c7f0f834-728c-410c-aaca-f78f5e5d3270', 'Resources', '/resources', 2);
+insert into public.nav_items (id, location, parent_id, label, href, position) values ('b1704135-c548-47c8-9a35-9fc441e80374', 'footer', 'c7f0f834-728c-410c-aaca-f78f5e5d3270', 'About', '/about', 3);
+insert into public.nav_items (id, location, parent_id, label, href, position) values ('86653d51-2564-4b30-90a7-06dbc52fc53c', 'footer', 'c7f0f834-728c-410c-aaca-f78f5e5d3270', 'Contact', '/contact', 4);
 
--- ----------------------------------------------------- site details ----
-insert into public.site_settings (id, name, short_name, url, email, phone, phone_href, locality, region, positioning, footer_blurb, primary_cta_label, primary_cta_href) values (
-  true, 'Jordan Marketing Consultants', 'JMC', 'https://jordanmarketingconsultants.com', 'wendell@jordanmarketingconsultants.com',
-  '(281) 989-0468', 'tel:+12819890468', 'League City', 'TX',
-  'Jordan Marketing Consultants is a Houston-area SEO agency rooted in League City, helping local, regional, and industry-focused businesses improve search visibility through practical SEO strategy, content planning, local optimization, and clear reporting.',
-  'A Houston-area SEO agency rooted in League City. Practical strategy, local optimization, content planning, and reporting you can actually read.',
-  'Request a Visibility Review', '/contact')
-on conflict (id) do update set
-  name = excluded.name, short_name = excluded.short_name, url = excluded.url,
-  email = excluded.email, phone = excluded.phone, phone_href = excluded.phone_href,
-  locality = excluded.locality, region = excluded.region,
-  positioning = excluded.positioning, footer_blurb = excluded.footer_blurb,
-  primary_cta_label = excluded.primary_cta_label,
-  primary_cta_href = excluded.primary_cta_href;
+-- ------------------------------------------------------ homepage links ----
+-- Only the four sections whose destinations changed. The rest of the
+-- homepage, including any copy edited in /admin, is left alone.
+update public.sections set data = '{"eyebrow":"SEO for local, regional, and industrial businesses","heading":"Search Visibility, Explained Every Month.","body":"Jordan Marketing Consultants does one thing: search visibility for local, regional, and industrial businesses. Every month you get a plain recap of what was done, why, and what changed.","primaryCta":{"label":"Request a Visibility Review","href":"/contact"},"secondaryCta":{"label":"See How JMC Reports SEO Progress","href":"/seo-reporting"},"showcase":[{"kind":"report","label":"Every month","title":"Monthly Recap","items":["What was done","Why it matters","What changed","What comes next"]},{"kind":"coverage","label":"Where you appear","title":"Search Visibility","items":["Search","Maps","Local grid"]},{"kind":"roadmap","label":"The plan","title":"SEO Roadmap","items":["Priorities set","Content queued","Technical fixes tracked"]}]}'::jsonb where key = 'hero' and page_id = (select id from public.pages where slug = '/');
+update public.sections set data = '{"treatment":"statement","heading":"No Mystery SEO. No Confusing Reports. No Guessing What You Paid For.","body":"Most agencies keep the work behind a login and the reasoning to themselves. JMC does the opposite. You see what was done, why it was done, and what it changed, in language that does not need translating. That is how the work is run, not a reporting add-on.","cta":{"label":"See How JMC Reports SEO Progress","href":"/seo-reporting"}}'::jsonb where key = 'transparency' and page_id = (select id from public.pages where slug = '/');
+update public.sections set data = '{"eyebrow":"Industries","heading":"Where This Method Gets Pointed","body":"One method, aimed at two different kinds of search problem.","groups":[{"label":"Consumer & Community","cards":[{"title":"Home Services & Trades","icon":"wrench","body":"Roofers, plumbers, electricians, and the trades that live on calls from a service area.","href":"/industries/home-services-trades"},{"title":"Healthcare & Wellness","icon":"heart-pulse","body":"Practices and clinics where people check credibility before they ever call.","href":"/industries/healthcare-wellness"},{"title":"Hospitality & Attractions","icon":"utensils","body":"Venues, parks, and places people search for by what they want to do, not by name.","href":"/industries/hospitality-attractions"},{"title":"Professional Services","icon":"briefcase","body":"Firms whose next client is comparing three local options in a single sitting.","href":"/industries/professional-services"}]},{"label":"Industrial & B2B","cards":[{"title":"Energy & Petrochemical","icon":"factory","body":"Operators and suppliers selling technical capability to a small, specific buyer pool.","href":"/industries/energy-petrochemical"},{"title":"Maritime & Logistics","icon":"network","body":"Port, freight, and supply chain businesses working across regions rather than a radius.","href":"/industries/maritime-logistics"},{"title":"Commercial Construction","icon":"hard-hat","body":"Contractors and infrastructure firms bidding well outside one city.","href":"/industries/commercial-construction-infrastructure"},{"title":"Aerospace & Aviation","icon":"compass","body":"Suppliers and services in a market where the search volume is low and the intent is high.","href":"/industries/aerospace-aviation"}]}],"escapeHatch":"The method does not change with the industry. If yours is not listed, it probably still applies.","cta":{"label":"Explore All Industries","href":"/industries"}}'::jsonb where key = 'industries' and page_id = (select id from public.pages where slug = '/');
+update public.sections set data = '{"eyebrow":"Clear Reporting","heading":"What You Get Every Month","body":"SEO should not feel vague. Every month you get the same four answers, in the same order, in language that does not need a glossary.","did":"A plain summary of the SEO work completed: content, technical checks, local visibility tasks, and everything else inside the scope.","why":"The reasoning behind each piece of work, and how it supports visibility, relevance, or trust.","changed":"What moved, what did not, and what we are still watching.","next":"The priorities for the coming month, in order, so you always know where the campaign is heading.","cta":{"label":"See How JMC Reports SEO Progress","href":"/seo-reporting"}}'::jsonb where key = 'monthly-recap' and page_id = (select id from public.pages where slug = '/');
 
--- ------------------------------------------------------- redirects ----
--- The three legacy URLs named in the keyword page map. The full inventory
--- from the old site is still outstanding — add the rest in /admin.
-insert into public.redirects (source, destination, permanent) values ('/local-seo-service', '/local-seo-services', true) on conflict (source) do nothing;
-insert into public.redirects (source, destination, permanent) values ('/seo-packages-pricing', '/monthly-seo-packages', true) on conflict (source) do nothing;
-insert into public.redirects (source, destination, permanent) values ('/seo-packages', '/monthly-seo-packages', true) on conflict (source) do nothing;
-insert into public.redirects (source, destination, permanent) values ('/free-website-audit', '/google-business-profile-optimization', true) on conflict (source) do nothing;
-insert into public.redirects (source, destination, permanent) values ('/contact-us', '/contact', true) on conflict (source) do nothing;
+-- --------------------------------------------------------- redirects ----
+-- /seo-packages is the important one here. It was live and linked, and
+-- Page Spec 06 renames it, so it has to keep resolving.
+insert into public.redirects (source, destination, permanent) values ('/seo-packages', '/monthly-seo-packages', true) on conflict (source) do update set destination = excluded.destination;
+insert into public.redirects (source, destination, permanent) values ('/seo-packages-pricing', '/monthly-seo-packages', true) on conflict (source) do update set destination = excluded.destination;
+insert into public.redirects (source, destination, permanent) values ('/free-website-audit', '/google-business-profile-optimization', true) on conflict (source) do update set destination = excluded.destination;
+insert into public.redirects (source, destination, permanent) values ('/local-seo-service', '/local-seo-services', true) on conflict (source) do update set destination = excluded.destination;
 
 commit;
-
--- Sanity check — expected: 20 pages, 154 sections, 12 packages, 42 menu items.
-select
-  (select count(*) from public.pages) as pages,
-  (select count(*) from public.sections) as sections,
-  (select count(*) from public.packages) as packages,
-  (select count(*) from public.nav_items) as nav_items;

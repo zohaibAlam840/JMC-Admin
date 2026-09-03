@@ -16,6 +16,105 @@ import type { HeroShowcaseCard } from "@/lib/types";
  * here — the bars carry no scale, no axis, and no value, and every label comes
  * from the section's own content rather than being invented.
  */
+/**
+ * The shape at the foot of the panel, chosen by the first showcase card.
+ *
+ * Every page that opens with a split hero used to draw the same bar row, which
+ * made eight different pages open identically — the one thing the specs are
+ * most consistently against. The card's `kind` already varies per page, so it
+ * picks the motif too: a coverage card gets a service-area grid, a roadmap
+ * card gets a route, a channels card gets a set of surfaces.
+ *
+ * All four are abstract by the same rule as the rest of the composition. No
+ * axis, no scale, no values, nothing that could be read as a result.
+ */
+function Motif({
+  kind,
+  bars,
+}: {
+  kind: HeroShowcaseCard["kind"];
+  bars: number[];
+}) {
+  if (kind === "coverage") {
+    // A service area, strongest around the middle. The same idea as the
+    // search-grid illustration, at a size that reads as a motif.
+    const cells = Array.from({ length: 24 }, (_, i) => {
+      const row = Math.floor(i / 8);
+      const col = i % 8;
+      const d = Math.hypot(row - 1, (col - 3.5) / 2);
+      return Math.max(0, 1 - d / 2.4);
+    });
+    return (
+      <div className="grid h-20 grid-cols-8 grid-rows-3 gap-1.5">
+        {cells.map((strength, i) => (
+          <span
+            key={i}
+            className="rounded-[3px] bg-teal"
+            style={{ opacity: 0.12 + strength * 0.68 }}
+          />
+        ))}
+      </div>
+    );
+  }
+
+  if (kind === "roadmap") {
+    // A route with four stops. Reads as a sequence rather than a measurement,
+    // which is what a roadmap card is claiming.
+    return (
+      <div className="flex h-20 items-center">
+        <div className="relative flex w-full items-center justify-between">
+          <span className="absolute inset-x-0 top-1/2 h-px -translate-y-1/2 bg-line" />
+          <span className="absolute left-0 top-1/2 h-[2px] w-1/2 -translate-y-1/2 rounded-full bg-[linear-gradient(90deg,var(--color-teal),var(--color-blue))]" />
+          {[0, 1, 2, 3].map((i) => (
+            <span
+              key={i}
+              className={cn(
+                "relative size-3 rounded-full border-2",
+                i <= 1
+                  ? "border-teal bg-white"
+                  : "border-line-strong bg-surface"
+              )}
+            />
+          ))}
+        </div>
+      </div>
+    );
+  }
+
+  if (kind === "channels") {
+    // Stacked surfaces of unequal width. A list of places, not a chart.
+    return (
+      <div className="flex h-20 flex-col justify-center gap-2.5">
+        {["w-full", "w-4/5", "w-3/5", "w-2/5"].map((w, i) => (
+          <span
+            key={w}
+            className={cn(
+              "h-2.5 rounded-full",
+              w,
+              i === 0 ? "bg-teal/70" : i === 1 ? "bg-blue/40" : "bg-surface"
+            )}
+          />
+        ))}
+      </div>
+    );
+  }
+
+  return (
+    <div className="flex h-20 items-end gap-1.5">
+      {bars.map((height, i) => (
+        <span
+          key={i}
+          style={{ height: `${height}%` }}
+          className={cn(
+            "flex-1 rounded-t-[3px]",
+            i === bars.length - 2 ? "bg-teal" : "bg-surface"
+          )}
+        />
+      ))}
+    </div>
+  );
+}
+
 export function HeroCardStack({ cards }: { cards: HeroShowcaseCard[] }) {
   const primary = cards[0];
   const secondary = cards[1];
@@ -79,21 +178,11 @@ export function HeroCardStack({ cards }: { cards: HeroShowcaseCard[] }) {
           ))}
         </ul>
 
-        {/* One simple bar shape, as the spec describes. No axis, no values. */}
         <div
           aria-hidden="true"
-          className="mt-6 flex h-20 items-end gap-1.5 border-t border-line pt-5"
+          className="mt-6 border-t border-line pt-5"
         >
-          {bars.map((height, i) => (
-            <span
-              key={i}
-              style={{ height: `${height}%` }}
-              className={cn(
-                "flex-1 rounded-t-[3px]",
-                i === bars.length - 2 ? "bg-teal" : "bg-surface"
-              )}
-            />
-          ))}
+          <Motif kind={primary?.kind ?? "report"} bars={bars} />
         </div>
       </div>
 

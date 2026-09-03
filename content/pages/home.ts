@@ -17,7 +17,7 @@ export const homePage: PageContent = {
   metaDescription:
     "Houston-area SEO from Jordan Marketing Consultants. Local and traditional SEO, content planning, and a plain monthly recap of what changed and why.",
   sections: [
-{
+    {
       id: "hero",
       type: "heroSplit",
       eyebrow: "SEO for local, regional, and industrial businesses",
@@ -29,12 +29,9 @@ export const homePage: PageContent = {
       // so the locked H1 does not have to.
       body: "Jordan Marketing Consultants does one thing: search visibility for local, regional, and industrial businesses. Every month you get a plain recap of what was done, why, and what changed.",
       primaryCta: { label: "Request a Visibility Review", href: "/contact" },
-      // Spec points this at /seo-reporting/, which does not exist yet. Aimed at
-      // the reporting section on this page until that page ships, so the
-      // no-dead-links guardrail holds.
       secondaryCta: {
         label: "See How JMC Reports SEO Progress",
-        href: "#monthly-recap",
+        href: "/seo-reporting",
       },
       showcase: [
         {
@@ -67,7 +64,7 @@ export const homePage: PageContent = {
       ],
     },
 
-{
+    {
       id: "growth-paths",
       type: "cardGrid",
       tone: "surface",
@@ -100,7 +97,7 @@ export const homePage: PageContent = {
       ],
     },
 
-{
+    {
       id: "transparency",
       type: "fullWidthText",
       treatment: "statement",
@@ -113,11 +110,11 @@ export const homePage: PageContent = {
       body: "Most agencies keep the work behind a login and the reasoning to themselves. JMC does the opposite. You see what was done, why it was done, and what it changed, in language that does not need translating. That is how the work is run, not a reporting add-on.",
       cta: {
         label: "See How JMC Reports SEO Progress",
-        href: "#monthly-recap",
+        href: "/seo-reporting",
       },
     },
 
-{
+    {
       id: "services",
       type: "cardGrid",
       tone: "white",
@@ -160,7 +157,7 @@ export const homePage: PageContent = {
       cta: { label: "Explore SEO Services", href: "/local-seo-services" },
     },
 
-{
+    {
       id: "industries",
       type: "industryGrid",
       tone: "surface",
@@ -172,67 +169,68 @@ export const homePage: PageContent = {
       body: "One method, aimed at two different kinds of search problem.",
       groups: [
         {
-          // Visitor-facing labels. Nobody self-identifies as a "B2B and
-          // Industrial Engine"; that is internal vocabulary. Final wording
-          // comes with the Step 4 copy deck.
-          label: "Businesses that serve a defined area",
-          serviceLine: "Local SEO",
-          serviceHref: "/local-seo-services",
+          /*
+           * Descriptive only. Page Spec 01 §5 is explicit that these labels
+           * must NOT assign a service lane: an earlier lane-based draft broke
+           * because each group contains both single-area operators and
+           * multi-market competitors.
+           *
+           * Group A sells to people. Group B sells to operations.
+           */
+          label: "Consumer & Community",
           cards: [
             {
               title: "Home Services & Trades",
               icon: "wrench",
               body: "Roofers, plumbers, electricians, and the trades that live on calls from a service area.",
-              href: "/local-seo-services",
+              href: "/industries/home-services-trades",
             },
             {
               title: "Healthcare & Wellness",
               icon: "heart-pulse",
               body: "Practices and clinics where people check credibility before they ever call.",
-              href: "/local-seo-services",
+              href: "/industries/healthcare-wellness",
             },
             {
               title: "Hospitality & Attractions",
               icon: "utensils",
               body: "Venues, parks, and places people search for by what they want to do, not by name.",
-              href: "/local-seo-services",
+              href: "/industries/hospitality-attractions",
             },
             {
               title: "Professional Services",
               icon: "briefcase",
               body: "Firms whose next client is comparing three local options in a single sitting.",
-              href: "/local-seo-services",
+              href: "/industries/professional-services",
             },
           ],
         },
         {
-          label: "Businesses selling across multiple markets",
-          serviceLine: "Traditional SEO",
-          serviceHref: "/traditional-seo-services",
+          label: "Industrial & B2B",
           cards: [
             {
               title: "Energy & Petrochemical",
               icon: "factory",
               body: "Operators and suppliers selling technical capability to a small, specific buyer pool.",
-              href: "/traditional-seo-services",
+              href: "/industries/energy-petrochemical",
             },
             {
               title: "Maritime & Logistics",
               icon: "network",
               body: "Port, freight, and supply chain businesses working across regions rather than a radius.",
-              href: "/traditional-seo-services",
+              href: "/industries/maritime-logistics",
             },
             {
               title: "Commercial Construction",
               icon: "hard-hat",
               body: "Contractors and infrastructure firms bidding well outside one city.",
-              href: "/traditional-seo-services",
+              href: "/industries/commercial-construction-infrastructure",
             },
             {
               title: "Aerospace & Aviation",
               icon: "compass",
               body: "Suppliers and services in a market where the search volume is low and the intent is high.",
-              href: "/traditional-seo-services",
+              href: "/industries/aerospace-aviation",
             },
           ],
         },
@@ -242,9 +240,10 @@ export const homePage: PageContent = {
       // statement of the method rather than a hole.
       escapeHatch:
         "The method does not change with the industry. If yours is not listed, it probably still applies.",
+      cta: { label: "Explore All Industries", href: "/industries" },
     },
 
-{
+    {
       /*
        * Page Spec 01 §6. Preview only: entry price alone, no onboarding fees,
        * no term badges, no full deliverable lists. Those live on the pricing
@@ -274,7 +273,7 @@ export const homePage: PageContent = {
           body: "For businesses that need consistent local visibility support across search, maps, content, reviews, and reporting.",
           cta: {
             label: "View Local SEO Packages",
-            href: "/seo-packages#local",
+            href: "/monthly-seo-packages#local",
           },
         },
         {
@@ -284,7 +283,7 @@ export const homePage: PageContent = {
           body: "For businesses targeting regional, national, or competitive industry visibility with a larger search footprint.",
           cta: {
             label: "View Traditional SEO Packages",
-            href: "/seo-packages#traditional",
+            href: "/monthly-seo-packages#traditional",
           },
         },
         {
@@ -297,7 +296,7 @@ export const homePage: PageContent = {
       ],
     },
 
-{
+    {
       id: "process",
       type: "processSteps",
       tone: "surface",
@@ -325,7 +324,7 @@ export const homePage: PageContent = {
       cta: { label: "Start with a Visibility Review", href: "/contact" },
     },
 
-{
+    {
       // Page Spec 01 §8, the proof half of the transparency argument. Card
       // titles are locked in the renderer; only these sentences vary.
       id: "monthly-recap",
@@ -340,11 +339,11 @@ export const homePage: PageContent = {
       next: "The priorities for the coming month, in order, so you always know where the campaign is heading.",
       cta: {
         label: "See How JMC Reports SEO Progress",
-        href: "#monthly-recap",
+        href: "/seo-reporting",
       },
     },
 
-{
+    {
       id: "houston",
       type: "fullWidthText",
       tone: "surface",
@@ -354,13 +353,13 @@ export const homePage: PageContent = {
       cta: { label: "Learn More About JMC", href: "/about" },
     },
 
-{
+    {
       id: "final-cta",
       type: "finalCta",
       heading: "Not Sure Where Your SEO Is Stuck? Start with a Visibility Review.",
       body: "We will help you identify visibility gaps, priority opportunities, and the best next step based on your business, market, and goals.",
       primaryCta: { label: "Request a Visibility Review", href: "/contact" },
-      secondaryCta: { label: "View SEO Packages", href: "/seo-packages" },
+      secondaryCta: { label: "View SEO Packages", href: "/monthly-seo-packages" },
     },
   ],
 };

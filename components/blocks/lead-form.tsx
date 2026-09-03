@@ -55,6 +55,14 @@ export function LeadForm({
   const pathname = usePathname();
   const params = useSearchParams();
   const tier = params.get("tier") ?? "";
+  /*
+   * Launch Sprint CTAs arrive as ?type=sprint. Page Spec 07 needs sprint
+   * enquiries separable from Visibility Review and Free Audit leads, and the
+   * service field already carries exactly that distinction, so it preselects
+   * rather than earning a column of its own.
+   */
+  const preselectedService =
+    params.get("type") === "sprint" ? "Launch Sprint" : "";
   // Captured once on mount rather than read at submit time, so the value is
   // the moment the form appeared rather than the moment it was sent.
   const [renderedAt] = React.useState(() => String(Date.now()));
@@ -176,7 +184,7 @@ export function LeadForm({
             <Select
               id="service"
               name="service"
-              defaultValue={v.service ?? ""}
+              defaultValue={v.service ?? preselectedService}
               aria-invalid={Boolean(e.service)}
             >
               <option value="">Select one</option>

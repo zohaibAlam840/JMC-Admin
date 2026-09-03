@@ -28,7 +28,22 @@ const nextConfig: NextConfig = {
       },
       {
         source: "/seo-packages-pricing",
-        destination: "/seo-packages",
+        destination: "/monthly-seo-packages",
+        permanent: true,
+      },
+      {
+        // Renamed for Page Spec 06, which fixes the address as
+        // /monthly-seo-packages/. The old one was live and linked, so it
+        // redirects rather than disappearing.
+        source: "/seo-packages",
+        destination: "/monthly-seo-packages",
+        permanent: true,
+      },
+      {
+        // Page Spec 04 sends the old free-audit URL here rather than to the
+        // contact page: the offer it promised now lives in §4 of this page.
+        source: "/free-website-audit",
+        destination: "/google-business-profile-optimization",
         permanent: true,
       },
       {

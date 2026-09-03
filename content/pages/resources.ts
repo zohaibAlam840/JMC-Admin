@@ -22,7 +22,7 @@ export const resourcesPage: PageContent = {
       heading: "SEO, Explained Without the Jargon",
       body: "Straight answers to the questions business owners actually ask about search visibility. We are building this out as we go. If something you need is missing, ask us directly.",
       primaryCta: { label: "Ask an SEO Question", href: "/contact" },
-      secondaryCta: { label: "View SEO Packages", href: "/seo-packages" },
+      secondaryCta: { label: "View SEO Packages", href: "/monthly-seo-packages" },
     },
 
     {
@@ -122,7 +122,7 @@ export const resourcesPage: PageContent = {
       heading: "Have a Question We Haven't Written About Yet?",
       body: "Ask it directly. If it is useful to you, it is probably useful to other businesses in the same position, and it may well become the next resource here.",
       primaryCta: { label: "Request a Visibility Review", href: "/contact" },
-      secondaryCta: { label: "View SEO Packages", href: "/seo-packages" },
+      secondaryCta: { label: "View SEO Packages", href: "/monthly-seo-packages" },
     },
   ],
 };

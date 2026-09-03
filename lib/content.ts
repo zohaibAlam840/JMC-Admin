@@ -153,6 +153,8 @@ type PackageRow = {
   price: string;
   price_unit: string | null;
   onboarding_fee: string | null;
+  term: string | null;
+  positioning: string | null;
   timeline: string | null;
   best_fit: string;
   deliverables: string[];
@@ -171,6 +173,8 @@ function toPackage(row: PackageRow): Package {
     price: row.price,
     ...(row.price_unit ? { priceUnit: row.price_unit } : {}),
     ...(row.onboarding_fee ? { onboardingFee: row.onboarding_fee } : {}),
+    ...(row.term ? { term: row.term } : {}),
+    ...(row.positioning ? { positioning: row.positioning } : {}),
     ...(row.timeline ? { timeline: row.timeline } : {}),
     bestFit: row.best_fit,
     deliverables: row.deliverables ?? [],

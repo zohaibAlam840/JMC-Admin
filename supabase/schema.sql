@@ -28,7 +28,8 @@ do $$ begin
   create type section_type as enum (
     'heroSplit', 'heroCentered', 'cardGrid', 'processSteps', 'fullWidthText',
     'featureSplit', 'pricingCards', 'calloutBanner', 'faq', 'finalCta',
-    'postList', 'linkStack', 'reportingBlock', 'industryGrid'
+    'postList', 'linkStack', 'reportingBlock', 'industryGrid',
+    'fourQuestions', 'recapExample', 'auditForm', 'waiverMatrix'
   );
 exception when duplicate_object then null; end $$;
 
@@ -139,7 +140,11 @@ create table if not exists public.packages (
   price           text not null default '',
   price_unit      text,
   onboarding_fee  text,
+  -- The commitment as a plain line, e.g. "12-month term, then month to month".
+  term            text,
   timeline        text,
+  -- A short line under the name, e.g. "Local Foundation". Page Spec 06.
+  positioning     text,
   best_fit        text not null default '',
   deliverables    text[] not null default '{}',
   cta_label       text not null default 'Request a Visibility Review',

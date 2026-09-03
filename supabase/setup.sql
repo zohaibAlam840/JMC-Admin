@@ -2,7 +2,7 @@
 --  JMC — complete database setup
 --
 --  GENERATED FILE. Do not edit — run `npm run sql:bundle` instead.
---  Sources: supabase/schema.sql, migrations/002_posts.sql, migrations/003_media.sql, migrations/004_link_stack.sql, migrations/005_reporting_block.sql, migrations/006_industry_grid.sql, migrations/007_lead_tier.sql
+--  Sources: supabase/schema.sql, migrations/002_posts.sql, migrations/003_media.sql, migrations/004_link_stack.sql, migrations/005_reporting_block.sql, migrations/006_industry_grid.sql, migrations/007_lead_tier.sql, migrations/008_page_specs_02_09.sql, migrations/009_package_positioning.sql
 --
 --  For a brand new Supabase project: paste this whole file into the SQL editor
 --  and run it once. Then run supabase/seed.sql to load the launch content.
@@ -41,7 +41,8 @@ do $$ begin
   create type section_type as enum (
     'heroSplit', 'heroCentered', 'cardGrid', 'processSteps', 'fullWidthText',
     'featureSplit', 'pricingCards', 'calloutBanner', 'faq', 'finalCta',
-    'postList', 'linkStack', 'reportingBlock', 'industryGrid'
+    'postList', 'linkStack', 'reportingBlock', 'industryGrid',
+    'fourQuestions', 'recapExample', 'auditForm', 'waiverMatrix'
   );
 exception when duplicate_object then null; end $$;
 
@@ -152,7 +153,11 @@ create table if not exists public.packages (
   price           text not null default '',
   price_unit      text,
   onboarding_fee  text,
+  -- The commitment as a plain line, e.g. "12-month term, then month to month".
+  term            text,
   timeline        text,
+  -- A short line under the name, e.g. "Local Foundation". Page Spec 06.
+  positioning     text,
   best_fit        text not null default '',
   deliverables    text[] not null default '{}',
   cta_label       text not null default 'Request a Visibility Review',
@@ -570,3 +575,59 @@ alter type section_type add value if not exists 'industryGrid';
 -- ============================================================================
 
 alter table public.leads add column if not exists tier text;
+
+
+-- ############################################################################
+-- ##  008_page_specs_02_09.sql
+-- ############################################################################
+
+-- ============================================================================
+--  JMC — block types for Page Specs 02 to 09
+--
+--  Run after 007_lead_tier.sql. Safe to run more than once.
+--
+--  Adds the four section types the new page specs need:
+--
+--    fourQuestions  Page Spec 05 §2. The four recap headings argued at length
+--                   rather than listed. Deliberately not the compact recap
+--                   block, which every other page uses.
+--    recapExample   Page Spec 05 §3. A worked example of a monthly recap,
+--                   drawn in HTML and carrying no figures at all.
+--    auditForm      Page Spec 04 §4. The Free Visibility Audit band.
+--    waiverMatrix   Page Specs 06 §7 and 07 §6. The onboarding-fee waiver,
+--                   read from either the package side or the sprint side.
+--
+--  Postgres will not let a new enum value be *used* in the same transaction
+--  that added it, so this file must run on its own before any insert that
+--  references one of these types.
+-- ============================================================================
+
+alter type section_type add value if not exists 'fourQuestions';
+alter type section_type add value if not exists 'recapExample';
+alter type section_type add value if not exists 'auditForm';
+alter type section_type add value if not exists 'waiverMatrix';
+
+
+-- ############################################################################
+-- ##  009_package_positioning.sql
+-- ############################################################################
+
+-- ============================================================================
+--  JMC — package positioning line and term
+--
+--  Run any time, in the same run as 008 or after it. Safe to run more than
+--  once.
+--
+--  positioning  Page Spec 06 gives every tier a short line under the name
+--               (Local Foundation, City-Level Growth, Metro Expansion) so the
+--               three read as an arc rather than as three prices.
+--
+--  term         The commitment as a plain line rather than a badge. Page Spec
+--               06 extends it past "12-month term" deliberately: that alone
+--               reads as rigid, while "then month to month" is both true and a
+--               materially easier thing to accept. Leaving the second half off
+--               was making the offer look worse than it is.
+-- ============================================================================
+
+alter table public.packages add column if not exists positioning text;
+alter table public.packages add column if not exists term text;

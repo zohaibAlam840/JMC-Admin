@@ -47,7 +47,7 @@ export const linksPage: PageContent = {
         },
         {
           label: "SEO Packages & Pricing",
-          href: "/seo-packages",
+          href: "/monthly-seo-packages",
           description: "Local, traditional, and launch sprints",
           icon: "layers",
         },
