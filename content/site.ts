@@ -58,7 +58,6 @@ export const mainNav: NavItem[] = [
     // why the hub page exists.
     href: "/industries",
     children: [
-      { label: "All industries", href: "/industries" },
       { label: "Home Services & Trades", href: "/industries/home-services-trades" },
       { label: "Healthcare & Wellness", href: "/industries/healthcare-wellness" },
       { label: "Hospitality & Attractions", href: "/industries/hospitality-attractions" },

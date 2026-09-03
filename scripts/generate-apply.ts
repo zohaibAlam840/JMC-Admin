@@ -244,7 +244,7 @@ footerNav.forEach((group, i) => {
 /* ---------------------------------------------------------- homepage bits -- */
 
 /*
- * Four homepage sections changed address, and nothing else on it did.
+ * Six homepage sections changed; nothing else on the page did.
  *
  * The homepage is not rebuilt wholesale here on purpose: Page Spec 01 has its
  * own installer and the client may have edited copy since. These four are
@@ -261,8 +261,8 @@ const HOME_SECTIONS = [
 ];
 
 w("-- ------------------------------------------------------ homepage links ----");
-w("-- Only the four sections whose destinations changed. The rest of the");
-w("-- homepage, including any copy edited in /admin, is left alone.");
+w("-- Only the sections whose destinations or card counts changed. The rest of");
+w("-- the homepage, including any copy edited in /admin, is left alone.");
 const home = filePages.find((p) => p.slug === "/");
 if (!home) throw new Error("No homepage in content/pages");
 for (const key of HOME_SECTIONS) {

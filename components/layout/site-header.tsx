@@ -207,10 +207,18 @@ export function SiteHeader({
                             </li>
                           ))}
 
-                          {/* Industries gets both a chevron and a way through
-                              to the overview, so the parent is never a
-                              dead end on a phone. */}
-                          {item.href && item.href !== "#" ? (
+                          {/*
+                            * Industries is the only dropdown parent that is a
+                            * real page of its own, so it is the only one that
+                            * needs this. Build Spec §7 makes the other two
+                            * hover-only, and both of them point at their own
+                            * first child, which is how that is detected here:
+                            * a "View all" link beside an identical child link
+                            * is noise, not a way out.
+                            */}
+                          {item.href &&
+                          item.href !== "#" &&
+                          !item.children.some((c) => c.href === item.href) ? (
                             <li>
                               <SheetClose asChild>
                                 <Link
