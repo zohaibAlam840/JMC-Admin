@@ -15,7 +15,7 @@ export const homePage: PageContent = {
   label: "Homepage",
   seoTitle: "Houston-Area SEO Agency | Jordan Marketing Consultants",
   metaDescription:
-    "Houston-area SEO from Jordan Marketing Consultants. Local and traditional SEO, content planning, and a plain monthly recap of what changed and why.",
+    "Houston-area SEO from Jordan Marketing Consultants. Local and traditional SEO, content planning, and a plain monthly recap of what changed, and why it did.",
   sections: [
     {
       id: "hero",
@@ -69,9 +69,9 @@ export const homePage: PageContent = {
       type: "cardGrid",
       tone: "surface",
       eyebrow: "SEO Growth Paths",
-      heading: "Choose the SEO Path That Fits Where You Are Growing",
-      body: "Different businesses need different SEO strategies. JMC helps visitors find the right path based on market size, competition, audience, and growth goals.",
-      columns: 3,
+      heading: "Two Paths, Sorted by Where You Compete",
+      body: "Different businesses need different SEO strategies. Which one fits comes down to reach: a defined area, or several markets at once.",
+      columns: 2,
       cards: [
         {
           title: "Local SEO",
@@ -87,12 +87,6 @@ export const homePage: PageContent = {
             label: "Explore Traditional SEO",
             href: "/traditional-seo-services",
           },
-        },
-        {
-          title: "Real Estate SEO",
-          icon: "home",
-          body: "For agents, teams, and brokerages that want stronger local search presence and content that supports trust.",
-          cta: { label: "Explore Real Estate SEO", href: "/real-estate-seo" },
         },
       ],
     },

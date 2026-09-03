@@ -143,7 +143,7 @@ const industries: Industry[] = [
       "Home service searches are urgent, local, and mostly made on a phone. Getting found in that moment is a different problem from ranking for a term someone researches over a fortnight.",
     seoTitle: "Home Services & Trades SEO | Houston Area",
     metaDescription:
-      "SEO for HVAC, roofing, plumbing, electrical, landscaping and exterior cleaning businesses in the Houston area. Local visibility, profile work, and clear monthly reporting.",
+      "SEO for HVAC, roofing, plumbing, electrical and landscaping businesses in the Houston area. Local visibility, profile work, and clear monthly reporting.",
     children: [
       {
         title: "HVAC & Climate Control",
@@ -371,7 +371,7 @@ const industries: Industry[] = [
       "Professional services buyers research quietly and at length, then contact one or two firms. Most of the decision happens before anyone picks up a phone.",
     seoTitle: "Professional Services SEO | Houston Area",
     metaDescription:
-      "SEO for legal, accounting, financial and consulting firms in the Houston area. Practical strategy, content built for how clients search, and clear monthly reporting.",
+      "SEO for legal, accounting, financial and consulting firms in the Houston area. Strategy, content built for how clients search, and clear monthly reporting.",
     children: [
       {
         title: "Legal Practices",
@@ -440,7 +440,7 @@ const industries: Industry[] = [
       "Buyers in this sector search by specification, not by adjective. The work is making a business findable in the exact technical language its customers already use.",
     seoTitle: "Energy & Petrochemical SEO | Houston Area",
     metaDescription:
-      "SEO for energy and petrochemical service firms, suppliers and technical consultancies. Search built around specifications, procurement cycles, and clear reporting.",
+      "SEO for energy and petrochemical service firms, suppliers and consultancies. Search built around specifications, procurement cycles, and clear reporting.",
     children: [
       {
         title: "Field & Industrial Services",
@@ -510,7 +510,7 @@ const industries: Industry[] = [
       "Logistics buyers search by route, service and capability, often under time pressure. Being findable in that language is most of the job.",
     seoTitle: "Maritime & Logistics SEO | Houston Area",
     metaDescription:
-      "SEO for port services, freight operators, and marine repair and fabrication businesses. Search built around routes, capabilities and how logistics buyers actually search.",
+      "SEO for port services, freight operators, and marine repair and fabrication firms. Search built around routes, capability, and how logistics buyers search.",
     children: [
       {
         title: "Port & Terminal Services",
@@ -580,7 +580,7 @@ const industries: Industry[] = [
       "Commercial construction is won on capability, references and bid lists, but the shortlist is increasingly built by searching. Being on it starts with being findable.",
     seoTitle: "Commercial Construction SEO | Houston Area",
     metaDescription:
-      "SEO for commercial contractors, civil and infrastructure firms, and building products suppliers. Search built around project types, capability and procurement cycles.",
+      "SEO for commercial contractors, civil and infrastructure firms, and building products suppliers. Search built around project type and qualification work.",
     children: [
       {
         title: "General & Specialty Contractors",
@@ -649,7 +649,7 @@ const industries: Industry[] = [
       "Aerospace buyers search by part, standard and certification, and they qualify before they contact. The work is being findable and credible in that order.",
     seoTitle: "Aerospace & Aviation SEO | Houston Area",
     metaDescription:
-      "SEO for aerospace manufacturers, MRO and ground service providers, and avionics suppliers. Search built around parts, certifications and long procurement cycles.",
+      "SEO for aerospace manufacturers, MRO and ground service providers, and avionics suppliers. Search built around parts, certification and procurement work.",
     children: [
       {
         title: "Parts & Component Manufacturers",
@@ -817,7 +817,7 @@ export const industriesIndexPage: PageContent = {
   label: "Industries",
   seoTitle: "Industries | Houston Area SEO for Any Sector",
   metaDescription:
-    "JMC works across trades, healthcare, hospitality, professional services, energy, maritime, construction and aerospace. The method does not change with the industry.",
+    "JMC works across trades, healthcare, hospitality, professional services, energy, maritime, construction and aerospace. The method does not change at all.",
   sections: [
     {
       id: "hero",

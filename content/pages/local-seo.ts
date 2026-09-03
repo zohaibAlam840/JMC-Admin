@@ -28,7 +28,7 @@ export const localSeoPage: PageContent = {
   label: "Local SEO Services",
   seoTitle: "Local SEO Services | Houston Area",
   metaDescription:
-    "Local SEO for Houston-area businesses. Google Business Profile, citations, reviews, local search grid tracking, and a monthly recap that says what actually changed.",
+    "Local SEO for Houston-area businesses. Google Business Profile, citations, reviews, local search grid tracking, and a monthly recap of what actually changed.",
   sections: [
     {
       id: "hero",

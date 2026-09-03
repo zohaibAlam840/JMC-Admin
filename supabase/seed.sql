@@ -15,7 +15,7 @@
 begin;
 
 -- ------------------------------------------------------------- pages ----
-insert into public.pages (slug, label, seo_title, meta_description, published, is_service, system, position) values ('/', 'Homepage', 'Houston-Area SEO Agency | Jordan Marketing Consultants', 'Houston-area SEO from Jordan Marketing Consultants. Local and traditional SEO, content planning, and a plain monthly recap of what changed and why.', true, false, true, 0)
+insert into public.pages (slug, label, seo_title, meta_description, published, is_service, system, position) values ('/', 'Homepage', 'Houston-Area SEO Agency | Jordan Marketing Consultants', 'Houston-area SEO from Jordan Marketing Consultants. Local and traditional SEO, content planning, and a plain monthly recap of what changed, and why it did.', true, false, true, 0)
 on conflict (slug) do update set
   label = excluded.label,
   seo_title = excluded.seo_title,
@@ -24,7 +24,7 @@ on conflict (slug) do update set
   system = excluded.system,
   position = excluded.position;
 
-insert into public.pages (slug, label, seo_title, meta_description, published, is_service, system, position) values ('/local-seo-services', 'Local SEO Services', 'Local SEO Services | Houston Area', 'Local SEO for Houston-area businesses. Google Business Profile, citations, reviews, local search grid tracking, and a monthly recap that says what actually changed.', true, true, false, 1)
+insert into public.pages (slug, label, seo_title, meta_description, published, is_service, system, position) values ('/local-seo-services', 'Local SEO Services', 'Local SEO Services | Houston Area', 'Local SEO for Houston-area businesses. Google Business Profile, citations, reviews, local search grid tracking, and a monthly recap of what actually changed.', true, true, false, 1)
 on conflict (slug) do update set
   label = excluded.label,
   seo_title = excluded.seo_title,
@@ -33,7 +33,7 @@ on conflict (slug) do update set
   system = excluded.system,
   position = excluded.position;
 
-insert into public.pages (slug, label, seo_title, meta_description, published, is_service, system, position) values ('/traditional-seo-services', 'Traditional SEO Services', 'Traditional SEO Services | Multi-Market Search', 'SEO for businesses competing across multiple markets, service lines, or competitive search. Strategy, strategic pages, technical monitoring, and clear monthly reporting.', true, true, false, 2)
+insert into public.pages (slug, label, seo_title, meta_description, published, is_service, system, position) values ('/traditional-seo-services', 'Traditional SEO Services', 'Traditional SEO Services | Multi-Market Search', 'SEO for businesses competing across several markets, service lines or competitive search. Strategy, strategic pages, technical monitoring, clear reporting.', true, true, false, 2)
 on conflict (slug) do update set
   label = excluded.label,
   seo_title = excluded.seo_title,
@@ -42,7 +42,7 @@ on conflict (slug) do update set
   system = excluded.system,
   position = excluded.position;
 
-insert into public.pages (slug, label, seo_title, meta_description, published, is_service, system, position) values ('/real-estate-seo', 'Real Estate SEO', 'Real Estate SEO for Agents, Teams, and Brokerages', 'Real estate SEO for agents, teams, and brokerages. Neighborhood visibility, market content, and reporting that shows what changed.', false, true, false, 3)
+insert into public.pages (slug, label, seo_title, meta_description, published, is_service, system, position) values ('/real-estate-seo', 'Real Estate SEO', 'Real Estate SEO for Agents, Teams, and Brokerages', 'Real estate SEO for agents, teams and brokerages. Neighborhood-level visibility, market content, local profile work, and reporting that shows what changed.', false, true, false, 3)
 on conflict (slug) do update set
   label = excluded.label,
   seo_title = excluded.seo_title,
@@ -69,7 +69,7 @@ on conflict (slug) do update set
   system = excluded.system,
   position = excluded.position;
 
-insert into public.pages (slug, label, seo_title, meta_description, published, is_service, system, position) values ('/about', 'About JMC', 'About Jordan Marketing Consultants', 'A Houston-area SEO agency rooted in League City. Practical strategy, local optimization, content planning, and reporting you can actually read.', true, false, false, 6)
+insert into public.pages (slug, label, seo_title, meta_description, published, is_service, system, position) values ('/about', 'About JMC', 'About Jordan Marketing Consultants', 'A Houston-area SEO agency rooted in League City. Practical SEO strategy, local optimization, content planning, and monthly reporting you can actually read.', true, false, false, 6)
 on conflict (slug) do update set
   label = excluded.label,
   seo_title = excluded.seo_title,
@@ -78,7 +78,7 @@ on conflict (slug) do update set
   system = excluded.system,
   position = excluded.position;
 
-insert into public.pages (slug, label, seo_title, meta_description, published, is_service, system, position) values ('/resources', 'Resources', 'SEO Resources for Houston-Area Businesses', 'Plain-English SEO explainers covering local search, organic search, reporting, and how AI answer tools fit into modern SEO.', true, false, false, 7)
+insert into public.pages (slug, label, seo_title, meta_description, published, is_service, system, position) values ('/resources', 'Resources', 'SEO Resources for Houston-Area Businesses', 'Plain-English SEO explainers from JMC, covering local search, organic search, reporting, and where AI answer tools actually fit into modern search work.', true, false, false, 7)
 on conflict (slug) do update set
   label = excluded.label,
   seo_title = excluded.seo_title,
@@ -87,7 +87,7 @@ on conflict (slug) do update set
   system = excluded.system,
   position = excluded.position;
 
-insert into public.pages (slug, label, seo_title, meta_description, published, is_service, system, position) values ('/links', 'Link Hub', 'Jordan Marketing Consultants | Houston-Area SEO', 'Houston-area SEO from Jordan Marketing Consultants. Request a visibility review, see packages, or read the resources.', false, false, true, 8)
+insert into public.pages (slug, label, seo_title, meta_description, published, is_service, system, position) values ('/links', 'Link Hub', 'Jordan Marketing Consultants | Houston-Area SEO', 'Houston-area SEO from Jordan Marketing Consultants. Request a visibility review, see the monthly packages and pricing, or read the SEO resources here.', false, false, true, 8)
 on conflict (slug) do update set
   label = excluded.label,
   seo_title = excluded.seo_title,
@@ -105,7 +105,7 @@ on conflict (slug) do update set
   system = excluded.system,
   position = excluded.position;
 
-insert into public.pages (slug, label, seo_title, meta_description, published, is_service, system, position) values ('/google-business-profile-optimization', 'Google Business Profile Optimization', 'Google Business Profile Optimization | Houston', 'Google Business Profile optimization for Houston-area businesses. Categories, services, citations, posts, reviews and local grid tracking, with a free visibility audit.', true, true, false, 10)
+insert into public.pages (slug, label, seo_title, meta_description, published, is_service, system, position) values ('/google-business-profile-optimization', 'Google Business Profile Optimization', 'Google Business Profile Optimization | Houston', 'Google Business Profile optimization for Houston-area businesses. Categories, services, citations, posts, reviews and grid tracking, plus a free audit.', true, true, false, 10)
 on conflict (slug) do update set
   label = excluded.label,
   seo_title = excluded.seo_title,
@@ -114,7 +114,7 @@ on conflict (slug) do update set
   system = excluded.system,
   position = excluded.position;
 
-insert into public.pages (slug, label, seo_title, meta_description, published, is_service, system, position) values ('/industries', 'Industries', 'Industries | Houston Area SEO for Any Sector', 'JMC works across trades, healthcare, hospitality, professional services, energy, maritime, construction and aerospace. The method does not change with the industry.', true, false, false, 11)
+insert into public.pages (slug, label, seo_title, meta_description, published, is_service, system, position) values ('/industries', 'Industries', 'Industries | Houston Area SEO for Any Sector', 'JMC works across trades, healthcare, hospitality, professional services, energy, maritime, construction and aerospace. The method does not change at all.', true, false, false, 11)
 on conflict (slug) do update set
   label = excluded.label,
   seo_title = excluded.seo_title,
@@ -123,7 +123,7 @@ on conflict (slug) do update set
   system = excluded.system,
   position = excluded.position;
 
-insert into public.pages (slug, label, seo_title, meta_description, published, is_service, system, position) values ('/industries/home-services-trades', 'Home Services & Trades', 'Home Services & Trades SEO | Houston Area', 'SEO for HVAC, roofing, plumbing, electrical, landscaping and exterior cleaning businesses in the Houston area. Local visibility, profile work, and clear monthly reporting.', true, false, false, 12)
+insert into public.pages (slug, label, seo_title, meta_description, published, is_service, system, position) values ('/industries/home-services-trades', 'Home Services & Trades', 'Home Services & Trades SEO | Houston Area', 'SEO for HVAC, roofing, plumbing, electrical and landscaping businesses in the Houston area. Local visibility, profile work, and clear monthly reporting.', true, false, false, 12)
 on conflict (slug) do update set
   label = excluded.label,
   seo_title = excluded.seo_title,
@@ -150,7 +150,7 @@ on conflict (slug) do update set
   system = excluded.system,
   position = excluded.position;
 
-insert into public.pages (slug, label, seo_title, meta_description, published, is_service, system, position) values ('/industries/professional-services', 'Professional Services', 'Professional Services SEO | Houston Area', 'SEO for legal, accounting, financial and consulting firms in the Houston area. Practical strategy, content built for how clients search, and clear monthly reporting.', true, false, false, 15)
+insert into public.pages (slug, label, seo_title, meta_description, published, is_service, system, position) values ('/industries/professional-services', 'Professional Services', 'Professional Services SEO | Houston Area', 'SEO for legal, accounting, financial and consulting firms in the Houston area. Strategy, content built for how clients search, and clear monthly reporting.', true, false, false, 15)
 on conflict (slug) do update set
   label = excluded.label,
   seo_title = excluded.seo_title,
@@ -159,7 +159,7 @@ on conflict (slug) do update set
   system = excluded.system,
   position = excluded.position;
 
-insert into public.pages (slug, label, seo_title, meta_description, published, is_service, system, position) values ('/industries/energy-petrochemical', 'Energy & Petrochemical', 'Energy & Petrochemical SEO | Houston Area', 'SEO for energy and petrochemical service firms, suppliers and technical consultancies. Search built around specifications, procurement cycles, and clear reporting.', true, false, false, 16)
+insert into public.pages (slug, label, seo_title, meta_description, published, is_service, system, position) values ('/industries/energy-petrochemical', 'Energy & Petrochemical', 'Energy & Petrochemical SEO | Houston Area', 'SEO for energy and petrochemical service firms, suppliers and consultancies. Search built around specifications, procurement cycles, and clear reporting.', true, false, false, 16)
 on conflict (slug) do update set
   label = excluded.label,
   seo_title = excluded.seo_title,
@@ -168,7 +168,7 @@ on conflict (slug) do update set
   system = excluded.system,
   position = excluded.position;
 
-insert into public.pages (slug, label, seo_title, meta_description, published, is_service, system, position) values ('/industries/maritime-logistics', 'Maritime & Logistics', 'Maritime & Logistics SEO | Houston Area', 'SEO for port services, freight operators, and marine repair and fabrication businesses. Search built around routes, capabilities and how logistics buyers actually search.', true, false, false, 17)
+insert into public.pages (slug, label, seo_title, meta_description, published, is_service, system, position) values ('/industries/maritime-logistics', 'Maritime & Logistics', 'Maritime & Logistics SEO | Houston Area', 'SEO for port services, freight operators, and marine repair and fabrication firms. Search built around routes, capability, and how logistics buyers search.', true, false, false, 17)
 on conflict (slug) do update set
   label = excluded.label,
   seo_title = excluded.seo_title,
@@ -177,7 +177,7 @@ on conflict (slug) do update set
   system = excluded.system,
   position = excluded.position;
 
-insert into public.pages (slug, label, seo_title, meta_description, published, is_service, system, position) values ('/industries/commercial-construction-infrastructure', 'Commercial Construction & Infrastructure', 'Commercial Construction SEO | Houston Area', 'SEO for commercial contractors, civil and infrastructure firms, and building products suppliers. Search built around project types, capability and procurement cycles.', true, false, false, 18)
+insert into public.pages (slug, label, seo_title, meta_description, published, is_service, system, position) values ('/industries/commercial-construction-infrastructure', 'Commercial Construction & Infrastructure', 'Commercial Construction SEO | Houston Area', 'SEO for commercial contractors, civil and infrastructure firms, and building products suppliers. Search built around project type and qualification work.', true, false, false, 18)
 on conflict (slug) do update set
   label = excluded.label,
   seo_title = excluded.seo_title,
@@ -186,7 +186,7 @@ on conflict (slug) do update set
   system = excluded.system,
   position = excluded.position;
 
-insert into public.pages (slug, label, seo_title, meta_description, published, is_service, system, position) values ('/industries/aerospace-aviation', 'Aerospace & Aviation', 'Aerospace & Aviation SEO | Houston Area', 'SEO for aerospace manufacturers, MRO and ground service providers, and avionics suppliers. Search built around parts, certifications and long procurement cycles.', true, false, false, 19)
+insert into public.pages (slug, label, seo_title, meta_description, published, is_service, system, position) values ('/industries/aerospace-aviation', 'Aerospace & Aviation', 'Aerospace & Aviation SEO | Houston Area', 'SEO for aerospace manufacturers, MRO and ground service providers, and avionics suppliers. Search built around parts, certification and procurement work.', true, false, false, 19)
 on conflict (slug) do update set
   label = excluded.label,
   seo_title = excluded.seo_title,
@@ -202,7 +202,7 @@ delete from public.sections where page_id in (select id from public.pages where 
 
 -- Homepage
 insert into public.sections (page_id, key, type, tone, data, position) select id, 'hero', 'heroSplit', NULL, '{"eyebrow":"SEO for local, regional, and industrial businesses","heading":"Search Visibility, Explained Every Month.","body":"Jordan Marketing Consultants does one thing: search visibility for local, regional, and industrial businesses. Every month you get a plain recap of what was done, why, and what changed.","primaryCta":{"label":"Request a Visibility Review","href":"/contact"},"secondaryCta":{"label":"See How JMC Reports SEO Progress","href":"/seo-reporting"},"showcase":[{"kind":"report","label":"Every month","title":"Monthly Recap","items":["What was done","Why it matters","What changed","What comes next"]},{"kind":"coverage","label":"Where you appear","title":"Search Visibility","items":["Search","Maps","Local grid"]},{"kind":"roadmap","label":"The plan","title":"SEO Roadmap","items":["Priorities set","Content queued","Technical fixes tracked"]}]}'::jsonb, 0 from public.pages where slug = '/';
-insert into public.sections (page_id, key, type, tone, data, position) select id, 'growth-paths', 'cardGrid', 'surface', '{"eyebrow":"SEO Growth Paths","heading":"Choose the SEO Path That Fits Where You Are Growing","body":"Different businesses need different SEO strategies. JMC helps visitors find the right path based on market size, competition, audience, and growth goals.","columns":3,"cards":[{"title":"Local SEO","icon":"map-pin","body":"For businesses that need stronger visibility in Google Search, Google Maps, and local service-area searches.","cta":{"label":"Explore Local SEO","href":"/local-seo-services"}},{"title":"Traditional SEO","icon":"trending-up","body":"For regional, national, and industry-focused companies competing across larger search markets.","cta":{"label":"Explore Traditional SEO","href":"/traditional-seo-services"}},{"title":"Real Estate SEO","icon":"home","body":"For agents, teams, and brokerages that want stronger local search presence and content that supports trust.","cta":{"label":"Explore Real Estate SEO","href":"/real-estate-seo"}}]}'::jsonb, 1 from public.pages where slug = '/';
+insert into public.sections (page_id, key, type, tone, data, position) select id, 'growth-paths', 'cardGrid', 'surface', '{"eyebrow":"SEO Growth Paths","heading":"Two Paths, Sorted by Where You Compete","body":"Different businesses need different SEO strategies. Which one fits comes down to reach: a defined area, or several markets at once.","columns":2,"cards":[{"title":"Local SEO","icon":"map-pin","body":"For businesses that need stronger visibility in Google Search, Google Maps, and local service-area searches.","cta":{"label":"Explore Local SEO","href":"/local-seo-services"}},{"title":"Traditional SEO","icon":"trending-up","body":"For regional, national, and industry-focused companies competing across larger search markets.","cta":{"label":"Explore Traditional SEO","href":"/traditional-seo-services"}}]}'::jsonb, 1 from public.pages where slug = '/';
 insert into public.sections (page_id, key, type, tone, data, position) select id, 'transparency', 'fullWidthText', NULL, '{"treatment":"statement","heading":"No Mystery SEO. No Confusing Reports. No Guessing What You Paid For.","body":"Most agencies keep the work behind a login and the reasoning to themselves. JMC does the opposite. You see what was done, why it was done, and what it changed, in language that does not need translating. That is how the work is run, not a reporting add-on.","cta":{"label":"See How JMC Reports SEO Progress","href":"/seo-reporting"}}'::jsonb, 2 from public.pages where slug = '/';
 insert into public.sections (page_id, key, type, tone, data, position) select id, 'services', 'cardGrid', 'white', '{"eyebrow":"SEO Services","heading":"SEO Work Built Around Strategy, Visibility, and Accountability","body":"JMC focuses on the pieces of SEO that help businesses become easier to find, easier to understand, and easier to trust in search.","columns":3,"cards":[{"title":"SEO Strategy","icon":"target","body":"Keyword priorities, search intent, competitor visibility, and roadmap planning."},{"title":"Local Optimization","icon":"map-pin","body":"Local search improvements that support visibility in Google Search, Google Maps, and service-area searches."},{"title":"Google Business Profile Support","icon":"star","body":"Profile optimization, post strategy, service alignment, and activity that supports local trust."},{"title":"SEO Content Planning","icon":"file-text","body":"Strategic SEO pages, content roadmaps, service page improvements, and search-focused messaging."},{"title":"Technical SEO Monitoring","icon":"wrench","body":"Ongoing review of technical issues that can affect crawling, indexing, visibility, and site performance."},{"title":"Reporting and Monthly Recaps","icon":"bar-chart","body":"Clear monthly updates that explain progress, priorities, and next steps without burying you in jargon."}],"cta":{"label":"Explore SEO Services","href":"/local-seo-services"}}'::jsonb, 3 from public.pages where slug = '/';
 insert into public.sections (page_id, key, type, tone, data, position) select id, 'industries', 'industryGrid', 'surface', '{"eyebrow":"Industries","heading":"Where This Method Gets Pointed","body":"One method, aimed at two different kinds of search problem.","groups":[{"label":"Consumer & Community","cards":[{"title":"Home Services & Trades","icon":"wrench","body":"Roofers, plumbers, electricians, and the trades that live on calls from a service area.","href":"/industries/home-services-trades"},{"title":"Healthcare & Wellness","icon":"heart-pulse","body":"Practices and clinics where people check credibility before they ever call.","href":"/industries/healthcare-wellness"},{"title":"Hospitality & Attractions","icon":"utensils","body":"Venues, parks, and places people search for by what they want to do, not by name.","href":"/industries/hospitality-attractions"},{"title":"Professional Services","icon":"briefcase","body":"Firms whose next client is comparing three local options in a single sitting.","href":"/industries/professional-services"}]},{"label":"Industrial & B2B","cards":[{"title":"Energy & Petrochemical","icon":"factory","body":"Operators and suppliers selling technical capability to a small, specific buyer pool.","href":"/industries/energy-petrochemical"},{"title":"Maritime & Logistics","icon":"network","body":"Port, freight, and supply chain businesses working across regions rather than a radius.","href":"/industries/maritime-logistics"},{"title":"Commercial Construction","icon":"hard-hat","body":"Contractors and infrastructure firms bidding well outside one city.","href":"/industries/commercial-construction-infrastructure"},{"title":"Aerospace & Aviation","icon":"compass","body":"Suppliers and services in a market where the search volume is low and the intent is high.","href":"/industries/aerospace-aviation"}]}],"escapeHatch":"The method does not change with the industry. If yours is not listed, it probably still applies.","cta":{"label":"Explore All Industries","href":"/industries"}}'::jsonb, 4 from public.pages where slug = '/';
@@ -279,7 +279,7 @@ insert into public.sections (page_id, key, type, tone, data, position) select id
 insert into public.sections (page_id, key, type, tone, data, position) select id, 'hero', 'heroCentered', NULL, '{"eyebrow":"About JMC","heading":"Practical SEO, Explained in Plain English","body":"Jordan Marketing Consultants is a Houston-area SEO agency rooted in League City, helping local, regional, and industry-focused businesses improve search visibility through practical SEO strategy, content planning, local optimization, and clear reporting.","primaryCta":{"label":"Request a Visibility Review","href":"/contact"},"secondaryCta":{"label":"View SEO Packages","href":"/monthly-seo-packages"}}'::jsonb, 0 from public.pages where slug = '/about';
 insert into public.sections (page_id, key, type, tone, data, position) select id, 'approach', 'cardGrid', 'white', '{"variant":"split","eyebrow":"How We Work","heading":"SEO Should Be Understandable Before It Is Impressive","body":"Most businesses that have hired an SEO agency before describe the same experience: work happened, invoices arrived, and nobody could explain what changed. JMC is built around fixing that.","columns":3,"cards":[{"title":"Scope Before Work","icon":"list-checks","body":"You know what is included before anything starts. No discovering the boundaries of your package three months in."},{"title":"Roadmap Over Tasks","icon":"compass","body":"Work is sequenced against a documented plan tied to your goals, not pulled from a generic monthly checklist."},{"title":"Reporting You Read","icon":"bar-chart","body":"A Monthly Recap in plain language, delivered by Loom or a call, so you can ask questions instead of decoding a dashboard."}]}'::jsonb, 1 from public.pages where slug = '/about';
 insert into public.sections (page_id, key, type, tone, data, position) select id, 'houston', 'fullWidthText', 'surface', '{"eyebrow":"Houston-Area SEO Agency","heading":"Rooted in League City. Built for Houston-Area Growth.","body":"JMC is based in League City and works with businesses across the Greater Houston area and beyond. Being local matters for understanding a market, but it is not a boundary. Traditional SEO clients compete regionally and nationally, and the work is built around where your customers actually are.","cta":{"label":"Explore SEO Services","href":"/local-seo-services"}}'::jsonb, 2 from public.pages where slug = '/about';
-insert into public.sections (page_id, key, type, tone, data, position) select id, 'specialties', 'cardGrid', 'white', '{"eyebrow":"What We Focus On","heading":"Three Service Lanes, One Standard","body":"Different markets need different strategies. The commitment to clear scope, documented priorities, and honest reporting does not change between them.","columns":3,"cards":[{"title":"Local SEO","icon":"map-pin","body":"For businesses that need visibility in a defined city or service area.","cta":{"label":"Explore Local SEO","href":"/local-seo-services"}},{"title":"Traditional SEO","icon":"trending-up","body":"For businesses competing across regions, national markets, or specialized industries.","cta":{"label":"Explore Traditional SEO","href":"/traditional-seo-services"}},{"title":"Real Estate SEO","icon":"home","body":"For agents, teams, and brokerages building neighborhood-level visibility.","cta":{"label":"Explore Real Estate SEO","href":"/real-estate-seo"}}]}'::jsonb, 3 from public.pages where slug = '/about';
+insert into public.sections (page_id, key, type, tone, data, position) select id, 'specialties', 'cardGrid', 'white', '{"eyebrow":"What We Focus On","heading":"Two Service Lanes, One Standard","body":"Different markets need different strategies. The commitment to clear scope, documented priorities, and honest reporting does not change between them.","columns":2,"cards":[{"title":"Local SEO","icon":"map-pin","body":"For businesses that need visibility in a defined city or service area.","cta":{"label":"Explore Local SEO","href":"/local-seo-services"}},{"title":"Traditional SEO","icon":"trending-up","body":"For businesses competing across regions, national markets, or specialized industries.","cta":{"label":"Explore Traditional SEO","href":"/traditional-seo-services"}}]}'::jsonb, 3 from public.pages where slug = '/about';
 insert into public.sections (page_id, key, type, tone, data, position) select id, 'process', 'processSteps', 'surface', '{"eyebrow":"The Process","heading":"A Clear SEO Process From Review to Recap","body":"The same four steps run every engagement, whether it is a local campaign or a national one.","steps":[{"title":"Visibility Review","body":"We review where your business currently shows up, where visibility is weak, and which opportunities are worth prioritizing."},{"title":"SEO Roadmap","body":"We organize the work around keyword priorities, content needs, local visibility, technical issues, and business goals."},{"title":"Implementation","body":"We complete the scoped SEO work, content updates, local optimization, and technical improvements tied to the plan."},{"title":"Monthly Recap","body":"You receive a clear summary of what was completed, what changed, and what should happen next."}],"cta":{"label":"Start with a Visibility Review","href":"/contact"}}'::jsonb, 4 from public.pages where slug = '/about';
 insert into public.sections (page_id, key, type, tone, data, position) select id, 'final-cta', 'finalCta', NULL, '{"heading":"Let''s Look at Where Your Visibility Stands","body":"A Visibility Review is the starting point for every JMC engagement, and it is useful even if you decide not to work with us.","primaryCta":{"label":"Request a Visibility Review","href":"/contact"},"secondaryCta":{"label":"View SEO Packages","href":"/monthly-seo-packages"}}'::jsonb, 5 from public.pages where slug = '/about';
 
@@ -579,56 +579,56 @@ on conflict (id) do update set
 -- Rebuilt from scratch so ordering and nesting stay exact.
 delete from public.nav_items;
 
-insert into public.nav_items (id, location, parent_id, label, href, position) values ('75b8f42e-e12d-4900-ab1f-f23345a59584', 'main', null, 'Home', '/', 0);
+insert into public.nav_items (id, location, parent_id, label, href, position) values ('d8de0ca1-c6ff-4ae5-a512-035f65ca6dd8', 'main', null, 'Home', '/', 0);
 
-insert into public.nav_items (id, location, parent_id, label, href, position) values ('ccad9fb4-ce62-474f-abbd-fe288a8baa63', 'main', null, 'SEO Services', '/local-seo-services', 1);
-insert into public.nav_items (id, location, parent_id, label, href, position) values ('7b68b078-aef6-4a56-9e40-177a05d64460', 'main', 'ccad9fb4-ce62-474f-abbd-fe288a8baa63', 'Local SEO Services', '/local-seo-services', 0);
-insert into public.nav_items (id, location, parent_id, label, href, position) values ('cdc14097-9c74-4631-988f-7828e3b6416a', 'main', 'ccad9fb4-ce62-474f-abbd-fe288a8baa63', 'Traditional SEO Services', '/traditional-seo-services', 1);
-insert into public.nav_items (id, location, parent_id, label, href, position) values ('716fd635-5790-4c7f-8675-550958cb7672', 'main', 'ccad9fb4-ce62-474f-abbd-fe288a8baa63', 'Google Business Profile Optimization', '/google-business-profile-optimization', 2);
-insert into public.nav_items (id, location, parent_id, label, href, position) values ('037d5726-213f-4c26-b7db-67b35f8999d6', 'main', 'ccad9fb4-ce62-474f-abbd-fe288a8baa63', 'SEO Content Strategy', '/traditional-seo-services#includes', 3);
-insert into public.nav_items (id, location, parent_id, label, href, position) values ('d64a15db-64bf-408e-89e0-ce3686cf5074', 'main', 'ccad9fb4-ce62-474f-abbd-fe288a8baa63', 'SEO Reporting', '/seo-reporting', 4);
+insert into public.nav_items (id, location, parent_id, label, href, position) values ('e626f418-8580-41e2-a59f-be595b541259', 'main', null, 'SEO Services', '/local-seo-services', 1);
+insert into public.nav_items (id, location, parent_id, label, href, position) values ('2a97dab8-e7f1-4c38-875c-b3c5bee881af', 'main', 'e626f418-8580-41e2-a59f-be595b541259', 'Local SEO Services', '/local-seo-services', 0);
+insert into public.nav_items (id, location, parent_id, label, href, position) values ('0f1c65d3-ecce-4416-86b5-d6b25c23e4da', 'main', 'e626f418-8580-41e2-a59f-be595b541259', 'Traditional SEO Services', '/traditional-seo-services', 1);
+insert into public.nav_items (id, location, parent_id, label, href, position) values ('4dee25f9-af8f-4e8c-b28c-e0ed97ca5bae', 'main', 'e626f418-8580-41e2-a59f-be595b541259', 'Google Business Profile Optimization', '/google-business-profile-optimization', 2);
+insert into public.nav_items (id, location, parent_id, label, href, position) values ('cd2d5b58-5ff8-4ef4-8bbe-573571314ff8', 'main', 'e626f418-8580-41e2-a59f-be595b541259', 'SEO Content Strategy', '/traditional-seo-services#includes', 3);
+insert into public.nav_items (id, location, parent_id, label, href, position) values ('acfe12ab-4d28-4480-83ec-807d562e637c', 'main', 'e626f418-8580-41e2-a59f-be595b541259', 'SEO Reporting', '/seo-reporting', 4);
 
-insert into public.nav_items (id, location, parent_id, label, href, position) values ('d033985a-d05a-4606-a828-c0844542653c', 'main', null, 'Industries', '/industries', 2);
-insert into public.nav_items (id, location, parent_id, label, href, position) values ('3a7169fe-6f51-4e99-85e9-8741cd936eb0', 'main', 'd033985a-d05a-4606-a828-c0844542653c', 'All industries', '/industries', 0);
-insert into public.nav_items (id, location, parent_id, label, href, position) values ('e168cd88-ed46-40eb-8eec-6b297c00f95a', 'main', 'd033985a-d05a-4606-a828-c0844542653c', 'Home Services & Trades', '/industries/home-services-trades', 1);
-insert into public.nav_items (id, location, parent_id, label, href, position) values ('04fffc76-58e1-4ecb-b10c-e1753763f2d3', 'main', 'd033985a-d05a-4606-a828-c0844542653c', 'Healthcare & Wellness', '/industries/healthcare-wellness', 2);
-insert into public.nav_items (id, location, parent_id, label, href, position) values ('bd2883e9-21e0-4ac9-b8c6-2dc4931156bf', 'main', 'd033985a-d05a-4606-a828-c0844542653c', 'Hospitality & Attractions', '/industries/hospitality-attractions', 3);
-insert into public.nav_items (id, location, parent_id, label, href, position) values ('e0653e9e-5bc9-4522-af55-c2fec8f51a2c', 'main', 'd033985a-d05a-4606-a828-c0844542653c', 'Professional Services', '/industries/professional-services', 4);
-insert into public.nav_items (id, location, parent_id, label, href, position) values ('b335b46d-a65f-476d-89ce-1c04a8e6b2a7', 'main', 'd033985a-d05a-4606-a828-c0844542653c', 'Energy & Petrochemical', '/industries/energy-petrochemical', 5);
-insert into public.nav_items (id, location, parent_id, label, href, position) values ('47b17f03-582a-4e92-96c5-f56023cda68b', 'main', 'd033985a-d05a-4606-a828-c0844542653c', 'Maritime & Logistics', '/industries/maritime-logistics', 6);
-insert into public.nav_items (id, location, parent_id, label, href, position) values ('56667484-43bf-4d2d-8b79-b81e8b2422b1', 'main', 'd033985a-d05a-4606-a828-c0844542653c', 'Commercial Construction', '/industries/commercial-construction-infrastructure', 7);
-insert into public.nav_items (id, location, parent_id, label, href, position) values ('39c33f7f-5fc0-40cf-a9b6-45c3d5b80f14', 'main', 'd033985a-d05a-4606-a828-c0844542653c', 'Aerospace & Aviation', '/industries/aerospace-aviation', 8);
+insert into public.nav_items (id, location, parent_id, label, href, position) values ('b4c52039-58b7-43c6-b683-2479af1aefde', 'main', null, 'Industries', '/industries', 2);
+insert into public.nav_items (id, location, parent_id, label, href, position) values ('7947cb03-a826-475c-81ff-64e93e6ceb7b', 'main', 'b4c52039-58b7-43c6-b683-2479af1aefde', 'All industries', '/industries', 0);
+insert into public.nav_items (id, location, parent_id, label, href, position) values ('ef561c26-de5c-4a77-97a4-b8c0c39013e4', 'main', 'b4c52039-58b7-43c6-b683-2479af1aefde', 'Home Services & Trades', '/industries/home-services-trades', 1);
+insert into public.nav_items (id, location, parent_id, label, href, position) values ('9d4fb673-4fa2-4cf0-92b9-8ef4f85c0eb0', 'main', 'b4c52039-58b7-43c6-b683-2479af1aefde', 'Healthcare & Wellness', '/industries/healthcare-wellness', 2);
+insert into public.nav_items (id, location, parent_id, label, href, position) values ('d2985471-967e-411c-a792-44159ecc4bb8', 'main', 'b4c52039-58b7-43c6-b683-2479af1aefde', 'Hospitality & Attractions', '/industries/hospitality-attractions', 3);
+insert into public.nav_items (id, location, parent_id, label, href, position) values ('8e3fe1db-15e1-4b56-a23d-f09a82f89cc2', 'main', 'b4c52039-58b7-43c6-b683-2479af1aefde', 'Professional Services', '/industries/professional-services', 4);
+insert into public.nav_items (id, location, parent_id, label, href, position) values ('f47075c5-e09c-49b5-8835-588db65cd6c8', 'main', 'b4c52039-58b7-43c6-b683-2479af1aefde', 'Energy & Petrochemical', '/industries/energy-petrochemical', 5);
+insert into public.nav_items (id, location, parent_id, label, href, position) values ('fbf1dc99-684b-45df-9e99-32aaf02492c1', 'main', 'b4c52039-58b7-43c6-b683-2479af1aefde', 'Maritime & Logistics', '/industries/maritime-logistics', 6);
+insert into public.nav_items (id, location, parent_id, label, href, position) values ('d364cbc7-3304-4af0-9b60-f077b37a5795', 'main', 'b4c52039-58b7-43c6-b683-2479af1aefde', 'Commercial Construction', '/industries/commercial-construction-infrastructure', 7);
+insert into public.nav_items (id, location, parent_id, label, href, position) values ('f1883870-2da7-4ce2-805d-647f3697c8ce', 'main', 'b4c52039-58b7-43c6-b683-2479af1aefde', 'Aerospace & Aviation', '/industries/aerospace-aviation', 8);
 
-insert into public.nav_items (id, location, parent_id, label, href, position) values ('e4b75dd0-ce09-472f-8865-142ed37a9ead', 'main', null, 'Pricing', '/monthly-seo-packages', 3);
-insert into public.nav_items (id, location, parent_id, label, href, position) values ('f8a97365-093c-456f-bcc7-1cf1299e20f5', 'main', 'e4b75dd0-ce09-472f-8865-142ed37a9ead', 'Monthly SEO Packages', '/monthly-seo-packages', 0);
-insert into public.nav_items (id, location, parent_id, label, href, position) values ('46dd76a6-11a2-4809-8d81-74427e1180bf', 'main', 'e4b75dd0-ce09-472f-8865-142ed37a9ead', 'Launch Sprints', '/launch-sprints', 1);
+insert into public.nav_items (id, location, parent_id, label, href, position) values ('f2ac8d62-cc27-425e-815c-6c165983c6e6', 'main', null, 'Pricing', '/monthly-seo-packages', 3);
+insert into public.nav_items (id, location, parent_id, label, href, position) values ('6adcd993-c359-46be-a783-5e25843ab2f8', 'main', 'f2ac8d62-cc27-425e-815c-6c165983c6e6', 'Monthly SEO Packages', '/monthly-seo-packages', 0);
+insert into public.nav_items (id, location, parent_id, label, href, position) values ('3ef238ca-a0e5-4df5-8b58-2d41d64f53c8', 'main', 'f2ac8d62-cc27-425e-815c-6c165983c6e6', 'Launch Sprints', '/launch-sprints', 1);
 
-insert into public.nav_items (id, location, parent_id, label, href, position) values ('95a77e9d-0b12-489b-8afc-c7a20a428e1e', 'main', null, 'Resources', '/resources', 4);
+insert into public.nav_items (id, location, parent_id, label, href, position) values ('384c6f0c-e326-4488-a3dc-b7312a6edc1f', 'main', null, 'Resources', '/resources', 4);
 
-insert into public.nav_items (id, location, parent_id, label, href, position) values ('adc5ae7a-a8bb-4fb0-98f2-2af8effd2c3e', 'main', null, 'About', '/about', 5);
+insert into public.nav_items (id, location, parent_id, label, href, position) values ('a7515c7f-2cf7-4508-bae3-e6bd21dc7561', 'main', null, 'About', '/about', 5);
 
-insert into public.nav_items (id, location, parent_id, label, href, position) values ('b016d6be-5443-452f-8aa4-0a367b213106', 'footer', null, 'SEO Services', '', 0);
-insert into public.nav_items (id, location, parent_id, label, href, position) values ('a5e4bd25-c656-4baa-842d-0751c093ec26', 'footer', 'b016d6be-5443-452f-8aa4-0a367b213106', 'Local SEO Services', '/local-seo-services', 0);
-insert into public.nav_items (id, location, parent_id, label, href, position) values ('436974b4-a6f1-4d38-8e8b-5c0e2f2225da', 'footer', 'b016d6be-5443-452f-8aa4-0a367b213106', 'Traditional SEO Services', '/traditional-seo-services', 1);
-insert into public.nav_items (id, location, parent_id, label, href, position) values ('d1fb308e-b9d6-4419-b7d9-66db9fa19818', 'footer', 'b016d6be-5443-452f-8aa4-0a367b213106', 'Google Business Profile Optimization', '/google-business-profile-optimization', 2);
-insert into public.nav_items (id, location, parent_id, label, href, position) values ('b86008c7-e36e-4cd0-9851-21f7e5ef821e', 'footer', 'b016d6be-5443-452f-8aa4-0a367b213106', 'SEO Reporting', '/seo-reporting', 3);
+insert into public.nav_items (id, location, parent_id, label, href, position) values ('03737dd0-9cae-4fa3-bf5f-a8a12f08ff82', 'footer', null, 'SEO Services', '', 0);
+insert into public.nav_items (id, location, parent_id, label, href, position) values ('3bc5e2b5-73a7-4f09-af5a-4c3e7cbfede2', 'footer', '03737dd0-9cae-4fa3-bf5f-a8a12f08ff82', 'Local SEO Services', '/local-seo-services', 0);
+insert into public.nav_items (id, location, parent_id, label, href, position) values ('5411d59b-98c0-4538-a870-102a7468eb8f', 'footer', '03737dd0-9cae-4fa3-bf5f-a8a12f08ff82', 'Traditional SEO Services', '/traditional-seo-services', 1);
+insert into public.nav_items (id, location, parent_id, label, href, position) values ('fd28563f-00da-49ac-a0d2-512d9f64bb8d', 'footer', '03737dd0-9cae-4fa3-bf5f-a8a12f08ff82', 'Google Business Profile Optimization', '/google-business-profile-optimization', 2);
+insert into public.nav_items (id, location, parent_id, label, href, position) values ('91a1e1b4-86f0-4111-8d77-70421d1afb5b', 'footer', '03737dd0-9cae-4fa3-bf5f-a8a12f08ff82', 'SEO Reporting', '/seo-reporting', 3);
 
-insert into public.nav_items (id, location, parent_id, label, href, position) values ('b6032c14-deb1-4258-9f46-7a0cdb6cfaf8', 'footer', null, 'Industries', '', 1);
-insert into public.nav_items (id, location, parent_id, label, href, position) values ('957de2c2-c05e-4d17-ad6b-11130cfc1806', 'footer', 'b6032c14-deb1-4258-9f46-7a0cdb6cfaf8', 'Home Services & Trades', '/industries/home-services-trades', 0);
-insert into public.nav_items (id, location, parent_id, label, href, position) values ('d3ecbe12-c393-4ca5-9826-fab133363b8a', 'footer', 'b6032c14-deb1-4258-9f46-7a0cdb6cfaf8', 'Healthcare & Wellness', '/industries/healthcare-wellness', 1);
-insert into public.nav_items (id, location, parent_id, label, href, position) values ('70f4bde9-f8f2-4693-ac50-4f6a050d89e7', 'footer', 'b6032c14-deb1-4258-9f46-7a0cdb6cfaf8', 'Hospitality & Attractions', '/industries/hospitality-attractions', 2);
-insert into public.nav_items (id, location, parent_id, label, href, position) values ('3494c925-c5ea-4c14-ba83-b7f32fa2c0f6', 'footer', 'b6032c14-deb1-4258-9f46-7a0cdb6cfaf8', 'Professional Services', '/industries/professional-services', 3);
-insert into public.nav_items (id, location, parent_id, label, href, position) values ('ffc04642-2535-4fb2-b60d-c927b67bc94b', 'footer', 'b6032c14-deb1-4258-9f46-7a0cdb6cfaf8', 'Energy & Petrochemical', '/industries/energy-petrochemical', 4);
-insert into public.nav_items (id, location, parent_id, label, href, position) values ('3d2ead5d-3e76-41ed-952d-8fcc48cd9404', 'footer', 'b6032c14-deb1-4258-9f46-7a0cdb6cfaf8', 'Maritime & Logistics', '/industries/maritime-logistics', 5);
-insert into public.nav_items (id, location, parent_id, label, href, position) values ('8e40dcd8-3855-462d-a320-26575229efbc', 'footer', 'b6032c14-deb1-4258-9f46-7a0cdb6cfaf8', 'Commercial Construction', '/industries/commercial-construction-infrastructure', 6);
-insert into public.nav_items (id, location, parent_id, label, href, position) values ('70d08fbb-867d-416f-b56c-4f454b32c12e', 'footer', 'b6032c14-deb1-4258-9f46-7a0cdb6cfaf8', 'Aerospace & Aviation', '/industries/aerospace-aviation', 7);
+insert into public.nav_items (id, location, parent_id, label, href, position) values ('e9412070-f969-4d19-8177-54c601c4bcb8', 'footer', null, 'Industries', '', 1);
+insert into public.nav_items (id, location, parent_id, label, href, position) values ('7c156429-11fb-4736-a99b-ae64ded2da57', 'footer', 'e9412070-f969-4d19-8177-54c601c4bcb8', 'Home Services & Trades', '/industries/home-services-trades', 0);
+insert into public.nav_items (id, location, parent_id, label, href, position) values ('47ffa0ea-6216-4c4f-8bb1-19bf0c416442', 'footer', 'e9412070-f969-4d19-8177-54c601c4bcb8', 'Healthcare & Wellness', '/industries/healthcare-wellness', 1);
+insert into public.nav_items (id, location, parent_id, label, href, position) values ('752da1c0-0aa5-4ed4-846e-5507a28856c1', 'footer', 'e9412070-f969-4d19-8177-54c601c4bcb8', 'Hospitality & Attractions', '/industries/hospitality-attractions', 2);
+insert into public.nav_items (id, location, parent_id, label, href, position) values ('9d8d27e3-c5e0-42e9-a24c-badc33ae421c', 'footer', 'e9412070-f969-4d19-8177-54c601c4bcb8', 'Professional Services', '/industries/professional-services', 3);
+insert into public.nav_items (id, location, parent_id, label, href, position) values ('ce9fed16-fdf2-4974-87f3-580e97e6744f', 'footer', 'e9412070-f969-4d19-8177-54c601c4bcb8', 'Energy & Petrochemical', '/industries/energy-petrochemical', 4);
+insert into public.nav_items (id, location, parent_id, label, href, position) values ('1c19e718-9bed-49e1-9d84-0cf60849e17e', 'footer', 'e9412070-f969-4d19-8177-54c601c4bcb8', 'Maritime & Logistics', '/industries/maritime-logistics', 5);
+insert into public.nav_items (id, location, parent_id, label, href, position) values ('679ebb44-2359-473d-ab4b-6ce74c0cb618', 'footer', 'e9412070-f969-4d19-8177-54c601c4bcb8', 'Commercial Construction', '/industries/commercial-construction-infrastructure', 6);
+insert into public.nav_items (id, location, parent_id, label, href, position) values ('28a5a52a-e1eb-432f-b5d2-166cbf6f8708', 'footer', 'e9412070-f969-4d19-8177-54c601c4bcb8', 'Aerospace & Aviation', '/industries/aerospace-aviation', 7);
 
-insert into public.nav_items (id, location, parent_id, label, href, position) values ('bf74af3a-02c4-4deb-a02e-f587adf0058f', 'footer', null, 'Company', '', 2);
-insert into public.nav_items (id, location, parent_id, label, href, position) values ('5b1e8ae3-d027-48d3-a309-2e8099ad49d8', 'footer', 'bf74af3a-02c4-4deb-a02e-f587adf0058f', 'Monthly SEO Packages', '/monthly-seo-packages', 0);
-insert into public.nav_items (id, location, parent_id, label, href, position) values ('275325a1-2104-4d32-8244-50834decf374', 'footer', 'bf74af3a-02c4-4deb-a02e-f587adf0058f', 'Launch Sprints', '/launch-sprints', 1);
-insert into public.nav_items (id, location, parent_id, label, href, position) values ('4983331d-223d-4a3d-921b-009e33a4f527', 'footer', 'bf74af3a-02c4-4deb-a02e-f587adf0058f', 'Resources', '/resources', 2);
-insert into public.nav_items (id, location, parent_id, label, href, position) values ('5a720382-c77b-46f6-852b-739f34987922', 'footer', 'bf74af3a-02c4-4deb-a02e-f587adf0058f', 'About', '/about', 3);
-insert into public.nav_items (id, location, parent_id, label, href, position) values ('3d11feb3-7774-4bd5-81bd-adced1505b65', 'footer', 'bf74af3a-02c4-4deb-a02e-f587adf0058f', 'Contact', '/contact', 4);
+insert into public.nav_items (id, location, parent_id, label, href, position) values ('269de0db-2730-486b-b83e-fc7fec5e766f', 'footer', null, 'Company', '', 2);
+insert into public.nav_items (id, location, parent_id, label, href, position) values ('e90ebc3f-0d74-4958-adae-d51ab8c8caa4', 'footer', '269de0db-2730-486b-b83e-fc7fec5e766f', 'Monthly SEO Packages', '/monthly-seo-packages', 0);
+insert into public.nav_items (id, location, parent_id, label, href, position) values ('d89db7a8-1a32-4898-8e2a-999951ea7037', 'footer', '269de0db-2730-486b-b83e-fc7fec5e766f', 'Launch Sprints', '/launch-sprints', 1);
+insert into public.nav_items (id, location, parent_id, label, href, position) values ('bbf73713-b8c2-4393-90e5-f7658ea28eca', 'footer', '269de0db-2730-486b-b83e-fc7fec5e766f', 'Resources', '/resources', 2);
+insert into public.nav_items (id, location, parent_id, label, href, position) values ('16fa0ac7-1003-469f-b97f-9c401674f610', 'footer', '269de0db-2730-486b-b83e-fc7fec5e766f', 'About', '/about', 3);
+insert into public.nav_items (id, location, parent_id, label, href, position) values ('196e0513-7f12-434e-b200-a9c6e853b757', 'footer', '269de0db-2730-486b-b83e-fc7fec5e766f', 'Contact', '/contact', 4);
 
 -- ----------------------------------------------------- site details ----
 insert into public.site_settings (id, name, short_name, url, email, phone, phone_href, locality, region, positioning, footer_blurb, primary_cta_label, primary_cta_href) values (

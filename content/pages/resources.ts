@@ -13,7 +13,7 @@ export const resourcesPage: PageContent = {
   label: "Resources",
   seoTitle: "SEO Resources for Houston-Area Businesses",
   metaDescription:
-    "Plain-English SEO explainers covering local search, organic search, reporting, and how AI answer tools fit into modern SEO.",
+    "Plain-English SEO explainers from JMC, covering local search, organic search, reporting, and where AI answer tools actually fit into modern search work.",
   sections: [
     {
       id: "hero",

@@ -13,7 +13,7 @@ export const realEstateSeoPage: PageContent = {
   label: "Real Estate SEO",
   seoTitle: "Real Estate SEO for Agents, Teams, and Brokerages",
   metaDescription:
-    "Real estate SEO for agents, teams, and brokerages. Neighborhood visibility, market content, and reporting that shows what changed.",
+    "Real estate SEO for agents, teams and brokerages. Neighborhood-level visibility, market content, local profile work, and reporting that shows what changed.",
   sections: [
     {
       id: "hero",

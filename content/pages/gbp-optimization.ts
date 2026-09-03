@@ -25,7 +25,7 @@ export const gbpOptimizationPage: PageContent = {
   label: "Google Business Profile Optimization",
   seoTitle: "Google Business Profile Optimization | Houston",
   metaDescription:
-    "Google Business Profile optimization for Houston-area businesses. Categories, services, citations, posts, reviews and local grid tracking, with a free visibility audit.",
+    "Google Business Profile optimization for Houston-area businesses. Categories, services, citations, posts, reviews and grid tracking, plus a free audit.",
   sections: [
     {
       id: "hero",

@@ -34,7 +34,7 @@ export const traditionalSeoPage: PageContent = {
   label: "Traditional SEO Services",
   seoTitle: "Traditional SEO Services | Multi-Market Search",
   metaDescription:
-    "SEO for businesses competing across multiple markets, service lines, or competitive search. Strategy, strategic pages, technical monitoring, and clear monthly reporting.",
+    "SEO for businesses competing across several markets, service lines or competitive search. Strategy, strategic pages, technical monitoring, clear reporting.",
   sections: [
     {
       id: "hero",

@@ -94,13 +94,23 @@ w("--  Rebuilds these pages to their specs and creates the ones that are new:");
 w("--");
 for (const page of pages) w(`--      ${page.slug.padEnd(46)} ${page.label}`);
 w("--");
-w("--  It also refreshes the packages, the menus, and the legacy redirects,");
-w("--  because /seo-packages has been renamed to /monthly-seo-packages and");
-w("--  every link to it moved with it.");
+w("--  It also:");
 w("--");
-w("--  Sections on the pages above are REPLACED wholesale. Any edit made to one");
-w("--  of them in /admin is overwritten. The homepage, articles, enquiries, and");
-w("--  every other page are untouched.");
+w("--    - refreshes the packages, both menus, and the legacy redirects, since");
+w("--      /seo-packages is renamed to /monthly-seo-packages and every link to");
+w("--      it moved with it;");
+w("--    - updates six homepage sections and one on About, which is all that");
+w("--      changed on those two pages;");
+w("--    - retunes every page title and description to the Build Spec lengths;");
+w("--    - unpublishes Real Estate SEO and hides its two tiers, which Page");
+w("--      Spec 01 §2 cuts from scope.");
+w("--");
+w("--  Sections on the rebuilt pages are REPLACED wholesale. Any edit made to");
+w("--  one of them in /admin is overwritten. Copy on the homepage and About,");
+w("--  outside the sections named above, is left alone, as are articles and");
+w("--  enquiries.");
+w("--");
+w("--  Safe to run more than once.");
 w("-- ==========================================================================");
 w();
 w("begin;");
@@ -243,7 +253,9 @@ footerNav.forEach((group, i) => {
  */
 const HOME_SECTIONS = [
   "hero",           // "See How JMC Reports SEO Progress" now has a page
-  "transparency",   // same CTA, same reason
+  "growth-paths",   // Real Estate card removed, so this is two cards now
+  "transparency",   // same CTA as the hero, same reason
+  "services",       // its CTA moved off the industries hub
   "industries",     // eight cards now point at eight industry pages
   "monthly-recap",  // same CTA again
 ];
@@ -267,6 +279,57 @@ for (const key of HOME_SECTIONS) {
       `where key = ${lit(key)} and page_id = (select id from public.pages where slug = '/');`
   );
 }
+w();
+
+/* ---------------------------------------------------------- about page -- */
+
+/*
+ * One section, for the same reason as the homepage: About is not rebuilt by
+ * any of the new specs, but its service-lane grid carried a Real Estate card
+ * that is about to point at an unpublished page.
+ */
+w("-- --------------------------------------------------------- about page ----");
+const about = filePages.find((p) => p.slug === "/about");
+const specialties = about?.sections.find((s) => s.id === "specialties");
+if (about && specialties) {
+  const { id, type, tone, ...data } = specialties as typeof specialties & {
+    tone?: "white" | "surface";
+  };
+  void id;
+  void type;
+  void tone;
+  w(
+    `update public.sections set data = ${jsonb(data)} ` +
+      `where key = 'specialties' and page_id = (select id from public.pages where slug = '/about');`
+  );
+}
+w();
+
+/* ------------------------------------------------------------ page meta -- */
+
+w("-- ---------------------------------------------------------- page meta ----");
+w("-- Titles and descriptions only, on every page. Sections are untouched here,");
+w("-- so this cannot disturb copy edited in /admin. Descriptions are retuned to");
+w("-- the 150 to 160 characters Build Spec §14 asks for.");
+for (const page of filePages) {
+  w(
+    `update public.pages set seo_title = ${lit(page.seoTitle)}, ` +
+      `meta_description = ${lit(page.metaDescription)} where slug = ${lit(page.slug)};`
+  );
+}
+w();
+
+/* ------------------------------------------------------- real estate seo -- */
+
+w("-- --------------------------------------------------- real estate seo ----");
+w("-- Cut from scope by Page Spec 01 §2. Unpublished rather than deleted: the");
+w("-- decision comes from a Decisions Record we have only seen quoted, and the");
+w("-- page and its two tiers come straight back if that changes.");
+w("--");
+w("-- Nothing links to it any more. The homepage and About both carried a Real");
+w("-- Estate card and both now show two service lanes instead of three.");
+w("update public.pages set published = false where slug = '/real-estate-seo';");
+w("update public.packages set visible = false where group_key = 'realEstate';");
 w();
 
 /* --------------------------------------------------------------- redirects -- */

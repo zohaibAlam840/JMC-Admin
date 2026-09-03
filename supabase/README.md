@@ -15,6 +15,7 @@ the current structure in one paste. Regenerate it after changing either:
 npm run sql:bundle      # rebuilds setup.sql
 npm run seed:generate   # rebuilds seed.sql from content/
 npm run sql:apply       # rebuilds apply-page-specs-02-09.sql
+npm run check           # dead links, anchors, meta lengths, one H1 per page
 ```
 
 ## An existing project — run the pieces
@@ -41,7 +42,7 @@ Each is safe to run more than once.
 | [`add-link-hub.sql`](./add-link-hub.sql) | Adds the `/links` page to a database seeded before the link hub existed. Run **after** `004`, in a separate run — Postgres will not use a new enum value in the transaction that added it. |
 | [`apply-page-spec-01.sql`](./apply-page-spec-01.sql) | Rebuilds the homepage to the ten sections of Page Spec 01, in its order. Run **after** `005` and `006`, each in its own run. Replaces the homepage sections wholesale; touches nothing else. |
 | [`apply-page-meta.sql`](./apply-page-meta.sql) | Updates every page title and meta description to the §14 lengths. Sections untouched, so it cannot disturb admin edits. |
-| [`apply-page-specs-02-09.sql`](./apply-page-specs-02-09.sql) | Rebuilds the six service and pricing pages to Page Specs 02 to 07, and creates SEO Reporting, the Industries hub and its eight industry pages. Also renames `/seo-packages` to `/monthly-seo-packages`, refreshes the packages and both menus, and adds the legacy redirects. Run **after** `008` and `009`, each in its own run. Regenerate with `npm run sql:apply`. |
+| [`apply-page-specs-02-09.sql`](./apply-page-specs-02-09.sql) | Rebuilds the service and pricing pages to Page Specs 02 to 07, and creates SEO Reporting, the Industries hub and its eight industry pages. Also renames `/seo-packages` to `/monthly-seo-packages`, refreshes the packages, both menus and the legacy redirects, retunes every page title and description, and unpublishes Real Estate SEO. Run **after** `008` and `009`, each in its own run. Safe to re-run. Regenerate with `npm run sql:apply`. |
 
 ## 2. Create the first admin account
 

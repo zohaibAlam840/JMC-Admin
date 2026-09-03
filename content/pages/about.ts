@@ -12,7 +12,7 @@ export const aboutPage: PageContent = {
   label: "About JMC",
   seoTitle: "About Jordan Marketing Consultants",
   metaDescription:
-    "A Houston-area SEO agency rooted in League City. Practical strategy, local optimization, content planning, and reporting you can actually read.",
+    "A Houston-area SEO agency rooted in League City. Practical SEO strategy, local optimization, content planning, and monthly reporting you can actually read.",
   sections: [
     {
       id: "hero",
@@ -67,9 +67,9 @@ export const aboutPage: PageContent = {
       type: "cardGrid",
       tone: "white",
       eyebrow: "What We Focus On",
-      heading: "Three Service Lanes, One Standard",
+      heading: "Two Service Lanes, One Standard",
       body: "Different markets need different strategies. The commitment to clear scope, documented priorities, and honest reporting does not change between them.",
-      columns: 3,
+      columns: 2,
       cards: [
         {
           title: "Local SEO",
@@ -85,12 +85,6 @@ export const aboutPage: PageContent = {
             label: "Explore Traditional SEO",
             href: "/traditional-seo-services",
           },
-        },
-        {
-          title: "Real Estate SEO",
-          icon: "home",
-          body: "For agents, teams, and brokerages building neighborhood-level visibility.",
-          cta: { label: "Explore Real Estate SEO", href: "/real-estate-seo" },
         },
       ],
     },

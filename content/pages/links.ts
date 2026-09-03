@@ -18,7 +18,7 @@ export const linksPage: PageContent = {
   label: "Link Hub",
   seoTitle: "Jordan Marketing Consultants | Houston-Area SEO",
   metaDescription:
-    "Houston-area SEO from Jordan Marketing Consultants. Request a visibility review, see packages, or read the resources.",
+    "Houston-area SEO from Jordan Marketing Consultants. Request a visibility review, see the monthly packages and pricing, or read the SEO resources here.",
   sections: [
     {
       id: "links",
