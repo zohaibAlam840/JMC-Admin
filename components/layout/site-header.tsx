@@ -1,7 +1,7 @@
 "use client";
 
 import * as React from "react";
-import Link from "next/link";
+import Link, { useLinkStatus } from "next/link";
 import { usePathname } from "next/navigation";
 import { ArrowRight, ChevronDown, Menu } from "lucide-react";
 import { Logo } from "@/components/ui/logo";
@@ -38,6 +38,29 @@ import type { NavItem } from "@/lib/types";
 const ACTIVE_LINK =
   "text-teal-ink underline decoration-teal decoration-2 underline-offset-[6px]";
 
+/**
+ * A dot beside a dropdown item that is being navigated to.
+ *
+ * Next skips the pending state entirely when the destination is already
+ * prefetched, which on this site is most of the time, so this shows up only
+ * where it is actually needed: a slow connection, or the first tap on a phone
+ * before prefetching has caught up. Rendered at a fixed size and toggled with
+ * opacity rather than mounted on demand, so it cannot shift the row it sits
+ * in, which is what the Next docs warn about.
+ */
+function PendingDot() {
+  const { pending } = useLinkStatus();
+  return (
+    <span
+      aria-hidden="true"
+      className={cn(
+        "ml-auto size-1.5 shrink-0 rounded-full bg-teal-ink transition-opacity duration-150",
+        pending ? "opacity-100" : "opacity-0"
+      )}
+    />
+  );
+}
+
 export function SiteHeader({
   nav: mainNav,
   primaryCta,
@@ -66,6 +89,10 @@ export function SiteHeader({
     const base = href.split("#")[0];
     return base === "/" ? pathname === "/" : pathname.startsWith(base);
   };
+
+  // Exact, unlike isActive: a dropdown child marks the page you are on, not
+  // the section you are in, or every industry item would light up at once.
+  const isCurrent = (href: string) => pathname === href.split("#")[0];
 
   return (
     <header
@@ -104,7 +131,23 @@ export function SiteHeader({
                       {item.children.map((child) => (
                         <li key={child.label}>
                           <NavigationMenuLink asChild>
-                            <Link href={child.href}>{child.label}</Link>
+                            <Link
+                              href={child.href}
+                              // Marks where you already are. Eight industry
+                              // pages share a layout, so without this the
+                              // dropdown gives no clue which one is open.
+                              aria-current={
+                                isCurrent(child.href) ? "page" : undefined
+                              }
+                              className={cn(
+                                "flex items-center gap-2",
+                                isCurrent(child.href) &&
+                                  "font-semibold text-teal-ink"
+                              )}
+                            >
+                              {child.label}
+                              <PendingDot />
+                            </Link>
                           </NavigationMenuLink>
                         </li>
                       ))}
@@ -199,9 +242,18 @@ export function SiteHeader({
                               <SheetClose asChild>
                                 <Link
                                   href={child.href}
-                                  className="block py-1.5 text-[0.88rem] text-subtle transition-colors hover:text-teal-ink"
+                                  aria-current={
+                                    isCurrent(child.href) ? "page" : undefined
+                                  }
+                                  className={cn(
+                                    "flex items-center gap-2 py-1.5 text-[0.88rem] transition-colors hover:text-teal-ink",
+                                    isCurrent(child.href)
+                                      ? "font-semibold text-teal-ink"
+                                      : "text-subtle"
+                                  )}
                                 >
                                   {child.label}
+                                  <PendingDot />
                                 </Link>
                               </SheetClose>
                             </li>

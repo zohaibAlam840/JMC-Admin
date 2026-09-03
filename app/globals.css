@@ -441,6 +441,43 @@
   }
 }
 
+/*
+ * Route progress bar.
+ *
+ * Interface feedback rather than decoration: most pages here are static and
+ * prefetched, so without it a click between two industry pages can look like
+ * a click that did nothing. scaleX on a fixed-width element, so it runs on the
+ * compositor and never touches layout.
+ *
+ * The reduced-motion block below flattens the animation to an instant, which
+ * leaves the bar appearing and disappearing. That is the whole signal, so it
+ * still works with the movement taken out.
+ */
+.route-progress-bar {
+  transform: scaleX(0.06);
+  transition:
+    transform 260ms ease-out,
+    opacity 240ms ease-out;
+}
+
+.route-progress-bar[data-state="running"] {
+  animation: route-progress 900ms cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+.route-progress-bar[data-state="done"] {
+  transform: scaleX(1);
+  opacity: 0;
+}
+
+@keyframes route-progress {
+  from {
+    transform: scaleX(0.06);
+  }
+  to {
+    transform: scaleX(0.9);
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   html {
     scroll-behavior: auto;
