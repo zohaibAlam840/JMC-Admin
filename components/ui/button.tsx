@@ -15,7 +15,7 @@ const buttonVariants = cva(
   // SEO Review") are wider than a 390px viewport and force the page to scroll
   // sideways. Labels wrap and centre instead; the header CTA opts back into
   // nowrap where there is room for it.
-  "relative inline-flex max-w-full items-center justify-center gap-2 rounded-md text-balance text-center font-body font-semibold leading-none tracking-[0.01em] transition-all duration-200 ease-out disabled:pointer-events-none disabled:opacity-40 [&_svg]:pointer-events-none [&_svg]:shrink-0 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-ink",
+  "relative inline-flex max-w-full items-center justify-center gap-2 rounded-md text-balance text-center font-body font-semibold leading-tight tracking-[0.01em] transition-all duration-200 ease-out disabled:pointer-events-none disabled:opacity-40 [&_svg]:pointer-events-none [&_svg]:shrink-0 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-ink",
   {
     variants: {
       variant: {
@@ -42,12 +42,21 @@ const buttonVariants = cva(
         onBrand:
           "border-[1.5px] border-brand-black/40 bg-transparent text-brand-black hover:bg-brand-black/10",
       },
+      /*
+       * 48px desktop, 52px mobile, 16px label. Build Spec §6.
+       *
+       * A minimum height with real vertical padding rather than a fixed one.
+       * A single-line label still measures exactly the height the spec asks
+       * for, because the padding and the line box add up to it. A label that
+       * wraps — "See How JMC Reports SEO Progress" does, in a hero column
+       * shared with a second button — grows the control instead of being
+       * squeezed into a box that cannot hold it.
+       */
       size: {
-        // 48px desktop, 52px mobile, 16px label. Build Spec §6.
-        sm: "h-11 px-5 text-[0.9rem]",
-        md: "h-[52px] px-8 text-base sm:h-12",
-        lg: "h-[52px] px-8 text-base sm:h-12",
-        icon: "size-12 rounded-md",
+        sm: "min-h-11 px-5 py-2.5 text-[0.9rem]",
+        md: "min-h-[52px] px-8 py-3.5 text-base sm:min-h-12",
+        lg: "min-h-[52px] px-8 py-3.5 text-base sm:min-h-12",
+        icon: "size-12 shrink-0 rounded-md p-0",
       },
     },
     defaultVariants: { variant: "primary", size: "md" },
