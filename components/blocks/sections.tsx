@@ -1116,10 +1116,31 @@ function renderSection(
     case "postList":
       return <PostList key={section.id} section={section} posts={posts} />;
     default: {
-      // Exhaustiveness check — adding a section type without a renderer
-      // becomes a compile error rather than a blank space on the page.
+      /*
+       * Compile time: assigning to `never` means adding a type to the union
+       * without a renderer here is a type error rather than a blank space on
+       * the page. That part was always right and stays.
+       *
+       * Run time: render nothing. Returning `_never` returned the section
+       * object itself, React refused it as a child, and the exception took
+       * the whole page down as a 500 — which is exactly what happened to
+       * /monthly-seo-packages, /seo-reporting and /industries when the
+       * database was migrated ahead of the deploy that could draw the new
+       * blocks.
+       *
+       * The database is edited independently of this code and will run ahead
+       * of it again: a migration lands before its deploy, or a rollback puts
+       * old code in front of a new database. A block this build cannot draw
+       * should cost that block, not the page around it.
+       */
       const _never: never = section;
-      return _never;
+      void _never;
+      if (process.env.NODE_ENV !== "production") {
+        console.warn(
+          `[sections] no renderer for type "${(section as Section).type}" — skipped`
+        );
+      }
+      return null;
     }
   }
 }
