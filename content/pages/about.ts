@@ -12,7 +12,7 @@ export const aboutPage: PageContent = {
   label: "About JMC",
   seoTitle: "About Jordan Marketing Consultants",
   metaDescription:
-    "Jordan Marketing Consultants is a Houston-area SEO agency rooted in League City, working with local, regional, and industry-focused businesses on practical SEO and clear reporting.",
+    "A Houston-area SEO agency rooted in League City. Practical SEO strategy, local optimization, content planning, and monthly reporting you can actually read.",
   sections: [
     {
       id: "hero",
@@ -21,7 +21,7 @@ export const aboutPage: PageContent = {
       heading: "Practical SEO, Explained in Plain English",
       body: "Jordan Marketing Consultants is a Houston-area SEO agency rooted in League City, helping local, regional, and industry-focused businesses improve search visibility through practical SEO strategy, content planning, local optimization, and clear reporting.",
       primaryCta: { label: "Request a Visibility Review", href: "/contact" },
-      secondaryCta: { label: "View SEO Packages", href: "/seo-packages" },
+      secondaryCta: { label: "View SEO Packages", href: "/monthly-seo-packages" },
     },
 
     {
@@ -67,9 +67,9 @@ export const aboutPage: PageContent = {
       type: "cardGrid",
       tone: "white",
       eyebrow: "What We Focus On",
-      heading: "Three Service Lanes, One Standard",
+      heading: "Two Service Lanes, One Standard",
       body: "Different markets need different strategies. The commitment to clear scope, documented priorities, and honest reporting does not change between them.",
-      columns: 3,
+      columns: 2,
       cards: [
         {
           title: "Local SEO",
@@ -85,12 +85,6 @@ export const aboutPage: PageContent = {
             label: "Explore Traditional SEO",
             href: "/traditional-seo-services",
           },
-        },
-        {
-          title: "Real Estate SEO",
-          icon: "home",
-          body: "For agents, teams, and brokerages building neighborhood-level visibility.",
-          cta: { label: "Explore Real Estate SEO", href: "/real-estate-seo" },
         },
       ],
     },
@@ -129,7 +123,7 @@ export const aboutPage: PageContent = {
       heading: "Let's Look at Where Your Visibility Stands",
       body: "A Visibility Review is the starting point for every JMC engagement, and it is useful even if you decide not to work with us.",
       primaryCta: { label: "Request a Visibility Review", href: "/contact" },
-      secondaryCta: { label: "View SEO Packages", href: "/seo-packages" },
+      secondaryCta: { label: "View SEO Packages", href: "/monthly-seo-packages" },
     },
   ],
 };

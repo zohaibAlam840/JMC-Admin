@@ -14,6 +14,8 @@ the current structure in one paste. Regenerate it after changing either:
 ```bash
 npm run sql:bundle      # rebuilds setup.sql
 npm run seed:generate   # rebuilds seed.sql from content/
+npm run sql:apply       # rebuilds apply-page-specs-02-09.sql
+npm run check           # dead links, anchors, meta lengths, one H1 per page
 ```
 
 ## An existing project — run the pieces
@@ -29,6 +31,9 @@ Each is safe to run more than once.
 | [`migrations/004_link_stack.sql`](./migrations/004_link_stack.sql) | The "Link hub" block type, for the link-in-bio page |
 | [`migrations/005_reporting_block.sql`](./migrations/005_reporting_block.sql) | The "Monthly Recap" block type, Build Spec §12 |
 | [`migrations/006_industry_grid.sql`](./migrations/006_industry_grid.sql) | The bucketed "Industries" block type, Page Spec 01 §5 |
+| [`migrations/007_lead_tier.sql`](./migrations/007_lead_tier.sql) | Which pricing card produced an enquiry, from `?tier=` on the CTA |
+| [`migrations/008_page_specs_02_09.sql`](./migrations/008_page_specs_02_09.sql) | Four block types for Page Specs 02 to 09: the expanded four questions, the example recap, the free audit form, and the waiver table |
+| [`migrations/009_package_positioning.sql`](./migrations/009_package_positioning.sql) | The positioning line and the term line on a package |
 
 ### One-off installers
 
@@ -36,6 +41,8 @@ Each is safe to run more than once.
 | --- | --- |
 | [`add-link-hub.sql`](./add-link-hub.sql) | Adds the `/links` page to a database seeded before the link hub existed. Run **after** `004`, in a separate run — Postgres will not use a new enum value in the transaction that added it. |
 | [`apply-page-spec-01.sql`](./apply-page-spec-01.sql) | Rebuilds the homepage to the ten sections of Page Spec 01, in its order. Run **after** `005` and `006`, each in its own run. Replaces the homepage sections wholesale; touches nothing else. |
+| [`apply-page-meta.sql`](./apply-page-meta.sql) | Updates every page title and meta description to the §14 lengths. Sections untouched, so it cannot disturb admin edits. |
+| [`apply-page-specs-02-09.sql`](./apply-page-specs-02-09.sql) | Rebuilds the service and pricing pages to Page Specs 02 to 07, and creates SEO Reporting, the Industries hub and its eight industry pages. Also renames `/seo-packages` to `/monthly-seo-packages`, refreshes the packages, both menus and the legacy redirects, retunes every page title and description, and unpublishes Real Estate SEO. Run **after** `008` and `009`, each in its own run. Safe to re-run. Regenerate with `npm run sql:apply`. |
 
 ## 2. Create the first admin account
 
@@ -57,8 +64,8 @@ select id, email, 'editor' from auth.users where email = 'someone@example.com';
 
 ## 4. Import the launch content
 
-Either route loads the same thing: 8 pages, 70 sections, 12 packages, 39 menu
-items, the site details, and the three known legacy redirects.
+Either route loads the same thing: 20 pages, 154 sections, 12 packages, 42 menu
+items, the site details, and the legacy redirects.
 
 **From the admin** — `/admin` offers an **Import launch content** button while
 the database is empty.

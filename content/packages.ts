@@ -34,9 +34,11 @@ export const packages: Package[] = [
     id: "local-neighborhood",
     group: "local",
     name: "Neighborhood",
+    positioning: "Local Foundation",
     price: "$875",
     priceUnit: "/month",
     onboardingFee: "$349 one-time",
+    term: "12-month term, then month to month",
     bestFit:
       "Best for businesses focused on improving visibility in one primary service area.",
     deliverables: [
@@ -50,15 +52,17 @@ export const packages: Package[] = [
       "Local search grid tracking",
       "Monthly Recap and Quarterly Project Update",
     ],
-    cta: { label: "Request Neighborhood Review", href: "/contact" },
+    cta: { label: "Start with Neighborhood", href: "/contact?tier=neighborhood" },
   },
   {
     id: "local-citywide",
     group: "local",
     name: "Citywide",
+    positioning: "City-Level Growth",
     price: "$1,165",
     priceUnit: "/month",
     onboardingFee: "$449 one-time",
+    term: "12-month term, then month to month",
     bestFit:
       "Best for businesses competing more aggressively across a city-level market with broader content and review support.",
     deliverables: [
@@ -72,16 +76,18 @@ export const packages: Package[] = [
       "Local search grid tracking",
       "Monthly Recap and Quarterly Project Update",
     ],
-    cta: { label: "Request Citywide Review", href: "/contact" },
+    cta: { label: "Start with Citywide", href: "/contact?tier=citywide" },
     featured: true,
   },
   {
     id: "local-metro",
     group: "local",
     name: "Metro",
+    positioning: "Metro Expansion",
     price: "$1,695",
     priceUnit: "/month",
     onboardingFee: "$649 one-time",
+    term: "12-month term, then month to month",
     bestFit:
       "Designed for businesses competing across multiple cities or high-demand metro areas where consistent content, visibility, and reputation signals are required to gain market share.",
     deliverables: [
@@ -95,7 +101,7 @@ export const packages: Package[] = [
       "Local search grid tracking",
       "Monthly Recap and Quarterly Project Update",
     ],
-    cta: { label: "Request Metro Review", href: "/contact" },
+    cta: { label: "Start with Metro", href: "/contact?tier=metro" },
   },
 
   /* ---------------------------------------------------------- traditional -- */
@@ -103,9 +109,11 @@ export const packages: Package[] = [
     id: "traditional-regional",
     group: "traditional",
     name: "Regional",
+    positioning: "Multi-Market Foundation",
     price: "$2,295",
     priceUnit: "/month",
     onboardingFee: "$895 one-time",
+    term: "12-month term, then month to month",
     bestFit:
       "Best for businesses targeting 1 to 3 priority markets or a defined regional service footprint.",
     deliverables: [
@@ -117,15 +125,17 @@ export const packages: Package[] = [
       "Monthly dashboard reporting",
       "Monthly Recap and Quarterly Project Update",
     ],
-    cta: { label: "Request Regional Review", href: "/contact" },
+    cta: { label: "Start with Regional", href: "/contact?tier=regional" },
   },
   {
     id: "traditional-national",
     group: "traditional",
     name: "National",
+    positioning: "National Growth",
     price: "$3,495",
     priceUnit: "/month",
     onboardingFee: "$1,095 one-time",
+    term: "12-month term, then month to month",
     bestFit:
       "Best for businesses targeting broader multi-market visibility across larger service areas, multiple service lines, or more competitive search markets.",
     deliverables: [
@@ -137,16 +147,18 @@ export const packages: Package[] = [
       "Monthly dashboard reporting",
       "Monthly Recap and Quarterly Project Update",
     ],
-    cta: { label: "Request National Review", href: "/contact" },
+    cta: { label: "Start with National", href: "/contact?tier=national" },
     featured: true,
   },
   {
     id: "traditional-national-plus",
     group: "traditional",
     name: "National+",
+    positioning: "Competitive Expansion",
     price: "$5,295",
     priceUnit: "/month",
     onboardingFee: "$1,295 one-time",
+    term: "12-month term, then month to month",
     bestFit:
       "Best for larger brands, complex service organizations, or high-competition industries that need broader search coverage and a more aggressive growth plan.",
     deliverables: [
@@ -158,7 +170,7 @@ export const packages: Package[] = [
       "Monthly dashboard reporting",
       "Monthly Recap and Quarterly Project Update",
     ],
-    cta: { label: "Request National+ Review", href: "/contact" },
+    cta: { label: "Start with National+", href: "/contact?tier=national-plus" },
   },
 
   /* --------------------------------------------------------- real estate -- */
@@ -217,7 +229,7 @@ export const packages: Package[] = [
     priceUnit: "one-time",
     timeline: "30 days",
     bestFit:
-      "Best for businesses that need a stronger local SEO foundation before moving into ongoing monthly service.",
+      "For businesses that need a stronger local SEO foundation before moving into ongoing monthly service.",
     deliverables: [
       "Kickoff and access setup",
       "Local SEO audit with priority findings",
@@ -230,7 +242,7 @@ export const packages: Package[] = [
       "Local search grid baseline snapshot",
       "30-Day Action Roadmap",
     ],
-    cta: { label: "Request Neighborhood Sprint", href: "/contact" },
+    cta: { label: "Start the Neighborhood Sprint", href: "/contact?type=sprint" },
   },
   {
     id: "sprint-regional",
@@ -240,7 +252,7 @@ export const packages: Package[] = [
     priceUnit: "one-time",
     timeline: "30 days",
     bestFit:
-      "Best for businesses targeting a broader service region or multiple markets that want a strong SEO foundation before starting monthly service.",
+      "For businesses targeting a broader service region or multiple markets that want a strong foundation before starting monthly service.",
     deliverables: [
       "Kickoff and access setup",
       "Technical and on-page SEO audit",
@@ -251,8 +263,11 @@ export const packages: Package[] = [
       "Backlink audit",
       "30-Day Roadmap and next-step recommendations",
     ],
-    cta: { label: "Request Regional Sprint", href: "/contact" },
-    featured: true,
+    // No emphasis on any sprint. Page Spec 07 §4 is explicit that the three
+    // are not a ladder, unlike the monthly tiers: Neighborhood is local work
+    // and the other two are technical, which is a difference in kind rather
+    // than in scale. Marking one "most chosen" would misdescribe the set.
+    cta: { label: "Start the Regional Sprint", href: "/contact?type=sprint" },
   },
   {
     id: "sprint-national",
@@ -262,7 +277,7 @@ export const packages: Package[] = [
     priceUnit: "one-time",
     timeline: "30 days",
     bestFit:
-      "Best for businesses that need foundational technical and on-page SEO work in place before starting a national monthly campaign.",
+      "For businesses that need foundational technical and on-page SEO work in place before starting a national monthly campaign.",
     deliverables: [
       "Kickoff and access setup",
       "Technical and on-page SEO audit",
@@ -273,7 +288,7 @@ export const packages: Package[] = [
       "Backlink audit",
       "30-Day Roadmap and next-step recommendations",
     ],
-    cta: { label: "Request National Sprint", href: "/contact" },
+    cta: { label: "Start the National Sprint", href: "/contact?type=sprint" },
   },
 ];
 

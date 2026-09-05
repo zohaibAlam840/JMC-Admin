@@ -17,8 +17,10 @@ import type { IndustryGridSection } from "@/lib/types";
  * method being industry-agnostic, and "we are experts in aerospace" would
  * contradict it.
  *
- * The group header is a label, a thin rule, and the service line at the far
- * right. No heavy dividers, no boxed sections.
+ * The group header is a label and a thin rule, and nothing else. The revised
+ * spec forbids naming a service line beside it: each group holds both
+ * single-area operators and multi-market competitors, so a lane label would be
+ * wrong for half the cards under it.
  */
 export function IndustryGrid({ section }: { section: IndustryGridSection }) {
   return (
@@ -38,12 +40,6 @@ export function IndustryGrid({ section }: { section: IndustryGridSection }) {
                 {group.label}
               </span>
               <span aria-hidden="true" className="h-px flex-1 bg-line" />
-              <Link
-                href={group.serviceHref}
-                className="shrink-0 text-[0.8125rem] font-semibold text-teal-ink underline-offset-4 hover:underline"
-              >
-                {group.serviceLine}
-              </Link>
             </div>
 
             {/* 4 across on desktop, 2 on tablet, 1 on mobile. */}

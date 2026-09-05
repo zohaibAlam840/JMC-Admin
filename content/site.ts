@@ -25,9 +25,9 @@ export const primaryCta = {
 /**
  * Approved main navigation.
  *
- * Six dropdown items have no page at launch. The Master Brief forbids
- * placeholder pages, so each routes to the closest real section instead.
- * When the phase-two pages ship, these hrefs become the only thing to change.
+ * Two dropdown items still have no page: SEO Content Strategy and the
+ * Resources hub's deeper pages. The Master Brief forbids placeholder pages, so
+ * each routes to the closest real section instead.
  */
 export const mainNav: NavItem[] = [
   { label: "Home", href: "/" },
@@ -37,41 +37,45 @@ export const mainNav: NavItem[] = [
     children: [
       { label: "Local SEO Services", href: "/local-seo-services" },
       { label: "Traditional SEO Services", href: "/traditional-seo-services" },
-      // Phase two: /google-business-profile-optimization
       {
         label: "Google Business Profile Optimization",
-        href: "/local-seo-services#includes",
+        href: "/google-business-profile-optimization",
       },
       // Phase two: /seo-content-strategy
       {
         label: "SEO Content Strategy",
         href: "/traditional-seo-services#includes",
       },
-      // Phase two: /seo-reporting
-      { label: "SEO Reporting", href: "/seo-packages#reporting" },
+      // In the dropdown as well as the footer. Build Spec §7 keeps SEO
+      // Reporting out of the top-level menu, not out of the site.
+      { label: "SEO Reporting", href: "/seo-reporting" },
     ],
   },
   {
     label: "Industries",
-    // The Industries parent is clickable, unlike the other two dropdowns —
-    // Build Spec §7. It points at the homepage grid until /industries/ exists.
-    href: "/#industries",
+    // The only clickable dropdown parent on the site, Build Spec §7 and Page
+    // Spec 08. On mobile a hover-only parent is a dead tap, which is most of
+    // why the hub page exists.
+    href: "/industries",
     children: [
-      { label: "Home Services & Trades", href: "/local-seo-services" },
-      { label: "Healthcare & Wellness", href: "/local-seo-services" },
-      { label: "Hospitality & Attractions", href: "/local-seo-services" },
-      { label: "Professional Services", href: "/local-seo-services" },
-      { label: "Energy & Petrochemical", href: "/traditional-seo-services" },
-      { label: "Maritime & Logistics", href: "/traditional-seo-services" },
-      { label: "Commercial Construction", href: "/traditional-seo-services" },
-      { label: "Aerospace & Aviation", href: "/traditional-seo-services" },
+      { label: "Home Services & Trades", href: "/industries/home-services-trades" },
+      { label: "Healthcare & Wellness", href: "/industries/healthcare-wellness" },
+      { label: "Hospitality & Attractions", href: "/industries/hospitality-attractions" },
+      { label: "Professional Services", href: "/industries/professional-services" },
+      { label: "Energy & Petrochemical", href: "/industries/energy-petrochemical" },
+      { label: "Maritime & Logistics", href: "/industries/maritime-logistics" },
+      {
+        label: "Commercial Construction",
+        href: "/industries/commercial-construction-infrastructure",
+      },
+      { label: "Aerospace & Aviation", href: "/industries/aerospace-aviation" },
     ],
   },
   {
     label: "Pricing",
-    href: "/seo-packages",
+    href: "/monthly-seo-packages",
     children: [
-      { label: "Monthly SEO Packages", href: "/seo-packages" },
+      { label: "Monthly SEO Packages", href: "/monthly-seo-packages" },
       { label: "Launch Sprints", href: "/launch-sprints" },
     ],
   },
@@ -91,30 +95,33 @@ export const footerNav: { heading: string; links: { label: string; href: string 
       { label: "Traditional SEO Services", href: "/traditional-seo-services" },
       {
         label: "Google Business Profile Optimization",
-        href: "/local-seo-services#includes",
+        href: "/google-business-profile-optimization",
       },
-      // Deliberately kept out of the main menu (Build Spec §7), which makes
-      // the footer one of only two places SEO Reporting is reachable.
-      { label: "SEO Reporting", href: "/#monthly-recap" },
+      // Kept out of the top-level menu by Build Spec §7, so the footer is one
+      // of the few places it is reachable without following a CTA.
+      { label: "SEO Reporting", href: "/seo-reporting" },
     ],
   },
   {
     heading: "Industries",
     links: [
-      { label: "Home Services & Trades", href: "/local-seo-services" },
-      { label: "Healthcare & Wellness", href: "/local-seo-services" },
-      { label: "Hospitality & Attractions", href: "/local-seo-services" },
-      { label: "Professional Services", href: "/local-seo-services" },
-      { label: "Energy & Petrochemical", href: "/traditional-seo-services" },
-      { label: "Maritime & Logistics", href: "/traditional-seo-services" },
-      { label: "Commercial Construction", href: "/traditional-seo-services" },
-      { label: "Aerospace & Aviation", href: "/traditional-seo-services" },
+      { label: "Home Services & Trades", href: "/industries/home-services-trades" },
+      { label: "Healthcare & Wellness", href: "/industries/healthcare-wellness" },
+      { label: "Hospitality & Attractions", href: "/industries/hospitality-attractions" },
+      { label: "Professional Services", href: "/industries/professional-services" },
+      { label: "Energy & Petrochemical", href: "/industries/energy-petrochemical" },
+      { label: "Maritime & Logistics", href: "/industries/maritime-logistics" },
+      {
+        label: "Commercial Construction",
+        href: "/industries/commercial-construction-infrastructure",
+      },
+      { label: "Aerospace & Aviation", href: "/industries/aerospace-aviation" },
     ],
   },
   {
     heading: "Company",
     links: [
-      { label: "Monthly SEO Packages", href: "/seo-packages" },
+      { label: "Monthly SEO Packages", href: "/monthly-seo-packages" },
       { label: "Launch Sprints", href: "/launch-sprints" },
       { label: "Resources", href: "/resources" },
       { label: "About", href: "/about" },

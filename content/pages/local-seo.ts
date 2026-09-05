@@ -1,61 +1,65 @@
 import type { PageContent } from "@/lib/types";
 
 /**
- * Local SEO Services.
+ * Local SEO Services — Page Spec 02. Nine sections.
  *
- * Structure is approved (Local SEO Wireframe v1). Copy is DRAFT — no copy deck
- * exists for this page. Written against the wireframe intent and the language
- * guardrails in Approved Positioning §9. Needs client sign-off.
+ * Two things on this page are worth knowing before editing it.
+ *
+ * §4 carries the local search grid, which is the strongest differentiator on
+ * the page: most agencies report one blended ranking number, and a grid shows
+ * visibility changing block to block. It is drawn in code rather than shown as
+ * a screenshot, because a real heatmap is client data and a capture invites
+ * questions about whose account it is and whether it is typical.
+ *
+ * §6 Callout A routes to /contact and must never route to Traditional SEO.
+ * Above the Metro tier a business is still a Local buyer if it competes in
+ * local results, however many locations it has. Seven locations across Texas
+ * is a large Local engagement and gets a custom Local quote. Traditional is a
+ * different problem, not a bigger one.
+ *
+ * The old indexed slug is /local-seo-service, singular. This page is plural,
+ * one character apart, and it takes more redirect traffic than any other page
+ * on the site. The redirect is in next.config.ts and in the seed.
+ *
+ * Copy is DRAFT. The Step 4 copy deck replaces it.
  */
 export const localSeoPage: PageContent = {
   slug: "/local-seo-services",
   label: "Local SEO Services",
-  seoTitle: "Local SEO Services in the Houston Area",
+  seoTitle: "Local SEO Services | Houston Area",
   metaDescription:
-    "Local SEO services for Houston-area businesses. Google Business Profile support, local content, citations, review support, rank tracking, and clear monthly reporting.",
+    "Local SEO for Houston-area businesses. Google Business Profile, citations, reviews, local search grid tracking, and a monthly recap of what actually changed.",
   sections: [
     {
       id: "hero",
       type: "heroSplit",
       eyebrow: "Local SEO Services",
-      heading: "Get Found by the People Searching in Your Service Area",
-      body: "Local SEO helps your business show up when nearby customers search for what you do. JMC works on the pieces that drive local visibility: your Google Business Profile, your service pages, your local listings, your reviews, and the reporting that shows what changed.",
+      heading: "Get Found Where Your Customers Are Looking",
+      body: "Local SEO is the work of appearing when somebody nearby searches for what you do. It runs across your Google Business Profile, your listings, your reviews and your service pages, and it is measured across your whole service area rather than as one number.",
       primaryCta: { label: "Request a Visibility Review", href: "/contact" },
       secondaryCta: {
         label: "View Local SEO Packages",
-        href: "/seo-packages#local",
+        href: "/monthly-seo-packages#local",
       },
-      // Stat + coverage + channels. Deliberately a different mix from the
-      // homepage so the two pages don't open identically.
+      // Coverage first, which gives the hero panel the service-area motif
+      // rather than the reporting bars used on the homepage.
       showcase: [
         {
-          kind: "stat",
-          label: "Neighborhood tier",
-          title: "What Gets Tracked",
-          // Real scope figures from the pricing sheet, not invented results.
-          stats: [
-            { value: "30", label: "Tracked keywords" },
-            { value: "3", label: "Tracked competitors" },
-            { value: "8", label: "Profile posts a month" },
-          ],
-          footnote: "Scales with Citywide and Metro",
-        },
-        {
           kind: "coverage",
-          label: "Service area",
-          title: "Local Search Grid",
-          items: ["Neighborhood", "Citywide", "Metro"],
-        },
-        {
-          kind: "channels",
           label: "Where you appear",
           title: "Local Surfaces",
           items: [
             "Google Search results",
             "Google Maps and the map pack",
             "Service-area searches",
+            "The profile panel itself",
           ],
-          footnote: "Tracked across your whole service area",
+        },
+        {
+          kind: "channels",
+          label: "Three tiers",
+          title: "Sized by Area",
+          items: ["Neighborhood", "Citywide", "Metro"],
         },
       ],
     },
@@ -63,124 +67,120 @@ export const localSeoPage: PageContent = {
     {
       id: "audience-fit",
       type: "cardGrid",
-      tone: "white",
-      variant: "split",
+      tone: "surface",
+      variant: "cards",
+      columns: 4,
       eyebrow: "Is This You",
-      heading: "Local SEO Is the Right Path When Your Customers Are Nearby",
-      body: "If your business depends on people finding you in a specific city or service area, local SEO is where the work should start.",
-      columns: 3,
+      heading: "Who Local SEO Is For",
+      body: "The first three sort by how customers reach you. The fourth is about scale, so a practice with four offices is both the third and the fourth.",
       cards: [
         {
-          title: "A Defined Local Market",
+          title: "Storefront",
+          icon: "storefront",
+          body: "Customers come to you, and being findable on a map is most of the battle. Shops, showrooms, studios, gyms.",
+        },
+        {
+          title: "Service Area",
           icon: "map-pin",
-          body: "You serve a city, a set of neighborhoods, or a drive-time radius rather than a national audience.",
+          body: "You travel to the customer, so you are ranked against an area rather than an address. Trades, contractors, mobile services.",
         },
         {
-          title: "Search and Maps Visibility",
-          icon: "search",
-          body: "You need to appear in both regular Google results and the map pack when someone searches nearby.",
+          title: "Appointment-Based",
+          icon: "calendar",
+          body: "Customers book time with you, and they compare two or three options before doing it. Practices, clinics, salons, consultants.",
         },
         {
-          title: "Service Pages That Work",
-          icon: "file-text",
-          body: "Your services need pages that explain what you do clearly enough for search engines and buyers to understand.",
-        },
-        {
-          title: "Google Business Profile Support",
-          icon: "star",
-          body: "Your profile needs consistent attention, not a one-time setup that goes stale after a month.",
-        },
-        {
-          title: "Reporting You Can Read",
-          icon: "bar-chart",
-          body: "You want to know what was done and what changed without decoding a dashboard on your own.",
+          title: "Multi-Location",
+          icon: "building",
+          body: "Several locations competing across the same broad area. Each one needs its own profile, its own citations and its own tracking, or they compete with each other.",
         },
       ],
-      cta: { label: "See What Local SEO Includes", href: "#includes" },
     },
 
     {
       id: "includes",
       type: "cardGrid",
-      tone: "surface",
-      variant: "numbered",
-      eyebrow: "What's Included",
-      heading: "The Work Behind Local Search Visibility",
-      body: "Local SEO is a set of connected workstreams. These are the pieces JMC manages month to month.",
+      tone: "white",
+      variant: "cards",
       columns: 3,
+      eyebrow: "What You Get",
+      heading: "What Local SEO Includes",
+      body: "Every package includes all six. Tiers differ by volume, not by what is included.",
       cards: [
         {
-          title: "Google Business Profile Optimization",
-          icon: "star",
-          body: "Profile completeness, categories, services, posts, photos, and the ongoing activity that supports local trust.",
+          title: "SEO Strategy & Roadmap",
+          icon: "compass",
+          body: "A plan for the next quarter rather than a list of tasks, with the reasoning behind the order it runs in.",
         },
         {
-          title: "Local Content and Service Pages",
-          icon: "file-text",
-          body: "Strategic SEO pages and service page improvements built around what local buyers actually search for.",
+          title: "Content & On-Page Optimization",
+          icon: "pencil",
+          body: "Service pages, titles, descriptions and on-page structure written for how people in your area actually search.",
         },
         {
-          title: "Citation and Listing Support",
-          icon: "link",
-          body: "Consistent name, address, and phone details across the directories and platforms that influence local results.",
-        },
-        {
-          title: "Review Support",
-          icon: "message-square",
-          body: "Review request sends and reply management so your reputation keeps building instead of stalling.",
-        },
-        {
-          title: "Local Rank Tracking",
+          title: "Technical Monitoring",
           icon: "gauge",
-          body: "Local search grid tracking that shows where you appear across your service area, not just one average position.",
+          body: "Crawling, indexing and site health watched month to month, so a problem is found before it costs you visibility.",
         },
         {
-          title: "Monthly Recaps and Reporting",
-          icon: "clipboard-check",
-          body: "A plain-English summary of what was completed, what moved, and what is prioritized next.",
+          title: "Detailed Monthly Reporting",
+          icon: "bar-chart",
+          body: "What was tracked, what moved and what did not, in language that does not need translating.",
+        },
+        {
+          title: "Monthly Project Recap (via Loom or video call)",
+          icon: "message-square",
+          body: "A person walking through the month rather than a file dropped into an inbox, with room to ask questions.",
+        },
+        {
+          title: "Review Management",
+          icon: "star",
+          body: "Review requests sent to real customers and replies written to what comes back, positive and negative alike.",
         },
       ],
-      cta: { label: "Compare Local SEO Packages", href: "/seo-packages#local" },
     },
 
     {
-      id: "system",
-      type: "featureSplit",
-      tone: "white",
-      eyebrow: "How It Fits Together",
-      heading: "Local Visibility Is One System, Not Six Separate Tasks",
-      body: "Each piece of local SEO supports the others. A strong Google Business Profile works better when your service pages back it up. Reviews matter more when your listings are consistent. Tracking only helps if someone reads it and acts on it. JMC manages these as one system and reports on them together.",
-      cta: { label: "Start with a Visibility Review", href: "/contact" },
-      groups: [
+      id: "visibility-system",
+      type: "cardGrid",
+      tone: "surface",
+      variant: "cards",
+      // Five, laid out as 3 + 2 centred. Padding to six with a filler card is
+      // explicitly forbidden by §4.
+      columns: 5,
+      eyebrow: "The System",
+      heading: "The Local Visibility System",
+      body: "Five parts, worked together. Any one of them on its own tends to stall.",
+      cards: [
         {
           title: "Google Business Profile",
-          icon: "star",
-          body: "The front door for local search and map results.",
+          icon: "storefront",
+          body: "Categories, services, information, photos and posts. For many local searches the profile is what is being ranked.",
+          cta: {
+            label: "Profile optimization",
+            href: "/google-business-profile-optimization",
+          },
         },
         {
-          title: "Website Content",
-          icon: "file-text",
-          body: "Service and location pages that explain what you do.",
-        },
-        {
-          title: "Citations and Listings",
-          icon: "link",
-          body: "Consistent business details across the platforms that count.",
+          title: "Citations & NAP Consistency",
+          icon: "shield-check",
+          body: "One standard for your name, address and phone number, applied across the listings that currently disagree with each other.",
         },
         {
           title: "Reviews",
-          icon: "message-square",
-          body: "Ongoing requests and replies that build local trust.",
+          icon: "star",
+          body: "Requests to real customers and replies to what arrives. Nothing fabricated, nothing incentivised.",
         },
         {
-          title: "Tracking",
-          icon: "gauge",
-          body: "Grid-based visibility tracking across your service area.",
+          title: "Local Search Grid Tracking",
+          icon: "map-pin",
+          body: "Visibility measured across a grid of points in your service area rather than as one blended rank, so you can see where you are strong and where you are not.",
+          visual: "searchGrid",
         },
         {
-          title: "Monthly Recaps",
-          icon: "clipboard-check",
-          body: "The summary that ties the month's work back to priorities.",
+          title: "Strategic SEO Pages",
+          icon: "file-text",
+          body: "Pages built for the services and areas worth competing for, rather than one page trying to hold all of them.",
         },
       ],
     },
@@ -188,90 +188,117 @@ export const localSeoPage: PageContent = {
     {
       id: "houston",
       type: "fullWidthText",
-      tone: "surface",
-      eyebrow: "Houston-Area SEO Agency",
-      heading: "Rooted in League City. Built for Houston-Area Growth.",
-      body: "JMC is based in League City and works with businesses across the Greater Houston area. Local SEO is not limited to one part of the map. The strategy is built around where your customers actually are and where your business is trying to grow.",
-      cta: { label: "Learn More About JMC", href: "/about" },
+      tone: "white",
+      eyebrow: "Where JMC Is",
+      heading: "Based in League City, Working Across the Houston Area",
+      body: "JMC is a Houston-area agency and most of its clients are within reach of it. Local SEO is not limited to the Houston area, though, and the work is the same wherever a business competes for customers in a defined patch.",
     },
 
     {
       id: "packages",
       type: "pricingCards",
-      tone: "white",
-      eyebrow: "Local SEO Packages",
-      heading: "Monthly Local SEO Built Around Your Market Size",
-      body: "Three levels of ongoing local SEO support. Every package includes strategy, on-page work, technical monitoring, review management, and a Monthly Recap.",
+      tone: "surface",
+      eyebrow: "Pricing",
+      heading: "Local SEO Packages",
+      body: "Three tiers, sized by how much ground you are competing for. Every tier includes all six of the deliverables above.",
       packageIds: ["local-neighborhood", "local-citywide", "local-metro"],
-      cta: { label: "View All SEO Packages", href: "/seo-packages" },
+    },
+
+    /*
+     * Callout A. Plain text under the three cards rather than a fourth card,
+     * by instruction: a card here would read as a hidden fourth tier.
+     *
+     * It routes to /contact for a quote and must never route to Traditional
+     * SEO. However many locations a business runs, if it competes in local
+     * results it is a Local buyer, and sending it to Traditional would put it
+     * in the wrong lane entirely.
+     */
+    {
+      id: "custom-scope",
+      type: "fullWidthText",
+      tone: "surface",
+      heading: "Working With Something Bigger?",
+      body: "If the scope is bigger or more involved than what is here, JMC will look at it and put together a quote. However many locations are involved, a business competing in local results is still a Local engagement.",
+      cta: { label: "Request a Visibility Review", href: "/contact" },
+    },
+
+    /*
+     * Callout B, the strongest conversion mechanic on the page. $799 buys a
+     * waiver worth up to $649, and the Neighborhood sprint unlocks it on all
+     * three Local tiers. A tinted box rather than the dark statement band:
+     * this is an offer beside the prices, not the visual peak of the page.
+     */
+    {
+      id: "sprint-callout",
+      type: "calloutBanner",
+      tone: "surface",
+      heading: "Or Start With a Launch Sprint",
+      body: "The Neighborhood Launch Sprint is $799, one-time, completed within 30 days. It builds the local foundation and finishes with a 30-day roadmap. Begin monthly service within 30 days of the sprint finishing and the onboarding fee on any Local package is waived, up to $649.",
+      primaryCta: { label: "View Launch Sprints", href: "/launch-sprints" },
+      secondaryCta: {
+        label: "View Local SEO Packages",
+        href: "/monthly-seo-packages#local",
+      },
     },
 
     {
-      id: "reporting",
-      type: "cardGrid",
-      tone: "surface",
-      emphasis: true,
-      eyebrow: "Clear Reporting",
-      heading: "Every Month You Get a Straight Answer",
-      body: "Local SEO involves a lot of small moving parts. Reporting is how those parts stay visible to you instead of disappearing into a dashboard.",
-      columns: 4,
-      cards: [
-        {
-          title: "What Was Completed",
-          body: "The specific work delivered this month across profile, content, listings, and reviews.",
-        },
-        {
-          title: "Why It Matters",
-          body: "How each piece supports local visibility, relevance, or trust.",
-        },
-        {
-          title: "What Changed",
-          body: "Movement in local visibility, tracked keywords, and grid coverage across your service area.",
-        },
-        {
-          title: "What Comes Next",
-          body: "The priorities queued for next month and the reasoning behind them.",
-        },
-      ],
-      cta: { label: "See How JMC Reports SEO Progress", href: "/contact" },
+      id: "monthly-recap",
+      type: "reportingBlock",
+      tone: "white",
+      eyebrow: "Reporting",
+      heading: "The Monthly Recap",
+      body: "Four questions, every month, in the same order.",
+      did: "The pages rewritten, the listings corrected, the posts published, named individually.",
+      why: "Why that work was the priority ahead of everything else in the queue.",
+      changed: "Grid visibility across the service area, compared with last month, including the quiet ones.",
+      next: "What is queued for the coming month, written down before it starts.",
+      cta: {
+        label: "See How JMC Reports SEO Progress",
+        href: "/seo-reporting",
+      },
     },
 
     {
       id: "faq",
       type: "faq",
-      tone: "white",
+      tone: "surface",
       eyebrow: "Questions",
-      heading: "Local SEO Questions We Hear Often",
+      heading: "Local SEO Questions",
       items: [
         {
-          question: "How long does local SEO take to show results?",
+          question: "How long before there are results?",
           answer:
-            "Most businesses start seeing measurable movement in local visibility within three to six months, though profile and listing improvements can show up sooner. The timeline depends on your market's competitiveness, your site's current condition, and how consistently the work is applied. We track movement monthly so you can see progress before it turns into leads.",
+            "Local tends to move faster than national search because the competing field is smaller, and profile or listing corrections can show within weeks. Ranking movement across a service area is a longer arc, usually a few months before the shape of it is clear. Nobody can honestly give you a date, and the recap tells you which stage the work is at each month.",
         },
         {
-          question: "Why does my Google Business Profile matter so much?",
+          question: "Is there a contract?",
           answer:
-            "For local searches, your Google Business Profile is often the first thing a customer sees and sometimes the only thing they interact with. Categories, services, posts, photos, and reviews all influence whether you appear in map results and whether someone chooses you once you do.",
+            "Yes. Twelve months, then month to month, with 30 days written notice to end it. The term exists because the work compounds and a three-month engagement cannot show what a twelve-month one can.",
         },
         {
-          question: "Do you work with competing businesses in the same area?",
+          question: "What does the onboarding fee cover?",
           answer:
-            "No. We do not take on two clients competing for the same service in the same primary market. If your market is already covered, we will tell you upfront rather than split our attention.",
+            "The audit, tracking setup, the foundational on-page work and the local visibility setup: profile, categories, services, citations and the grid baseline. It is the work that has to happen once before the monthly work means anything.",
         },
         {
-          question: "What does monthly reporting actually include?",
+          question: "How is this different from Traditional SEO?",
           answer:
-            "A Monthly Recap covering the work completed, why it mattered, what moved in your tracked keywords and local grid, and the priorities for the following month. It is delivered as a plain-English summary by Loom or video call, not just a raw dashboard export.",
+            "Local SEO is for businesses competing for customers in a defined area, however many locations they run in it. Traditional SEO is for businesses competing across multiple markets, multiple service lines, or genuinely competitive search. It is a difference in reach, not in size.",
         },
         {
-          question: "Do I need new pages on my website?",
+          question: "Do you guarantee rankings?",
           answer:
-            "Often yes. Strategic SEO pages give search engines and buyers a clear answer for each service you offer. Your package includes a set number of these pages per month, and we prioritize them based on what your market is actually searching for.",
+            "No, and anyone who does is guessing. What is guaranteed is the scope, the reporting, and knowing exactly what was done and why.",
         },
         {
-          question: "Can you do local SEO on my existing website?",
+          question: "What is local search grid tracking?",
           answer:
-            "In most cases, yes. We start with an audit to confirm the site can support the work. If something structural is holding visibility back, we will flag it as a priority finding rather than working around it quietly.",
+            "Instead of checking your rank from one point, it checks from a grid of points across your service area. That matters because local results change street by street: you can be first near your own address and invisible four miles away, and one blended number hides that completely.",
+        },
+        {
+          question: "What if the business is not in Houston?",
+          answer:
+            "Local SEO is not limited to the Houston area. JMC is based in League City and most clients are nearby, but the work is the same for a business competing in a defined area anywhere.",
         },
       ],
       cta: { label: "Request a Visibility Review", href: "/contact" },
@@ -280,12 +307,12 @@ export const localSeoPage: PageContent = {
     {
       id: "final-cta",
       type: "finalCta",
-      heading: "Find Out Where Your Local Visibility Stands",
-      body: "A Visibility Review shows where you currently appear, where the gaps are, and which local SEO priorities are worth acting on first.",
+      heading: "Start With a Visibility Review",
+      body: "Where you appear across your service area today, what is holding it back, and which of those gaps is worth closing first.",
       primaryCta: { label: "Request a Visibility Review", href: "/contact" },
       secondaryCta: {
         label: "View Local SEO Packages",
-        href: "/seo-packages#local",
+        href: "/monthly-seo-packages#local",
       },
     },
   ],

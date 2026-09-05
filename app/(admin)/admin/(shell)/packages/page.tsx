@@ -156,6 +156,13 @@ function PackageForm({ pkg }: { pkg?: AdminPackage }) {
         </Field>
       </div>
 
+      <Field
+        label="Positioning line"
+        hint="A short line under the name, e.g. “Local Foundation”. It is what makes three tiers read as an arc rather than as three prices."
+      >
+        <Input name="positioning" defaultValue={pkg?.positioning ?? ""} />
+      </Field>
+
       <div className="grid gap-4 sm:grid-cols-2">
         <Field label="Onboarding fee" hint="Monthly packages only. e.g. “$349 one-time”.">
           <Input name="onboarding_fee" defaultValue={pkg?.onboarding_fee ?? ""} />
@@ -164,6 +171,13 @@ function PackageForm({ pkg }: { pkg?: AdminPackage }) {
           <Input name="timeline" defaultValue={pkg?.timeline ?? ""} />
         </Field>
       </div>
+
+      <Field
+        label="Term"
+        hint="Monthly packages only. Keep the second half — “12-month term, then month to month” is a much easier thing to accept than the first half alone, and it is true."
+      >
+        <Input name="term" defaultValue={pkg?.term ?? ""} />
+      </Field>
 
       <Field label="Who it is for" hint="One or two sentences. Shown under the price.">
         <Textarea name="best_fit" defaultValue={pkg?.best_fit} rows={3} />

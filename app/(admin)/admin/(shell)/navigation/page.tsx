@@ -166,7 +166,7 @@ function NavItemForm({
           <input type="hidden" name="href" value="" />
         ) : (
           <Field label="Links to" className="min-w-[12rem] flex-1">
-            <Input name="href" defaultValue={item?.href} placeholder="/seo-packages" />
+            <Input name="href" defaultValue={item?.href} placeholder="/monthly-seo-packages" />
           </Field>
         )}
 

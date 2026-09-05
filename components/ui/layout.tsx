@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { Reveal } from "@/components/motion/reveal";
 import { cn } from "@/lib/utils";
 
@@ -94,29 +95,38 @@ export function SectionHeader({
 }
 
 /**
- * Base surface card. Larger radius and softer elevation than the launch build,
- * matching the reference direction.
+ * Base surface card.
+ *
+ * Defined by a hairline border rather than a shadow, per Build Spec §1.5; the
+ * shadow appears on hover and nowhere else.
+ *
+ * Given an `href` the whole card becomes the click target, which §10 requires:
+ * "entire card is the click target when href is present, not just the link
+ * text". Anything inside it must therefore not be a link of its own.
  */
 export function Card({
   children,
   className,
   interactive = false,
+  href,
 }: {
   children: React.ReactNode;
   className?: string;
   interactive?: boolean;
+  href?: string;
 }) {
-  return (
-    <div
-      className={cn(
-        "flex h-full flex-col rounded-bento border border-line bg-white p-6 transition-all duration-300 ease-out-soft sm:p-7",
-        interactive &&
-          "hover:-translate-y-1.5 hover:border-teal/50 hover:shadow-lift",
-        className
-      )}
-    >
+  const classes = cn(
+    "flex h-full flex-col rounded-card border border-line bg-white p-6 transition-shadow duration-200 sm:p-7",
+    interactive && "hover:shadow-lift",
+    className
+  );
+
+  return href ? (
+    <Link href={href} className={classes}>
       {children}
-    </div>
+    </Link>
+  ) : (
+    <div className={classes}>{children}</div>
   );
 }
 

@@ -64,7 +64,8 @@ export const ICON_NAMES: IconName[] = [
   "heart-pulse", "briefcase", "utensils", "hard-hat", "factory", "network",
   "search", "trending-up", "clipboard-check", "message-square", "star", "link",
   "gauge", "users", "layers", "calendar", "shield-check", "compass",
-  "list-checks",
+  "list-checks", "ship", "plane", "lightning", "image", "storefront", "phone",
+  "envelope", "pencil", "code", "globe", "rocket", "warning",
 ];
 
 const CTA_DEFAULT = { label: "Request a Visibility Review", href: "/contact" };
@@ -183,7 +184,13 @@ export const SECTION_SCHEMAS = [
       { ...eyebrow, optional: false },
       heading,
       body(),
-      { name: "primaryCta", label: "Primary button", kind: "cta" },
+      {
+        name: "primaryCta",
+        label: "Primary button",
+        kind: "cta",
+        optional: true,
+        help: "Leave empty where the section directly below the hero is the action, as on the Industries hub.",
+      },
       { name: "secondaryCta", label: "Secondary button", kind: "cta", optional: true },
     ],
     defaults: {
@@ -224,8 +231,22 @@ export const SECTION_SCHEMAS = [
           { value: "2", label: "2" },
           { value: "3", label: "3" },
           { value: "4", label: "4" },
+          { value: "5", label: "5 — laid out as 3 + 2, centred" },
         ],
         help: "Cards always stack on mobile.",
+      },
+      {
+        name: "groupLabels",
+        label: "Row labels",
+        kind: "repeater",
+        itemLabel: "Label",
+        optional: true,
+        max: 3,
+        help: "Drops a labelled divider into the grid. Position 0 puts it above the first card, 3 above the fourth, and so on.",
+        fields: [
+          { name: "at", label: "Before card number", kind: "text" },
+          { name: "label", label: "Label", kind: "text" },
+        ],
       },
       {
         name: "emphasis",
@@ -332,7 +353,8 @@ export const SECTION_SCHEMAS = [
   {
     type: "featureSplit",
     label: "Feature split",
-    description: "Copy on one side, a staggered set of feature cards on the other.",
+    description:
+      "Copy on one side, and either a set of feature cards or a comparison table on the other.",
     supportsTone: true,
     fields: [
       eyebrow,
@@ -356,6 +378,28 @@ export const SECTION_SCHEMAS = [
           { name: "title", label: "Title", kind: "text" },
           { name: "body", label: "Body", kind: "textarea" },
           { name: "icon", label: "Icon", kind: "icon", optional: true },
+        ],
+      },
+      {
+        name: "tableHeadings",
+        label: "Table column headings",
+        kind: "stringList",
+        optional: true,
+        help: "Fill this in to draw a comparison table instead of the feature cards. The first heading labels the rows.",
+      },
+      {
+        name: "tableRows",
+        label: "Table rows",
+        kind: "repeater",
+        itemLabel: "Row",
+        optional: true,
+        fields: [
+          {
+            name: "cells",
+            label: "Cells",
+            kind: "stringList",
+            help: "One per column, left to right, in the same order as the headings.",
+          },
         ],
       },
       sectionCta,
@@ -506,10 +550,8 @@ export const SECTION_SCHEMAS = [
             name: "label",
             label: "Group label",
             kind: "text",
-            help: "Visitor-facing. How the buyer would describe themselves, not internal vocabulary.",
+            help: "Descriptive only. Do not name a service line here: each group holds both single-area and multi-market businesses.",
           },
-          { name: "serviceLine", label: "Service line", kind: "text" },
-          { name: "serviceHref", label: "Service line links to", kind: "text" },
           {
             name: "cards",
             label: "Industries",
@@ -674,7 +716,7 @@ export const SECTION_SCHEMAS = [
             name: "href",
             label: "Links to",
             kind: "text",
-            help: "A full address for anything off-site (https://instagram.com/...), or a path like /seo-packages for a page on this site.",
+            help: "A full address for anything off-site (https://instagram.com/...), or a path like /monthly-seo-packages for a page on this site.",
           },
           { name: "description", label: "Second line", kind: "text", optional: true },
           { name: "icon", label: "Icon", kind: "icon", optional: true },
@@ -712,11 +754,193 @@ export const SECTION_SCHEMAS = [
           icon: "target",
           featured: true,
         },
-        { label: "SEO Packages & Pricing", href: "/seo-packages", icon: "layers" },
+        { label: "SEO Packages & Pricing", href: "/monthly-seo-packages", icon: "layers" },
         { label: "Instagram", href: "https://instagram.com/", icon: "message-square" },
         { label: "Facebook", href: "https://facebook.com/", icon: "users" },
       ],
       footnote: "League City, TX · Serving the Greater Houston area",
+    },
+  },
+
+  {
+    type: "fourQuestions",
+    label: "The four questions, expanded",
+    description:
+      "The long-form version of the Monthly Recap headings, for the SEO Reporting page. The four titles are fixed; only the paragraphs are editable.",
+    supportsTone: true,
+    fields: [
+      eyebrow,
+      heading,
+      body(true),
+      {
+        name: "did",
+        label: "What We Did",
+        kind: "textarea",
+        help: "Roughly a paragraph. The heading itself is fixed.",
+      },
+      { name: "didExample", label: "What We Did — example line", kind: "text", optional: true },
+      { name: "why", label: "Why We Did It", kind: "textarea" },
+      { name: "whyExample", label: "Why We Did It — example line", kind: "text", optional: true },
+      { name: "changed", label: "What Changed", kind: "textarea" },
+      { name: "changedExample", label: "What Changed — example line", kind: "text", optional: true },
+      { name: "next", label: "Where We're Headed", kind: "textarea" },
+      { name: "nextExample", label: "Where We're Headed — example line", kind: "text", optional: true },
+      sectionCta,
+    ],
+    defaults: {
+      heading: "The four questions every recap answers",
+      did: "What was actually done that month.",
+      why: "Why that work was the priority.",
+      changed: "What moved, reported honestly.",
+      next: "What comes next, so nothing is a surprise.",
+    },
+  },
+
+  {
+    type: "recapExample",
+    label: "Example recap",
+    description:
+      "A worked example of a monthly recap, drawn as a document. Never put a percentage, a figure or a client name in here — the whole point of the panel is that it contains none.",
+    supportsTone: true,
+    fields: [
+      eyebrow,
+      heading,
+      body(true),
+      { name: "panelTitle", label: "Panel title", kind: "text" },
+      { name: "panelMeta", label: "Panel subtitle", kind: "text", optional: true },
+      {
+        name: "did",
+        label: "What We Did — example lines",
+        kind: "stringList",
+        help: "Two or three. Each line is an action, never a result.",
+      },
+      { name: "why", label: "Why We Did It — example lines", kind: "stringList" },
+      {
+        name: "changed",
+        label: "What Changed — example lines",
+        kind: "stringList",
+        help: "Describe the kind of movement tracked, not a number.",
+      },
+      { name: "next", label: "Where We're Headed — example lines", kind: "stringList" },
+      {
+        name: "caption",
+        label: "Caption",
+        kind: "textarea",
+        help: "Sits under the panel and repeats that this is an example.",
+      },
+    ],
+    defaults: {
+      heading: "What a recap looks like",
+      panelTitle: "Monthly Project Recap",
+      panelMeta: "Example structure",
+      did: ["An action completed that month."],
+      why: ["The reasoning behind it."],
+      changed: ["The kind of movement tracked."],
+      next: ["What comes next."],
+      caption:
+        "An example of the structure, not a real client report. No figures appear because none would be real.",
+    },
+  },
+
+  {
+    type: "auditForm",
+    label: "Free audit form",
+    description:
+      "The solid ink band with the Free Visibility Audit form. The five fields are fixed — adding a sixth is what kills a form like this.",
+    supportsTone: false,
+    fields: [
+      eyebrow,
+      heading,
+      body(),
+      {
+        name: "covers",
+        label: "What the audit covers",
+        kind: "stringList",
+        optional: true,
+      },
+      {
+        name: "note",
+        label: "Reassurance line",
+        kind: "text",
+        optional: true,
+        help: "Short, e.g. \"No call required.\" Never state a turnaround time — the confirmation page does the reassuring instead.",
+      },
+      { name: "submitLabel", label: "Button label", kind: "text" },
+      {
+        name: "profileHelp",
+        label: "Profile field helper text",
+        kind: "text",
+        optional: true,
+      },
+      {
+        name: "source",
+        label: "Lead source tag",
+        kind: "text",
+        help: "How this form is labelled in the enquiry list. Keep it different from the Visibility Review form so the two lead types stay separable.",
+      },
+    ],
+    defaults: {
+      eyebrow: "Free Visibility Audit",
+      heading: "Get a free look at your profile",
+      body: "A written audit of the profile and the site behind it.",
+      note: "No call required.",
+      submitLabel: "Get a Free Visibility Audit",
+      profileHelp: "Optional. Paste the map listing link if handy.",
+      source: "Free Visibility Audit",
+    },
+  },
+
+  {
+    type: "waiverMatrix",
+    label: "Waiver table",
+    description:
+      "The three sprint rows and what each one waives. The same terms appear on the packages page and the sprints page — change one and change the other.",
+    supportsTone: true,
+    fields: [
+      eyebrow,
+      heading,
+      body(true),
+      { name: "sprintHeading", label: "First column heading", kind: "text" },
+      {
+        name: "priceHeading",
+        label: "Price column heading",
+        kind: "text",
+        optional: true,
+        help: "Leave empty to hide the price column, which the sprints page does — the prices are already on that page.",
+      },
+      { name: "waivesHeading", label: "Last column heading", kind: "text" },
+      {
+        name: "rows",
+        label: "Rows",
+        kind: "repeater",
+        itemLabel: "Row",
+        max: 4,
+        fields: [
+          { name: "sprint", label: "Sprint", kind: "text" },
+          { name: "price", label: "One-time price", kind: "text", optional: true },
+          { name: "waives", label: "Waives onboarding on", kind: "text" },
+        ],
+      },
+      {
+        name: "condition",
+        label: "Condition line",
+        kind: "text",
+        help: "The 30-day rule. Must read identically on both pages that show this table.",
+      },
+      sectionCta,
+    ],
+    defaults: {
+      heading: "Start with a Launch Sprint",
+      sprintHeading: "Sprint",
+      priceHeading: "One-time",
+      waivesHeading: "Waives onboarding on",
+      rows: [
+        { sprint: "Neighborhood Launch Sprint", price: "$799", waives: "Neighborhood, Citywide, or Metro" },
+        { sprint: "Regional Launch Sprint", price: "$1,495", waives: "Regional" },
+        { sprint: "National Launch Sprint", price: "$2,295", waives: "National or National+" },
+      ],
+      condition:
+        "Monthly service must begin within 30 calendar days of sprint completion.",
     },
   },
 

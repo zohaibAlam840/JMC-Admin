@@ -43,13 +43,19 @@ export function localBusinessSchema(site: SiteDetails = fileSite) {
       "@type": "AdministrativeArea",
       name: "Greater Houston, Texas",
     },
+    /*
+     * The services the site actually sells. Real Estate SEO was here and is
+     * gone: Page Spec 01 §2 cuts it, and structured data on every page of the
+     * site advertising a service with no page behind it is exactly the kind of
+     * quiet inaccuracy the whole positioning is built against.
+     */
     knowsAbout: [
       "Local SEO",
       "Traditional SEO",
-      "Real Estate SEO",
       "Google Business Profile optimization",
       "SEO content strategy",
       "Technical SEO",
+      "SEO reporting",
     ],
   };
 }

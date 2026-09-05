@@ -131,4 +131,113 @@ export async function submitLead(
   redirect("/thank-you");
 }
 
+/**
+ * Free Visibility Audit request — Page Spec 04 §4.
+ *
+ * A separate action rather than a mode on submitLead, for two reasons. The
+ * offers are genuinely different — a written report against a conversation,
+ * top of funnel against mid — and §4 requires them to stay separable in the
+ * CRM, which is easier to guarantee when the two never share a code path. And
+ * this form has five fields and no message box on purpose: friction is what
+ * kills a lead magnet, so the validation here has to be looser than the review
+ * form's, not the same rules with fields skipped.
+ *
+ * The confirmation carries the reassurance the page deliberately withholds.
+ * §4 forbids stating a turnaround anywhere, because a stated deadline has to
+ * hold on the worst week rather than the average one, so the visitor is sent
+ * to the audit variant of the thank-you page instead of the generic one.
+ */
+export async function submitAudit(
+  _prev: LeadState,
+  formData: FormData
+): Promise<LeadState> {
+  if (str(formData, "company_website")) {
+    redirect("/thank-you?type=audit");
+  }
+
+  const renderedAt = Number(str(formData, "renderedAt"));
+  if (Number.isFinite(renderedAt) && Date.now() - renderedAt < 3000) {
+    redirect("/thank-you?type=audit");
+  }
+
+  const values = {
+    business: str(formData, "business"),
+    website: str(formData, "website"),
+    profile: str(formData, "profile"),
+    email: str(formData, "email"),
+    phone: str(formData, "phone"),
+    sourceCta: str(formData, "sourceCta") || "Free Visibility Audit",
+    sourcePage: str(formData, "sourcePage"),
+  };
+
+  const errors: Record<string, string> = {};
+
+  if (!values.business) {
+    errors.business = "Enter the business name so we know what to look at.";
+  }
+  if (!values.website) {
+    errors.website = "We need a website address to run the audit against.";
+  }
+  if (!values.email) {
+    errors.email = "We need an email address to send the audit to.";
+  } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(values.email)) {
+    errors.email = "That email address doesn't look right.";
+  }
+
+  if (Object.keys(errors).length > 0) {
+    return { errors, values };
+  }
+
+  // The profile link rides in `message` rather than earning a column. It is
+  // the only free-text this form collects and it is optional, so a schema
+  // change would buy nothing that a labelled line does not.
+  const message = values.profile
+    ? `Google Business Profile: ${values.profile}`
+    : "";
+
+  if (supabaseConfigured) {
+    const supabase = await createSupabaseServerClient();
+    const { error } = await supabase.from("leads").insert({
+      name: "",
+      email: values.email,
+      phone: values.phone || null,
+      company: values.business,
+      website: values.website,
+      service: null,
+      message: message || null,
+      page_path: values.sourcePage || null,
+      source_cta: values.sourceCta,
+      tier: null,
+    });
+
+    if (error) {
+      console.error("[audit] could not save request", error.message);
+      return {
+        errors: {
+          form: "Something went wrong sending that. Please try again, or email us directly.",
+        },
+        values,
+      };
+    }
+  } else {
+    console.info("[audit] free visibility audit request (no database configured)", {
+      ...values,
+      receivedAt: new Date().toISOString(),
+    });
+  }
+
+  await notifyNewLead({
+    name: values.business,
+    email: values.email,
+    phone: values.phone,
+    business: values.business,
+    website: values.website,
+    message,
+    sourcePage: values.sourcePage,
+    sourceCta: values.sourceCta,
+  });
+
+  redirect("/thank-you?type=audit");
+}
+
 

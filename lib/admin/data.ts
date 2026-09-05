@@ -39,6 +39,8 @@ export type AdminPackage = {
   price: string;
   price_unit: string | null;
   onboarding_fee: string | null;
+  term: string | null;
+  positioning: string | null;
   timeline: string | null;
   best_fit: string;
   deliverables: string[];

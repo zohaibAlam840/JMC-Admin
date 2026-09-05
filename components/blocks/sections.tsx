@@ -1,3 +1,4 @@
+import * as React from "react";
 import Link from "next/link";
 import { ArrowRight, Check, Sparkles } from "lucide-react";
 import {
@@ -7,7 +8,7 @@ import {
   HeroBackdrop,
   SectionHeader,
 } from "@/components/ui/layout";
-import { ArrowLink, Button } from "@/components/ui/button";
+import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import {
   Accordion,
@@ -22,6 +23,11 @@ import { PostCard } from "@/components/blocks/post-card";
 import { HeroCardStack } from "@/components/blocks/hero-card-stack";
 import { ReportingBlock } from "@/components/blocks/reporting-block";
 import { IndustryGrid } from "@/components/blocks/industry-grid";
+import { SearchGrid } from "@/components/blocks/search-grid";
+import { FourQuestions } from "@/components/blocks/four-questions";
+import { RecapExample } from "@/components/blocks/recap-example";
+import { AuditForm } from "@/components/blocks/audit-form";
+import { WaiverMatrix } from "@/components/blocks/waiver-matrix";
 import { LinkStack } from "@/components/blocks/link-stack";
 import { packages as filePackages } from "@/content/packages";
 import { cn } from "@/lib/utils";
@@ -144,27 +150,33 @@ function HeroCentered({ section }: { section: HeroCenteredSection }) {
             </p>
           </Reveal>
 
-          <Reveal delay={0.18} className="mt-1">
-            <div className="flex flex-col gap-3 sm:flex-row">
-              <Button href={section.primaryCta.href} size="lg" className="group">
-                {section.primaryCta.label}
-                <ArrowRight
-                  size={16}
-                  aria-hidden="true"
-                  className="transition-transform duration-300 ease-out-soft group-hover:translate-x-1"
-                />
-              </Button>
-              {section.secondaryCta ? (
+          {section.primaryCta ? (
+            <Reveal delay={0.18} className="mt-1">
+              <div className="flex flex-col gap-3 sm:flex-row">
                 <Button
-                  href={section.secondaryCta.href}
-                  variant="secondary"
+                  href={section.primaryCta.href}
                   size="lg"
+                  className="group"
                 >
-                  {section.secondaryCta.label}
+                  {section.primaryCta.label}
+                  <ArrowRight
+                    size={16}
+                    aria-hidden="true"
+                    className="transition-transform duration-300 ease-out-soft group-hover:translate-x-1"
+                  />
                 </Button>
-              ) : null}
-            </div>
-          </Reveal>
+                {section.secondaryCta ? (
+                  <Button
+                    href={section.secondaryCta.href}
+                    variant="secondary"
+                    size="lg"
+                  >
+                    {section.secondaryCta.label}
+                  </Button>
+                ) : null}
+              </div>
+            </Reveal>
+          ) : null}
         </div>
       </Container>
     </section>
@@ -175,14 +187,94 @@ function HeroCentered({ section }: { section: HeroCenteredSection }) {
 /*  05 · CardGrid — carries roughly 30 sections across the site                 */
 /* -------------------------------------------------------------------------- */
 
-const columnClass: Record<2 | 3 | 4, string> = {
-  2: "sm:grid-cols-2",
+/**
+ * The arrow label at the foot of a card.
+ *
+ * Rendered as a span rather than a link, because the card around it is already
+ * the click target. Nesting an anchor inside an anchor is invalid HTML and
+ * browsers unnest it silently, which breaks the outer link.
+ */
+function CardShell({
+  href,
+  className,
+  children,
+}: {
+  href?: string;
+  className: string;
+  children: React.ReactNode;
+}) {
+  return href ? (
+    <Link href={href} className={className}>
+      {children}
+    </Link>
+  ) : (
+    <div className={className}>{children}</div>
+  );
+}
+
+function CardArrow({ label }: { label: string }) {
+  return (
+    <span className="mt-auto inline-flex items-center gap-1.5 pt-6 font-body text-[0.95rem] font-semibold text-teal-ink">
+      {label}
+      <span
+        aria-hidden="true"
+        className="transition-transform duration-200 group-hover:translate-x-0.5"
+      >
+        &rarr;
+      </span>
+    </span>
+  );
+}
+
+const columnClass: Record<2 | 3 | 4 | 5, string> = {
+  // Capped and centred, per Page Spec 01 §2: two cards across a 1200px
+  // container stretch thin and stop reading as a pair of choices.
+  2: "sm:grid-cols-2 mx-auto max-w-[960px]",
   3: "sm:grid-cols-2 lg:grid-cols-3",
   4: "sm:grid-cols-2 lg:grid-cols-4",
+  // Six tracks, each card spanning two. That is what makes 3 + 2 possible:
+  // the fourth card starts one track in and the last row centres itself.
+  5: "sm:grid-cols-2 lg:grid-cols-6 mx-auto max-w-[1100px]",
 };
+
+/**
+ * Per-card class for the five-column layout.
+ *
+ * Page Spec 02 §4: five across at full width leaves every card too narrow to
+ * read, so a five lays out as 3 + 2 centred. Padding to six with a filler card
+ * is explicitly forbidden, which is why this is a layout problem rather than a
+ * content one.
+ */
+function cellClass(columns: number, index: number, total: number) {
+  if (columns !== 5) return "h-full";
+  return cn(
+    "h-full lg:col-span-2",
+    total === 5 && index === 3 && "lg:col-start-2"
+  );
+}
+
+/**
+ * A full-width label inside the grid, marking the start of a run of cards.
+ * Spans every column so it reads as a divider rather than as a seventh card.
+ */
+function GroupLabel({ label }: { label: string }) {
+  return (
+    <div className="col-span-full flex items-center gap-4 pt-2 first:pt-0">
+      <span className="shrink-0 text-[0.75rem] font-semibold uppercase tracking-[0.08em] text-ink-strong">
+        {label}
+      </span>
+      <span aria-hidden="true" className="h-px flex-1 bg-line" />
+    </div>
+  );
+}
 
 function CardGrid({ section }: { section: CardGridSection }) {
   const variant = section.variant ?? "cards";
+  // Coerced, because the admin repeater stores every field as a string and
+  // "3" would never match the numeric index it is meant to sit before.
+  const labelAt = new Map(
+    (section.groupLabels ?? []).map((g) => [Number(g.at), g.label])
+  );
 
   /* -- split: borderless rows with rules. No card chrome at all. ----------- */
   if (variant === "split") {
@@ -199,7 +291,10 @@ function CardGrid({ section }: { section: CardGridSection }) {
           <Stagger className="flex flex-col divide-y divide-line border-y border-line">
             {section.cards.map((card) => (
               <StaggerItem key={card.title}>
-                <div className="group flex items-start gap-5 py-6">
+                <CardShell
+                  href={card.cta?.href}
+                  className="group flex items-start gap-5 py-6"
+                >
                   {card.icon ? (
                     <span className="inline-flex size-10 shrink-0 items-center justify-center rounded-card border border-line bg-white text-teal-ink transition-colors duration-300 group-hover:border-transparent group-hover:bg-brand-black group-hover:text-white">
                       <Icon name={card.icon} size={19} />
@@ -214,13 +309,9 @@ function CardGrid({ section }: { section: CardGridSection }) {
                         {card.body}
                       </p>
                     ) : null}
-                    {card.cta ? (
-                      <ArrowLink href={card.cta.href} className="mt-3">
-                        {card.cta.label}
-                      </ArrowLink>
-                    ) : null}
+                    {card.cta ? <CardArrow label={card.cta.label} /> : null}
                   </div>
-                </div>
+                </CardShell>
               </StaggerItem>
             ))}
           </Stagger>
@@ -248,9 +339,16 @@ function CardGrid({ section }: { section: CardGridSection }) {
         />
 
         <Stagger className={cn("mt-12 grid gap-3", columnClass[section.columns])}>
-          {section.cards.map((card) => (
-            <StaggerItem key={card.title} className="h-full">
-              <div className="group flex h-full flex-col rounded-card border border-line bg-white p-5 transition-all duration-300 ease-out-soft hover:-translate-y-1 hover:border-teal/50 hover:shadow-soft">
+          {section.cards.map((card, i) => (
+            <React.Fragment key={card.title + i}>
+            {labelAt.has(i) ? <GroupLabel label={labelAt.get(i)!} /> : null}
+            <StaggerItem
+              className={cellClass(section.columns, i, section.cards.length)}
+            >
+              <CardShell
+                href={card.cta?.href}
+                className="group flex h-full flex-col rounded-card border border-line bg-white p-5 transition-shadow duration-200 hover:shadow-lift"
+              >
                 <div className="flex items-center gap-3">
                   {card.icon ? (
                     <span className="inline-flex size-9 shrink-0 items-center justify-center rounded-[10px] bg-surface text-teal-ink transition-colors duration-300 group-hover:bg-brand-black group-hover:text-white">
@@ -266,13 +364,10 @@ function CardGrid({ section }: { section: CardGridSection }) {
                     {card.body}
                   </p>
                 ) : null}
-                {card.cta ? (
-                  <ArrowLink href={card.cta.href} className="mt-auto pt-4 text-[0.8rem]">
-                    {card.cta.label}
-                  </ArrowLink>
-                ) : null}
-              </div>
+                {card.cta ? <CardArrow label={card.cta.label} /> : null}
+              </CardShell>
             </StaggerItem>
+            </React.Fragment>
           ))}
         </Stagger>
 
@@ -303,9 +398,14 @@ function CardGrid({ section }: { section: CardGridSection }) {
 
       <Stagger className={cn("mt-12 grid gap-5", columnClass[section.columns])}>
         {section.cards.map((card, i) => (
-          <StaggerItem key={card.title} className="h-full">
+          <React.Fragment key={card.title + i}>
+          {labelAt.has(i) ? <GroupLabel label={labelAt.get(i)!} /> : null}
+          <StaggerItem
+            className={cellClass(section.columns, i, section.cards.length)}
+          >
             <Card
               interactive
+              href={card.cta?.href}
               className={cn(
                 "group relative overflow-hidden",
                 // Reporting sections are the site's differentiator, so they get
@@ -346,13 +446,12 @@ function CardGrid({ section }: { section: CardGridSection }) {
                 </p>
               ) : null}
 
-              {card.cta ? (
-                <ArrowLink href={card.cta.href} className="mt-auto pt-6">
-                  {card.cta.label}
-                </ArrowLink>
-              ) : null}
+              {card.visual === "searchGrid" ? <SearchGrid /> : null}
+
+              {card.cta ? <CardArrow label={card.cta.label} /> : null}
             </Card>
           </StaggerItem>
+          </React.Fragment>
         ))}
       </Stagger>
 
@@ -466,6 +565,13 @@ function FullWidthText({ section }: { section: FullWidthTextSection }) {
 
 function FeatureSplit({ section }: { section: FeatureSplitSection }) {
   const copyFirst = section.align !== "right";
+  /*
+   * This is the one section whose copy regularly runs to two paragraphs, and
+   * a blank line typed in the admin has to survive as one. Rendered into a
+   * single <p> it collapses to a wall of text, which is exactly what the
+   * longer sections here are trying not to be.
+   */
+  const paragraphs = section.body.split(/\n\s*\n/).filter(Boolean);
 
   return (
     <Band id={section.id} tone={section.tone}>
@@ -480,9 +586,16 @@ function FeatureSplit({ section }: { section: FeatureSplitSection }) {
           <h2 className="text-[1.875rem] sm:text-[2.25rem] lg:text-[2.625rem]">
             {section.heading}
           </h2>
-          <p className="text-[1.02rem] leading-relaxed text-subtle">
-            {section.body}
-          </p>
+          <div className="flex flex-col gap-4">
+            {paragraphs.map((paragraph) => (
+              <p
+                key={paragraph.slice(0, 40)}
+                className="text-[1.02rem] leading-relaxed text-subtle"
+              >
+                {paragraph}
+              </p>
+            ))}
+          </div>
           {section.cta ? (
             <div className="mt-2">
               <Button href={section.cta.href} size="lg" className="group">
@@ -497,6 +610,57 @@ function FeatureSplit({ section }: { section: FeatureSplitSection }) {
           ) : null}
         </Reveal>
 
+        {section.tableHeadings && section.tableRows ? (
+          /*
+           * A real table, not a grid of cards. Both sections that use it are
+           * making an argument out of the alignment: "this stays the same,
+           * that changes" on the industries hub, and "here is how coverage
+           * grows by tier" before the Traditional pricing cards. Cards would
+           * let the eye read down one column without ever lining the two up.
+           */
+          <Reveal
+            className={cn(
+              "overflow-x-auto rounded-bento border border-line bg-white",
+              !copyFirst && "lg:order-1"
+            )}
+          >
+            <table className="w-full border-collapse text-left">
+              <thead>
+                <tr className="border-b border-line bg-surface">
+                  {section.tableHeadings.map((h) => (
+                    <th
+                      key={h}
+                      scope="col"
+                      className="px-4 py-3 text-[0.72rem] font-semibold uppercase tracking-[0.08em] text-ink-strong sm:px-5"
+                    >
+                      {h}
+                    </th>
+                  ))}
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-line">
+                {section.tableRows.map((row) => (
+                  <tr key={row.cells[0]}>
+                    {row.cells.map((cell, i) => (
+                      <th
+                        key={cell + i}
+                        scope={i === 0 ? "row" : undefined}
+                        className={cn(
+                          "px-4 py-4 text-[0.88rem] leading-snug sm:px-5",
+                          i === 0
+                            ? "font-heading font-bold text-ink-strong"
+                            : "font-normal tabular-nums text-subtle"
+                        )}
+                      >
+                        {cell}
+                      </th>
+                    ))}
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </Reveal>
+        ) : (
         <Stagger
           className={cn(
             "grid gap-4 sm:grid-cols-2",
@@ -528,6 +692,7 @@ function FeatureSplit({ section }: { section: FeatureSplitSection }) {
             </StaggerItem>
           ))}
         </Stagger>
+        )}
       </div>
     </Band>
   );
@@ -570,7 +735,12 @@ function PricingCards({
               : "sm:grid-cols-2 lg:grid-cols-3"
         )}
       >
-        {items.map((pkg) => (
+        {items.map((pkg) => {
+          // Sprints run 8 to 10 deliverables against a monthly tier's 5 or 6.
+          // In one column that is a card twice the height of the ones beside
+          // it, so Page Spec 07 §4 splits the list in two on desktop.
+          const isSprint = pkg.group === "sprint";
+          return (
           <StaggerItem key={pkg.id} className="h-full">
             <div
               className={cn(
@@ -593,6 +763,12 @@ function PricingCards({
               <h3 className="text-[1.3125rem] leading-tight sm:text-[1.5rem]">
                 {pkg.name}
               </h3>
+
+              {pkg.positioning ? (
+                <p className="mt-1.5 text-[0.78rem] font-semibold uppercase tracking-[0.08em] text-teal-ink">
+                  {pkg.positioning}
+                </p>
+              ) : null}
 
               <p className="mt-4 flex items-baseline gap-1.5">
                 <span
@@ -617,15 +793,25 @@ function PricingCards({
               ) : null}
               {pkg.timeline ? (
                 <p className="mt-1.5 text-[0.82rem] text-subtle">
-                  {pkg.timeline} sprint window
+                  Completed within {pkg.timeline}
                 </p>
+              ) : null}
+              {pkg.term ? (
+                <p className="mt-1.5 text-[0.82rem] text-subtle">{pkg.term}</p>
               ) : null}
 
               <p className="mt-5 border-t border-line pt-5 text-[0.88rem] leading-relaxed text-subtle">
                 {pkg.bestFit}
               </p>
 
-              <ul className="mt-5 flex flex-1 flex-col gap-2.5">
+              <ul
+                className={cn(
+                  "mt-5 flex-1 gap-2.5",
+                  isSprint
+                    ? "grid content-start sm:grid-cols-2 sm:gap-x-5"
+                    : "flex flex-col"
+                )}
+              >
                 {pkg.deliverables.map((d) => (
                   <li key={d} className="flex gap-2.5 text-[0.86rem] leading-snug">
                     <span className="mt-0.5 inline-flex size-4 shrink-0 items-center justify-center rounded-pill bg-surface text-teal-ink">
@@ -645,7 +831,8 @@ function PricingCards({
               </Button>
             </div>
           </StaggerItem>
-        ))}
+        );
+      })}
       </Stagger>
 
       {section.cta ? (
@@ -918,13 +1105,42 @@ function renderSection(
       return <ReportingBlock key={section.id} section={section} />;
     case "linkStack":
       return <LinkStack key={section.id} section={section} />;
+    case "fourQuestions":
+      return <FourQuestions key={section.id} section={section} />;
+    case "recapExample":
+      return <RecapExample key={section.id} section={section} />;
+    case "auditForm":
+      return <AuditForm key={section.id} section={section} />;
+    case "waiverMatrix":
+      return <WaiverMatrix key={section.id} section={section} />;
     case "postList":
       return <PostList key={section.id} section={section} posts={posts} />;
     default: {
-      // Exhaustiveness check — adding a section type without a renderer
-      // becomes a compile error rather than a blank space on the page.
+      /*
+       * Compile time: assigning to `never` means adding a type to the union
+       * without a renderer here is a type error rather than a blank space on
+       * the page. That part was always right and stays.
+       *
+       * Run time: render nothing. Returning `_never` returned the section
+       * object itself, React refused it as a child, and the exception took
+       * the whole page down as a 500 — which is exactly what happened to
+       * /monthly-seo-packages, /seo-reporting and /industries when the
+       * database was migrated ahead of the deploy that could draw the new
+       * blocks.
+       *
+       * The database is edited independently of this code and will run ahead
+       * of it again: a migration lands before its deploy, or a rollback puts
+       * old code in front of a new database. A block this build cannot draw
+       * should cost that block, not the page around it.
+       */
       const _never: never = section;
-      return _never;
+      void _never;
+      if (process.env.NODE_ENV !== "production") {
+        console.warn(
+          `[sections] no renderer for type "${(section as Section).type}" — skipped`
+        );
+      }
+      return null;
     }
   }
 }
