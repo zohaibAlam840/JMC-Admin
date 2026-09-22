@@ -4,13 +4,12 @@ import * as React from "react";
 import { useActionState } from "react";
 import { useFormStatus } from "react-dom";
 import { usePathname, useSearchParams } from "next/navigation";
-import { ArrowRight, ChevronDown, Loader2 } from "lucide-react";
+import { ArrowRight, Loader2 } from "lucide-react";
 import { submitLead, type LeadState } from "@/app/actions/lead";
-import { Input, Label, Select, Textarea } from "@/components/ui/form-controls";
+import { Input, Label, Textarea } from "@/components/ui/form-controls";
 import { Button } from "@/components/ui/button";
-import { SERVICE_OPTIONS } from "@/lib/lead-options";
 
-function SubmitButton() {
+function SubmitButton({ label }: { label: string }) {
   const { pending } = useFormStatus();
   return (
     <Button
@@ -26,7 +25,7 @@ function SubmitButton() {
         </>
       ) : (
         <>
-          Request My Visibility Review
+          {label}
           <ArrowRight
             size={16}
             aria-hidden="true"
@@ -47,22 +46,36 @@ function FieldError({ id, message }: { id: string; message?: string }) {
   );
 }
 
+/**
+ * The Visibility Review form — Page Spec 12 §2.
+ *
+ * Six visible fields and no more. The set is fixed by the spec rather than by
+ * what would be convenient to have in the CRM: every extra field costs
+ * completions, and this form is the site's only conversion path.
+ *
+ * Website URL is optional deliberately. A business with no site, or one
+ * mid-rebuild, is still a lead, and requiring it would turn away exactly the
+ * prospects a rebuild-adjacent agency wants.
+ *
+ * What the visitor came from rides along as hidden fields — the page, the CTA
+ * label, `type` and `tier`. None of them changes what is required.
+ */
 export function LeadForm({
   sourceCta = "Request a Visibility Review",
+  submitLabel = "Request a Visibility Review",
 }: {
   sourceCta?: string;
+  submitLabel?: string;
 }) {
   const pathname = usePathname();
   const params = useSearchParams();
-  const tier = params.get("tier") ?? "";
   /*
-   * Launch Sprint CTAs arrive as ?type=sprint. Page Spec 07 needs sprint
-   * enquiries separable from Visibility Review and Free Audit leads, and the
-   * service field already carries exactly that distinction, so it preselects
-   * rather than earning a column of its own.
+   * Read here as well as on the server: the page renders the hero and the
+   * heading from the same parameters, and the form has to post the values the
+   * visitor actually arrived with rather than a copy that can drift.
    */
-  const preselectedService =
-    params.get("type") === "sprint" ? "Launch Sprint" : "";
+  const type = params.get("type") === "sprint" ? "sprint" : "";
+  const tier = params.get("tier") ?? "";
   // Captured once on mount rather than read at submit time, so the value is
   // the moment the form appeared rather than the moment it was sent.
   const [renderedAt] = React.useState(() => String(Date.now()));
@@ -75,6 +88,12 @@ export function LeadForm({
       {/* Attribution — which CTA and page produced this request. */}
       <input type="hidden" name="sourceCta" value={sourceCta} />
       <input type="hidden" name="sourcePage" value={pathname} />
+      {/*
+       * Lead type. Sprint enquiries have to stay separable from Visibility
+       * Reviews in the CRM, and this is also what selects the confirmation the
+       * visitor lands on.
+       */}
+      <input type="hidden" name="type" value={type} />
       {/*
        * Pricing card CTAs arrive as ?tier=neighborhood. Build Spec §13 wants
        * that carried through for attribution.
@@ -154,73 +173,58 @@ export function LeadForm({
         </div>
 
         <div className="flex flex-col gap-2">
-          <Label htmlFor="business">Business name</Label>
+          <Label htmlFor="business">
+            Company <span className="text-teal-ink">*</span>
+          </Label>
           <Input
             id="business"
             name="business"
+            required
             autoComplete="organization"
             defaultValue={v.business}
+            aria-invalid={Boolean(e.business)}
+            aria-describedby={e.business ? "business-error" : undefined}
           />
+          <FieldError id="business-error" message={e.business} />
         </div>
 
-        <div className="flex flex-col gap-2">
-          <Label htmlFor="website">Website</Label>
+        <div className="flex flex-col gap-2 sm:col-span-2">
+          <Label htmlFor="website">Website URL</Label>
           <Input
             id="website"
             name="website"
             type="url"
             inputMode="url"
-            placeholder="https://"
             autoComplete="url"
             defaultValue={v.website}
+            aria-describedby="website-help"
           />
-        </div>
-
-        <div className="flex flex-col gap-2">
-          <Label htmlFor="service">
-            What are you interested in?
-          </Label>
-          <div className="relative">
-            <Select
-              id="service"
-              name="service"
-              defaultValue={v.service ?? preselectedService}
-              aria-invalid={Boolean(e.service)}
-            >
-              <option value="">Select one</option>
-              {SERVICE_OPTIONS.map((opt) => (
-                <option key={opt} value={opt}>
-                  {opt}
-                </option>
-              ))}
-            </Select>
-            <ChevronDown
-              size={16}
-              aria-hidden="true"
-              className="pointer-events-none absolute right-4 top-1/2 -translate-y-1/2 text-subtle"
-            />
-          </div>
-          <FieldError id="service-error" message={e.service} />
+          {/* Helper text, not a placeholder. A placeholder is not a label and
+              disappears the moment someone starts typing. */}
+          <p id="website-help" className="text-[0.8rem] text-subtle">
+            If there is one.
+          </p>
         </div>
       </div>
 
       <div className="flex flex-col gap-2">
-        <Label htmlFor="message">What are you trying to improve?</Label>
+        <Label htmlFor="message">
+          What are you trying to improve?{" "}
+          <span className="text-teal-ink">*</span>
+        </Label>
         <Textarea
           id="message"
           name="message"
           rows={4}
+          required
           defaultValue={v.message}
-          placeholder="Markets you serve, what you sell, and where visibility feels weak."
+          aria-invalid={Boolean(e.message)}
+          aria-describedby={e.message ? "message-error" : undefined}
         />
+        <FieldError id="message-error" message={e.message} />
       </div>
 
-      <SubmitButton />
-
-      <p className="text-[0.8rem] leading-relaxed text-subtle">
-        We reply within one business day. No automated sales sequence, and your
-        details are not shared.
-      </p>
+      <SubmitButton label={submitLabel} />
     </form>
   );
 }

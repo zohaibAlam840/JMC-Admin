@@ -4,6 +4,7 @@ import { Logo } from "@/components/ui/logo";
 import { Container } from "@/components/ui/layout";
 import { Reveal } from "@/components/motion/reveal";
 import type { SiteConfig } from "@/lib/content";
+import { publishedPolicies } from "@/lib/legal";
 
 export function SiteFooter({
   site,
@@ -13,6 +14,12 @@ export function SiteFooter({
   nav: SiteConfig["footerNav"];
 }) {
   const year = new Date().getFullYear();
+  /*
+   * Build Spec §8 puts the legal links in the bottom bar. They appear only for
+   * policies that can actually be served: a footer link to a 404 is worse than
+   * no link, and it is the kind of thing nobody clicks until a regulator does.
+   */
+  const policies = publishedPolicies();
 
   return (
     <footer className="relative isolate overflow-hidden bg-brand-black text-white/75">
@@ -83,10 +90,22 @@ export function SiteFooter({
           <p>
             &copy; {year} {site.name}. All rights reserved.
           </p>
-          <p>
-            {site.locality}, {site.region} &middot; Serving the Greater Houston
-            area
-          </p>
+
+          <div className="flex flex-wrap items-center gap-x-4 gap-y-2">
+            {policies.map((policy) => (
+              <Link
+                key={policy.slug}
+                href={policy.slug}
+                className="transition-colors hover:text-teal"
+              >
+                {policy.title}
+              </Link>
+            ))}
+            <p>
+              {site.locality}, {site.region} &middot; Serving the Greater
+              Houston area
+            </p>
+          </div>
         </Container>
       </div>
     </footer>

@@ -1,5 +1,6 @@
 import * as React from "react";
 import Link from "next/link";
+import Image from "next/image";
 import { ArrowRight, Check, Sparkles } from "lucide-react";
 import {
   Band,
@@ -125,7 +126,15 @@ function HeroCentered({ section }: { section: HeroCenteredSection }) {
   return (
     <section
       id={section.id}
-      className="relative isolate scroll-mt-28 overflow-hidden bg-surface-2 pb-20 pt-16 sm:pb-24 sm:pt-20 lg:pb-28"
+      className={cn(
+        "relative isolate scroll-mt-28 overflow-hidden bg-surface-2 pt-16 sm:pt-20",
+        // The bottom padding is sized for the button row. On the pages that
+        // open without one — About, the Industries hub — keeping it leaves a
+        // gap the width of a hero between the subhead and the next section.
+        section.primaryCta
+          ? "pb-20 sm:pb-24 lg:pb-28"
+          : "pb-12 sm:pb-14 lg:pb-16"
+      )}
     >
       <HeroBackdrop />
 
@@ -223,6 +232,33 @@ function CardArrow({ label }: { label: string }) {
         &rarr;
       </span>
     </span>
+  );
+}
+
+/**
+ * A card's scannable list.
+ *
+ * Neutral markers rather than ticks, on purpose. The section this was built
+ * for pairs what JMC does against what it declines, and a tick beside "paid
+ * ads" would read as a judgement on every agency that sells them, which Page
+ * Spec 11 §3 rules out. A rule and a dot state the list without grading it.
+ */
+function CardItems({ items }: { items: string[] }) {
+  return (
+    <ul className="mt-4 flex flex-col gap-2.5 border-t border-line pt-4">
+      {items.map((item) => (
+        <li
+          key={item}
+          className="flex items-start gap-2.5 text-[0.92rem] leading-snug text-ink"
+        >
+          <span
+            aria-hidden="true"
+            className="mt-[0.45rem] size-1.5 shrink-0 rounded-pill bg-teal"
+          />
+          {item}
+        </li>
+      ))}
+    </ul>
   );
 }
 
@@ -364,6 +400,7 @@ function CardGrid({ section }: { section: CardGridSection }) {
                     {card.body}
                   </p>
                 ) : null}
+                {card.items?.length ? <CardItems items={card.items} /> : null}
                 {card.cta ? <CardArrow label={card.cta.label} /> : null}
               </CardShell>
             </StaggerItem>
@@ -445,6 +482,8 @@ function CardGrid({ section }: { section: CardGridSection }) {
                   {card.body}
                 </p>
               ) : null}
+
+              {card.items?.length ? <CardItems items={card.items} /> : null}
 
               {card.visual === "searchGrid" ? <SearchGrid /> : null}
 
@@ -573,12 +612,37 @@ function FeatureSplit({ section }: { section: FeatureSplitSection }) {
    */
   const paragraphs = section.body.split(/\n\s*\n/).filter(Boolean);
 
+  /*
+   * Four ways this section can be built, and "none" is a real one: About §2
+   * waits on a headshot, and until it arrives the copy should run full width
+   * rather than sit next to a placeholder.
+   */
+  const visual =
+    section.tableHeadings && section.tableRows
+      ? "table"
+      : section.portrait
+        ? "portrait"
+        : section.groups.length > 0
+          ? "groups"
+          : "none";
+
   return (
     <Band id={section.id} tone={section.tone}>
-      <div className="grid items-center gap-14 lg:grid-cols-2 lg:gap-20">
+      <div
+        className={cn(
+          "grid items-center gap-14 lg:gap-20",
+          visual !== "none" && "lg:grid-cols-2"
+        )}
+      >
         <Reveal
           direction={copyFirst ? "right" : "left"}
-          className={cn("flex flex-col gap-5", !copyFirst && "lg:order-2")}
+          className={cn(
+            "flex flex-col gap-5",
+            // With no visual beside it the copy would otherwise run the full
+            // 1200px container, which is roughly 130 characters a line.
+            visual === "none" && "max-w-[68ch]",
+            !copyFirst && "lg:order-2"
+          )}
         >
           {section.eyebrow ? (
             <p className="eyebrow eyebrow-dot">{section.eyebrow}</p>
@@ -660,7 +724,29 @@ function FeatureSplit({ section }: { section: FeatureSplitSection }) {
               </tbody>
             </table>
           </Reveal>
-        ) : (
+        ) : section.portrait ? (
+          /*
+           * One portrait, framed and nothing else. Page Spec 11 §2 rules out
+           * the name plate, the role title and the caption block, so the only
+           * thing wrapping the image is the radius and the border every other
+           * visual on the site gets.
+           */
+          <Reveal
+            className={cn(
+              "overflow-hidden rounded-bento border border-line bg-surface",
+              !copyFirst && "lg:order-1"
+            )}
+          >
+            <Image
+              src={section.portrait.src}
+              alt={section.portrait.alt}
+              width={720}
+              height={900}
+              sizes="(min-width: 1024px) 40vw, 100vw"
+              className="h-auto w-full object-cover"
+            />
+          </Reveal>
+        ) : visual === "groups" ? (
         <Stagger
           className={cn(
             "grid gap-4 sm:grid-cols-2",
@@ -692,7 +778,7 @@ function FeatureSplit({ section }: { section: FeatureSplitSection }) {
             </StaggerItem>
           ))}
         </Stagger>
-        )}
+        ) : null}
       </div>
     </Band>
   );

@@ -63,6 +63,18 @@ export type Card = {
    * distinct price line rather than a sentence.
    */
   meta?: string;
+  /**
+   * A short scannable list inside the card, under the body.
+   *
+   * Page Spec 11 §3 asks for the "what JMC does / doesn't do" lists as lists
+   * and forbids turning them into paragraphs, because that section is the one
+   * a prospect screenshots to explain JMC to someone else.
+   *
+   * Rendered with neutral markers, not ticks. Half of these lists are things
+   * JMC declines, and a tick beside "paid ads" would read as a verdict on
+   * every agency that offers them, which §3 rules out.
+   */
+  items?: string[];
   /** Card-level link. Path sections use these instead of buttons. */
   cta?: CTA;
   /**
@@ -276,6 +288,19 @@ export type FeatureSplitSection = Base & {
   tableHeadings?: string[];
   /** One entry per row. `cells` matches the headings, left to right. */
   tableRows?: { cells: string[] }[];
+  /**
+   * A single portrait drawn beside the copy instead of the group cards.
+   *
+   * Exists for one section: About §2, the 2022 pivot. Page Spec 11 allows one
+   * image of one person on the whole site and forbids a name plate, a role
+   * title or a caption under it, so this is deliberately a src and an alt and
+   * nothing else — there is no field here for the things it must not have.
+   *
+   * When absent the copy runs full width rather than beside an empty frame. A
+   * grey placeholder on the page that argues JMC is transparent would be the
+   * worst possible stand-in, and the headshot is still to be supplied.
+   */
+  portrait?: { src: string; alt: string };
   /** Which side the copy sits on. */
   align?: "left" | "right";
 };

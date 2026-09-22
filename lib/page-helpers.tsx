@@ -3,6 +3,7 @@ import Link from "next/link";
 import { Sections } from "@/components/blocks/sections";
 import {
   JsonLd,
+  aboutPageSchema,
   breadcrumbSchema,
   faqSchema,
   serviceSchema,
@@ -105,6 +106,15 @@ export function RenderPage({
           <JsonLd data={breadcrumbSchema(trail)} />
           <Breadcrumb trail={trail} />
         </>
+      ) : null}
+      {page.slug === "/about" ? (
+        <JsonLd
+          data={aboutPageSchema({
+            name: page.seoTitle,
+            description: page.metaDescription,
+            url: page.slug,
+          })}
+        />
       ) : null}
       {page.isService ? (
         <JsonLd

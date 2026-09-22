@@ -1,5 +1,6 @@
 import type { MetadataRoute } from "next";
 import { getPublishedPages, getPublishedPostSlugs, getSiteConfig } from "@/lib/content";
+import { publishedPolicies } from "@/lib/legal";
 
 /**
  * Built from the published rows in `pages`, so a page the client adds in
@@ -28,6 +29,20 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     changeFrequency: "monthly",
     priority: 0.7,
   });
+
+  /*
+   * The legal pages. Indexable and included, at low priority per Page Spec 15,
+   * and only when their embed is configured — a sitemap entry for a 404 is a
+   * coverage error reported back in Search Console.
+   */
+  for (const policy of publishedPolicies()) {
+    entries.push({
+      url: `${site.url}${policy.slug}`,
+      lastModified,
+      changeFrequency: "yearly",
+      priority: 0.2,
+    });
+  }
 
   // Articles carry their own last-modified date rather than "now" — an
   // unchanged post should not look freshly edited on every rebuild.

@@ -1,7 +1,6 @@
 "use server";
 
 import { redirect } from "next/navigation";
-import { SERVICE_OPTIONS } from "@/lib/lead-options";
 import { createSupabaseServerClient } from "@/lib/supabase/server";
 import { supabaseConfigured } from "@/lib/supabase/config";
 import { notifyNewLead } from "@/lib/notify";
@@ -36,15 +35,24 @@ export async function submitLead(
    * themselves, so a bot learns nothing from the response.
    */
 
+  /*
+   * Lead type, read before the spam checks so even a discarded submission
+   * lands on the confirmation the visitor expected. Anything other than
+   * "sprint" is a Visibility Review: Page Spec 12 requires a bad parameter to
+   * fall back to the default rather than render a broken state.
+   */
+  const isSprint = str(formData, "type") === "sprint";
+  const confirmation = isSprint ? "/thank-you?type=sprint" : "/thank-you";
+
   // Bots fill hidden fields; humans never see this one.
   if (str(formData, "company_website")) {
-    redirect("/thank-you");
+    redirect(confirmation);
   }
 
   // Nobody reads six fields and writes a paragraph in under three seconds.
   const renderedAt = Number(str(formData, "renderedAt"));
   if (Number.isFinite(renderedAt) && Date.now() - renderedAt < 3000) {
-    redirect("/thank-you");
+    redirect(confirmation);
   }
 
   const values = {
@@ -53,7 +61,12 @@ export async function submitLead(
     phone: str(formData, "phone"),
     business: str(formData, "business"),
     website: str(formData, "website"),
-    service: str(formData, "service"),
+    /*
+     * Derived from the lead type rather than chosen from a dropdown. Page Spec
+     * 12 fixes the form at six visible fields, and the one distinction the CRM
+     * actually needs — sprint against review — already travels in `type`.
+     */
+    service: isSprint ? "Launch Sprint" : "",
     message: str(formData, "message"),
     sourceCta: str(formData, "sourceCta"),
     sourcePage: str(formData, "sourcePage"),
@@ -63,19 +76,24 @@ export async function submitLead(
 
   const errors: Record<string, string> = {};
 
+  /*
+   * Third person, like every other string on the site. An error message is
+   * page copy: "we need your email" is the one place first-person voice tends
+   * to survive a rewrite, because nobody thinks of validation as copy.
+   */
   if (!values.name) {
-    errors.name = "Enter your name so we know who we're talking to.";
+    errors.name = "A name is needed so the reply is addressed to someone.";
   }
   if (!values.email) {
-    errors.email = "We need an email address to send your review.";
+    errors.email = "An email address is needed to send the review to.";
   } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(values.email)) {
-    errors.email = "That email address doesn't look right.";
+    errors.email = "That email address does not look right.";
   }
-  if (
-    values.service &&
-    !(SERVICE_OPTIONS as readonly string[]).includes(values.service)
-  ) {
-    errors.service = "Choose one of the listed options.";
+  if (!values.business) {
+    errors.business = "Enter the business name.";
+  }
+  if (!values.message) {
+    errors.message = "A sentence or two about what is not working is enough.";
   }
 
   if (Object.keys(errors).length > 0) {
@@ -107,7 +125,7 @@ export async function submitLead(
       console.error("[lead] could not save request", error.message);
       return {
         errors: {
-          form: "Something went wrong sending that. Please try again, or email us directly.",
+          form: "That did not send. Please try again, or email wendell@jordanmarketingconsultants.com directly.",
         },
         values,
       };
@@ -128,7 +146,9 @@ export async function submitLead(
   await notifyNewLead(values);
 
   // TODO: post to Bigin once the API credentials and target pipeline arrive.
-  redirect("/thank-you");
+  // Sprint and review leads must land in distinct stages, which is why `type`
+  // is stored rather than inferred from the CTA label later.
+  redirect(confirmation);
 }
 
 /**
@@ -173,15 +193,15 @@ export async function submitAudit(
   const errors: Record<string, string> = {};
 
   if (!values.business) {
-    errors.business = "Enter the business name so we know what to look at.";
+    errors.business = "Enter the business name so the audit knows what to look at.";
   }
   if (!values.website) {
-    errors.website = "We need a website address to run the audit against.";
+    errors.website = "A website address is needed to run the audit against.";
   }
   if (!values.email) {
-    errors.email = "We need an email address to send the audit to.";
+    errors.email = "An email address is needed to send the audit to.";
   } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(values.email)) {
-    errors.email = "That email address doesn't look right.";
+    errors.email = "That email address does not look right.";
   }
 
   if (Object.keys(errors).length > 0) {
@@ -214,7 +234,7 @@ export async function submitAudit(
       console.error("[audit] could not save request", error.message);
       return {
         errors: {
-          form: "Something went wrong sending that. Please try again, or email us directly.",
+          form: "That did not send. Please try again, or email wendell@jordanmarketingconsultants.com directly.",
         },
         values,
       };

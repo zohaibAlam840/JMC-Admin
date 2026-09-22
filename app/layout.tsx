@@ -37,12 +37,19 @@ const montserrat = Montserrat({
 
 export const metadata: Metadata = {
   metadataBase: new URL(site.url),
-  title: {
-    default: "Houston-Area SEO Agency | Jordan Marketing Consultants",
-    template: "%s | Jordan Marketing Consultants",
-  },
+  /*
+   * A default, and deliberately no template.
+   *
+   * A "%s | Jordan Marketing Consultants" template was appending 31 characters
+   * to every page title on the site, which put all of them past the 60 the
+   * page specs cap them at, and printed the brand twice on the pages whose own
+   * title already carried it. Each page now writes its whole title, which is
+   * also the only way `npm run check` can measure the string a search result
+   * will actually show.
+   */
+  title: "Houston-Area SEO Agency | Jordan Marketing Consultants",
   description:
-    "Jordan Marketing Consultants helps Houston-area businesses improve search visibility through local SEO, traditional SEO, real estate SEO, content planning, and clear reporting.",
+    "Jordan Marketing Consultants is a Houston-area SEO agency in League City. Local, regional, and industrial search visibility, explained in plain language every month.",
   openGraph: {
     type: "website",
     locale: "en_US",

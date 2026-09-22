@@ -60,6 +60,35 @@ export function localBusinessSchema(site: SiteDetails = fileSite) {
   };
 }
 
+/**
+ * AboutPage — Page Spec 11.
+ *
+ * No Person schema alongside it, deliberately. The page names one person once,
+ * for one state-issued credential, and makes no claim about a role, a title or
+ * a headcount. Person markup would assert exactly the things the page spends
+ * its length declining to assert.
+ */
+export function aboutPageSchema({
+  name,
+  description,
+  url,
+  site = fileSite,
+}: {
+  name: string;
+  description: string;
+  url: string;
+  site?: SiteDetails;
+}) {
+  return {
+    "@context": "https://schema.org",
+    "@type": "AboutPage",
+    name,
+    description,
+    url: `${site.url}${url}`,
+    mainEntity: { "@id": `${site.url}/#organization` },
+  };
+}
+
 export function serviceSchema({
   name,
   description,

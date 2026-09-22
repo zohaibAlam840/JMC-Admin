@@ -1,37 +1,27 @@
-import { Container } from "@/components/ui/layout";
-import { Button } from "@/components/ui/button";
+import { NotFoundBody } from "@/components/blocks/not-found-body";
 import { SiteChrome } from "@/components/layout/site-chrome";
 
 /**
- * Global 404. Next renders this against the root layout, which carries no
- * chrome, so it pulls the header and footer in itself.
+ * The root 404, for a URL that matches no segment at all.
+ *
+ * Next renders this against the root layout, which carries no chrome, so it
+ * pulls the header and footer in itself — a visitor who has landed on a dead
+ * URL needs the full nav more than anyone.
+ *
+ * Most real 404s on this site do not come through here. Every marketing URL
+ * matches the catch-all under (site), so `notFound()` there hits
+ * app/(site)/not-found.tsx, which is already inside the (site) chrome.
+ *
+ * It returns a real 404 status because it is the `not-found` convention rather
+ * than a route that renders a message with a 200. A "not found" page returning
+ * 200 is a soft 404 and gets indexed, and the redirect map's global rules rule
+ * out the other common shortcut — a blanket redirect to the homepage, which
+ * Google also reads as a soft 404.
  */
 export default function NotFound() {
   return (
     <SiteChrome>
-      <section className="bg-surface-2 py-24 sm:py-32">
-        <Container>
-          <div className="mx-auto max-w-xl text-center">
-            <p className="eyebrow">404</p>
-            <h1 className="mt-3 text-4xl sm:text-5xl">
-              That Page Isn&apos;t Here
-            </h1>
-            <p className="mt-5 text-[1.02rem] leading-relaxed text-ink">
-              The page may have moved during our site rebuild. Here are the
-              places most people are looking for.
-            </p>
-            <div className="mt-8 flex flex-col justify-center gap-3 sm:flex-row sm:flex-wrap">
-              <Button href="/">Home</Button>
-              <Button href="/monthly-seo-packages" variant="secondary">
-                SEO Packages
-              </Button>
-              <Button href="/contact" variant="secondary">
-                Contact
-              </Button>
-            </div>
-          </div>
-        </Container>
-      </section>
+      <NotFoundBody />
     </SiteChrome>
   );
 }

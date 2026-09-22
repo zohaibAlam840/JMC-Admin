@@ -1,177 +1,265 @@
 import type { Metadata } from "next";
 import { Check } from "lucide-react";
-import { Container } from "@/components/ui/layout";
-import { Button } from "@/components/ui/button";
-import { site } from "@/content/site";
+import { Band, Card, Container, SectionHeader } from "@/components/ui/layout";
+import { Stagger, StaggerItem } from "@/components/motion/reveal";
+import { ConversionEvent } from "@/components/blocks/conversion-event";
 
 /**
- * Conversion confirmation. Noindexed — this page should never appear in search
- * results, and it is the destination where analytics conversion tracking fires
- * once GA4/GTM is wired in phase 4.
+ * Conversion confirmation — Page Spec 13.
  *
- * Two variants, chosen by ?type=. The audit variant exists because Page Spec
- * 04 §4 forbids stating a turnaround anywhere on the page that offers the free
- * audit, which leaves the confirmation to do the reassuring on its own.
- * Silence on the page is acceptable; silence after submitting is not.
+ * A small page carrying more load than usual. Neither form on the site states
+ * a response time, because a promised turnaround has to hold on the worst week
+ * rather than the average one. The consequence is that this page does the
+ * reassuring instead: if it says nothing useful, a visitor is left wondering
+ * whether the submission went anywhere at all.
+ *
+ * It also carries every conversion event on the site. If it fails to load, the
+ * analytics show no conversions however many leads arrive.
+ *
+ * Three variants, switched on ?type=. An unrecognised value falls back to the
+ * default rather than rendering an empty state.
  */
 export const metadata: Metadata = {
   title: "Thank You",
   description: "Your request has been received.",
-  robots: { index: false, follow: false },
+  robots: { index: false, follow: true },
 };
 
 type Variant = {
   heading: string;
   intro: string;
+  /** The conversion event this variant fires. */
+  event: string;
   steps: { title: string; body: string }[];
-  links: { label: string; href: string }[];
+  /** Onward links so the page is not a dead end. */
+  onward: { title: string; body: string; href: string }[];
 };
 
+/*
+ * Default, from the Visibility Review form.
+ *
+ * No pricing link in the onward cards, per §3: someone who has just requested
+ * a review does not need to be sold to again.
+ */
 const review: Variant = {
   heading: "Request Received",
   intro:
-    "Thanks for reaching out. We will review your search visibility and get back to you within one business day.",
+    "The request arrived and a person will read it. Here is what happens to it.",
+  event: "lead_visibility_review",
   steps: [
     {
-      title: "We review your search visibility",
-      body: "Where you appear today, which terms you are missing, and who is currently taking that space.",
+      title: "The enquiry is read",
+      body: "By a person, not an autoresponder, and not the start of a sales sequence.",
     },
     {
-      title: "We come back with priorities",
-      body: "The gaps worth acting on first, and the reasoning behind the order.",
+      title: "A look at the current setup",
+      body: "Reviewed before any conversation, so the call is about substance rather than about collecting basic facts.",
     },
     {
-      title: "We recommend a real next step",
-      body: "A package, a sprint, or advice you can act on yourself, whichever actually fits.",
+      title: "A conversation",
+      body: "What is worth doing first, and the reasoning behind that order.",
     },
   ],
-  links: [
-    { label: "View SEO Packages", href: "/monthly-seo-packages" },
-    { label: "Back to Home", href: "/" },
+  onward: [
+    {
+      title: "How JMC reports progress",
+      body: "The four questions every recap answers, and what one actually contains.",
+      href: "/seo-reporting",
+    },
+    {
+      title: "Industries JMC works with",
+      body: "Eight kinds of business, and what changes between them.",
+      href: "/industries",
+    },
+    {
+      title: "About JMC",
+      body: "Why the agency does one thing, and what it declines.",
+      href: "/about",
+    },
   ],
 };
 
 /*
- * Sprint, reached from a Launch Sprints CTA carrying ?type=sprint. Decisions
- * Record §9 requires all three variants: a sprint enquiry is a different
- * conversation from a visibility review, and landing it on the generic
- * confirmation would describe the wrong next step.
+ * Sprint, reached from a Launch Sprints CTA carrying ?type=sprint. A sprint
+ * enquiry is a different conversation from a visibility review, and landing it
+ * on the generic confirmation would describe the wrong next step.
  */
 const sprint: Variant = {
   heading: "Sprint Enquiry Received",
   intro:
-    "Thanks. A Launch Sprint is a fixed scope inside a fixed window, so the first step is agreeing exactly what is in it.",
+    "The enquiry arrived and a person will read it. A Launch Sprint is a fixed scope inside a fixed window, so the first step is agreeing exactly what is in it.",
+  event: "lead_sprint_consultation",
   steps: [
     {
-      title: "The current foundation gets reviewed",
-      body: "Where the site and the profile stand today, and which of the three sprints actually matches the problem.",
+      title: "The enquiry is read",
+      body: "By a person, along with a look at which of the three sprints matches the problem described.",
     },
     {
-      title: "The scope is written down before anything starts",
-      body: "The deliverable list is the whole list. Anything outside it is quoted separately rather than absorbed quietly.",
+      title: "A look at the current foundation",
+      body: "Where the site and the profile stand today, reviewed before the scope conversation rather than during it.",
     },
     {
-      title: "Thirty days, then a roadmap",
-      body: "The work completes inside the window and finishes with a 30-Day Action Roadmap, which is yours whatever you decide next.",
+      title: "A conversation about scope",
+      body: "The deliverable list is the whole list, and it is agreed before the window opens.",
     },
   ],
-  links: [
-    { label: "View Launch Sprints", href: "/launch-sprints" },
-    { label: "View Monthly SEO Packages", href: "/monthly-seo-packages" },
+  onward: [
+    {
+      title: "How JMC reports progress",
+      body: "The four questions every recap answers, and what one actually contains.",
+      href: "/seo-reporting",
+    },
+    {
+      title: "Industries JMC works with",
+      body: "Eight kinds of business, and what changes between them.",
+      href: "/industries",
+    },
+    {
+      title: "About JMC",
+      body: "Why the agency does one thing, and what it declines.",
+      href: "/about",
+    },
   ],
 };
 
 /*
- * Steps, deliberately, rather than dates. No hour count, no "shortly", no
- * "within a few days" — a stated deadline would have to hold on the worst week
- * rather than the average one. What the visitor gets instead is the sequence,
- * and the fact that a person is in it.
+ * Audit, from the Free Visibility Audit form on the GBP page.
+ *
+ * The three steps here mirror the auto-reply email exactly, same content and
+ * same sequence, so a visitor reading both does not find two versions of what
+ * is about to happen.
+ *
+ * This is the one variant that links to offers, per §3: that visitor has not
+ * spoken to anyone yet.
  */
 const audit: Variant = {
   heading: "Audit Request Received",
   intro:
-    "Thanks. The request arrived and it is in the queue. Here is what happens to it.",
+    "The request arrived and it is in the queue. A written audit comes back by email.",
+  event: "lead_free_audit",
   steps: [
     {
-      title: "The profile and the site get reviewed",
-      body: "Categories, services, business information, listing consistency, and where the profile is visible across the area you serve.",
+      title: "The profile and site are reviewed",
+      body: "A person reviews it, not a tool alone. Categories, services, business information, listing consistency, and where the profile is visible across the area served.",
     },
     {
-      title: "A person reads the results",
-      body: "The report is not sent straight out of a tool. Wendell goes through it and writes the part that says what actually matters in it.",
+      title: "The audit is written",
+      body: "Structured around what was found and what it means, on the same four headings as the monthly recap.",
     },
     {
-      title: "A written audit comes back by email",
-      body: "Built on the same four headings as the monthly recap: what is there, why it matters, what is working and what is not, and what to do next.",
+      title: "It arrives by email",
+      body: "No call required, and no obligation attached to reading it.",
     },
   ],
-  links: [
-    { label: "Explore Local SEO", href: "/local-seo-services" },
-    { label: "View Launch Sprints", href: "/launch-sprints" },
+  onward: [
+    {
+      title: "Local SEO services",
+      body: "What ongoing local visibility work covers, month to month.",
+      href: "/local-seo-services",
+    },
+    {
+      title: "Launch Sprints",
+      body: "Fixed scope inside a fixed window, for a foundation that needs building once.",
+      href: "/launch-sprints",
+    },
+    {
+      title: "How JMC reports progress",
+      body: "The four questions every recap answers, and what one actually contains.",
+      href: "/seo-reporting",
+    },
   ],
 };
 
-export default async function Page({
-  searchParams,
-}: PageProps<"/thank-you">) {
-  const { type } = await searchParams;
-  const variant =
-    type === "audit" ? audit : type === "sprint" ? sprint : review;
+export default async function Page({ searchParams }: PageProps<"/thank-you">) {
+  const params = await searchParams;
+  const type = typeof params.type === "string" ? params.type : "";
+  const tier = typeof params.tier === "string" ? params.tier : undefined;
+
+  const variant = type === "audit" ? audit : type === "sprint" ? sprint : review;
 
   return (
-    <section className="bg-surface-2 py-20 sm:py-28">
-      <Container>
-        <div className="mx-auto max-w-2xl text-center">
-          <span className="mx-auto inline-flex size-16 items-center justify-center rounded-pill bg-brand-black text-white shadow-soft ring-8 ring-white">
-            <Check size={28} strokeWidth={3} aria-hidden="true" />
-          </span>
+    <>
+      <ConversionEvent event={variant.event} tier={tier} />
 
-          <h1 className="mt-6 text-4xl sm:text-5xl">{variant.heading}</h1>
-          <p className="mt-5 text-[1.08rem] leading-relaxed text-ink">
-            {variant.intro}
-          </p>
+      {/*
+       * A clear statement, set well. No confetti, no animated checkmark: the
+       * visitor has just been told a person will read what they sent, and a
+       * celebration graphic is the wrong register for that promise.
+       */}
+      <section className="scroll-mt-24 bg-white py-16 sm:py-20">
+        <Container>
+          <div className="mx-auto max-w-[680px] text-center">
+            <span className="mx-auto inline-flex size-14 items-center justify-center rounded-pill bg-brand-black text-white">
+              <Check size={24} strokeWidth={3} aria-hidden="true" />
+            </span>
 
-          <ol className="mt-10 flex flex-col gap-4 text-left">
-            {variant.steps.map((item, i) => (
-              <li
-                key={item.title}
-                className="flex gap-4 rounded-card border border-line bg-white p-5"
-              >
-                <span className="gradient-text font-display text-2xl font-bold leading-none">
-                  {String(i + 1).padStart(2, "0")}
-                </span>
-                <div>
-                  <p className="font-heading text-base font-bold text-ink-strong">
-                    {item.title}
-                  </p>
-                  <p className="mt-1 text-[0.9rem] leading-relaxed text-subtle">
-                    {item.body}
-                  </p>
-                </div>
-              </li>
-            ))}
-          </ol>
-
-          <p className="mt-8 text-[0.9rem] text-subtle">
-            Need something sooner? Call{" "}
-            <a
-              href={site.phoneHref}
-              className="font-semibold text-teal-ink hover:underline"
-            >
-              {site.phone}
-            </a>
-            .
-          </p>
-
-          <div className="mt-8 flex flex-col justify-center gap-3 sm:flex-row">
-            {variant.links.map((link) => (
-              <Button key={link.href} href={link.href} variant="secondary">
-                {link.label}
-              </Button>
-            ))}
+            <h1 className="mt-6 font-display text-[2.125rem] leading-[1.05] sm:text-[2.625rem]">
+              {variant.heading}
+            </h1>
+            <p className="mt-4 text-[1.06rem] leading-relaxed text-subtle">
+              {variant.intro}
+            </p>
           </div>
-        </div>
-      </Container>
-    </section>
+        </Container>
+      </section>
+
+      {/*
+       * The section that replaces a response-time promise, so it has to be
+       * concrete. Steps, never dates: no hour count, no "shortly", nothing in
+       * the cards and nothing in a caption either.
+       */}
+      <Band tone="surface">
+        <SectionHeader eyebrow="What happens next" heading="Three Steps, No Dates" />
+
+        <Stagger className="mt-12 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+          {variant.steps.map((step, i) => (
+            <StaggerItem key={step.title} className="h-full">
+              <Card className="gap-3">
+                <span className="inline-flex size-11 items-center justify-center rounded-card border border-line bg-surface font-display text-base font-bold leading-none">
+                  <span className="gradient-text">
+                    {String(i + 1).padStart(2, "0")}
+                  </span>
+                </span>
+                <h2 className="text-[1.1875rem] leading-tight">{step.title}</h2>
+                <p className="text-[0.9rem] leading-relaxed text-subtle">
+                  {step.body}
+                </p>
+              </Card>
+            </StaggerItem>
+          ))}
+        </Stagger>
+      </Band>
+
+      {/* Plain cards, no buttons. Low-key, so the page is not a dead end
+          without becoming another pitch. */}
+      <Band tone="white">
+        <SectionHeader
+          eyebrow="While you're here"
+          heading="Worth a Look"
+        />
+
+        <Stagger className="mt-12 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+          {variant.onward.map((link) => (
+            <StaggerItem key={link.href} className="h-full">
+              <Card interactive href={link.href} className="group gap-2.5">
+                <h2 className="text-[1.1875rem] leading-tight">{link.title}</h2>
+                <p className="text-[0.9rem] leading-relaxed text-subtle">
+                  {link.body}
+                </p>
+                <span className="mt-auto inline-flex items-center gap-1.5 pt-5 font-body text-[0.9rem] font-semibold text-teal-ink">
+                  Read on
+                  <span
+                    aria-hidden="true"
+                    className="transition-transform duration-200 group-hover:translate-x-0.5"
+                  >
+                    &rarr;
+                  </span>
+                </span>
+              </Card>
+            </StaggerItem>
+          ))}
+        </Stagger>
+      </Band>
+    </>
   );
 }
