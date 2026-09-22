@@ -47,6 +47,14 @@ function textArray(values: string[]): string {
  * this file would otherwise overwrite with everything else on the page.
  */
 const SLUGS = [
+  /*
+   * About joined this list when Page Spec 11 arrived. It used to be patched
+   * section by section, on the grounds that no spec rebuilt it; 11 rebuilds
+   * it completely, around the 2022 pivot rather than around a process list,
+   * and not one of the old section keys survived. Patching by key threw as
+   * soon as the content file changed, which is the failure mode you want.
+   */
+  "/about",
   "/local-seo-services",
   "/traditional-seo-services",
   "/monthly-seo-packages",
@@ -304,62 +312,6 @@ for (const key of HOME_SECTIONS) {
 }
 w();
 
-/* ---------------------------------------------------------- about page -- */
-
-/*
- * About is not rebuilt by any page spec, so it is patched section by section
- * rather than wholesale. Three things changed: the service-lane grid lost its
- * Real Estate card, the process steps moved to third person (Decisions Record
- * §2), and the Monthly Recap block is new (§7 lists About among the pages
- * that carry it).
- */
-w("-- --------------------------------------------------------- about page ----");
-const about = filePages.find((p) => p.slug === "/about");
-if (!about) throw new Error("No About page in content/pages");
-
-for (const key of ["specialties", "process"]) {
-  const section = about.sections.find((s) => s.id === key);
-  if (!section) throw new Error(`About has no "${key}" section`);
-  const { id, type, tone, ...data } = section as typeof section & {
-    tone?: "white" | "surface";
-  };
-  void id;
-  void type;
-  void tone;
-  w(
-    `update public.sections set data = ${jsonb(data)} ` +
-      `where key = ${lit(key)} and page_id = (select id from public.pages where slug = '/about');`
-  );
-}
-
-/*
- * The recap block is a new section rather than an edited one, so it is
- * removed first (making a re-run idempotent), the sections after it are
- * pushed down one, and it slots into the gap.
- */
-const recap = about.sections.find((s) => s.id === "monthly-recap");
-if (recap) {
-  const { id, type, tone, ...data } = recap as typeof recap & {
-    tone?: "white" | "surface";
-  };
-  void id;
-  const position = about.sections.indexOf(recap);
-  w(
-    `delete from public.sections where key = 'monthly-recap' ` +
-      `and page_id = (select id from public.pages where slug = '/about');`
-  );
-  w(
-    `update public.sections set position = position + 1 where position >= ${position} ` +
-      `and page_id = (select id from public.pages where slug = '/about');`
-  );
-  w(
-    `insert into public.sections (page_id, key, type, tone, data, position) ` +
-      `select id, 'monthly-recap', ${lit(type)}, ${lit(tone ?? null)}, ${jsonb(data)}, ${position} ` +
-      `from public.pages where slug = '/about';`
-  );
-}
-w();
-
 /* ------------------------------------------------------------ page meta -- */
 
 w("-- ---------------------------------------------------------- page meta ----");
@@ -387,16 +339,42 @@ w("update public.pages set published = false where slug = '/real-estate-seo';");
 w("update public.packages set visible = false where group_key = 'realEstate';");
 w();
 
+/* ----------------------------------------------------------- resources -- */
+
+w("-- ----------------------------------------------------------- resources ----");
+w("-- Built, not published — Page Spec 14. The route and the post template");
+w("-- exist and work; zero posts go live, and the page stays out of the nav,");
+w("-- the footer and the sitemap until content is sourced.");
+w("--");
+w("-- This has to be stated here because the page rebuild above only touches");
+w("-- the pages it owns, and /resources is not one of them. Left");
+w("-- alone it stays published from the original seed, and the sitemap picks");
+w("-- it up the moment the database is reachable — listing a URL that 302s.");
+w("update public.pages set published = false where slug = '/resources';");
+w();
+
 /* --------------------------------------------------------------- redirects -- */
 
 w("-- --------------------------------------------------------- redirects ----");
 w("-- /seo-packages is the important one here. It was live and linked, and");
 w("-- Page Spec 06 renames it, so it has to keep resolving.");
-for (const [source, destination] of REDIRECTS) {
+/*
+ * `permanent` is written from the third element rather than hardcoded, and
+ * the conflict clause updates it.
+ *
+ * Both were wrong: every row was emitted as `true`, so /resources — the one
+ * deliberate 302 on the site — was stored as a 301. next.config.ts carries
+ * its own copy of that redirect and Next resolves config redirects before the
+ * proxy, so visitors got the right status anyway and the fault stayed
+ * invisible. It would have surfaced the moment Resources publishes and that
+ * config entry is deleted, which is exactly when telling Google the URL is
+ * permanently gone does the most damage.
+ */
+for (const [source, destination, permanent = true] of REDIRECTS) {
   w(
     `insert into public.redirects (source, destination, permanent) values ` +
-      `(${lit(source)}, ${lit(destination)}, true) ` +
-      `on conflict (source) do update set destination = excluded.destination;`
+      `(${lit(source)}, ${lit(destination)}, ${permanent}) ` +
+      `on conflict (source) do update set destination = excluded.destination, permanent = excluded.permanent;`
   );
 }
 w();
