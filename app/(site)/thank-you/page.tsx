@@ -52,6 +52,36 @@ const review: Variant = {
 };
 
 /*
+ * Sprint, reached from a Launch Sprints CTA carrying ?type=sprint. Decisions
+ * Record §9 requires all three variants: a sprint enquiry is a different
+ * conversation from a visibility review, and landing it on the generic
+ * confirmation would describe the wrong next step.
+ */
+const sprint: Variant = {
+  heading: "Sprint Enquiry Received",
+  intro:
+    "Thanks. A Launch Sprint is a fixed scope inside a fixed window, so the first step is agreeing exactly what is in it.",
+  steps: [
+    {
+      title: "The current foundation gets reviewed",
+      body: "Where the site and the profile stand today, and which of the three sprints actually matches the problem.",
+    },
+    {
+      title: "The scope is written down before anything starts",
+      body: "The deliverable list is the whole list. Anything outside it is quoted separately rather than absorbed quietly.",
+    },
+    {
+      title: "Thirty days, then a roadmap",
+      body: "The work completes inside the window and finishes with a 30-Day Action Roadmap, which is yours whatever you decide next.",
+    },
+  ],
+  links: [
+    { label: "View Launch Sprints", href: "/launch-sprints" },
+    { label: "View Monthly SEO Packages", href: "/monthly-seo-packages" },
+  ],
+};
+
+/*
  * Steps, deliberately, rather than dates. No hour count, no "shortly", no
  * "within a few days" — a stated deadline would have to hold on the worst week
  * rather than the average one. What the visitor gets instead is the sequence,
@@ -85,7 +115,8 @@ export default async function Page({
   searchParams,
 }: PageProps<"/thank-you">) {
   const { type } = await searchParams;
-  const variant = type === "audit" ? audit : review;
+  const variant =
+    type === "audit" ? audit : type === "sprint" ? sprint : review;
 
   return (
     <section className="bg-surface-2 py-20 sm:py-28">

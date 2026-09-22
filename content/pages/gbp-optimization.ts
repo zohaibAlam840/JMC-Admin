@@ -226,10 +226,7 @@ export const gbpOptimizationPage: PageContent = {
           cta: { label: "Explore Local SEO", href: "/local-seo-services" },
         },
       ],
-      cta: {
-        label: "Not sure which fits? Request a Visibility Review",
-        href: "/contact",
-      },
+      cta: { label: "Request a Visibility Review", href: "/contact" },
     },
 
     {

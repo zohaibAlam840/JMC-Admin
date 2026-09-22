@@ -65,7 +65,20 @@ export const servicePageSlugs = new Set([
  * deleted: the cut comes from a Decisions Record we have only seen quoted, and
  * the page plus its two packages come straight back if that changes.
  */
-export const draftPageSlugs = new Set(["/links", "/real-estate-seo"]);
+export const draftPageSlugs = new Set([
+  "/links",
+  "/real-estate-seo",
+  /*
+   * Resources is built but unpublished at launch while its content is
+   * sourced — Decisions Record §3 and §14. It is also out of the nav and the
+   * footer, and /resources/ carries the site's one temporary 302 to the
+   * homepage so the indexed URL stays alive rather than being told it is gone.
+   *
+   * Publishing it is three edits: remove it here, add it back to footer
+   * column four, and delete that redirect from next.config.ts.
+   */
+  "/resources",
+]);
 
 /** Pages whose route is hand-built, so the slug must never change. */
 export const systemPageSlugs = new Set(["/", "/links"]);

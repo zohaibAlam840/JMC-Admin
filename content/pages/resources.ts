@@ -20,8 +20,8 @@ export const resourcesPage: PageContent = {
       type: "heroCentered",
       eyebrow: "Resources",
       heading: "SEO, Explained Without the Jargon",
-      body: "Straight answers to the questions business owners actually ask about search visibility. We are building this out as we go. If something you need is missing, ask us directly.",
-      primaryCta: { label: "Ask an SEO Question", href: "/contact" },
+      body: "Straight answers to the questions business owners actually ask about search visibility. This section is being built out as it goes. If something you need is missing, ask for it directly.",
+      primaryCta: { label: "Request a Visibility Review", href: "/contact" },
       secondaryCta: { label: "View SEO Packages", href: "/monthly-seo-packages" },
     },
 
@@ -31,7 +31,7 @@ export const resourcesPage: PageContent = {
       variant: "compact",
       tone: "white",
       eyebrow: "Topics",
-      heading: "What We Write About",
+      heading: "What These Cover",
       body: "The areas where clear information saves businesses the most money.",
       columns: 3,
       cards: [
@@ -75,7 +75,7 @@ export const resourcesPage: PageContent = {
       eyebrow: "Search Is Changing",
       heading: "SEO Built for How People Search Now",
       body: "People search across Google, maps, organic results, and increasingly AI-powered answer tools. Nobody can guarantee placement inside an AI answer, and you should be skeptical of anyone who says otherwise. What does help is the same practical work that has always helped: clear service pages, strong site structure, sound internal linking, accurate schema, and content that establishes what you do and where you do it.",
-      cta: { label: "Talk Through Your SEO Strategy", href: "/contact" },
+      cta: { label: "Request a Visibility Review", href: "/contact" },
       groups: [
         {
           title: "Clear Service Pages",
@@ -112,14 +112,14 @@ export const resourcesPage: PageContent = {
       // article is published this says so honestly rather than showing an
       // empty grid or invented posts.
       emptyMessage:
-        "The first articles are being written now. In the meantime, ask us the question directly. We answer it either way.",
-      cta: { label: "Ask an SEO Question", href: "/contact" },
+        "The first articles are being written now. In the meantime, send the question directly. It gets an answer either way.",
+      cta: { label: "Request a Visibility Review", href: "/contact" },
     },
 
     {
       id: "final-cta",
       type: "finalCta",
-      heading: "Have a Question We Haven't Written About Yet?",
+      heading: "A Question That Is Not Answered Here Yet?",
       body: "Ask it directly. If it is useful to you, it is probably useful to other businesses in the same position, and it may well become the next resource here.",
       primaryCta: { label: "Request a Visibility Review", href: "/contact" },
       secondaryCta: { label: "View SEO Packages", href: "/monthly-seo-packages" },

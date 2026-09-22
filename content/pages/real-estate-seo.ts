@@ -208,7 +208,7 @@ export const realEstateSeoPage: PageContent = {
       tone: "white",
       eyebrow: "Real Estate SEO Options",
       heading: "Two Paths Depending on How You Are Built",
-      body: "Real estate SEO is scoped differently than standard local SEO packages. Reach out and we will size it against your markets and business model.",
+      body: "Real estate SEO is scoped differently than standard local SEO packages. Reach out and JMC will size it against your markets and business model.",
       packageIds: ["real-estate-agent", "real-estate-team"],
       cta: {
         label: "Request a Real Estate Visibility Review",
@@ -261,7 +261,7 @@ export const realEstateSeoPage: PageContent = {
       type: "faq",
       tone: "surface",
       eyebrow: "Questions",
-      heading: "Real Estate SEO Questions We Hear Often",
+      heading: "Common Real Estate SEO Questions",
       items: [
         {
           question: "Is SEO worth it for an individual agent?",
@@ -291,7 +291,7 @@ export const realEstateSeoPage: PageContent = {
         {
           question: "Who writes the content?",
           answer:
-            "JMC plans and produces the content as part of your monthly scope. We will pull on your market knowledge where it makes the content genuinely better, but you are not being handed a writing assignment.",
+            "JMC plans and produces the content as part of your monthly scope. JMC draws on your market knowledge where it makes the content genuinely better, but you are not being handed a writing assignment.",
         },
       ],
       cta: {

@@ -65,11 +65,34 @@ const pages = SLUGS.map((slug) => {
   return page;
 });
 
-const REDIRECTS: [string, string][] = [
+/**
+ * The legacy map, from JMC-Redirect-Map.xlsx. Kept in step with the copy in
+ * next.config.ts: that one is the safety net, this one is what the client can
+ * edit in /admin afterwards.
+ *
+ * /resources is the only 302 on the site, and deliberately so: the page is
+ * built but unpublished, and a 301 would tell Google it is gone for good.
+ */
+const REDIRECTS: [string, string, boolean?][] = [
+  ["/local-seo-service", "/local-seo-services"],
+  ["/reputation-management", "/local-seo-services"],
+  ["/link-building-service", "/traditional-seo-services"],
+  ["/real-estate-seo", "/local-seo-services"],
+  ["/seo-website-services", "/traditional-seo-services"],
+  ["/free-website-audit", "/google-business-profile-optimization"],
+  ["/services", "/local-seo-services"],
+  ["/contact-us", "/contact"],
+  ["/seo-service", "/local-seo-services"],
+  ["/seo-league-city", "/local-seo-services"],
+  ["/about-us", "/about"],
+  ["/online-reviews-for-roofers", "/industries/home-services-trades"],
+  ["/audit", "/google-business-profile-optimization"],
+  ["/general", "/"],
+  ["/general/feed", "/"],
+  ["/navigating-the-ai-frontier", "/"],
   ["/seo-packages", "/monthly-seo-packages"],
   ["/seo-packages-pricing", "/monthly-seo-packages"],
-  ["/free-website-audit", "/google-business-profile-optimization"],
-  ["/local-seo-service", "/local-seo-services"],
+  ["/resources", "/", false],
 ];
 
 const out: string[] = [];
@@ -284,15 +307,20 @@ w();
 /* ---------------------------------------------------------- about page -- */
 
 /*
- * One section, for the same reason as the homepage: About is not rebuilt by
- * any of the new specs, but its service-lane grid carried a Real Estate card
- * that is about to point at an unpublished page.
+ * About is not rebuilt by any page spec, so it is patched section by section
+ * rather than wholesale. Three things changed: the service-lane grid lost its
+ * Real Estate card, the process steps moved to third person (Decisions Record
+ * §2), and the Monthly Recap block is new (§7 lists About among the pages
+ * that carry it).
  */
 w("-- --------------------------------------------------------- about page ----");
 const about = filePages.find((p) => p.slug === "/about");
-const specialties = about?.sections.find((s) => s.id === "specialties");
-if (about && specialties) {
-  const { id, type, tone, ...data } = specialties as typeof specialties & {
+if (!about) throw new Error("No About page in content/pages");
+
+for (const key of ["specialties", "process"]) {
+  const section = about.sections.find((s) => s.id === key);
+  if (!section) throw new Error(`About has no "${key}" section`);
+  const { id, type, tone, ...data } = section as typeof section & {
     tone?: "white" | "surface";
   };
   void id;
@@ -300,7 +328,34 @@ if (about && specialties) {
   void tone;
   w(
     `update public.sections set data = ${jsonb(data)} ` +
-      `where key = 'specialties' and page_id = (select id from public.pages where slug = '/about');`
+      `where key = ${lit(key)} and page_id = (select id from public.pages where slug = '/about');`
+  );
+}
+
+/*
+ * The recap block is a new section rather than an edited one, so it is
+ * removed first (making a re-run idempotent), the sections after it are
+ * pushed down one, and it slots into the gap.
+ */
+const recap = about.sections.find((s) => s.id === "monthly-recap");
+if (recap) {
+  const { id, type, tone, ...data } = recap as typeof recap & {
+    tone?: "white" | "surface";
+  };
+  void id;
+  const position = about.sections.indexOf(recap);
+  w(
+    `delete from public.sections where key = 'monthly-recap' ` +
+      `and page_id = (select id from public.pages where slug = '/about');`
+  );
+  w(
+    `update public.sections set position = position + 1 where position >= ${position} ` +
+      `and page_id = (select id from public.pages where slug = '/about');`
+  );
+  w(
+    `insert into public.sections (page_id, key, type, tone, data, position) ` +
+      `select id, 'monthly-recap', ${lit(type)}, ${lit(tone ?? null)}, ${jsonb(data)}, ${position} ` +
+      `from public.pages where slug = '/about';`
   );
 }
 w();

@@ -66,6 +66,16 @@ export type Card = {
   /** Card-level link. Path sections use these instead of buttons. */
   cta?: CTA;
   /**
+   * Makes the whole card a link with no labelled button inside it.
+   *
+   * For cards whose title already names the destination: the industry cards
+   * on Traditional SEO §4, or the profile card in the Local visibility
+   * system. A `cta` there would need a label repeating the title, which is a
+   * card title dressed as a button, and outside the governed CTA library
+   * (Decisions Record §9) either way.
+   */
+  href?: string;
+  /**
    * A code-built illustration drawn inside the card, below the copy.
    *
    * "searchGrid" is the local search grid from Page Spec 02 §4 — deliberately

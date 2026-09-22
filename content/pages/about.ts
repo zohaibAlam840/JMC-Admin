@@ -29,7 +29,7 @@ export const aboutPage: PageContent = {
       type: "cardGrid",
       variant: "split",
       tone: "white",
-      eyebrow: "How We Work",
+      eyebrow: "How the Work Runs",
       heading: "SEO Should Be Understandable Before It Is Impressive",
       body: "Most businesses that have hired an SEO agency before describe the same experience: work happened, invoices arrived, and nobody could explain what changed. JMC is built around fixing that.",
       columns: 3,
@@ -59,14 +59,14 @@ export const aboutPage: PageContent = {
       eyebrow: "Houston-Area SEO Agency",
       heading: "Rooted in League City. Built for Houston-Area Growth.",
       body: "JMC is based in League City and works with businesses across the Greater Houston area and beyond. Being local matters for understanding a market, but it is not a boundary. Traditional SEO clients compete regionally and nationally, and the work is built around where your customers actually are.",
-      cta: { label: "Explore SEO Services", href: "/local-seo-services" },
+      cta: { label: "Explore Local SEO", href: "/local-seo-services" },
     },
 
     {
       id: "specialties",
       type: "cardGrid",
       tone: "white",
-      eyebrow: "What We Focus On",
+      eyebrow: "What JMC Focuses On",
       heading: "Two Service Lanes, One Standard",
       body: "Different markets need different strategies. The commitment to clear scope, documented priorities, and honest reporting does not change between them.",
       columns: 2,
@@ -99,29 +99,53 @@ export const aboutPage: PageContent = {
       steps: [
         {
           title: "Visibility Review",
-          body: "We review where your business currently shows up, where visibility is weak, and which opportunities are worth prioritizing.",
+          body: "JMC reviews where your business currently shows up, where visibility is weak, and which opportunities are worth prioritizing.",
         },
         {
           title: "SEO Roadmap",
-          body: "We organize the work around keyword priorities, content needs, local visibility, technical issues, and business goals.",
+          body: "The work is organized around keyword priorities, content needs, local visibility, technical issues, and business goals.",
         },
         {
           title: "Implementation",
-          body: "We complete the scoped SEO work, content updates, local optimization, and technical improvements tied to the plan.",
+          body: "JMC completes the scoped SEO work, content updates, local optimization, and technical improvements tied to the plan.",
         },
         {
           title: "Monthly Recap",
           body: "You receive a clear summary of what was completed, what changed, and what should happen next.",
         },
       ],
-      cta: { label: "Start with a Visibility Review", href: "/contact" },
+      cta: { label: "Request a Visibility Review", href: "/contact" },
+    },
+
+    /*
+     * Decisions Record §7 lists About among the pages that carry the recap
+     * block. It reads oddly at first for a page that sells nothing, and that
+     * is the point: the page argues JMC does one thing well, and this is the
+     * artefact that shows what "well" means in practice.
+     */
+    {
+      id: "monthly-recap",
+      type: "reportingBlock",
+      tone: "surface",
+      eyebrow: "Reporting",
+      heading: "The Monthly Recap",
+      body: "The same four questions every month, on every engagement.",
+      did: "The specific work completed that month, named task by task.",
+      why: "Why that work was the priority ahead of everything else in the queue.",
+      changed:
+        "What moved, reported honestly, including the months where little did.",
+      next: "Next month's priorities, so nothing in the following recap is a surprise.",
+      cta: {
+        label: "See How JMC Reports SEO Progress",
+        href: "/seo-reporting",
+      },
     },
 
     {
       id: "final-cta",
       type: "finalCta",
       heading: "Let's Look at Where Your Visibility Stands",
-      body: "A Visibility Review is the starting point for every JMC engagement, and it is useful even if you decide not to work with us.",
+      body: "A Visibility Review is the starting point for every JMC engagement, and it is useful even if you decide not to go ahead.",
       primaryCta: { label: "Request a Visibility Review", href: "/contact" },
       secondaryCta: { label: "View SEO Packages", href: "/monthly-seo-packages" },
     },

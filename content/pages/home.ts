@@ -148,7 +148,7 @@ export const homePage: PageContent = {
           body: "Clear monthly updates that explain progress, priorities, and next steps without burying you in jargon.",
         },
       ],
-      cta: { label: "Explore SEO Services", href: "/local-seo-services" },
+      cta: { label: "Explore Local SEO", href: "/local-seo-services" },
     },
 
     {
@@ -234,7 +234,7 @@ export const homePage: PageContent = {
       // statement of the method rather than a hole.
       escapeHatch:
         "The method does not change with the industry. If yours is not listed, it probably still applies.",
-      cta: { label: "Explore All Industries", href: "/industries" },
+      cta: { label: "Explore Industries", href: "/industries" },
     },
 
     {
@@ -300,22 +300,22 @@ export const homePage: PageContent = {
       steps: [
         {
           title: "Visibility Review",
-          body: "We review where your business currently shows up, where visibility is weak, and which opportunities are worth prioritizing.",
+          body: "JMC reviews where your business currently shows up, where visibility is weak, and which opportunities are worth prioritizing.",
         },
         {
           title: "SEO Roadmap",
-          body: "We organize the work around keyword priorities, content needs, local visibility, technical issues, and business goals.",
+          body: "The work is organized around keyword priorities, content needs, local visibility, technical issues, and business goals.",
         },
         {
           title: "Implementation",
-          body: "We complete the scoped SEO work, content updates, local optimization, and technical improvements tied to the plan.",
+          body: "JMC completes the scoped SEO work, content updates, local optimization, and technical improvements tied to the plan.",
         },
         {
           title: "Monthly Recap",
           body: "You receive a clear summary of what was completed, what changed, and what should happen next.",
         },
       ],
-      cta: { label: "Start with a Visibility Review", href: "/contact" },
+      cta: { label: "Request a Visibility Review", href: "/contact" },
     },
 
     {
@@ -329,7 +329,7 @@ export const homePage: PageContent = {
       body: "SEO should not feel vague. Every month you get the same four answers, in the same order, in language that does not need a glossary.",
       did: "A plain summary of the SEO work completed: content, technical checks, local visibility tasks, and everything else inside the scope.",
       why: "The reasoning behind each piece of work, and how it supports visibility, relevance, or trust.",
-      changed: "What moved, what did not, and what we are still watching.",
+      changed: "What moved, what did not, and what is still being watched.",
       next: "The priorities for the coming month, in order, so you always know where the campaign is heading.",
       cta: {
         label: "See How JMC Reports SEO Progress",
@@ -351,7 +351,7 @@ export const homePage: PageContent = {
       id: "final-cta",
       type: "finalCta",
       heading: "Not Sure Where Your SEO Is Stuck? Start with a Visibility Review.",
-      body: "We will help you identify visibility gaps, priority opportunities, and the best next step based on your business, market, and goals.",
+      body: "A review identifies visibility gaps, priority opportunities, and the best next step for your business, market, and goals.",
       primaryCta: { label: "Request a Visibility Review", href: "/contact" },
       secondaryCta: { label: "View SEO Packages", href: "/monthly-seo-packages" },
     },

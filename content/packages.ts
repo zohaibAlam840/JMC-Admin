@@ -195,7 +195,7 @@ export const packages: Package[] = [
       "Search visibility tracking",
       "Monthly Recap and reporting",
     ],
-    cta: { label: "Request Agent SEO Review", href: "/contact" },
+    cta: { label: "Request a Visibility Review", href: "/contact" },
     pricingPending: true,
     // Hidden with the Real Estate page — cut from scope by Page Spec 01 §2.
     visible: false,
@@ -215,7 +215,7 @@ export const packages: Package[] = [
       "Search visibility tracking across markets",
       "Monthly Recap and reporting",
     ],
-    cta: { label: "Request Team/Brokerage SEO Review", href: "/contact" },
+    cta: { label: "Request a Visibility Review", href: "/contact" },
     pricingPending: true,
     visible: false,
   },

@@ -292,7 +292,7 @@ function CardGrid({ section }: { section: CardGridSection }) {
             {section.cards.map((card) => (
               <StaggerItem key={card.title}>
                 <CardShell
-                  href={card.cta?.href}
+                  href={card.href ?? card.cta?.href}
                   className="group flex items-start gap-5 py-6"
                 >
                   {card.icon ? (
@@ -346,7 +346,7 @@ function CardGrid({ section }: { section: CardGridSection }) {
               className={cellClass(section.columns, i, section.cards.length)}
             >
               <CardShell
-                href={card.cta?.href}
+                href={card.href ?? card.cta?.href}
                 className="group flex h-full flex-col rounded-card border border-line bg-white p-5 transition-shadow duration-200 hover:shadow-lift"
               >
                 <div className="flex items-center gap-3">
@@ -405,7 +405,7 @@ function CardGrid({ section }: { section: CardGridSection }) {
           >
             <Card
               interactive
-              href={card.cta?.href}
+              href={card.href ?? card.cta?.href}
               className={cn(
                 "group relative overflow-hidden",
                 // Reporting sections are the site's differentiator, so they get

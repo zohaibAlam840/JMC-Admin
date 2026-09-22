@@ -195,7 +195,7 @@ const industries: Industry[] = [
       {
         title: "HVAC & Climate Control",
         icon: "gauge",
-        body: "Demand spikes with the weather and the searches that come with it are almost always urgent. Visibility has to already be there when the heat arrives.",
+        body: "Demand spikes with the weather, and the searches that come with it are almost always urgent. Visibility has to already be there when the heat arrives.",
       },
       {
         title: "Power Washing & Exterior Cleaning",
@@ -293,22 +293,22 @@ const industries: Industry[] = [
     },
     children: [
       {
-        title: "Dental Practices",
-        icon: "heart-pulse",
-        body: "One of the most competitive local categories anywhere, with searches split between routine care and urgent problems.",
-      },
-      {
-        title: "Medical & Specialty Clinics",
-        icon: "shield-check",
-        body: "Often searched by condition rather than by specialty, which is rarely the language the practice uses about itself.",
-      },
-      {
-        title: "Physical Therapy & Chiropractic",
+        title: "Mental & Behavioral Health Professionals",
         icon: "users",
+        body: "Searched for privately and carefully, often by specialty and modality rather than by practice name.",
+      },
+      {
+        title: "Private Dental & Medical Practices",
+        icon: "heart-pulse",
+        body: "Among the most competitive local categories anywhere, with searches split between routine care and urgent problems.",
+      },
+      {
+        title: "Physical Therapy & Sports Rehab",
+        icon: "shield-check",
         body: "Referral-heavy, but nearly every referral gets checked online before an appointment is made.",
       },
       {
-        title: "Med Spas & Wellness Studios",
+        title: "Medical Spas & Wellness Clinics",
         icon: "star",
         body: "A discretionary purchase where reviews, photos and the profile carry as much weight as the website.",
       },
@@ -389,24 +389,24 @@ const industries: Industry[] = [
     },
     children: [
       {
-        title: "Hotels & Lodging",
-        icon: "building",
-        body: "Competing against booking platforms that outrank almost everyone, so direct visibility has to be earned in the gaps they leave.",
+        title: "RV Parks & Campground Resorts",
+        icon: "map-pin",
+        body: "Booked weeks ahead by people comparing sites, amenities and location across a whole region.",
       },
       {
-        title: "Restaurants & Bars",
-        icon: "utensils",
-        body: "Short-notice, heavily map-driven searches where photos, hours and the menu decide the click.",
-      },
-      {
-        title: "Venues & Event Spaces",
+        title: "Regional Venues & Event Spaces",
         icon: "calendar",
         body: "A long, considered booking with a high value, researched across many sites before anyone makes contact.",
       },
       {
-        title: "Attractions & Tours",
-        icon: "compass",
+        title: "Coastal & Waterway Attractions",
+        icon: "ship",
         body: "Draws visitors from well outside the immediate area, which pulls the work beyond a single local radius.",
+      },
+      {
+        title: "Boutique Hotels & Lodging",
+        icon: "building",
+        body: "Competing against booking platforms that outrank almost everyone, so direct visibility has to be earned in the gaps they leave.",
       },
     ],
     search: {
@@ -484,19 +484,19 @@ const industries: Industry[] = [
     },
     children: [
       {
-        title: "Legal Practices",
+        title: "Law Firms & Legal Services",
         icon: "shield-check",
         body: "Among the most competitive search categories that exists, with a lead value high enough to justify the fight.",
       },
       {
-        title: "Accounting & Financial Services",
+        title: "Accounting & Wealth Management",
         icon: "bar-chart",
         body: "Strongly seasonal for some services and steady for others, with a long client relationship at the end of it.",
       },
       {
-        title: "Consulting & Agencies",
-        icon: "compass",
-        body: "Sold on credibility and specificity, where a vague services page loses to a precise one every time.",
+        title: "Commercial Insurance & Staffing",
+        icon: "briefcase",
+        body: "Sold business to business on specificity and coverage, where a vague services page loses to a precise one.",
       },
     ],
     search: {
@@ -574,19 +574,19 @@ const industries: Industry[] = [
     },
     children: [
       {
-        title: "Field & Industrial Services",
+        title: "Oil & Gas Field Services & Logistics",
         icon: "hard-hat",
         body: "Contracted on capability and compliance, and often searched for during a turnaround or an outage.",
       },
       {
-        title: "Equipment & Component Suppliers",
+        title: "Petrochemical Plant Services & Contracting",
         icon: "factory",
-        body: "Found by part number, specification and standard far more often than by company name.",
+        body: "Qualified long before any conversation, on certifications, safety record and plant experience.",
       },
       {
-        title: "Engineering & Technical Consultancies",
-        icon: "compass",
-        body: "A long procurement cycle with several people involved, each searching for something different.",
+        title: "Industrial Equipment & Supplies",
+        icon: "layers",
+        body: "Found by part number, specification and standard far more often than by company name.",
       },
     ],
     search: {
@@ -665,17 +665,17 @@ const industries: Industry[] = [
     },
     children: [
       {
-        title: "Port & Terminal Services",
+        title: "Port Services & Stevedoring",
         icon: "ship",
         body: "Searched by service and by port, with capability and certification usually deciding the shortlist.",
       },
       {
-        title: "Freight & Transport Operators",
+        title: "Freight Transport & Warehousing",
         icon: "network",
-        body: "Route and mode drive the search, and comparison against several operators is standard.",
+        body: "Route, mode and capacity drive the search, and comparison against several operators is standard.",
       },
       {
-        title: "Marine Repair & Fabrication",
+        title: "Marine Repair & Industrial Supplies",
         icon: "wrench",
         body: "Often urgent, because a vessel out of service is costing money every day it waits.",
       },
@@ -756,19 +756,19 @@ const industries: Industry[] = [
     },
     children: [
       {
-        title: "General & Specialty Contractors",
+        title: "Commercial & Industrial Subcontractors",
         icon: "hard-hat",
-        body: "Shortlisted on project type and sector experience long before any bid conversation happens.",
+        body: "Shortlisted on trade, project type and sector experience long before any bid conversation happens.",
       },
       {
-        title: "Civil & Infrastructure Firms",
+        title: "Civil & Roadway Contracting",
         icon: "building",
         body: "Public and private procurement with long cycles and a heavy emphasis on qualification.",
       },
       {
-        title: "Building Products & Materials Suppliers",
+        title: "Earthmoving, Crane & Site Services",
         icon: "layers",
-        body: "Specified by architects and engineers, which means being found by product and standard rather than by brand.",
+        body: "Hired on equipment, capacity and availability, frequently at short notice on an active site.",
       },
     ],
     search: {
@@ -846,19 +846,19 @@ const industries: Industry[] = [
     },
     children: [
       {
-        title: "Parts & Component Manufacturers",
+        title: "Aviation Services & Hangar Operations",
+        icon: "plane",
+        body: "Capability, certification and location together decide who gets contacted.",
+      },
+      {
+        title: "Aerospace Manufacturing & Parts Suppliers",
         icon: "factory",
         body: "Found by part number, material and specification, frequently by an engineer rather than a buyer.",
       },
       {
-        title: "MRO & Ground Services",
-        icon: "wrench",
-        body: "Capability, certification and location together decide who gets contacted.",
-      },
-      {
-        title: "Avionics & Systems Suppliers",
-        icon: "code",
-        body: "Highly technical searches, with compliance often acting as the first filter applied.",
+        title: "Defense & Space Contracting",
+        icon: "shield-check",
+        body: "Clearance, compliance and past performance are the first filters applied, before capability.",
       },
     ],
     search: {

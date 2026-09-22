@@ -52,14 +52,14 @@ export const seoPackagesPage: PageContent = {
           icon: "map-pin",
           meta: "From $875 a month",
           body: "For businesses competing for customers in a defined area, however many locations they run inside it.",
-          cta: { label: "See Local Packages", href: "#local" },
+          cta: { label: "View Local SEO Packages", href: "#local" },
         },
         {
           title: "Traditional SEO",
           icon: "globe",
           meta: "From $2,295 a month",
           body: "For businesses competing across multiple markets, multiple service lines, or genuinely competitive search.",
-          cta: { label: "See Traditional Packages", href: "#traditional" },
+          cta: { label: "View Traditional SEO Packages", href: "#traditional" },
         },
       ],
     },
@@ -197,7 +197,7 @@ export const seoPackagesPage: PageContent = {
         },
       ],
       groups: [],
-      cta: { label: "See how a sprint waives it", href: "#sprint-waiver" },
+      cta: { label: "View Launch Sprints", href: "/launch-sprints" },
     },
 
     {

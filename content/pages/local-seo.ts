@@ -156,10 +156,9 @@ export const localSeoPage: PageContent = {
           title: "Google Business Profile",
           icon: "storefront",
           body: "Categories, services, information, photos and posts. For many local searches the profile is what is being ranked.",
-          cta: {
-            label: "Profile optimization",
-            href: "/google-business-profile-optimization",
-          },
+          // The card is the click target; the title already says where it
+          // goes, so it carries no button label of its own.
+          href: "/google-business-profile-optimization",
         },
         {
           title: "Citations & NAP Consistency",

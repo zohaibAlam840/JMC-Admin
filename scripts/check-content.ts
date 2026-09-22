@@ -1,7 +1,8 @@
 import { filePages, draftPageSlugs } from "../content/pages";
 import { packages } from "../content/packages";
 import { footerNav, mainNav } from "../content/site";
-import type { Section } from "../lib/types";
+import { APPROVED_CTAS, RETIRED_CTAS } from "../lib/cta-library";
+import type { CTA, Section } from "../lib/types";
 
 /**
  * Content QA. Catches the mistakes that only show up as a 404 in production.
@@ -45,6 +46,9 @@ function hrefsIn(value: unknown): string[] {
   return [];
 }
 
+/** Set while walking a draft page, so draft-to-draft links stay quiet. */
+let fromDraftPage = false;
+
 function checkHref(raw: string, where: string) {
   if (!raw.startsWith("/") && !raw.startsWith("#")) return; // external or tel:
   // A query string is lead attribution, not part of the route.
@@ -61,7 +65,9 @@ function checkHref(raw: string, where: string) {
     return;
   }
 
-  if (draftPageSlugs.has(path)) {
+  // A draft linking to a draft is fine: neither is reachable, and both
+  // publish together or not at all.
+  if (draftPageSlugs.has(path) && !fromDraftPage) {
     problems.push(
       `${where}: links to ${path}, which seeds as a draft and 404s in production`
     );
@@ -76,6 +82,7 @@ function checkHref(raw: string, where: string) {
 
 for (const page of filePages) {
   const own = anchors(page.slug);
+  fromDraftPage = draftPageSlugs.has(page.slug);
 
   for (const section of page.sections) {
     for (const href of hrefsIn(section as unknown as Section)) {
@@ -90,6 +97,65 @@ for (const page of filePages) {
       }
       checkHref(href, `${page.slug} §${section.id}`);
     }
+  }
+}
+
+fromDraftPage = false;
+
+/* ---------------------------------------------------------- CTA library -- */
+
+/**
+ * Every CTA on the site has to be one of the approved labels — Decisions
+ * Record §9. Forty labels for a dozen actions is what that library exists to
+ * stop, and a rule nothing enforces drifts back within a month.
+ */
+const approved = new Set<string>(APPROVED_CTAS);
+
+/** Pulls every CTA object out of a section, at any depth. */
+function ctasIn(value: unknown): CTA[] {
+  if (Array.isArray(value)) return value.flatMap(ctasIn);
+  if (value && typeof value === "object") {
+    const record = value as Record<string, unknown>;
+    return Object.entries(record).flatMap(([key, v]) => {
+      const isCta =
+        /^(cta|primaryCta|secondaryCta)$/.test(key) &&
+        v !== null &&
+        typeof v === "object" &&
+        typeof (v as CTA).label === "string";
+      return isCta ? [v as CTA, ...ctasIn(v)] : ctasIn(v);
+    });
+  }
+  return [];
+}
+
+for (const page of filePages) {
+  /*
+   * Unpublished pages are exempt. Real Estate SEO is cut from scope and its
+   * CTAs were retired with it; the link hub is a profile page, not part of the
+   * governed site. Rewriting copy on a page nobody can reach would be work
+   * spent to quiet a checker.
+   */
+  if (draftPageSlugs.has(page.slug) && page.slug !== "/resources") continue;
+
+  for (const section of page.sections) {
+    for (const cta of ctasIn(section)) {
+      if (approved.has(cta.label)) continue;
+      const instead = RETIRED_CTAS[cta.label];
+      problems.push(
+        `${page.slug} §${section.id}: CTA "${cta.label}" is not in the library` +
+          (instead ? `. Use "${instead}"` : "")
+      );
+    }
+  }
+}
+
+for (const pkg of packages) {
+  if (!approved.has(pkg.cta.label)) {
+    const instead = RETIRED_CTAS[pkg.cta.label];
+    problems.push(
+      `package ${pkg.id}: CTA "${pkg.cta.label}" is not in the library` +
+        (instead ? `. Use "${instead}"` : "")
+    );
   }
 }
 

@@ -271,6 +271,13 @@ export const SECTION_SCHEMAS = [
           },
           { name: "body", label: "Body", kind: "textarea", optional: true },
           { name: "icon", label: "Icon", kind: "icon", optional: true },
+          {
+            name: "href",
+            label: "Whole card links to",
+            kind: "text",
+            optional: true,
+            help: "Makes the whole card clickable with no button inside it. Use this where the card title already says where it goes, rather than adding a button that repeats the title.",
+          },
           { name: "cta", label: "Card link", kind: "cta", optional: true },
         ],
       },

@@ -156,28 +156,25 @@ export const traditionalSeoPage: PageContent = {
           title: "Energy & Petrochemical",
           icon: "lightning",
           body: "Suppliers and service firms found by specification, standard and part number rather than by name.",
-          cta: { label: "Energy & Petrochemical", href: "/industries/energy-petrochemical" },
+          href: "/industries/energy-petrochemical",
         },
         {
           title: "Maritime & Logistics",
           icon: "ship",
           body: "Port, freight and marine businesses searched by route, mode and capability.",
-          cta: { label: "Maritime & Logistics", href: "/industries/maritime-logistics" },
+          href: "/industries/maritime-logistics",
         },
         {
           title: "Commercial Construction",
           icon: "hard-hat",
           body: "Contractors, civil firms and suppliers qualified on project type long before any bid conversation.",
-          cta: {
-            label: "Construction & Infrastructure",
-            href: "/industries/commercial-construction-infrastructure",
-          },
+          href: "/industries/commercial-construction-infrastructure",
         },
         {
           title: "Aerospace & Aviation",
           icon: "plane",
           body: "Manufacturers and service providers where certification is the first filter a buyer applies.",
-          cta: { label: "Aerospace & Aviation", href: "/industries/aerospace-aviation" },
+          href: "/industries/aerospace-aviation",
         },
       ],
       cta: { label: "Explore Industries", href: "/industries" },
@@ -328,7 +325,7 @@ export const traditionalSeoPage: PageContent = {
         {
           question: "Do you build links?",
           answer:
-            "No. JMC advises on authority building and does not sell or place links. Bought placements are a risk taken with your domain rather than with the agency's, and the recommendations you get are the ones that would be given if the domain were ours.",
+            "No. JMC advises on authority building and does not sell or place links. Bought placements are a risk taken with your domain rather than with the agency's, and the recommendations you get are the ones JMC would follow on its own domain.",
         },
         {
           question: "How is this different from Local SEO?",
