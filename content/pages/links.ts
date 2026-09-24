@@ -25,6 +25,14 @@ export const linksPage: PageContent = {
       type: "linkStack",
       eyebrow: "@htxseo",
       theme: "dark",
+      /*
+       * The Instagram crop rather than the About headshot: it is square, it is
+       * the picture people already associate with the profile they clicked
+       * from, and at 320px it is the right weight for a 96px avatar where the
+       * 1080px file would be a megabyte of waste.
+       */
+      avatarUrl: "/images/wendell-jordan-avatar.png",
+      avatarAlt: "Wendell Jordan",
       heading: "Houston’s SEO Agency",
       // Approved positioning, trimmed to one line. Deliberately not the
       // "powerful SEO strategies" wording from the existing Linktree — the

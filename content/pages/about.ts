@@ -51,10 +51,17 @@ export const aboutPage: PageContent = {
      * thing it has instead of proof.
      *
      * Three paragraphs, separated by blank lines so the renderer keeps them
-     * as three. `groups: []` and no portrait means the copy runs full width
-     * until the headshot arrives; add
-     *   portrait: { src: "/wendell-jordan.jpg", alt: "Wendell Jordan" },
-     * and it moves to the right column with no other change.
+     * as three.
+     *
+     * The headshot is the supplied file, which arrives already masked to a
+     * circle with the room behind him kept inside it. Hence shape "circle":
+     * dropping a pre-masked PNG into the usual bordered rectangle would show
+     * four corners of empty surface around it.
+     *
+     * The alt text names him and nothing else. Page Spec 11 §2 rules out the
+     * name plate and the role title on the visible page, and alt text is page
+     * copy too — "Wendell Jordan, founder and SEO strategist" would reinstate
+     * through the back door exactly what the spec removed from the front.
      */
     {
       id: "narrowing",
@@ -63,6 +70,11 @@ export const aboutPage: PageContent = {
       eyebrow: "2022",
       heading: "The Narrowing",
       body: "JMC used to be full service, with web design as the main business. The websites were not good enough, and the process from onboarding to launch was difficult for everyone involved.\n\nThe turn came in a professional networking group. SEO was the only part of the work worth talking about. Over time it became the part worth doing.\n\nIn 2022 the agency stopped doing everything and started doing one thing.",
+      portrait: {
+        src: "/images/wendell-jordan.png",
+        alt: "Wendell Jordan",
+        shape: "circle",
+      },
       groups: [],
     },
 

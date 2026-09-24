@@ -733,17 +733,25 @@ function FeatureSplit({ section }: { section: FeatureSplitSection }) {
            */
           <Reveal
             className={cn(
-              "overflow-hidden rounded-bento border border-line bg-surface",
+              section.portrait.shape === "circle"
+                ? // Already masked, so no frame and no background behind it.
+                  // Capped and centred: the supplied file is 1080px square, and
+                  // stretching it across half a 1200px container would show it
+                  // softening on a retina screen.
+                  "mx-auto w-full max-w-[26rem]"
+                : "overflow-hidden rounded-bento border border-line bg-surface",
               !copyFirst && "lg:order-1"
             )}
           >
             <Image
               src={section.portrait.src}
               alt={section.portrait.alt}
-              width={720}
-              height={900}
-              sizes="(min-width: 1024px) 40vw, 100vw"
+              width={section.portrait.shape === "circle" ? 1080 : 720}
+              height={section.portrait.shape === "circle" ? 1080 : 900}
+              sizes="(min-width: 1024px) 26rem, 100vw"
               className="h-auto w-full object-cover"
+              // The one photograph on the site, and it sits high on the page.
+              priority
             />
           </Reveal>
         ) : visual === "groups" ? (

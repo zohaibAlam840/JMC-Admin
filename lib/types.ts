@@ -300,7 +300,23 @@ export type FeatureSplitSection = Base & {
    * grey placeholder on the page that argues JMC is transparent would be the
    * worst possible stand-in, and the headshot is still to be supplied.
    */
-  portrait?: { src: string; alt: string };
+  portrait?: {
+    src: string;
+    alt: string;
+    /**
+     * How the image is framed.
+     *
+     * "frame" is the default: a rounded rectangle with the same hairline
+     * border every other visual on the site carries.
+     *
+     * "circle" is for a file that already carries its own circular mask, as
+     * the supplied headshot does. Putting a pre-masked PNG inside a bordered
+     * rectangle shows four corners of empty surface around it, which reads as
+     * a mistake rather than a choice, so that treatment drops the frame and
+     * lets the image be its own shape.
+     */
+    shape?: "frame" | "circle";
+  };
   /** Which side the copy sits on. */
   align?: "left" | "right";
 };
