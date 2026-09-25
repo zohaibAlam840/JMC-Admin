@@ -1,5 +1,10 @@
 import { randomUUID } from "node:crypto";
-import { writeFileSync } from "node:fs";
+import {
+  mkdirSync,
+  readdirSync,
+  rmSync,
+  writeFileSync,
+} from "node:fs";
 import { join } from "node:path";
 import {
   draftPageSlugs,
@@ -182,15 +187,20 @@ w();
 w("-- ---------------------------------------------------------- sections ----");
 w("-- Replaced rather than merged: a section dropped by the new spec should");
 w("-- disappear here too, not linger as an orphan.");
-w(
-  `delete from public.sections where page_id in (select id from public.pages where slug in (${pages
-    .map((p) => lit(p.slug))
-    .join(", ")}));`
-);
+w("--");
+w("-- Each page clears its own sections immediately before re-inserting them,");
+w("-- rather than one delete covering all sixteen up front. That keeps every");
+w("-- page block self-contained, which is what lets the split files below be");
+w("-- run one at a time without a page ever being left with no sections.");
 w();
 
 for (const page of pages) {
   w(`-- ${page.label}`);
+  w(
+    `delete from public.sections where page_id = (select id from public.pages where slug = ${lit(
+      page.slug
+    )});`
+  );
   for (const [position, section] of page.sections.entries()) {
     const { id, type, tone, ...data } = section as typeof section & {
       tone?: "white" | "surface";
@@ -385,8 +395,135 @@ w();
 const target = join(process.cwd(), "supabase", "apply-page-specs-02-09.sql");
 writeFileSync(target, out.join("\n"), "utf8");
 
+/* ------------------------------------------------------------ split parts -- */
+
+/**
+ * The same SQL again, cut into parts small enough to paste.
+ *
+ * The whole file is about 190KB on lines up to 3,000 characters, and pasting
+ * that into the Supabase SQL editor truncated it — silently, mid-string. A cut
+ * string literal does not fail where it was cut: the parser keeps going and
+ * reads the rest of the sentence as SQL, so an ordinary word in the body copy
+ * turns into a table name and the error points at something like `relation
+ * "an" does not exist`, which describes nothing that is wrong with the file.
+ *
+ * Parts are cut only between top-level statements, and never inside a page's
+ * delete-then-insert run, so a part that fails leaves nothing half-built.
+ * Every part is its own transaction and the whole set is idempotent, so the
+ * recovery from any failure is to run that part again.
+ */
+const MAX_PART_BYTES = 45_000;
+
+/** Statement boundaries, found by lexing rather than by splitting on ";". */
+function statements(sql: string): string[] {
+  const found: string[] = [];
+  let buf = "";
+  let inString = false;
+  let inComment = false;
+
+  for (let i = 0; i < sql.length; i++) {
+    const c = sql[i];
+    const next = sql[i + 1];
+
+    if (inComment) {
+      buf += c;
+      if (c === "\n") inComment = false;
+      continue;
+    }
+    if (inString) {
+      buf += c;
+      // '' is an escaped quote, not the end of the literal.
+      if (c === "'" && next === "'") {
+        buf += next;
+        i++;
+      } else if (c === "'") {
+        inString = false;
+      }
+      continue;
+    }
+    if (c === "-" && next === "-") {
+      inComment = true;
+      buf += c;
+      continue;
+    }
+    if (c === "'") {
+      inString = true;
+      buf += c;
+      continue;
+    }
+    if (c === ";") {
+      found.push((buf + c).trim());
+      buf = "";
+      continue;
+    }
+    buf += c;
+  }
+  if (buf.trim()) found.push(buf.trim());
+  return found;
+}
+
+const body = statements(out.join("\n")).filter(
+  (s) => s !== "begin;" && s !== "commit;"
+);
+
+/*
+ * A page's delete and its inserts have to stay together, so statements are
+ * grouped before they are packed. Everything else is its own group.
+ */
+const groups: string[][] = [];
+for (const stmt of body) {
+  const startsPage = /^-- .*\n?delete from public\.sections where page_id =/m.test(
+    stmt
+  );
+  if (startsPage || groups.length === 0) groups.push([stmt]);
+  else if (/^insert into public\.sections/m.test(stmt)) {
+    groups[groups.length - 1].push(stmt);
+  } else groups.push([stmt]);
+}
+
+const parts: string[][] = [[]];
+let bytes = 0;
+for (const group of groups) {
+  const size = group.join("\n").length;
+  if (bytes > 0 && bytes + size > MAX_PART_BYTES) {
+    parts.push([]);
+    bytes = 0;
+  }
+  parts[parts.length - 1].push(...group);
+  bytes += size;
+}
+
+const partDir = join(process.cwd(), "supabase", "apply-parts");
+mkdirSync(partDir, { recursive: true });
+for (const existing of readdirSync(partDir)) {
+  if (existing.endsWith(".sql")) rmSync(join(partDir, existing));
+}
+
+const partPaths: string[] = [];
+parts.forEach((stmts, index) => {
+  const n = String(index + 1).padStart(2, "0");
+  const header = [
+    "-- ======================================================================",
+    `--  JMC apply, part ${index + 1} of ${parts.length}`,
+    "--",
+    "--  GENERATED. Run the parts IN ORDER, each on its own, letting each",
+    "--  finish before starting the next. Safe to run more than once.",
+    "--",
+    "--  These exist because the single combined file is too large to paste",
+    "--  into the Supabase SQL editor without being truncated.",
+    "-- ======================================================================",
+    "",
+    "begin;",
+    "",
+  ].join("\n");
+  const file = join(partDir, `${n}.sql`);
+  writeFileSync(file, `${header}${stmts.join("\n")}\n\ncommit;\n`, "utf8");
+  partPaths.push(file);
+});
+
 const sectionCount = pages.reduce((n, p) => n + p.sections.length, 0);
 console.log(`Wrote ${target}`);
 console.log(
   `  ${pages.length} pages, ${sectionCount} sections, ${packages.length} packages, ${REDIRECTS.length} redirects`
 );
+console.log(`Wrote ${parts.length} part files to ${partDir}`);
