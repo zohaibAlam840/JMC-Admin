@@ -31,7 +31,7 @@ export function SiteFooter({
       <Container className="relative py-16 lg:py-20">
         <Reveal className="grid gap-12 md:grid-cols-2 lg:grid-cols-[1.3fr_1fr_1fr_1fr]">
           <div className="flex flex-col gap-6">
-            <Logo onDark />
+            <Logo onDark variant="lockup" />
             <p className="max-w-xs text-[0.88rem] leading-relaxed text-white/55">
               {site.footerBlurb}
             </p>

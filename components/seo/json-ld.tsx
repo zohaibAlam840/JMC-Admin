@@ -33,6 +33,19 @@ export function localBusinessSchema(site: SiteDetails = fileSite) {
     url: site.url,
     email: site.email,
     telephone: site.phone,
+    /*
+     * Google reads `logo` off the Organization node for the knowledge panel and
+     * wants an absolute URL, so this is built from site.url rather than left as
+     * the root-relative path the pages use. `image` repeats it because some
+     * consumers read one property and not the other, and the lockup is the only
+     * brand image the site has.
+     *
+     * The file is the served copy of the same artwork the header and footer
+     * inline (components/ui/logo.tsx). Both come from the one trace, so a
+     * future logo change has to touch both.
+     */
+    logo: `${site.url}/images/jmc-logo.svg`,
+    image: `${site.url}/images/jmc-logo.svg`,
     address: {
       "@type": "PostalAddress",
       addressLocality: site.locality,
