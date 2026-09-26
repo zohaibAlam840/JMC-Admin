@@ -32,6 +32,11 @@ yarn-error.log*
 
 # env files (can opt-in for committing if needed)
 .env*
+# ...except the template, which is the only record of which variables the app
+# needs. The blanket rule above was swallowing it, so a fresh clone had nothing
+# documenting the Supabase, Resend, GA4 or Termageddon configuration. It holds
+# no secrets: every value in it is blank or already public.
+!.env.example
 
 # vercel
 .vercel
