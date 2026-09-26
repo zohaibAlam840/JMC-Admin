@@ -1,7 +1,10 @@
 import { RouteProgress } from "@/components/layout/route-progress";
 import { SiteHeader } from "@/components/layout/site-header";
 import { SiteFooter } from "@/components/layout/site-footer";
+import { Analytics } from "@/components/analytics/analytics";
+import { CookieConsent } from "@/components/analytics/cookie-consent";
 import { getSiteConfig } from "@/lib/content";
+import { publishedPolicies } from "@/lib/legal";
 
 /**
  * The public site's chrome.
@@ -23,6 +26,15 @@ import { getSiteConfig } from "@/lib/content";
 export async function SiteChrome({ children }: { children: React.ReactNode }) {
   const { site, primaryCta, mainNav, footerNav } = await getSiteConfig();
 
+  /*
+   * Same rule the footer's legal links follow: a policy with no Termageddon
+   * key behind it is a 404, and pointing a consent banner at a 404 cookie
+   * policy is worse than pointing at nothing.
+   */
+  const cookiePolicy = publishedPolicies().find(
+    (p) => p.slug === "/cookie-policy"
+  );
+
   return (
     <>
       <RouteProgress />
@@ -31,6 +43,16 @@ export async function SiteChrome({ children }: { children: React.ReactNode }) {
         {children}
       </main>
       <SiteFooter site={site} nav={footerNav} />
+      {/*
+       * Analytics hangs off the public chrome rather than the root layout, so
+       * /admin is outside it. That is deliberate and not just tidiness: the
+       * client is the heaviest user of his own site, and counting his sessions
+       * in the numbers his monthly recap reports would corrupt the one metric
+       * the whole service is sold on. Both render nothing without a GA4
+       * Measurement ID.
+       */}
+      <Analytics />
+      <CookieConsent cookiePolicyHref={cookiePolicy?.slug} />
     </>
   );
 }
