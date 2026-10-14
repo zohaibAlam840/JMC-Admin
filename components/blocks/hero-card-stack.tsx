@@ -78,18 +78,58 @@ const RING_ARCS = [
   { stroke: "var(--color-blue)", opacity: 1 },
 ];
 
+/**
+ * The ring itself. One arc per labelled item, equal arcs, nothing in the hole.
+ *
+ * A pie chart's expressive power is entirely in unequal slices, and an
+ * unequal slice here would be a claim about proportion with no source behind
+ * it -- Page Spec 01 §1 rules exactly that out. So what is borrowed is the
+ * shape's legibility, not its claim: this says "the profile is made of these
+ * parts", which is true, and says nothing about how much each one matters.
+ */
+function ProfileRing({ count }: { count: number }) {
+  const segments = Math.max(2, Math.min(count || 4, 4));
+  const r = 26;
+  const circumference = 2 * Math.PI * r;
+  const gap = 7;
+  const arc = circumference / segments - gap;
+
+  return (
+    <svg
+      viewBox="0 0 72 72"
+      className="size-[9.5rem] shrink-0"
+      aria-hidden="true"
+    >
+      {Array.from({ length: segments }, (_, i) => (
+        <circle
+          key={i}
+          cx="36"
+          cy="36"
+          r={r}
+          fill="none"
+          stroke={RING_ARCS[i % RING_ARCS.length].stroke}
+          strokeOpacity={RING_ARCS[i % RING_ARCS.length].opacity}
+          strokeWidth="9"
+          strokeLinecap="round"
+          strokeDasharray={`${arc} ${circumference - arc}`}
+          strokeDashoffset={-((circumference / segments) * i) + gap / 2}
+          /* Start at twelve o'clock rather than three. */
+          transform="rotate(-90 36 36)"
+        />
+      ))}
+    </svg>
+  );
+}
+
 function Motif({
   kind,
   bars,
   seed,
-  segments,
 }: {
   kind: HeroShowcaseCard["kind"];
   bars: number[];
   /** Varies the drawn shape between pages that share a motif. */
   seed: string;
-  /** Ring motif only: how many arcs to draw, one per labelled row above. */
-  segments: number;
 }) {
   if (kind === "coverage") {
     // A service area, strongest around the middle. The same idea as the
@@ -183,59 +223,6 @@ function Motif({
           className="absolute size-2.5 -translate-x-1/2 -translate-y-1/2 rounded-full bg-blue ring-2 ring-white"
           style={{ left: "100%", top: `${(end[1] / 72) * 100}%` }}
         />
-      </div>
-    );
-  }
-
-  if (kind === "profile") {
-    /*
-     * A ring split into one arc per labelled row above it.
-     *
-     * Drawn right-aligned, which is not a composition preference: the
-     * overlapping second panel sits over the bottom-LEFT of this band, and a
-     * circle placed there loses a quarter of itself behind it. The other
-     * motifs are full-width shapes that survive being clipped; this one does
-     * not.
-     *
-     * Equal arcs, no numbers, no percentages, nothing in the hole. A pie
-     * chart's whole expressive power is in unequal slices, and using it that
-     * way here would mean inventing proportions -- so what is borrowed is the
-     * shape's legibility, not its claim.
-     */
-    const count = Math.max(2, Math.min(segments || 4, 4));
-    const r = 26;
-    const circumference = 2 * Math.PI * r;
-    const gap = 7;
-    const arc = circumference / count - gap;
-
-    return (
-      <div className="flex h-24 items-center justify-end pr-1">
-        <svg
-          viewBox="0 0 72 72"
-          /* Taller than the other motifs, which are wide shapes. A circle
-             sized to their 80px band reads as an afterthought parked in the
-             corner; at this size it is the thing the panel ends on. */
-          className="size-24"
-          aria-hidden="true"
-        >
-          {Array.from({ length: count }, (_, i) => (
-            <circle
-              key={i}
-              cx="36"
-              cy="36"
-              r={r}
-              fill="none"
-              stroke={RING_ARCS[i % RING_ARCS.length].stroke}
-              strokeOpacity={RING_ARCS[i % RING_ARCS.length].opacity}
-              strokeWidth="9"
-              strokeLinecap="round"
-              strokeDasharray={`${arc} ${circumference - arc}`}
-              strokeDashoffset={-((circumference / count) * i) + gap / 2}
-              /* Start at twelve o'clock rather than three. */
-              transform="rotate(-90 36 36)"
-            />
-          ))}
-        </svg>
       </div>
     );
   }
@@ -335,6 +322,8 @@ export function HeroCardStack({ cards }: { cards: HeroShowcaseCard[] }) {
   // differently on every render is noise rather than structure.
   const bars = [38, 62, 45, 78, 56, 88, 70];
 
+  const isRing = primary?.kind === "profile";
+
   return (
     <div className="relative isolate mx-auto w-full max-w-[30rem] lg:mx-0">
       {/* Soft gradient wash behind the composition. */}
@@ -364,47 +353,88 @@ export function HeroCardStack({ cards }: { cards: HeroShowcaseCard[] }) {
           />
         </div>
 
-        {/* Labelled rows. The muted bar beside each is a placeholder for the
-            written detail, not a measurement of anything. */}
-        <ul className="flex flex-col gap-3.5 pt-5">
-          {rows.map((row, i) => (
-            <li key={row} className="flex items-center gap-3">
-              <span
-                aria-hidden="true"
-                className={cn(
-                  "size-1.5 shrink-0 rounded-full",
-                  // On a ring card the bullet is the legend, so it takes the
-                  // colour of the arc standing for that row.
-                  primary?.kind === "profile"
-                    ? RING_DOTS[i % RING_DOTS.length]
-                    : "bg-teal"
-                )}
-              />
-              <span className="text-[0.8125rem] text-ink">{row}</span>
-              <span
-                aria-hidden="true"
-                className={cn(
-                  "ml-auto h-1.5 rounded-full bg-surface",
-                  ["w-14", "w-10", "w-16", "w-12"][i % 4]
-                )}
-              />
-            </li>
-          ))}
-        </ul>
+        {isRing ? (
+          /*
+           * The chart IS the panel.
+           *
+           * Everywhere else this component draws a small shape in a band at
+           * the foot of a list of rows, which reads as a dashboard. The
+           * client's note on this page was to make it "a pie chart instead
+           * of the dashboard looking one", so here the ring takes the body
+           * and the rows become its legend. Each legend dot is the colour of
+           * the arc it stands for, which is what lets the ring be read
+           * without labels pinned to it.
+           */
+          <div
+            /*
+             * Everything inside the right 17rem, and that measurement is not
+             * a taste: the overlapping card below hangs into this panel's
+             * left edge by about 8rem at every breakpoint, so content there
+             * is content behind a card. Ring above legend rather than beside
+             * it for the same reason -- side by side needs the full width
+             * and loses half the words.
+             */
+            className="flex justify-end pt-5"
+          >
+            <div className="flex w-[17rem] flex-col items-center gap-5">
+              <ProfileRing count={rows.length} />
+              {/*
+                * The deep bottom padding is for the overlapping card, and it
+                * only applies below lg. Up there the card hangs out into the
+                * gutter and clears this content sideways; narrower than that
+                * it tucks back under the panel and lands straight across the
+                * legend, so the panel has to leave it a band of its own.
+                */}
+              <ul className="flex w-full flex-col gap-2.5 pb-32 lg:pb-1">
+                {rows.map((row, i) => (
+                  <li key={row} className="flex items-center gap-3">
+                    <span
+                      aria-hidden="true"
+                      className={cn(
+                        "size-2.5 shrink-0 rounded-full",
+                        RING_DOTS[i % RING_DOTS.length]
+                      )}
+                    />
+                    <span className="text-[0.8125rem] text-ink">{row}</span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          </div>
+        ) : (
+          <>
+            {/* Labelled rows. The muted bar beside each is a placeholder for
+                the written detail, not a measurement of anything. */}
+            <ul className="flex flex-col gap-3.5 pt-5">
+              {rows.map((row, i) => (
+                <li key={row} className="flex items-center gap-3">
+                  <span
+                    aria-hidden="true"
+                    className="size-1.5 shrink-0 rounded-full bg-teal"
+                  />
+                  <span className="text-[0.8125rem] text-ink">{row}</span>
+                  <span
+                    aria-hidden="true"
+                    className={cn(
+                      "ml-auto h-1.5 rounded-full bg-surface",
+                      ["w-14", "w-10", "w-16", "w-12"][i % 4]
+                    )}
+                  />
+                </li>
+              ))}
+            </ul>
 
-        <div
-          aria-hidden="true"
-          className="mt-6 border-t border-line pt-5"
-        >
-          <Motif
-            kind={primary?.kind ?? "report"}
-            bars={bars}
-            segments={rows.length}
-            // Seeded from the card's own words, so two pages sharing a motif
-            // still draw different shapes.
-            seed={`${primary?.title ?? ""}|${primary?.label ?? ""}`}
-          />
-        </div>
+            <div aria-hidden="true" className="mt-6 border-t border-line pt-5">
+              <Motif
+                kind={primary?.kind ?? "report"}
+                bars={bars}
+                // Seeded from the card's own words, so two pages sharing a
+                // motif still draw different shapes.
+                seed={`${primary?.title ?? ""}|${primary?.label ?? ""}`}
+              />
+            </div>
+          </>
+        )}
       </div>
 
       {/* ----------------------------------------------- overlapping panel -- */}
