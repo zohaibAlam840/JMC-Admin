@@ -39,11 +39,18 @@ export function WaiverMatrix({ section }: { section: WaiverMatrixSection }) {
           <h2 className="text-[1.875rem] sm:text-[2.25rem] lg:text-[2.625rem]">
             {section.heading}
           </h2>
-          {section.body ? (
-            <p className="mx-auto max-w-[68ch] text-[1.02rem] leading-relaxed text-subtle">
-              {section.body}
-            </p>
-          ) : null}
+          {/* A blank line is a paragraph, as in SectionHeader. This section
+              now has to say what a sprint is before it lists the terms. */}
+          {section.body
+            ? section.body.split(/\n\s*\n/).map((paragraph, i) => (
+                <p
+                  key={i}
+                  className="mx-auto max-w-[68ch] text-[1.02rem] leading-relaxed text-subtle"
+                >
+                  {paragraph}
+                </p>
+              ))
+            : null}
         </Reveal>
 
         <div className="mx-auto mt-12 max-w-[900px] overflow-hidden rounded-bento border border-line bg-white">

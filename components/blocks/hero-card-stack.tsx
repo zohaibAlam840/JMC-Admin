@@ -152,6 +152,78 @@ function ProfilePie({ count }: { count: number }) {
   );
 }
 
+/**
+ * A bar chart of published figures, with the values printed on it.
+ *
+ * The one chart in this file that is allowed numbers, and only because its
+ * numbers are checkable: they are the tier scope printed further down the
+ * same page, not a measurement of anybody's results. See the `scale` card in
+ * lib/types.ts for the rule.
+ *
+ * Bars are drawn in proportion from zero rather than from the smallest value,
+ * which matters more than it looks: a chart baselined at the smallest figure
+ * would make "up to 60" next to "up to 90" look like a threefold difference
+ * instead of half as much again.
+ */
+function ScaleChart({
+  series,
+  unit,
+}: {
+  series: { label: string; value: number }[];
+  unit: string;
+}) {
+  const bars = series.slice(0, 4);
+  const peak = Math.max(...bars.map((b) => b.value), 1);
+
+  return (
+    <div className="flex flex-col gap-3">
+      <div className="flex h-32 items-stretch gap-3">
+        {bars.map((bar, i) => (
+          <div
+            key={bar.label}
+            className="flex h-full flex-1 flex-col items-center gap-2"
+          >
+            <span className="font-heading text-[0.9375rem] font-bold leading-none text-ink-strong">
+              {bar.value}
+            </span>
+            {/*
+              The bar is positioned against this box rather than sized inside
+              the column. A percentage height needs a parent with a definite
+              one, and the column's height comes from its content -- so the
+              first version of this resolved every bar to zero and drew a
+              chart of three numbers floating over nothing.
+            */}
+            <div className="relative w-full flex-1">
+              <span
+                aria-hidden="true"
+                style={{ height: `${(bar.value / peak) * 100}%` }}
+                className={cn(
+                  "absolute inset-x-0 bottom-0 rounded-t-[4px]",
+                  i === bars.length - 1
+                    ? "bg-[linear-gradient(180deg,var(--color-teal),var(--color-blue))]"
+                    : "bg-teal/25"
+                )}
+              />
+            </div>
+          </div>
+        ))}
+      </div>
+      <div aria-hidden="true" className="h-px w-full bg-line" />
+      <div className="flex gap-3">
+        {bars.map((bar) => (
+          <span
+            key={bar.label}
+            className="flex-1 text-center text-[0.75rem] text-subtle"
+          >
+            {bar.label}
+          </span>
+        ))}
+      </div>
+      <p className="text-center text-[0.75rem] text-subtle">{unit}</p>
+    </div>
+  );
+}
+
 function Motif({
   kind,
   bars,
@@ -354,6 +426,7 @@ export function HeroCardStack({ cards }: { cards: HeroShowcaseCard[] }) {
   const bars = [38, 62, 45, 78, 56, 88, 70];
 
   const isRing = primary?.kind === "profile";
+  const isScale = primary?.kind === "scale";
 
   return (
     <div className="relative isolate mx-auto w-full max-w-[30rem] lg:mx-0">
@@ -384,7 +457,20 @@ export function HeroCardStack({ cards }: { cards: HeroShowcaseCard[] }) {
           />
         </div>
 
-        {isRing ? (
+        {isScale && primary?.kind === "scale" ? (
+          /*
+           * Like the pie, the chart replaces the row list rather than sitting
+           * in a band beneath it -- the client's note on the row-list layout
+           * was that it reads as a dashboard. Same 17rem right-hand column,
+           * for the same reason: the overlapping card covers this panel's
+           * left edge.
+           */
+          <div className="flex justify-end pt-5">
+            <div className="w-[17rem] pb-32 lg:pb-1">
+              <ScaleChart series={primary.series} unit={primary.unit} />
+            </div>
+          </div>
+        ) : isRing ? (
           /*
            * The chart IS the panel.
            *

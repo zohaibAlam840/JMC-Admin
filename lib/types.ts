@@ -142,6 +142,27 @@ export type HeroShowcaseCard =
    * of these four parts", which is true and is all the card is asserting.
    */
   | (ShowcaseBase & { kind: "profile"; items: string[] })
+  /**
+   * A bar chart with real, labelled figures -- the only card here that
+   * carries numbers, and it may only carry one kind.
+   *
+   * Every other treatment is deliberately abstract because Page Spec 01 §1
+   * forbids fabricated metrics presented as real client data. This one is
+   * allowed numbers because the numbers are not results and are not invented:
+   * they are published scope, the same figures printed in the package
+   * deliverables and in the tier table on the page itself. A reader can scroll
+   * down and check them, which is the test.
+   *
+   * It must never be fed a result -- traffic, rankings, leads, a percentage
+   * lift. If a figure cannot be checked against something already published,
+   * it does not belong in this card.
+   */
+  | (ShowcaseBase & {
+      kind: "scale";
+      /** What the figures count, e.g. "tracked keywords". Drawn under them. */
+      unit: string;
+      series: { label: string; value: number }[];
+    })
   | (ShowcaseBase & {
       kind: "stat";
       stats: { value: string; label: string }[];

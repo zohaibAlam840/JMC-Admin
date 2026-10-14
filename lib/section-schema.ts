@@ -115,6 +115,8 @@ const showcaseCards: Field = {
         { value: "roadmap", label: "Roadmap — an ordered set of stages" },
         { value: "growth", label: "Growth — the same card, drawn as a rising line" },
         { value: "channels", label: "Channels — where visibility is worked" },
+        { value: "profile", label: "Profile — a pie, one wedge per line" },
+        { value: "scale", label: "Scale — a bar chart of published figures" },
         { value: "stat", label: "Stats — three figures with labels" },
       ],
     },
@@ -128,6 +130,27 @@ const showcaseCards: Field = {
     roadmap: [{ name: "items", label: "Stages", kind: "stringList" }],
     growth: [{ name: "items", label: "Stages", kind: "stringList" }],
     channels: [{ name: "items", label: "Channels", kind: "stringList" }],
+    profile: [{ name: "items", label: "Parts", kind: "stringList" }],
+    scale: [
+      {
+        name: "unit",
+        label: "What the figures count",
+        kind: "text",
+        help: "Drawn under the bars, e.g. \"tracked keywords each month\".",
+      },
+      {
+        name: "series",
+        label: "Bars",
+        kind: "repeater",
+        itemLabel: "Bar",
+        max: 4,
+        help: "Published scope only — figures a reader can check against the packages on the page. Never a result.",
+        fields: [
+          { name: "label", label: "Label", kind: "text" },
+          { name: "value", label: "Value", kind: "text" },
+        ],
+      },
+    ],
     stat: [
       {
         name: "stats",

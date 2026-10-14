@@ -85,11 +85,23 @@ export function SectionHeader({
       <h2 className="text-[1.875rem] sm:text-[2.25rem] lg:text-[2.625rem]">
         {heading}
       </h2>
-      {body ? (
-        <p className="max-w-2xl text-[1.02rem] leading-relaxed text-subtle">
-          {body}
-        </p>
-      ) : null}
+      {/*
+        A blank line in the copy means a new paragraph, rather than being
+        welded into the same block. Section bodies are a sentence or two
+        almost everywhere, so this changes nothing on most of the site -- it
+        matters where a section has to explain something before it lists it,
+        and a six-line wall was the thing being complained about.
+      */}
+      {body
+        ? body.split(/\n\s*\n/).map((paragraph, i) => (
+            <p
+              key={i}
+              className="max-w-2xl text-[1.02rem] leading-relaxed text-subtle"
+            >
+              {paragraph}
+            </p>
+          ))
+        : null}
     </Reveal>
   );
 }
