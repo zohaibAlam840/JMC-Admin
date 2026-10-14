@@ -30,6 +30,7 @@ import { RecapExample } from "@/components/blocks/recap-example";
 import { AuditForm } from "@/components/blocks/audit-form";
 import { WaiverMatrix } from "@/components/blocks/waiver-matrix";
 import { LinkStack } from "@/components/blocks/link-stack";
+import { TabbedList } from "@/components/blocks/tabbed-list";
 import { packages as filePackages } from "@/content/packages";
 import { cn } from "@/lib/utils";
 import type { Package, PostSummary } from "@/lib/types";
@@ -731,13 +732,15 @@ function FeatureSplit({ section }: { section: FeatureSplitSection }) {
    * rather than sit next to a placeholder.
    */
   const visual =
-    section.tableHeadings && section.tableRows
-      ? "table"
-      : section.portrait
-        ? "portrait"
-        : section.groups.length > 0
-          ? "groups"
-          : "none";
+    section.tabs && section.tabs.length > 0
+      ? "tabs"
+      : section.tableHeadings && section.tableRows
+        ? "table"
+        : section.portrait
+          ? "portrait"
+          : section.groups.length > 0
+            ? "groups"
+            : "none";
 
   return (
     <Band id={section.id} tone={section.tone}>
@@ -787,7 +790,11 @@ function FeatureSplit({ section }: { section: FeatureSplitSection }) {
           ) : null}
         </Reveal>
 
-        {section.tableHeadings && section.tableRows ? (
+        {visual === "tabs" && section.tabs ? (
+          <Reveal className={cn(!copyFirst && "lg:order-1")}>
+            <TabbedList tabs={section.tabs} />
+          </Reveal>
+        ) : section.tableHeadings && section.tableRows ? (
           /*
            * A real table, not a grid of cards. Both sections that use it are
            * making an argument out of the alignment: "this stays the same,
@@ -998,15 +1005,18 @@ function PricingCards({
                   : "border-line"
               )}
             >
-              {pkg.featured ? (
-                <Badge
-                  variant="brand"
-                  size="sm"
-                  className="absolute -top-2.5 left-7 shadow-soft"
-                >
-                  Most chosen
-                </Badge>
-              ) : null}
+              {/*
+               * No "Most chosen" badge. Removed in review: "we don't want
+               * most chosen or anything like that, but still have it — still
+               * subconsciously sell it to them... Take that off. It's still
+               * subliminally chosen."
+               *
+               * So the label goes and the emphasis stays. The featured tier
+               * keeps its teal border, its shadow and the vertical lift above,
+               * which is what actually draws the eye; the badge was the part
+               * making a claim about other people's choices that nothing on
+               * this site can substantiate.
+               */}
 
               <h3 className="text-[1.3125rem] leading-tight sm:text-[1.5rem]">
                 {pkg.name}

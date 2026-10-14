@@ -321,6 +321,22 @@ export type FeatureSplitSection = Base & {
   /** One entry per row. `cells` matches the headings, left to right. */
   tableRows?: { cells: string[] }[];
   /**
+   * A segmented toggle drawn instead of the table or the group cards, showing
+   * one list at a time.
+   *
+   * Exists for one section: onboarding on Monthly SEO Packages, where the
+   * client asked for "a toggled table, where if it's on local SEO, it'll
+   * break down onboarding, and then if you toggle it over, it'll give you
+   * traditional SEO."
+   *
+   * Takes precedence over `tableHeadings`/`tableRows` when both are present,
+   * since the toggle is the richer form of the same comparison.
+   */
+  tabs?: {
+    label: string;
+    items: { title: string; body?: string }[];
+  }[];
+  /**
    * A single portrait drawn beside the copy instead of the group cards.
    *
    * Exists for one section: About §2, the 2022 pivot. Page Spec 11 allowed one

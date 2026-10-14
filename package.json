@@ -10,7 +10,8 @@
     "seed:generate": "tsx scripts/generate-seed.ts",
     "sql:bundle": "tsx scripts/bundle-sql.ts",
     "sql:apply": "tsx scripts/generate-apply.ts",
-    "check": "tsx scripts/check-content.ts"
+    "check": "tsx scripts/check-content.ts",
+    "sql:page": "tsx scripts/generate-page-sql.ts"
   },
   "dependencies": {
     "@phosphor-icons/react": "^2.1.10",

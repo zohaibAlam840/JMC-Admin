@@ -34,7 +34,20 @@ export const seoPackagesPage: PageContent = {
       eyebrow: "Monthly SEO Packages",
       heading: "The Prices Are on This Page",
       body: "Six monthly packages across two service lines, with what each one includes and what it costs. Nothing here is behind a call, because a price you have to ask for is a price that changes depending on who is asking.",
-      // No buttons: the path selector directly below is the action.
+      /*
+       * A button here after all. The original note said the path selector
+       * below was the action and a hero button would be noise; the client
+       * disagreed in review — "I still want a CTA up here" — and he is
+       * closer to how his buyers arrive than the spec is.
+       *
+       * One button, not two. The page's whole argument is that the prices are
+       * right here, so a second button competing with the price list would
+       * work against it.
+       */
+      primaryCta: {
+        label: "Request a Visibility Review",
+        href: "/contact",
+      },
     },
 
     {
@@ -74,46 +87,30 @@ export const seoPackagesPage: PageContent = {
       packageIds: ["local-neighborhood", "local-citywide", "local-metro"],
     },
 
-    // The custom-scope line for the Local group. It routes to /contact for a
-    // quote and must never route to Traditional: above the Metro tier a
-    // business competing in local results is still a Local buyer.
+    /*
+     * The Local half of what used to be a single "Included in Every Package"
+     * section sitting below both price lists.
+     *
+     * Split and moved by instruction: "I think we need to put this below each
+     * package... Local SEO packages, and then right here is where that
+     * information belongs", and then "once we move those two things up there,
+     * I think we get rid of this section altogether." The combined section is
+     * gone; these are its two halves, each under the prices it describes.
+     *
+     * It reads better split. A reader comparing three Local tiers wants to
+     * know what all three include while the prices are still on screen, not
+     * after scrolling past a second price list for a service line they have
+     * already ruled out.
+     */
     {
-      id: "local-custom",
-      type: "fullWidthText",
-      tone: "white",
-      heading: "Bigger Than Metro?",
-      body: "If the scope is bigger or more involved than what is here, JMC will look at it and put together a quote. That is still a Local engagement, however many locations are involved.",
-      cta: { label: "Request a Visibility Review", href: "/contact" },
-    },
-
-    {
-      id: "traditional",
-      type: "pricingCards",
-      tone: "surface",
-      eyebrow: "Traditional SEO",
-      heading: "Traditional SEO Packages",
-      body: "Three tiers, sized by footprint rather than by headcount.",
-      packageIds: [
-        "traditional-regional",
-        "traditional-national",
-        "traditional-national-plus",
-      ],
-      cta: { label: "Request a Visibility Review", href: "/contact" },
-    },
-
-    {
-      id: "included",
+      id: "local-included",
       type: "cardGrid",
       tone: "white",
       variant: "compact",
       columns: 3,
-      eyebrow: "Every Tier",
-      heading: "Included in Every Package",
-      body: "Tiers differ by volume, not by what is included.",
-      groupLabels: [
-        { at: 0, label: "Local SEO, all tiers" },
-        { at: 6, label: "Traditional SEO, all tiers" },
-      ],
+      eyebrow: "Every Local Tier",
+      heading: "Included in Every Local Package",
+      body: "The three tiers differ by volume, not by what is included.",
       cards: [
         {
           title: "SEO Strategy & Roadmap",
@@ -145,6 +142,56 @@ export const seoPackagesPage: PageContent = {
           icon: "star",
           body: "Requests sent to real customers, and replies to what arrives.",
         },
+      ],
+    },
+
+
+    // The custom-scope line for the Local group. It routes to /contact for a
+    // quote and must never route to Traditional: above the Metro tier a
+    // business competing in local results is still a Local buyer.
+    {
+      id: "local-custom",
+      type: "fullWidthText",
+      tone: "white",
+      heading: "Bigger Than Metro?",
+      body: "If the scope is bigger or more involved than what is here, JMC will look at it and put together a quote. That is still a Local engagement, however many locations are involved.",
+      cta: { label: "Request a Visibility Review", href: "/contact" },
+    },
+
+    {
+      id: "traditional",
+      type: "pricingCards",
+      tone: "surface",
+      eyebrow: "Traditional SEO",
+      heading: "Traditional SEO Packages",
+      body: "Three tiers, sized by footprint rather than by headcount.",
+      packageIds: [
+        "traditional-regional",
+        "traditional-national",
+        "traditional-national-plus",
+      ],
+      /*
+       * No section CTA. It used to close the Traditional price list, which
+       * made sense when that list ended the lane. Now two sections follow it
+       * — what every tier includes, then the custom-scope line — and the
+       * custom-scope line carries the same "Request a Visibility Review"
+       * button. Two identical buttons a screen apart is one too many, and the
+       * lower one is the one that earns the click, because by then the reader
+       * knows the published tiers do not fit.
+       */
+    },
+
+    /* The Traditional half of the same split. See local-included above. */
+    {
+      id: "traditional-included",
+      type: "cardGrid",
+      tone: "surface",
+      variant: "compact",
+      columns: 3,
+      eyebrow: "Every Traditional Tier",
+      heading: "Included in Every Traditional Package",
+      body: "The three tiers differ by footprint, not by what is included.",
+      cards: [
         {
           title: "SEO Strategy & Roadmap",
           icon: "compass",
@@ -173,26 +220,126 @@ export const seoPackagesPage: PageContent = {
       ],
     },
 
+    /*
+     * The custom-scope line for Traditional, which did not exist: "we also
+     * don't even have a bigger than here. So we need to put a bigger than
+     * here." Local had one and Traditional did not, which left the top
+     * Traditional tier looking like a ceiling rather than the largest
+     * published package.
+     *
+     * Mirrors local-custom deliberately, including routing to /contact for a
+     * quote rather than anywhere else.
+     */
+    {
+      id: "traditional-custom",
+      type: "fullWidthText",
+      tone: "surface",
+      heading: "Bigger Than National+?",
+      body: "If the footprint is wider or the search landscape more competitive than what is published here, JMC will look at the scope and put together a quote rather than forcing it into a tier that does not fit.",
+      cta: { label: "Request a Visibility Review", href: "/contact" },
+    },
+
+
     {
       id: "onboarding",
       type: "featureSplit",
-      tone: "surface",
+      tone: "white",
       align: "left",
       eyebrow: "The One-Time Fee",
       heading: "What Onboarding Covers",
-      body: "Every tier carries a one-time onboarding fee, from $349 to $1,295 depending on the package. It pays for the work that has to happen once before the monthly work means anything: nothing built on an unaudited foundation is worth reporting on.\n\nThe two scopes are genuinely different rather than one generic setup with different price tags, which is why they are listed separately below. A Launch Sprint can waive this fee entirely, which the next section sets out.",
-      tableHeadings: ["Lane", "Onboarding covers"],
-      tableRows: [
+      body: "Every tier carries a one-time onboarding fee, from $349 to $1,295 depending on the package. It pays for the work that has to happen once before the monthly work means anything: nothing built on an unaudited foundation is worth reporting on.\n\nThe two scopes are genuinely different rather than one generic setup with two price tags. Switch between them to see what each one actually covers.\n\nA Launch Sprint is this same work bought standalone, which is why it waives the fee rather than discounting it. The next section sets out which sprint waives which package.",
+      /*
+       * Replaces a two-row table, by instruction: "we'll be a little more
+       * detailed and explain exactly what onboarding is for each side...
+       * almost like a toggled table, where if it's on local SEO, it'll break
+       * down onboarding, and then if you toggle it over, traditional SEO."
+       *
+       * DRAFT CONTENT, and derived rather than invented. This page already
+       * argues that a Launch Sprint is "the onboarding work done standalone",
+       * so the two lists are the published sprint deliverables with the
+       * 30-Day Action Roadmap removed — the roadmap is what a sprint adds on
+       * top, and it is not part of onboarding on a monthly package.
+       *
+       * Local follows the Neighborhood sprint, Traditional follows Regional.
+       * That keeps this section consistent with the sprint page by
+       * construction: if those deliverables change, these should change with
+       * them. Worth Wendell confirming against what onboarding actually runs,
+       * since this is the one section where being wrong means charging for
+       * something that does not happen.
+       */
+      tabs: [
         {
-          cells: [
-            "Local SEO",
-            "Audit, setup, tracking, foundational optimization, and local visibility setup",
+          label: "Local SEO",
+          items: [
+            {
+              title: "Kickoff and access setup",
+              body: "Accounts, permissions and the handover needed before anything can be audited.",
+            },
+            {
+              title: "Local SEO audit",
+              body: "The current foundation reviewed end to end, with findings ranked by impact.",
+            },
+            {
+              title: "Local keyword and competitor snapshot",
+              body: "What the business should be found for, and who is currently being found instead.",
+            },
+            {
+              title: "Search Console and Bing setup",
+              body: "Set up or verified, so the reporting has something real behind it from month one.",
+            },
+            {
+              title: "Google Business Profile audit and core optimization",
+              body: "Categories, services, hours and the fields that decide whether the profile shows at all.",
+            },
+            {
+              title: "Citation audit and NAP standard",
+              body: "One agreed name, address and phone format, and a list of where it is currently wrong.",
+            },
+            {
+              title: "Schema, sitemap and robots.txt review",
+              body: "The technical files that decide what search engines can read.",
+            },
+            {
+              title: "Titles and meta descriptions",
+              body: "Written for the priority pages rather than generated across the whole site.",
+            },
+            {
+              title: "Local search grid baseline",
+              body: "Where the business ranks across the service area today, so later months have something to compare against.",
+            },
           ],
         },
         {
-          cells: [
-            "Traditional SEO",
-            "Audit, setup, tracking, foundational optimization, and roadmap development",
+          label: "Traditional SEO",
+          items: [
+            {
+              title: "Kickoff and access setup",
+              body: "Accounts, permissions and the handover needed before anything can be audited.",
+            },
+            {
+              title: "Technical and on-page SEO audit",
+              body: "A full review across the site rather than a local profile, since the competition is not in one area.",
+            },
+            {
+              title: "Keyword and competitor analysis",
+              body: "Across every market and service line in scope, not a single radius.",
+            },
+            {
+              title: "Search Console and Bing setup",
+              body: "Set up or verified, so the reporting has something real behind it from month one.",
+            },
+            {
+              title: "Schema, sitemap and robots.txt review",
+              body: "The technical files that decide what search engines can read.",
+            },
+            {
+              title: "Titles and meta descriptions",
+              body: "Written for the priority pages rather than generated across the whole site.",
+            },
+            {
+              title: "Backlink audit",
+              body: "What authority already exists and what is actively working against it.",
+            },
           ],
         },
       ],
@@ -203,7 +350,7 @@ export const seoPackagesPage: PageContent = {
     {
       id: "sprint-waiver",
       type: "waiverMatrix",
-      tone: "white",
+      tone: "surface",
       eyebrow: "Another Way In",
       heading: "Start With a Launch Sprint",
       body: "A sprint is the onboarding work done standalone, with a roadmap attached. That is why the waiver exists rather than being a discount: it is close to the same job, bought once, with no monthly commitment behind it.",
@@ -235,7 +382,7 @@ export const seoPackagesPage: PageContent = {
     {
       id: "monthly-recap",
       type: "reportingBlock",
-      tone: "surface",
+      tone: "white",
       eyebrow: "Reporting",
       heading: "The Monthly Recap",
       body: "Included in every package in both lanes, at every tier.",
@@ -253,7 +400,7 @@ export const seoPackagesPage: PageContent = {
     {
       id: "faq",
       type: "faq",
-      tone: "white",
+      tone: "surface",
       eyebrow: "Questions",
       heading: "Pricing Questions",
       items: [
