@@ -35,20 +35,37 @@ export const launchSprintsPage: PageContent = {
       eyebrow: "Launch Sprints",
       heading: "A Fixed Scope, Finished in Thirty Days",
       body: "A Launch Sprint is a single engagement with a defined start, a defined end, and a written list of everything included. There is no term, no renewal, and no obligation to continue afterwards.",
+      /*
+       * One button, by instruction: "We got to get rid of the monthly SEO
+       * package CTA here... if we are going to mention the monthly SEO
+       * package, we need to do it later on."
+       *
+       * It still is mentioned later on, twice — the waiver section links to
+       * the packages, and so does the closing CTA — so nothing is lost except
+       * the invitation to leave this page before reading it.
+       */
       primaryCta: {
         label: "Request a Sprint Consultation",
         href: "/contact?type=sprint",
       },
-      secondaryCta: {
-        label: "View Monthly SEO Packages",
-        href: "/monthly-seo-packages",
-      },
-      // A roadmap motif rather than the reporting one. Page Spec 07 §1 wants
-      // this hero visually distinct from the pages that sell ongoing service,
-      // and the motif is the cheapest place to do it.
+      /*
+       * A sparkline rather than the route motif, which the client could not
+       * read: it is the same card, drawn as a rising line instead of four
+       * dots on a track. Abstract either way — no axis, no scale, no numbers,
+       * because Page Spec 01 §1 forbids anything that could be read as a
+       * result. A direction is the most it says.
+       *
+       * One card, not two. The second card ("Three Sprints / Sized by Reach")
+       * is gone for a plain layout reason: it overlaps the bottom-left of the
+       * panel and covered the first 45% of the line, so the growth read — the
+       * entire point of the change — started halfway up. Nothing is lost by
+       * dropping it. The three sprints get a full pricing section of their own
+       * below, where they are names, prices and scopes rather than three
+       * unexplained chips.
+       */
       showcase: [
         {
-          kind: "roadmap",
+          kind: "growth",
           label: "Thirty days",
           title: "The Sprint",
           items: [
@@ -58,34 +75,47 @@ export const launchSprintsPage: PageContent = {
             "30-Day Action Roadmap",
           ],
         },
-        {
-          kind: "coverage",
-          label: "Three sprints",
-          title: "Sized by Reach",
-          items: ["Neighborhood", "Regional", "National"],
-        },
       ],
     },
 
+    /*
+     * Restructured from a three-card grid, by instruction: "we don't have
+     * enough information on this page... we're probably going to have to
+     * restructure this section to be able to articulate it in more than five
+     * sentences, six sentences."
+     *
+     * A card grid cannot hold that. Three cards of two sentences each is six
+     * sentences of captions, and the thing a reader actually wants answered —
+     * what IS this, and why would I buy it instead of a retainer — has
+     * nowhere to go. A split puts real prose on the left and keeps the three
+     * points beside it as the summary they always were.
+     *
+     * The middle point is "A Defined Window" rather than "Thirty Days"
+     * because the number is in dispute: the client says Neighborhood runs 30
+     * days and Regional and National run 45, then said his own document does
+     * not support that. The phrasing here is true under either answer, so it
+     * does not have to be rewritten once he confirms. The hero headline and
+     * the package timelines still assert thirty and are flagged, not guessed.
+     *
+     * Copy is DRAFT pending the Step 4 deck, as everywhere else.
+     */
     {
       id: "what-a-sprint-is",
-      type: "cardGrid",
+      type: "featureSplit",
       tone: "surface",
-      variant: "cards",
-      columns: 3,
       eyebrow: "The Shape of It",
       heading: "What a Sprint Is",
-      body: "Three things, and they are the whole of the commitment.",
-      cards: [
+      body: "A Launch Sprint is a single piece of SEO work with a start date, an end date, and a list agreed before anything begins. It is not a trial of monthly service, and it is not a discounted version of it.\n\nIt is the foundational work — the audit, the technical and on-page fixes, the setup that should be in place before any ongoing campaign — done once, as its own job, with its own price.\n\nMost SEO engagements spend their first two months doing exactly this work inside a retainer while the invoice runs. A sprint separates it out and puts a finish date on it, so a business can buy the foundation without committing to a year of anything.\n\nAt the end you get the work itself and a written roadmap of what to do next. Whether that turns into monthly service, a job for an internal team, or nothing for a while is a real decision rather than a formality — the roadmap is written to be useful in all three cases.",
+      groups: [
         {
           title: "One-Time",
           icon: "rocket",
           body: "A single engagement. No term, no renewal, and no ongoing invoice arriving next month.",
         },
         {
-          title: "Thirty Days",
+          title: "A Defined Window",
           icon: "calendar",
-          body: "A defined window with a defined end. The work is completed inside it rather than running until somebody stops it.",
+          body: "A fixed start and a fixed end. The work is completed inside the window rather than running until somebody stops it.",
         },
         {
           title: "Fixed Scope",
@@ -157,34 +187,21 @@ export const launchSprintsPage: PageContent = {
     },
 
     {
-      id: "waiver",
-      type: "waiverMatrix",
-      tone: "surface",
-      eyebrow: "Continuing On",
-      heading: "Continuing Into Monthly Service",
-      body: "The sprint deliverables and the onboarding work on a monthly package are close to the same job. That is why the waiver exists: a sprint is the onboarding done standalone, with a roadmap attached.",
-      sprintHeading: "Sprint",
-      // No price column on this page. The three prices are already on the
-      // cards directly above, and repeating them turns a mapping table into a
-      // second, quieter price list.
-      waivesHeading: "Waives onboarding on",
-      rows: [
-        { sprint: "Neighborhood", waives: "Neighborhood, Citywide, or Metro" },
-        { sprint: "Regional", waives: "Regional" },
-        { sprint: "National", waives: "National or National+" },
-      ],
-      condition:
-        "Monthly service must begin within 30 calendar days of sprint completion.",
-      cta: {
-        label: "View Monthly SEO Packages",
-        href: "/monthly-seo-packages",
-      },
-    },
-
-    {
+      /*
+       * Moved above the monthly-service section, by instruction: "it needs to
+       * be the deliverables first, deliverables first, and then... the
+       * deliverables needs to go ahead."
+       *
+       * It reads better that way too. What you walk away with is the answer to
+       * "what am I buying"; the onboarding waiver is the answer to "what if I
+       * continue", which is a question nobody asks before the first one.
+       *
+       * Tones swapped with the waiver section in the same move, so the bands
+       * still alternate rather than running white into white.
+       */
       id: "roadmap",
       type: "cardGrid",
-      tone: "white",
+      tone: "surface",
       variant: "cards",
       columns: 4,
       emphasis: true,
@@ -213,9 +230,42 @@ export const launchSprintsPage: PageContent = {
           body: "Whether that means monthly service or handling the roadmap internally. Both are real answers, and the roadmap is written to work either way.",
         },
       ],
+      /*
+       * No CTA. This section used to link to /seo-reporting, and the client
+       * cut it in review: "not how JMC reports SEO progress, because the
+       * deliverable here is different, so this would take them to the wrong
+       * place."
+       *
+       * He is right. /seo-reporting describes the monthly recap, and a sprint
+       * does not produce one — it produces the 30-Day Action Roadmap these
+       * cards describe. Nothing replaces it: the waiver section directly
+       * below carries the real next step, and two CTAs one band apart would
+       * compete anyway.
+       */
+    },
+
+    {
+      id: "waiver",
+      type: "waiverMatrix",
+      tone: "white",
+      eyebrow: "Continuing On",
+      heading: "Continuing Into Monthly Service",
+      body: "The sprint deliverables and the onboarding work on a monthly package are close to the same job. That is why the waiver exists: a sprint is the onboarding done standalone, with a roadmap attached.",
+      sprintHeading: "Sprint",
+      // No price column on this page. The three prices are already on the
+      // cards directly above, and repeating them turns a mapping table into a
+      // second, quieter price list.
+      waivesHeading: "Waives onboarding on",
+      rows: [
+        { sprint: "Neighborhood", waives: "Neighborhood, Citywide, or Metro" },
+        { sprint: "Regional", waives: "Regional" },
+        { sprint: "National", waives: "National or National+" },
+      ],
+      condition:
+        "Monthly service must begin within 30 calendar days of sprint completion.",
       cta: {
-        label: "See How JMC Reports SEO Progress",
-        href: "/seo-reporting",
+        label: "View Monthly SEO Packages",
+        href: "/monthly-seo-packages",
       },
     },
 

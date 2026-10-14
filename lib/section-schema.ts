@@ -113,6 +113,7 @@ const showcaseCards: Field = {
         { value: "report", label: "Report — a list of what is reported on" },
         { value: "coverage", label: "Coverage — areas or markets covered" },
         { value: "roadmap", label: "Roadmap — an ordered set of stages" },
+        { value: "growth", label: "Growth — the same card, drawn as a rising line" },
         { value: "channels", label: "Channels — where visibility is worked" },
         { value: "stat", label: "Stats — three figures with labels" },
       ],
@@ -125,6 +126,7 @@ const showcaseCards: Field = {
     report: [{ name: "items", label: "Lines", kind: "stringList" }],
     coverage: [{ name: "items", label: "Lines", kind: "stringList" }],
     roadmap: [{ name: "items", label: "Stages", kind: "stringList" }],
+    growth: [{ name: "items", label: "Stages", kind: "stringList" }],
     channels: [{ name: "items", label: "Channels", kind: "stringList" }],
     stat: [
       {

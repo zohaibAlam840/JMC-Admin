@@ -123,6 +123,12 @@ export type HeroShowcaseCard =
   | (ShowcaseBase & { kind: "report"; items: string[] })
   | (ShowcaseBase & { kind: "coverage"; items: string[] })
   | (ShowcaseBase & { kind: "roadmap"; items: string[] })
+  /**
+   * Same card, drawn with a sparkline instead of a route. Added in review when
+   * the route motif "was not making much sense" to a non-technical reader.
+   * Abstract like the rest: a direction, no axis and no numbers.
+   */
+  | (ShowcaseBase & { kind: "growth"; items: string[] })
   | (ShowcaseBase & { kind: "channels"; items: string[] })
   | (ShowcaseBase & {
       kind: "stat";

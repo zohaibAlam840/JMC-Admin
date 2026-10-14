@@ -410,7 +410,7 @@ function CardGrid({ section }: { section: CardGridSection }) {
         </Stagger>
 
         {section.cta ? (
-          <Reveal className="mt-12">
+          <Reveal className="mt-12 flex justify-center">
             <Button href={section.cta.href} size="lg" className="group">
               {section.cta.label}
               <ArrowRight
@@ -496,7 +496,7 @@ function CardGrid({ section }: { section: CardGridSection }) {
       </Stagger>
 
       {section.cta ? (
-        <Reveal className="mt-12">
+        <Reveal className="mt-12 flex justify-center">
           <Button href={section.cta.href} size="lg" className="group">
             {section.cta.label}
             <ArrowRight
@@ -1084,7 +1084,7 @@ function PricingCards({
       </Stagger>
 
       {section.cta ? (
-        <Reveal className="mt-12">
+        <Reveal className="mt-12 flex justify-center">
           <Button href={section.cta.href} variant="secondary" size="lg">
             {section.cta.label}
           </Button>
@@ -1305,7 +1305,7 @@ function PostList({
       )}
 
       {section.cta ? (
-        <Reveal className="mt-12">
+        <Reveal className="mt-12 flex justify-center">
           <Button href={section.cta.href} variant="secondary" size="lg">
             {section.cta.label}
           </Button>

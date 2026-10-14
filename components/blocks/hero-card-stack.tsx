@@ -57,6 +57,89 @@ function Motif({
     );
   }
 
+  if (kind === "growth") {
+    /*
+     * A sparkline. Asked for in review: the route motif below "was not making
+     * much sense" and the client wanted something a non-technical reader reads
+     * instantly as going up.
+     *
+     * Still abstract, by the same rule as every other motif here — Page Spec
+     * 01 §1 forbids fabricated metrics presented as real data. So there is no
+     * axis, no gridline, no scale and not one number. What is left is the only
+     * honest thing a shape like this can say: the direction.
+     *
+     * The two small pullbacks are deliberate. A line that only ever rises
+     * reads as a drawing of a line; SEO does not work like that, and neither
+     * does the reporting this site promises.
+     *
+     * No hover layer, which is the one place this departs from how a real
+     * chart would be built. A tooltip implies there is a value underneath to
+     * read, and there is not.
+     */
+    const points = [
+      [0, 58],
+      [25, 52],
+      [50, 55],
+      [75, 42],
+      [100, 38],
+      [125, 26],
+      [150, 29],
+      [175, 14],
+      [200, 6],
+    ];
+    const line = points.map(([x, y]) => `${x},${y}`).join(" ");
+    const end = points[points.length - 1];
+
+    return (
+      <div className="relative h-20 w-full">
+        <svg
+          viewBox="0 0 200 72"
+          // Stretched to whatever width the panel is, because the panel's
+          // width is not knowable here. non-scaling-stroke keeps the line 2px
+          // through that stretch, which is the whole reason this is safe.
+          preserveAspectRatio="none"
+          className="absolute inset-0 size-full overflow-visible"
+        >
+          <defs>
+            <linearGradient id="jmc-growth-line" x1="0" y1="0" x2="1" y2="0">
+              <stop offset="0" stopColor="var(--color-teal)" />
+              <stop offset="1" stopColor="var(--color-blue)" />
+            </linearGradient>
+            <linearGradient id="jmc-growth-fill" x1="0" y1="0" x2="0" y2="1">
+              <stop
+                offset="0"
+                stopColor="var(--color-teal)"
+                stopOpacity="0.22"
+              />
+              <stop offset="1" stopColor="var(--color-teal)" stopOpacity="0" />
+            </linearGradient>
+          </defs>
+
+          <polygon points={`0,72 ${line} 200,72`} fill="url(#jmc-growth-fill)" />
+          <polyline
+            points={line}
+            fill="none"
+            stroke="url(#jmc-growth-line)"
+            strokeWidth={2}
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            vectorEffect="non-scaling-stroke"
+          />
+        </svg>
+
+        {/*
+         * The end point, in HTML rather than as an SVG <circle>. The stretch
+         * above would squash a circle into an ellipse, and non-scaling-stroke
+         * only rescues the stroke, not the geometry.
+         */}
+        <span
+          className="absolute size-2.5 -translate-x-1/2 -translate-y-1/2 rounded-full bg-blue ring-2 ring-white"
+          style={{ left: "100%", top: `${(end[1] / 72) * 100}%` }}
+        />
+      </div>
+    );
+  }
+
   if (kind === "roadmap") {
     // A route with four stops. Reads as a sequence rather than a measurement,
     // which is what a roadmap card is claiming.
