@@ -1184,9 +1184,16 @@ export const industriesIndexPage: PageContent = {
       type: "heroCentered",
       eyebrow: "Industries",
       heading: "The Method Doesn't Change With the Industry",
-      body: "Eight sectors, one approach. What changes between them is the language buyers search in, how long they take to decide, and what a single lead is worth.",
-      // No buttons at all: the grid directly below is the action, per Page
-      // Spec 08 §1.
+      body: "Eight sectors, one approach. What changes between them is the search language, not the work.",
+      // Page Spec 08 §1 opened this hero with no buttons, on the reasoning
+      // that the grid below is the action. Overridden in the client review on
+      // 2026-10-14: "I think we do need a CTA up here ... but it needs to be a
+      // button." The body was cut in the same pass, for the reason he gave --
+      // the hero ran long and then the section under it said the same thing.
+      // The clause that left ("how long they take to decide, and what a single
+      // lead is worth") still appears verbatim in "the-method" below, so this
+      // is de-duplication rather than a cut.
+      primaryCta: { label: "Request a Visibility Review", href: "/contact" },
     },
 
     {
@@ -1235,7 +1242,18 @@ export const industriesIndexPage: PageContent = {
         },
       ],
       groups: [],
-      cta: { label: "Explore Local SEO", href: "/local-seo-services" },
+      /**
+       * Lane-neutral on purpose. This was "Explore Local SEO" and the client
+       * rejected it in the 2026-10-14 review: "because we're doing industries,
+       * they may be a traditional SEO client that we've now pushed to local
+       * SEO ... that's the wrong CTA." The section argues the method runs on
+       * two tracks, so a button that picks one of them for the reader
+       * contradicts the paragraph above it. The packages page carries both
+       * tracks side by side and lets the reader sort themselves. He also said
+       * the final label is still open, so this is the safe answer rather than
+       * the settled one.
+       */
+      cta: { label: "View SEO Packages", href: "/monthly-seo-packages" },
     },
 
     {

@@ -299,6 +299,15 @@ const HOME_SECTIONS = [
   "services",       // its CTA moved off the industries hub
   "industries",     // eight cards now point at eight industry pages
   "monthly-recap",  // same CTA again
+  // Added 2026-10-14, after npm run sql:pending found these three still
+  // holding pre-decision content. Not cosmetic drift: the package cards and
+  // the closing CTA both pointed at /seo-packages, a slug that no longer
+  // exists, so the live homepage had dead links in two places. "process"
+  // additionally carried a retired CTA label ("Start with a Visibility
+  // Review") and the first-person "we" voice that check-voice rejects.
+  "packages",       // cards linked to /seo-packages, now /monthly-seo-packages
+  "process",        // retired CTA label, and "we" throughout the steps
+  "final-cta",      // same dead link in the secondary button
 ];
 
 w("-- ------------------------------------------------------ homepage links ----");

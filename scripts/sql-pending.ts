@@ -348,8 +348,14 @@ async function main() {
     written.push(name);
   });
 
-  // Clear any parts left behind by a previous, larger run.
-  for (let i = parts.length; i < 20; i++) {
+  // Clear any parts left behind by a previous run. A single part is written
+  // as apply-pending.sql with no number, so in that case there is no
+  // apply-pending-1.sql to keep and the sweep has to start at the first
+  // index -- starting it at parts.length left a stale 44KB part 1 sitting
+  // beside the real file, which is exactly the kind of "which one do I run?"
+  // ambiguity this script exists to remove.
+  const firstStale = parts.length > 1 ? parts.length : 0;
+  for (let i = firstStale; i < 20; i++) {
     const stale = join(process.cwd(), "supabase", `apply-pending-${i + 1}.sql`);
     if (existsSync(stale)) unlinkSync(stale);
   }
