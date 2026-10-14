@@ -143,9 +143,64 @@ export function Card({
 }
 
 /** Hairline grid + brand glow used behind hero sections. */
-export function HeroBackdrop() {
+/**
+ * A reporting chart drawn behind a hero, for the words to sit on top of.
+ *
+ * Asked for on the SEO Reporting page: "we could put almost the same kind of
+ * jagged chart that looks like a reporting kind of graphic behind it ...
+ * behind the words and have the words as an overlay."
+ *
+ * Decoration, and held to the rule the hero motifs are held to: no axis, no
+ * scale, no numbers, nothing that could be read as a result. A jagged line
+ * with two pullbacks and a soft fill under it, faint enough that body copy
+ * stays comfortably readable on top of it.
+ */
+function ChartBackdrop() {
+  // Rising overall, with two dips. A line that only climbs reads as a drawing.
+  const points = [
+    [0, 78], [8, 72], [16, 75], [24, 62], [32, 66], [40, 52],
+    [48, 44], [56, 50], [64, 36], [72, 30], [80, 33], [88, 18], [100, 10],
+  ];
+  const line = points.map(([x, y]) => `${x},${y}`).join(" ");
+
+  return (
+    <svg
+      aria-hidden="true"
+      viewBox="0 0 100 90"
+      preserveAspectRatio="none"
+      className="pointer-events-none absolute inset-x-0 bottom-0 top-16 h-[calc(100%-4rem)] w-full"
+    >
+      <defs>
+        <linearGradient id="hero-chart-fill" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%" stopColor="var(--color-teal)" stopOpacity="0.16" />
+          <stop offset="100%" stopColor="var(--color-blue)" stopOpacity="0" />
+        </linearGradient>
+        <linearGradient id="hero-chart-line" x1="0" y1="0" x2="1" y2="0">
+          <stop offset="0%" stopColor="var(--color-teal)" />
+          <stop offset="100%" stopColor="var(--color-blue)" />
+        </linearGradient>
+      </defs>
+      <polygon points={`0,90 ${line} 100,90`} fill="url(#hero-chart-fill)" />
+      <polyline
+        points={line}
+        fill="none"
+        stroke="url(#hero-chart-line)"
+        strokeOpacity="0.55"
+        strokeWidth="1"
+        strokeLinejoin="round"
+        strokeLinecap="round"
+        /* The viewBox is stretched to the hero's width, so a plain stroke
+           would be drawn as a hairline horizontally and a slab vertically. */
+        vectorEffect="non-scaling-stroke"
+      />
+    </svg>
+  );
+}
+
+export function HeroBackdrop({ chart = false }: { chart?: boolean }) {
   return (
     <>
+      {chart ? <ChartBackdrop /> : null}
       <div
         aria-hidden="true"
         className="grid-backdrop pointer-events-none absolute inset-0 [mask-image:radial-gradient(75%_60%_at_50%_35%,black,transparent)]"

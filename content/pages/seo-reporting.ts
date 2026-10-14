@@ -27,38 +27,26 @@ export const seoReportingPage: PageContent = {
   metaDescription:
     "How JMC reports SEO progress: a monthly recap that answers what was done, why it was done, what changed, and what comes next. Plus a quarterly project update.",
   sections: [
+    /*
+     * Centred, with the chart behind it and no panel beside it. All three
+     * come from the same note in the client review on 2026-10-14: "put the
+     * graphic behind everything, and then overlay the verbiage ... we're
+     * moving this off, you can center all of this out", and on the two
+     * buttons, "we'll definitely get paralysis analysis here ... it needs to
+     * just be one CTA".
+     *
+     * The showcase cards that used to sit on the right previewed the four
+     * recap headings. They are not lost: the section immediately below this
+     * one is those four headings, at full size.
+     */
     {
       id: "hero",
-      type: "heroSplit",
+      type: "heroCentered",
+      backdrop: "chart",
       eyebrow: "SEO Reporting",
       heading: "SEO Reporting That Answers Four Questions",
       body: "Most SEO reporting either buries the work in numbers or skips it entirely. JMC reports every month in the same shape, so you always know what was done, why it was the priority, and what it changed.",
       primaryCta: { label: "Request a Visibility Review", href: "/contact" },
-      secondaryCta: {
-        label: "Explore Local SEO",
-        href: "/local-seo-services",
-      },
-      // The four labels in the hero panel are the four recap headings, so the
-      // visual previews the page's argument before a word of it is read.
-      showcase: [
-        {
-          kind: "report",
-          label: "Every month",
-          title: "Monthly Project Recap",
-          items: [
-            "What We Did",
-            "Why We Did It",
-            "What Changed",
-            "Where We're Headed",
-          ],
-        },
-        {
-          kind: "coverage",
-          label: "Also included",
-          title: "Quarterly Update",
-          items: ["Local", "Traditional", "Every tier"],
-        },
-      ],
     },
 
     {
@@ -142,55 +130,41 @@ export const seoReportingPage: PageContent = {
       ],
     },
 
-    {
-      id: "standards",
-      type: "cardGrid",
-      tone: "white",
-      // Numbered rather than icon tiles, so this section does not read as a
-      // second copy of the one directly above it.
-      variant: "numbered",
-      columns: 3,
-      eyebrow: "Editorial Discipline",
-      heading: "What Gets Left Out",
-      body: "A recap is more useful for what it leaves out than for what it piles in.",
-      cards: [
-        {
-          title: "Fewer Numbers, Better Ones",
-          body: "A figure earns its place by informing a decision. Metrics that look impressive without changing what happens next are left out on purpose.",
-        },
-        {
-          title: "Every Number Has a Reason",
-          body: "Nothing appears in a recap without an explanation of why it is there and what it means. A number with no reading is decoration.",
-        },
-        {
-          title: "Honest in Slow Months",
-          body: "SEO has quiet months. When one happens, the recap says so, says why, and says what is being done about it.",
-        },
-      ],
-    },
-
+    /*
+     * Stacked rather than two columns, and considerably longer than it was.
+     *
+     * The decisions record specifies two columns here; the client overrode
+     * it in review on 2026-10-14 after seeing it built: "I know the document
+     * says two columns, but local SEO on top, traditional SEO below it ...
+     * more of a paragraph style, with the same Explore Local SEO, Explore
+     * Traditional CTAs at the end. We have an opportunity there to be more
+     * elaborative ... this is maybe a little too high level."
+     *
+     * So each lane now says what is actually measured, how it is measured,
+     * and what the recap does with it, which is the difference a reader is
+     * trying to judge. Both still carry equal weight and identical styling:
+     * this section is the page's routing mechanism as well as its argument.
+     */
     {
       id: "by-lane",
       type: "cardGrid",
       tone: "surface",
-      // Two cards, capped and centred. This section is also the page's routing
-      // mechanism, so both lanes carry equal weight and equal styling.
       variant: "cards",
-      columns: 2,
+      columns: 1,
       eyebrow: "By Service",
       heading: "Reporting Differs by Where You Compete",
-      body: "The four questions are the same in both lanes. What sits underneath them is not.",
+      body: "The four questions are the same in both lanes. What sits underneath them is not, because the two are not measuring the same thing.",
       cards: [
         {
-          title: "Local SEO",
+          title: "Local SEO Reporting",
           icon: "map-pin",
-          body: "Local search grid tracking, profile activity, review movement, and citation consistency. Visibility mapped across the service area rather than reduced to a single blended rank.",
+          body: "A single rank is close to meaningless in local search, because the result changes street by street. You can hold the first position near your own address and be invisible four miles away, and one blended number hides exactly that. So local reporting leads with grid tracking: visibility checked from a spread of points across the service area, the same points every month, shown as a map of where you are strong and where you are not.\n\nAround it sits what moves that map. Profile activity, because for many local searches the profile is what is being ranked rather than the site. Review movement, both what arrived and what was replied to. Citation consistency, which is slow, unglamorous and the thing most often quietly wrong. The recap names the listings corrected and the posts published rather than reporting that local optimization was carried out.",
           cta: { label: "Explore Local SEO", href: "/local-seo-services" },
         },
         {
-          title: "Traditional SEO",
+          title: "Traditional SEO Reporting",
           icon: "globe",
-          body: "Dashboard reporting, tracked keywords and competitors across markets, technical issues flagged as they appear, and how the strategic pages are performing.",
+          body: "Competing across markets means the field matters as much as your own position. Keywords and competitors are tracked as one set and reported together, so a month where you held position while two competitors moved past you reads as what it is rather than as no change. Dashboard reporting sits alongside the recap on these packages.\n\nUnderneath that sits the work itself. Which strategic pages were published and what they are starting to rank for, which takes months rather than weeks and is reported as a trajectory rather than a verdict. Technical issues flagged as they appeared, because a redirect chain or a stray noindex introduced in a redesign can undo a quarter before anyone notices. And the authority recommendations made, including the ones you are better placed to act on than JMC is.",
           cta: {
             label: "Explore Traditional SEO",
             href: "/traditional-seo-services",

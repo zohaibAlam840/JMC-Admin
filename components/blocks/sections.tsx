@@ -138,7 +138,7 @@ function HeroCentered({ section }: { section: HeroCenteredSection }) {
           : "pb-12 sm:pb-14 lg:pb-16"
       )}
     >
-      <HeroBackdrop />
+      <HeroBackdrop chart={section.backdrop === "chart"} />
 
       <Container className="relative">
         <div className="mx-auto flex max-w-3xl flex-col items-center gap-6 text-center">
@@ -264,7 +264,10 @@ function CardItems({ items }: { items: string[] }) {
   );
 }
 
-const columnClass: Record<2 | 3 | 4 | 5, string> = {
+const columnClass: Record<1 | 2 | 3 | 4 | 5, string> = {
+  // Full width, stacked, and narrower than the container so the lines stay
+  // readable: this is a column of prose blocks, not a grid of one.
+  1: "mx-auto max-w-[900px]",
   // Capped and centred, per Page Spec 01 §2: two cards across a 1200px
   // container stretch thin and stop reading as a pair of choices.
   2: "sm:grid-cols-2 mx-auto max-w-[960px]",
@@ -479,11 +482,19 @@ function CardGrid({ section }: { section: CardGridSection }) {
                 </p>
               ) : null}
 
-              {card.body ? (
-                <p className="mt-3 max-w-[68ch] text-[0.92rem] leading-relaxed text-subtle">
-                  {card.body}
-                </p>
-              ) : null}
+              {/* A blank line is a paragraph here too. Cards are a sentence
+                  or two nearly everywhere; the exception is a one-column
+                  section, where each card is a block of prose. */}
+              {card.body
+                ? card.body.split(/\n\s*\n/).map((paragraph, j) => (
+                    <p
+                      key={j}
+                      className="mt-3 max-w-[68ch] text-[0.92rem] leading-relaxed text-subtle"
+                    >
+                      {paragraph}
+                    </p>
+                  ))
+                : null}
 
               {card.items?.length ? <CardItems items={card.items} /> : null}
 

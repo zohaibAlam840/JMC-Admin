@@ -213,6 +213,12 @@ export type HeroCenteredSection = Base & {
    */
   primaryCta?: CTA;
   secondaryCta?: CTA;
+  /**
+   * Draw a reporting chart behind the copy instead of the plain grid wash.
+   * One page uses it, by request: the SEO Reporting hero, where the client
+   * wanted "the graphic behind everything" with the words over the top.
+   */
+  backdrop?: "chart";
 };
 
 export type CardGridSection = Base & {
@@ -228,7 +234,13 @@ export type CardGridSection = Base & {
    * §4 asks for and which keeps the card width readable. Padding a five to a
    * six with a filler card is forbidden.
    */
-  columns: 2 | 3 | 4 | 5;
+  /**
+    * One is for a section of two or three full-width blocks read in order
+    * rather than compared side by side -- the reporting page's lane section,
+    * where the client asked for "local SEO on top, traditional SEO below it
+    * ... more of a paragraph style".
+    */
+  columns: 1 | 2 | 3 | 4 | 5;
   cta?: CTA;
   /** Reporting sections get the accent treatment — the site's differentiator. */
   emphasis?: boolean;
