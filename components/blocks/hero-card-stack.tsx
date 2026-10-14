@@ -79,44 +79,75 @@ const RING_ARCS = [
 ];
 
 /**
- * The ring itself. One arc per labelled item, equal arcs, nothing in the hole.
+ * A pie, cut into one wedge per labelled item, with the first one pulled out.
  *
- * A pie chart's expressive power is entirely in unequal slices, and an
- * unequal slice here would be a claim about proportion with no source behind
- * it -- Page Spec 01 §1 rules exactly that out. So what is borrowed is the
- * shape's legibility, not its claim: this says "the profile is made of these
- * parts", which is true, and says nothing about how much each one matters.
+ * Asked for by name in review, with a reference image: solid wedges, flat
+ * colour, one slice sitting proud of the others. What the reference also had
+ * was a percentage printed on every slice, and those are not here.
+ *
+ * The omission is the point rather than an oversight. Page Spec 01 §1: no
+ * fabricated metrics presented as real client data. A number on a slice is
+ * the strongest possible claim a chart can make, and there is no measurement
+ * behind any number that could go here -- so printing "40%" would be
+ * inventing a statistic about somebody's Google Business Profile and putting
+ * it on the page that sells the audit. For the same reason the wedges are
+ * equal: an unequal slice is that same claim made silently.
+ *
+ * What survives is what the shape can honestly say: a profile is made of
+ * these parts, and this is the first of them. If real figures ever exist,
+ * both constraints lift together -- unequal wedges and printed values would
+ * then be reporting rather than decoration.
  */
-function ProfileRing({ count }: { count: number }) {
-  const segments = Math.max(2, Math.min(count || 4, 4));
-  const r = 26;
-  const circumference = 2 * Math.PI * r;
-  const gap = 7;
-  const arc = circumference / segments - gap;
+function ProfilePie({ count }: { count: number }) {
+  const slices = Math.max(2, Math.min(count || 4, 4));
+  const cx = 60;
+  const cy = 60;
+  const r = 48;
+  /** Degrees trimmed off each end of a wedge, which draws the hairline gaps. */
+  const trim = 1.4;
+  /**
+   * How far the first wedge sits out of the pie, along its own bisector.
+   *
+   * Only the offset, never the radius: a bigger wedge would be a claim that
+   * this part of a profile is a larger share of something, which is the one
+   * thing the equal slices exist to avoid saying.
+   */
+  const explode = 11;
+
+  const point = (angle: number, radius: number, dx = 0, dy = 0) => {
+    const rad = ((angle - 90) * Math.PI) / 180;
+    return [
+      (cx + dx + radius * Math.cos(rad)).toFixed(2),
+      (cy + dy + radius * Math.sin(rad)).toFixed(2),
+    ];
+  };
 
   return (
     <svg
-      viewBox="0 0 72 72"
-      className="size-[9.5rem] shrink-0"
+      viewBox="0 0 120 120"
+      className="size-[10.5rem] shrink-0"
       aria-hidden="true"
     >
-      {Array.from({ length: segments }, (_, i) => (
-        <circle
-          key={i}
-          cx="36"
-          cy="36"
-          r={r}
-          fill="none"
-          stroke={RING_ARCS[i % RING_ARCS.length].stroke}
-          strokeOpacity={RING_ARCS[i % RING_ARCS.length].opacity}
-          strokeWidth="9"
-          strokeLinecap="round"
-          strokeDasharray={`${arc} ${circumference - arc}`}
-          strokeDashoffset={-((circumference / segments) * i) + gap / 2}
-          /* Start at twelve o'clock rather than three. */
-          transform="rotate(-90 36 36)"
-        />
-      ))}
+      {Array.from({ length: slices }, (_, i) => {
+        const sweep = 360 / slices;
+        const from = i * sweep + trim;
+        const to = (i + 1) * sweep - trim;
+        const mid = ((from + to) / 2 - 90) * (Math.PI / 180);
+        const dx = i === 0 ? Math.cos(mid) * explode : 0;
+        const dy = i === 0 ? Math.sin(mid) * explode : 0;
+        const [x1, y1] = point(from, r, dx, dy);
+        const [x2, y2] = point(to, r, dx, dy);
+        const large = to - from > 180 ? 1 : 0;
+
+        return (
+          <path
+            key={i}
+            d={`M ${(cx + dx).toFixed(2)} ${(cy + dy).toFixed(2)} L ${x1} ${y1} A ${r} ${r} 0 ${large} 1 ${x2} ${y2} Z`}
+            fill={RING_ARCS[i % RING_ARCS.length].stroke}
+            fillOpacity={RING_ARCS[i % RING_ARCS.length].opacity}
+          />
+        );
+      })}
     </svg>
   );
 }
@@ -377,7 +408,7 @@ export function HeroCardStack({ cards }: { cards: HeroShowcaseCard[] }) {
             className="flex justify-end pt-5"
           >
             <div className="flex w-[17rem] flex-col items-center gap-5">
-              <ProfileRing count={rows.length} />
+              <ProfilePie count={rows.length} />
               {/*
                 * The deep bottom padding is for the overlapping card, and it
                 * only applies below lg. Up there the card hangs out into the
