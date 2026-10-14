@@ -20,20 +20,43 @@ import type { PageContent } from "@/lib/types";
  * on pages selling ongoing service. This page describes its own deliverable
  * and links out for what monthly looks like.
  *
+ * THREE DIFFERENT "30 DAYS" LIVE ON THIS PAGE. They are not the same number
+ * and must not be reconciled with each other:
+ *
+ *  1. Sprint duration. 30 days on Neighborhood, 45 on Regional and National,
+ *     confirmed by the client in review. It is never stated as a single
+ *     figure in page copy — it comes off each package's own `timeline` field,
+ *     which is why the hero headline no longer carries a number.
+ *  2. The 30-Day Action Roadmap. The deliverable's name: a plan for the 30
+ *     days after handover. It does not change when the sprint runs 45.
+ *  3. The onboarding waiver window. Monthly service must begin within 30
+ *     calendar days of the sprint finishing. Nothing to do with either of the
+ *     above.
+ *
  * Copy is DRAFT. The Step 4 copy deck replaces it.
  */
 export const launchSprintsPage: PageContent = {
   slug: "/launch-sprints",
   label: "Launch Sprints",
-  seoTitle: "SEO Launch Sprints | One-Time, 30 Days",
+  seoTitle: "SEO Launch Sprints | One-Time, Fixed Scope",
   metaDescription:
-    "One-time SEO Launch Sprints from $799, completed within 30 days. A fixed scope, a full audit, foundational optimization, and a 30-day action roadmap at the end.",
+    "One-time SEO Launch Sprints from $799, with a fixed scope and a fixed end date. A full audit, foundational optimization, and a 30-day action roadmap at the end.",
   sections: [
     {
       id: "hero",
       type: "heroSplit",
       eyebrow: "Launch Sprints",
-      heading: "A Fixed Scope, Finished in Thirty Days",
+      /*
+       * The headline no longer carries a number.
+       *
+       * It used to read "Finished in Thirty Days", which stopped being true
+       * when the client confirmed Regional and National run 45. A headline is
+       * the worst place on a page to put a figure that varies by tier: it is
+       * the one line every visitor reads and the one nobody re-reads after
+       * seeing the cards. The duration now lives only where it is accurate —
+       * on each pricing card, from that package's own timeline field.
+       */
+      heading: "A Fixed Scope, With a Finish Date",
       body: "A Launch Sprint is a single engagement with a defined start, a defined end, and a written list of everything included. There is no term, no renewal, and no obligation to continue afterwards.",
       /*
        * One button, by instruction: "We got to get rid of the monthly SEO
@@ -66,7 +89,7 @@ export const launchSprintsPage: PageContent = {
       showcase: [
         {
           kind: "growth",
-          label: "Thirty days",
+          label: "Fixed window",
           title: "The Sprint",
           items: [
             "Audit",
@@ -142,8 +165,8 @@ export const launchSprintsPage: PageContent = {
           body: "Everything included is written down before the work begins. Anything outside it is quoted separately rather than absorbed quietly or dropped without mention.",
         },
         {
-          title: "Thirty Days, Then Done",
-          body: "The window closes. There is no rollover into an open-ended timeline and no month four that nobody agreed to.",
+          title: "The Window Closes",
+          body: "30 days on a Neighborhood sprint, 45 on Regional and National. When it is up the work is delivered. There is no rollover into an open-ended timeline and no month four that nobody agreed to.",
         },
         {
           title: "A Foundation, Not a Campaign",
@@ -279,12 +302,12 @@ export const launchSprintsPage: PageContent = {
         {
           question: "Is there any ongoing commitment?",
           answer:
-            "None. A sprint is a one-time engagement with no term and no auto-renewal. When the 30 days are up, the work is delivered and the arrangement is over unless you decide otherwise.",
+            "None. A sprint is a one-time engagement with no term and no auto-renewal. When the window is up, the work is delivered and the arrangement is over unless you decide otherwise.",
         },
         {
-          question: "What happens after the 30 days?",
+          question: "How long does a sprint take?",
           answer:
-            "The 30-Day Action Roadmap is handed over, along with everything completed during the sprint. Continuing into monthly service is optional and is a separate decision.",
+            "A Neighborhood sprint runs 30 days. Regional and National run 45, because the audit and the on-page work cover more ground. At the end the 30-Day Action Roadmap is handed over along with everything completed during the sprint, and continuing into monthly service is optional.",
         },
         {
           question: "How does the onboarding waiver work?",
@@ -317,7 +340,7 @@ export const launchSprintsPage: PageContent = {
       id: "final-cta",
       type: "finalCta",
       heading: "Start With a Sprint",
-      body: "A fixed scope, thirty days, and a roadmap at the end of it that is yours whatever you decide to do next.",
+      body: "A fixed scope, a fixed end date, and a roadmap at the end of it that is yours whatever you decide to do next.",
       primaryCta: {
         label: "Request a Sprint Consultation",
         href: "/contact?type=sprint",

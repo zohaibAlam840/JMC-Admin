@@ -169,7 +169,7 @@ on conflict (id) do update set
   cta_label = excluded.cta_label, cta_href = excluded.cta_href,
   featured = excluded.featured;
 insert into public.packages (id, group_key, name, price, price_unit, onboarding_fee, term, positioning, timeline, best_fit, deliverables, cta_label, cta_href, featured, visible, pricing_pending, position) values (
-  'sprint-regional', 'sprint', 'Regional Launch Sprint', '$1,495', 'one-time', NULL, NULL, NULL, '30 days',
+  'sprint-regional', 'sprint', 'Regional Launch Sprint', '$1,495', 'one-time', NULL, NULL, NULL, '45 days',
   'For businesses targeting a broader service region or multiple markets that want a strong foundation before starting monthly service.', ARRAY['Kickoff and access setup', 'Technical and on-page SEO audit', 'Regional keyword and competitor analysis', 'Google Search Console and Bing setup or verification', 'Schema, sitemap, and robots.txt review', 'Titles and meta descriptions for up to 10 priority pages', 'Backlink audit', '30-Day Roadmap and next-step recommendations']::text[],
   'Start the Regional Sprint', '/contact?type=sprint', false, true, false, 10)
 on conflict (id) do update set

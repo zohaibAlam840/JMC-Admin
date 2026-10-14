@@ -94,7 +94,7 @@ on conflict (slug) do update set
   meta_description = excluded.meta_description,
   is_service = excluded.is_service,
   system = excluded.system;
-insert into public.pages (slug, label, seo_title, meta_description, published, is_service, system, position) values ('/launch-sprints', 'Launch Sprints', 'SEO Launch Sprints | One-Time, 30 Days', 'One-time SEO Launch Sprints from $799, completed within 30 days. A fixed scope, a full audit, foundational optimization, and a 30-day action roadmap at the end.', true, false, false, 5)
+insert into public.pages (slug, label, seo_title, meta_description, published, is_service, system, position) values ('/launch-sprints', 'Launch Sprints', 'SEO Launch Sprints | One-Time, Fixed Scope', 'One-time SEO Launch Sprints from $799, with a fixed scope and a fixed end date. A full audit, foundational optimization, and a 30-day action roadmap at the end.', true, false, false, 5)
 on conflict (slug) do update set
   label = excluded.label,
   seo_title = excluded.seo_title,

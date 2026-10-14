@@ -250,7 +250,7 @@ export const packages: Package[] = [
     name: "Regional Launch Sprint",
     price: "$1,495",
     priceUnit: "one-time",
-    timeline: "30 days",
+    timeline: "45 days",
     bestFit:
       "For businesses targeting a broader service region or multiple markets that want a strong foundation before starting monthly service.",
     deliverables: [
@@ -275,7 +275,7 @@ export const packages: Package[] = [
     name: "National Launch Sprint",
     price: "$2,295",
     priceUnit: "one-time",
-    timeline: "30 days",
+    timeline: "45 days",
     bestFit:
       "For businesses that need foundational technical and on-page SEO work in place before starting a national monthly campaign.",
     deliverables: [
