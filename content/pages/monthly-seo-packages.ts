@@ -344,7 +344,21 @@ export const seoPackagesPage: PageContent = {
         },
       ],
       groups: [],
-      cta: { label: "View Launch Sprints", href: "/launch-sprints" },
+      /*
+       * "Not the right CTA here. We need something like a get started."
+       *
+       * It was "View Launch Sprints", which was wrong twice over. It pointed
+       * sideways at the moment the reader has just finished understanding
+       * what they are paying for, and the very next section is the sprint
+       * waiver carrying the same link — so the page asked twice and the first
+       * ask was the weaker one.
+       *
+       * "Get Started" is his wording. It is more generic than the labels
+       * elsewhere on this site, which are deliberately specific, but a
+       * generic label is right here: the reader has just read the scope and
+       * the question is whether they want to begin, not which page to visit.
+       */
+      cta: { label: "Get Started", href: "/contact" },
     },
 
     {

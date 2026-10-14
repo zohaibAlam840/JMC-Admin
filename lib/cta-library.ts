@@ -12,8 +12,23 @@
 
 /** One per action, not one per page. */
 export const CTA_LIBRARY = {
-  /** The sitewide primary. Sprint consultation is the Launch Sprints page only. */
-  primary: ["Request a Visibility Review", "Request a Sprint Consultation"],
+  /**
+   * The sitewide primary. Sprint consultation is the Launch Sprints page only.
+   *
+   * "Get Started" was added from the client review on 2026-10-14 — "not the
+   * right CTA here, we need something like a get started" — and is the one
+   * deliberately generic label in the set. It exists for the single place
+   * where the reader has just finished reading a scope and the question is
+   * whether to begin, not which page to visit next. It is on the Monthly SEO
+   * Packages onboarding section and nowhere else; if it starts appearing on
+   * other pages it has stopped meaning anything and should be replaced with
+   * the specific label for that action.
+   */
+  primary: [
+    "Request a Visibility Review",
+    "Request a Sprint Consultation",
+    "Get Started",
+  ],
 
   secondary: [
     "View SEO Packages",
