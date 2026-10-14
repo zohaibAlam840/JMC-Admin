@@ -42,6 +42,56 @@ export const aboutPage: PageContent = {
     },
 
     /*
+     * Added from the client review on 2026-10-12, asked for in as many words:
+     * a section detailing "what Jordan Marketing Consultants have become",
+     * drawn "like a timeline", sitting above The Narrowing.
+     *
+     * It does a different job from the section below it. This is the factual
+     * spine — what happened, in order. The Narrowing is why, told as a story
+     * with the one unflattering detail that makes it credible. Keeping them
+     * apart is what stops the page telling the 2022 pivot twice in a row.
+     *
+     * DRAFT, and deliberately short on years. Only 2022 is established in the
+     * approved copy; the founding year and the date he became a TREC-approved
+     * instructor are not, and an invented year on the page that argues JMC
+     * tells clients the truth is a bad trade for a bit of symmetry. So the
+     * labels describe the period where the year is unknown — every one of them
+     * is true as written — and they swap for real years the moment he sends
+     * them. The content of entries 1 and 2 is drawn from the bio he supplied;
+     * entries 3 and 4 restate what the rest of the page already establishes.
+     */
+    {
+      id: "became",
+      type: "timeline",
+      tone: "white",
+      eyebrow: "History",
+      heading: "What JMC Has Become",
+      body: "The agency did not start here. It arrived at one service by taking things away.",
+      entries: [
+        {
+          year: "Before the agency",
+          title: "Sales, then the web",
+          body: "A decade in sales and business development, including building and training sales teams from the ground up, before any of the work was digital.",
+        },
+        {
+          year: "The full-service years",
+          title: "Web design was the main business",
+          body: "A full-service agency doing web design, hosting, and everything adjacent to it. SEO was one line item among many.",
+        },
+        {
+          year: "2022",
+          title: "One service",
+          body: "The agency stopped offering everything else and kept the one thing it was genuinely good at.",
+        },
+        {
+          year: "Today",
+          title: "Local, regional, and industrial search",
+          body: "Search visibility for businesses around Houston and beyond, with the same four-question recap every month on every engagement.",
+        },
+      ],
+    },
+
+    /*
      * The page's core section, and the strongest asset in the source material:
      * specific, and mildly unflattering, which is what makes it credible in a
      * way a credentials list never is.
@@ -58,10 +108,28 @@ export const aboutPage: PageContent = {
      * dropping a pre-masked PNG into the usual bordered rectangle would show
      * four corners of empty surface around it.
      *
-     * The alt text names him and nothing else. Page Spec 11 §2 rules out the
-     * name plate and the role title on the visible page, and alt text is page
-     * copy too — "Wendell Jordan, founder and SEO strategist" would reinstate
-     * through the back door exactly what the spec removed from the front.
+     * The name and role under the portrait are the client's override of Page
+     * Spec 11 §2, asked for in the 2026-10-12 review: "throw my picture up
+     * there with my bio".
+     *
+     * The alt text stays his name and nothing else. It is not a place to
+     * restate the role — that now sits in real text immediately below the
+     * image, where a screen reader reads it anyway, so putting it in the alt
+     * as well would announce it twice.
+     *
+     * The bio is DRAFT and is a rewrite, not the text he sent. What he sent
+     * was an AI-generated summary of his LinkedIn, and most of it cannot go on
+     * this site: "prominent SEO Specialist", "high-ROI, human-centric organic
+     * growth strategies" and "transform local search queries into booked
+     * appointments" are exactly the claim-led register the language guardrails
+     * rule out, and it also lists real estate, AEO and GEO as specialities
+     * when the first is cut from scope and the other two are not services this
+     * site sells. What survives is the part that is checkable and the part
+     * that explains something: how long he has done it, and where the
+     * insistence on plain reporting came from.
+     *
+     * "Twelve years" is his own figure and the only hard number here, so it
+     * is the one line to confirm before this page goes live.
      */
     {
       id: "narrowing",
@@ -74,6 +142,12 @@ export const aboutPage: PageContent = {
         src: "/images/wendell-jordan.png",
         alt: "Wendell Jordan",
         shape: "circle",
+        name: "Wendell Jordan",
+        // One word. "Founder and Principal Strategist" is the title in the bio
+        // he sent, and a page that spends its length declining to make claims
+        // about seniority should not open its one caption with two of them.
+        role: "Founder",
+        bio: "Wendell has spent twelve years running a digital marketing agency, the last several of them on SEO alone. He came to it from sales and business development, which is where the insistence on plain reporting comes from: he spent years explaining numbers to people who did not want a dashboard.",
       },
       groups: [],
     },

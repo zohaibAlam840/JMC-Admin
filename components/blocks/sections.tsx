@@ -45,6 +45,7 @@ import type {
   PostListSection,
   PricingCardsSection,
   Section,
+  TimelineSection,
 } from "@/lib/types";
 
 /* -------------------------------------------------------------------------- */
@@ -517,6 +518,92 @@ function CardGrid({ section }: { section: CardGridSection }) {
 /** Rendered by ProcessRoadmap — a dark band with the steps drawn as a route. */
 
 /* -------------------------------------------------------------------------- */
+/*  06b · Timeline                                                             */
+/* -------------------------------------------------------------------------- */
+
+function Timeline({ section }: { section: TimelineSection }) {
+  return (
+    <Band id={section.id} tone={section.tone}>
+      <SectionHeader
+        eyebrow={section.eyebrow}
+        heading={section.heading}
+        body={section.body}
+      />
+
+      {/*
+       * One rail, one column, at every width.
+       *
+       * The alternating left/right timeline is the obvious treatment and the
+       * wrong one here: it reads in zigzag, breaks to a single column on
+       * mobile anyway, and the entries are prose rather than labels, so the
+       * two sides end up different heights and the years stop lining up. A
+       * single rail reads top to bottom the way the history actually ran.
+       *
+       * The rail itself is a border on the list rather than an absolutely
+       * positioned line, so it can never fall out of step with the content
+       * beside it.
+       *
+       * Centred in a reading-width column under a centred header. Left against
+       * the container it left half the band empty at desktop width, which read
+       * as a layout fault rather than as whitespace — and it put a left-aligned
+       * heading directly above the centred ones every other section uses.
+       */}
+      <ol className="mx-auto mt-12 flex max-w-2xl flex-col border-l border-line pl-6 sm:pl-8">
+        {section.entries.map((entry, i) => (
+          <li
+            key={entry.year + entry.title}
+            className={cn(
+              "relative",
+              i < section.entries.length - 1 && "pb-10 sm:pb-12"
+            )}
+          >
+            {/*
+             * The marker sits on the rail, not beside it: half its width is
+             * pushed back over the border by the negative offset, which is
+             * what makes it read as a point on the line rather than a bullet.
+             */}
+            <span
+              aria-hidden="true"
+              className={cn(
+                "absolute -left-[calc(1.5rem+5px)] top-[0.45rem] size-[9px] rounded-full bg-teal ring-4 sm:-left-[calc(2rem+5px)]",
+                // The ring punches the rail out from behind the dot, so it has
+                // to be painted in the band's own background. Hard-coding white
+                // would draw a white halo on the tinted tone. (Band also knows
+                // a "mist" tone, but a section's `tone` cannot be set to it —
+                // the database constrains the column to white/surface.)
+                section.tone === "surface" ? "ring-surface-2" : "ring-white"
+              )}
+            />
+            <p className="font-heading text-[0.8125rem] font-bold uppercase tracking-[0.08em] text-teal-ink tabular-nums">
+              {entry.year}
+            </p>
+            <h3 className="mt-1.5 text-[1.1875rem] leading-tight">
+              {entry.title}
+            </h3>
+            <p className="mt-2 max-w-[60ch] text-[0.95rem] leading-relaxed text-subtle">
+              {entry.body}
+            </p>
+          </li>
+        ))}
+      </ol>
+
+      {section.cta ? (
+        <div className="mt-10">
+          <Button href={section.cta.href} size="lg" className="group">
+            {section.cta.label}
+            <ArrowRight
+              size={16}
+              aria-hidden="true"
+              className="transition-transform duration-300 ease-out-soft group-hover:translate-x-1"
+            />
+          </Button>
+        </div>
+      ) : null}
+    </Band>
+  );
+}
+
+/* -------------------------------------------------------------------------- */
 /*  07 · FullWidthText                                                         */
 /* -------------------------------------------------------------------------- */
 
@@ -726,33 +813,74 @@ function FeatureSplit({ section }: { section: FeatureSplitSection }) {
           </Reveal>
         ) : section.portrait ? (
           /*
-           * One portrait, framed and nothing else. Page Spec 11 §2 rules out
-           * the name plate, the role title and the caption block, so the only
-           * thing wrapping the image is the radius and the border every other
-           * visual on the site gets.
+           * The portrait, and — since the client asked for it in review — the
+           * name, role and bio under it.
+           *
+           * All three are optional and all three are absent by default, so the
+           * treatment Page Spec 11 §2 specified (image only, no name plate, no
+           * role title, no caption) is still what a portrait with no caption
+           * fields renders as.
            */
           <Reveal
             className={cn(
-              section.portrait.shape === "circle"
-                ? // Already masked, so no frame and no background behind it.
-                  // Capped and centred: the supplied file is 1080px square, and
-                  // stretching it across half a 1200px container would show it
-                  // softening on a retina screen.
-                  "mx-auto w-full max-w-[26rem]"
-                : "overflow-hidden rounded-bento border border-line bg-surface",
+              "mx-auto flex w-full max-w-[26rem] flex-col",
               !copyFirst && "lg:order-1"
             )}
           >
-            <Image
-              src={section.portrait.src}
-              alt={section.portrait.alt}
-              width={section.portrait.shape === "circle" ? 1080 : 720}
-              height={section.portrait.shape === "circle" ? 1080 : 900}
-              sizes="(min-width: 1024px) 26rem, 100vw"
-              className="h-auto w-full object-cover"
-              // The one photograph on the site, and it sits high on the page.
-              priority
-            />
+            <div
+              className={cn(
+                section.portrait.shape === "circle"
+                  ? // Already masked, so no frame and no background behind it.
+                    // The supplied file is 1080px square; stretching it across
+                    // half a 1200px container would show it softening on a
+                    // retina screen, hence the cap on the wrapper above.
+                    ""
+                  : "overflow-hidden rounded-bento border border-line bg-surface"
+              )}
+            >
+              <Image
+                src={section.portrait.src}
+                alt={section.portrait.alt}
+                width={section.portrait.shape === "circle" ? 1080 : 720}
+                height={section.portrait.shape === "circle" ? 1080 : 900}
+                sizes="(min-width: 1024px) 26rem, 100vw"
+                className="h-auto w-full object-cover"
+                // The one photograph on the site, and it sits high on the page.
+                priority
+              />
+            </div>
+
+            {section.portrait.name ||
+            section.portrait.role ||
+            section.portrait.bio ? (
+              /*
+               * Centred under a circular portrait, left-aligned under a
+               * rectangular one — a centred caption below a hard left edge
+               * reads as misaligned rather than as a choice.
+               */
+              <div
+                className={cn(
+                  "mt-5 flex flex-col gap-1",
+                  section.portrait.shape === "circle" && "text-center"
+                )}
+              >
+                {section.portrait.name ? (
+                  <p className="font-heading text-[1.05rem] font-bold leading-tight text-ink-strong">
+                    {section.portrait.name}
+                  </p>
+                ) : null}
+                {section.portrait.role ? (
+                  <p className="text-[0.75rem] font-semibold uppercase tracking-[0.08em] text-teal-ink">
+                    {section.portrait.role}
+                  </p>
+                ) : null}
+                {section.portrait.bio ? (
+                  <p className="mt-2 text-[0.9rem] leading-relaxed text-subtle">
+                    {section.portrait.bio}
+                  </p>
+                ) : null}
+              </div>
+            ) : null}
           </Reveal>
         ) : visual === "groups" ? (
         <Stagger
@@ -1179,6 +1307,8 @@ function renderSection(
       return <CardGrid key={section.id} section={section} />;
     case "processSteps":
       return <ProcessRoadmap key={section.id} section={section} />;
+    case "timeline":
+      return <Timeline key={section.id} section={section} />;
     case "fullWidthText":
       return <FullWidthText key={section.id} section={section} />;
     case "featureSplit":

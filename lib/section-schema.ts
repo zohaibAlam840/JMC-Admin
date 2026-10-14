@@ -330,6 +330,46 @@ export const SECTION_SCHEMAS = [
   },
 
   {
+    type: "timeline",
+    label: "Timeline",
+    description:
+      "Dated events on a single rail, newest last. For history — what the business has become. Use the Process roadmap instead for the stages of an engagement.",
+    supportsTone: true,
+    fields: [
+      eyebrow,
+      heading,
+      body(true),
+      {
+        name: "entries",
+        label: "Entries",
+        kind: "repeater",
+        itemLabel: "Entry",
+        max: 6,
+        help: "In order, oldest first. Past about six the rail stops reading as a history and starts reading as a list.",
+        fields: [
+          {
+            name: "year",
+            label: "Year",
+            kind: "text",
+            help: 'Free text, so "2022", "Today" and "2014–2022" all work.',
+          },
+          { name: "title", label: "Title", kind: "text" },
+          { name: "body", label: "Body", kind: "textarea" },
+        ],
+      },
+      sectionCta,
+    ],
+    defaults: {
+      eyebrow: "History",
+      heading: "How it got here",
+      entries: [
+        { year: "2020", title: "First milestone", body: "What happened." },
+        { year: "Today", title: "Where it stands", body: "What that means now." },
+      ],
+    },
+  },
+
+  {
     type: "fullWidthText",
     label: "Statement",
     description:

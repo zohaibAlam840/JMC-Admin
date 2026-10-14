@@ -29,7 +29,8 @@ do $$ begin
     'heroSplit', 'heroCentered', 'cardGrid', 'processSteps', 'fullWidthText',
     'featureSplit', 'pricingCards', 'calloutBanner', 'faq', 'finalCta',
     'postList', 'linkStack', 'reportingBlock', 'industryGrid',
-    'fourQuestions', 'recapExample', 'auditForm', 'waiverMatrix'
+    'fourQuestions', 'recapExample', 'auditForm', 'waiverMatrix',
+    'timeline'
   );
 exception when duplicate_object then null; end $$;
 

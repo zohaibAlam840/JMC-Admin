@@ -207,6 +207,32 @@ export type ProcessStepsSection = Base & {
   cta?: CTA;
 };
 
+/**
+ * A dated timeline — About, added from client review on 2026-10-12.
+ *
+ * Asked for in as many words: a section detailing "what Jordan Marketing
+ * Consultants have become", drawn "like a timeline". It sits above The
+ * Narrowing and does a different job from it. The timeline is the factual
+ * spine — what happened, in order. The Narrowing is why, told as a story.
+ * Splitting them is what stops the page telling the 2022 pivot twice.
+ *
+ * Distinct from ProcessStepsSection, which looks adjacent and is not: those
+ * are the stages of an engagement, repeatable and undated, drawn as a route on
+ * a dark band. These are events with years on them, and the years are the
+ * point.
+ *
+ * `year` is a string rather than a number so an entry can read "2022", "Today"
+ * or "2014–2022" without the type fighting the content.
+ */
+export type TimelineSection = Base & {
+  type: "timeline";
+  eyebrow?: string;
+  heading: string;
+  body?: string;
+  entries: { year: string; title: string; body: string }[];
+  cta?: CTA;
+};
+
 export type FullWidthTextSection = Base & {
   type: "fullWidthText";
   eyebrow?: string;
@@ -291,18 +317,36 @@ export type FeatureSplitSection = Base & {
   /**
    * A single portrait drawn beside the copy instead of the group cards.
    *
-   * Exists for one section: About §2, the 2022 pivot. Page Spec 11 allows one
-   * image of one person on the whole site and forbids a name plate, a role
-   * title or a caption under it, so this is deliberately a src and an alt and
-   * nothing else — there is no field here for the things it must not have.
+   * Exists for one section: About §2, the 2022 pivot. Page Spec 11 allowed one
+   * image of one person on the whole site and forbade a name plate, a role
+   * title or a caption under it.
+   *
+   * The client overrode that in review on 2026-10-12: "throw my picture up
+   * there with my bio". The three caption fields below are that override, and
+   * they are optional precisely so the spec's treatment stays reachable — a
+   * portrait with no name, role or bio still renders exactly as before.
    *
    * When absent the copy runs full width rather than beside an empty frame. A
    * grey placeholder on the page that argues JMC is transparent would be the
-   * worst possible stand-in, and the headshot is still to be supplied.
+   * worst possible stand-in.
    */
   portrait?: {
     src: string;
     alt: string;
+    /** Name under the portrait. Omit for the spec's unlabelled treatment. */
+    name?: string;
+    /**
+     * One short role line. Kept to a word or two: the page spends its length
+     * declining to make claims about seniority and headcount, and "Founder &
+     * Principal Strategist" would undo that in the caption.
+     */
+    role?: string;
+    /**
+     * Short third-person bio, like every other string on the site. A bio is
+     * the one place first-person survives a rewrite, and on this page it
+     * would be the only "I" on the whole domain.
+     */
+    bio?: string;
     /**
      * How the image is framed.
      *
@@ -566,6 +610,7 @@ export type Section =
   | HeroCenteredSection
   | CardGridSection
   | ProcessStepsSection
+  | TimelineSection
   | FullWidthTextSection
   | FeatureSplitSection
   | PricingCardsSection
