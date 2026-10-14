@@ -28,12 +28,49 @@ import type { HeroShowcaseCard } from "@/lib/types";
  * All four are abstract by the same rule as the rest of the composition. No
  * axis, no scale, no values, nothing that could be read as a result.
  */
+/**
+ * Pick one of a set deterministically from a string.
+ *
+ * The eight industry pages share this component, and before this they shared
+ * the identical drawing too — the client's note was that moving between them
+ * "feels like I am on the same page". Varying the shape by the card's own
+ * title means no two pages draw the same curve, without anybody maintaining a
+ * per-page number.
+ *
+ * Deterministic rather than random, because a shape that differs between the
+ * server and the client hydrates mismatched, and a chart that redraws itself
+ * on every render is noise rather than structure.
+ */
+function pick<T>(options: T[], seed: string): T {
+  let hash = 0;
+  for (let i = 0; i < seed.length; i++) {
+    hash = (hash * 31 + seed.charCodeAt(i)) >>> 0;
+  }
+  return options[hash % options.length];
+}
+
+/** Rising, with pullbacks. A line that only goes up reads as a drawing. */
+const GROWTH_CURVES = [
+  [58, 52, 55, 42, 38, 26, 29, 14, 6],
+  [62, 59, 48, 50, 36, 31, 33, 19, 9],
+  [55, 57, 44, 46, 30, 33, 21, 16, 8],
+];
+
+const BAR_SETS = [
+  [34, 48, 41, 60, 55, 74, 88],
+  [28, 36, 52, 45, 63, 71, 90],
+  [40, 38, 55, 62, 58, 76, 84],
+];
+
 function Motif({
   kind,
   bars,
+  seed,
 }: {
   kind: HeroShowcaseCard["kind"];
   bars: number[];
+  /** Varies the drawn shape between pages that share a motif. */
+  seed: string;
 }) {
   if (kind === "coverage") {
     // A service area, strongest around the middle. The same idea as the
@@ -76,17 +113,8 @@ function Motif({
      * chart would be built. A tooltip implies there is a value underneath to
      * read, and there is not.
      */
-    const points = [
-      [0, 58],
-      [25, 52],
-      [50, 55],
-      [75, 42],
-      [100, 38],
-      [125, 26],
-      [150, 29],
-      [175, 14],
-      [200, 6],
-    ];
+    const ys = pick(GROWTH_CURVES, seed);
+    const points = ys.map((y, i) => [(i * 200) / (ys.length - 1), y]);
     const line = points.map(([x, y]) => `${x},${y}`).join(" ");
     const end = points[points.length - 1];
 
@@ -182,18 +210,42 @@ function Motif({
     );
   }
 
+  /*
+   * The default: a column chart that rises, with the latest column picked
+   * out and a baseline under it.
+   *
+   * It used to be a row of bars at arbitrary heights with the second-to-last
+   * one coloured, which read as decoration rather than as a chart. The client
+   * asked for something "actually meaningful... understandable to normal
+   * people", and the two things that turn bars into a chart a layperson reads
+   * instantly are a baseline to sit on and a direction to travel in.
+   *
+   * Still abstract, like every other motif here: no axis, no scale, no
+   * numbers. Page Spec 01 §1 forbids anything that could be read as a real
+   * result, so direction is the most this is allowed to say.
+   *
+   * `bars` is the caller's fallback; the seeded set is what actually varies
+   * between pages sharing this motif.
+   */
+  const heights = pick(BAR_SETS, seed) ?? bars;
+
   return (
-    <div className="flex h-20 items-end gap-1.5">
-      {bars.map((height, i) => (
-        <span
-          key={i}
-          style={{ height: `${height}%` }}
-          className={cn(
-            "flex-1 rounded-t-[3px]",
-            i === bars.length - 2 ? "bg-teal" : "bg-surface"
-          )}
-        />
-      ))}
+    <div className="flex h-20 flex-col justify-end gap-1.5">
+      <div className="flex flex-1 items-end gap-1.5">
+        {heights.map((height, i) => (
+          <span
+            key={i}
+            style={{ height: `${height}%` }}
+            className={cn(
+              "flex-1 rounded-t-[3px]",
+              i === heights.length - 1
+                ? "bg-[linear-gradient(180deg,var(--color-teal),var(--color-blue))]"
+                : "bg-surface"
+            )}
+          />
+        ))}
+      </div>
+      <span aria-hidden="true" className="h-px w-full bg-line" />
     </div>
   );
 }
@@ -265,13 +317,33 @@ export function HeroCardStack({ cards }: { cards: HeroShowcaseCard[] }) {
           aria-hidden="true"
           className="mt-6 border-t border-line pt-5"
         >
-          <Motif kind={primary?.kind ?? "report"} bars={bars} />
+          <Motif
+            kind={primary?.kind ?? "report"}
+            bars={bars}
+            // Seeded from the card's own words, so two pages sharing a motif
+            // still draw different shapes.
+            seed={`${primary?.title ?? ""}|${primary?.label ?? ""}`}
+          />
         </div>
       </div>
 
       {/* ----------------------------------------------- overlapping panel -- */}
       {chips.length > 0 && secondary ? (
-        <div className="absolute -bottom-8 -left-4 w-[13.5rem] rounded-card border border-line bg-white p-4 shadow-[0_8px_24px_rgba(0,0,0,0.10)] sm:-left-8">
+        /*
+         * Narrower at desktop, and nudged further out.
+         *
+         * It sits over the bottom-left corner, which is exactly where the
+         * motif is drawn. That cost nothing while the motif was an abstract
+         * shape; once it became a real chart the overlap hid the first half
+         * of the line, so a rising line appeared to start halfway up.
+         *
+         * A bottom-anchored card this tall always covers the chart band, so
+         * the fix is width, not vertical position. At 11rem with -left-12 it
+         * hangs in the column gutter and clips roughly a quarter of the
+         * chart instead of half. Pushing it further out is not available:
+         * past about -left-16 it reaches the hero's secondary button.
+         */
+        <div className="absolute -bottom-8 -left-4 w-[13.5rem] rounded-card border border-line bg-white p-4 shadow-[0_8px_24px_rgba(0,0,0,0.10)] sm:-left-8 lg:-left-12 lg:w-[11rem]">
           <span className="text-[0.625rem] font-semibold uppercase tracking-[0.08em] text-subtle">
             {secondary.label}
           </span>

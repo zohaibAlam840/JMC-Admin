@@ -295,7 +295,7 @@ type Industry = {
    * an industry.
    */
   style: {
-    motif: "report" | "coverage" | "roadmap" | "channels";
+    motif: "report" | "coverage" | "roadmap" | "channels" | "growth";
     /** The hero panel. Behaviour, never a claim, and never a number. */
     panel: { label: string; title: string; items: string[] };
     aside: { label: string; title: string; items: string[] };
@@ -432,7 +432,7 @@ const industries: Industry[] = [
     metaDescription:
       "SEO for dental, medical, therapy and wellness practices in the Houston area. Local visibility, profile and review support, and reporting you can actually read.",
     style: {
-      motif: "channels",
+      motif: "growth",
       panel: {
         label: "How patients search",
         title: "By Symptom, Not Specialty",
@@ -529,7 +529,7 @@ const industries: Industry[] = [
     metaDescription:
       "SEO for hotels, restaurants, venues and attractions in the Houston area and beyond. Local and regional visibility, profile work, and clear monthly reporting.",
     style: {
-      motif: "roadmap",
+      motif: "report",
       panel: {
         label: "Two clocks at once",
         title: "Now, and Six Weeks Out",
@@ -625,7 +625,7 @@ const industries: Industry[] = [
     metaDescription:
       "SEO for legal, accounting, financial and consulting firms in the Houston area. Strategy, content built for how clients search, and clear monthly reporting.",
     style: {
-      motif: "report",
+      motif: "growth",
       panel: {
         label: "How clients search",
         title: "Quietly, Over Weeks",
@@ -716,7 +716,7 @@ const industries: Industry[] = [
     metaDescription:
       "SEO for energy and petrochemical service firms, suppliers and consultancies. Search built around specifications, procurement cycles, and clear reporting.",
     style: {
-      motif: "channels",
+      motif: "report",
       panel: {
         label: "How buyers search",
         title: "By Specification",
@@ -808,7 +808,7 @@ const industries: Industry[] = [
     metaDescription:
       "SEO for port services, freight operators, and marine repair and fabrication firms. Search built around routes, capability, and how logistics buyers search.",
     style: {
-      motif: "roadmap",
+      motif: "coverage",
       panel: {
         label: "How buyers search",
         title: "By Route and Capability",
@@ -900,7 +900,7 @@ const industries: Industry[] = [
     metaDescription:
       "SEO for commercial contractors, civil and infrastructure firms, and building products suppliers. Search built around project type and qualification work.",
     style: {
-      motif: "report",
+      motif: "growth",
       panel: {
         label: "How buyers search",
         title: "To Qualify, Not to Enquire",
@@ -991,7 +991,7 @@ const industries: Industry[] = [
     metaDescription:
       "SEO for aerospace manufacturers, MRO and ground service providers, and avionics suppliers. Search built around parts, certification and procurement work.",
     style: {
-      motif: "coverage",
+      motif: "report",
       panel: {
         label: "How buyers search",
         title: "By Part and Approval",

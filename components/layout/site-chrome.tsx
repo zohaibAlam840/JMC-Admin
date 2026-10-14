@@ -1,4 +1,7 @@
-import { RouteProgress } from "@/components/layout/route-progress";
+import {
+  RouteProgress,
+  RouteSkeleton,
+} from "@/components/layout/route-progress";
 import { SiteHeader } from "@/components/layout/site-header";
 import { SiteFooter } from "@/components/layout/site-footer";
 import { Analytics } from "@/components/analytics/analytics";
@@ -38,6 +41,7 @@ export async function SiteChrome({ children }: { children: React.ReactNode }) {
   return (
     <>
       <RouteProgress />
+      <RouteSkeleton />
       <SiteHeader nav={mainNav} primaryCta={primaryCta} />
       <main id="main" className="flex-1">
         {children}
