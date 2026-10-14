@@ -531,30 +531,54 @@ function Timeline({ section }: { section: TimelineSection }) {
       />
 
       {/*
-       * One rail, one column, at every width.
+       * Horizontal from `lg` up, vertical below it.
        *
-       * The alternating left/right timeline is the obvious treatment and the
-       * wrong one here: it reads in zigzag, breaks to a single column on
-       * mobile anyway, and the entries are prose rather than labels, so the
-       * two sides end up different heights and the years stop lining up. A
-       * single rail reads top to bottom the way the history actually ran.
+       * Horizontal is what the client asked for and it suits a history — the
+       * eye reads left to right the way the years run. It only works where
+       * there is width for it, though: four columns of prose inside a 390px
+       * phone is four columns of two-word lines, so below `lg` the same markup
+       * falls back to the vertical rail by swapping which border draws it.
        *
-       * The rail itself is a border on the list rather than an absolutely
-       * positioned line, so it can never fall out of step with the content
-       * beside it.
+       * The rail is a border on the items rather than an absolutely positioned
+       * line, so it cannot drift out of step with the markers sitting on it.
+       * That is also why the horizontal layout has no column gap and pads
+       * inside each item instead: a gap would break the top border into four
+       * disconnected segments with blank space where the line should run.
        *
-       * Centred in a reading-width column under a centred header. Left against
-       * the container it left half the band empty at desktop width, which read
-       * as a layout fault rather than as whitespace — and it put a left-aligned
-       * heading directly above the centred ones every other section uses.
+       * The year sits under the marker rather than above it. Above, a label
+       * that wraps to two lines ("Before the agency" does, in a narrow column)
+       * pushes its own dot down and the rail stops being straight.
        */}
-      <ol className="mx-auto mt-12 flex max-w-2xl flex-col border-l border-line pl-6 sm:pl-8">
+      <ol
+        className={cn(
+          "mx-auto mt-12 grid max-w-2xl lg:max-w-none",
+          "lg:[grid-template-columns:var(--timeline-cols)]"
+        )}
+        style={
+          {
+            /*
+             * Capped at four. Five or six entries each get a 200px column,
+             * which is too narrow for a sentence, so past four the grid wraps
+             * to a second row and each row draws its own rail.
+             */
+            "--timeline-cols": `repeat(${Math.min(
+              section.entries.length,
+              4
+            )}, minmax(0, 1fr))`,
+          } as React.CSSProperties
+        }
+      >
         {section.entries.map((entry, i) => (
           <li
             key={entry.year + entry.title}
             className={cn(
-              "relative",
-              i < section.entries.length - 1 && "pb-10 sm:pb-12"
+              "relative border-line pl-6 sm:pl-8",
+              // Vertical rail: left border, bottom padding carrying the line
+              // down to the next marker.
+              "border-l",
+              i < section.entries.length - 1 && "pb-10 sm:pb-12",
+              // Horizontal rail: the same line, turned.
+              "lg:border-l-0 lg:border-t lg:pb-0 lg:pl-0 lg:pr-8 lg:pt-6"
             )}
           >
             {/*
@@ -565,7 +589,9 @@ function Timeline({ section }: { section: TimelineSection }) {
             <span
               aria-hidden="true"
               className={cn(
-                "absolute -left-[calc(1.5rem+5px)] top-[0.45rem] size-[9px] rounded-full bg-teal ring-4 sm:-left-[calc(2rem+5px)]",
+                "absolute size-[9px] rounded-full bg-teal ring-4",
+                "-left-[calc(1.5rem+5px)] top-[0.45rem] sm:-left-[calc(2rem+5px)]",
+                "lg:left-0 lg:top-[-5px]",
                 // The ring punches the rail out from behind the dot, so it has
                 // to be painted in the band's own background. Hard-coding white
                 // would draw a white halo on the tinted tone. (Band also knows
