@@ -98,7 +98,19 @@ const RING_ARCS = [
  * both constraints lift together -- unequal wedges and printed values would
  * then be reporting rather than decoration.
  */
-function ProfilePie({ count }: { count: number }) {
+function ProfilePie({
+  count,
+  weights,
+}: {
+  count: number;
+  /**
+   * Optional. Without it every wedge is the same size, which is all an
+   * unmeasured card is allowed to say. With it the wedges are drawn in
+   * proportion, and the caller is asserting the figures are published scope
+   * a reader could check -- see the `share` card in lib/types.ts.
+   */
+  weights?: number[];
+}) {
   const slices = Math.max(2, Math.min(count || 4, 4));
   const cx = 60;
   const cy = 60;
@@ -128,10 +140,20 @@ function ProfilePie({ count }: { count: number }) {
       className="size-[10.5rem] shrink-0"
       aria-hidden="true"
     >
-      {Array.from({ length: slices }, (_, i) => {
-        const sweep = 360 / slices;
-        const from = i * sweep + trim;
-        const to = (i + 1) * sweep - trim;
+      {(() => {
+        const share = weights?.slice(0, slices);
+        const total = share?.reduce((a, b) => a + b, 0) || 0;
+        // Each wedge's start angle is the sum of everything before it.
+        const edges = [0];
+        for (let i = 0; i < slices; i++) {
+          edges.push(
+            edges[i] +
+              (share && total > 0 ? (share[i] / total) * 360 : 360 / slices)
+          );
+        }
+        return Array.from({ length: slices }, (_, i) => {
+        const from = edges[i] + trim;
+        const to = edges[i + 1] - trim;
         const mid = ((from + to) / 2 - 90) * (Math.PI / 180);
         const dx = i === 0 ? Math.cos(mid) * explode : 0;
         const dy = i === 0 ? Math.sin(mid) * explode : 0;
@@ -147,7 +169,8 @@ function ProfilePie({ count }: { count: number }) {
             fillOpacity={RING_ARCS[i % RING_ARCS.length].opacity}
           />
         );
-      })}
+        });
+      })()}
     </svg>
   );
 }
@@ -427,6 +450,7 @@ export function HeroCardStack({ cards }: { cards: HeroShowcaseCard[] }) {
 
   const isRing = primary?.kind === "profile";
   const isScale = primary?.kind === "scale";
+  const isShare = primary?.kind === "share";
 
   return (
     <div className="relative isolate mx-auto w-full max-w-[30rem] lg:mx-0">
@@ -457,7 +481,45 @@ export function HeroCardStack({ cards }: { cards: HeroShowcaseCard[] }) {
           />
         </div>
 
-        {isScale && primary?.kind === "scale" ? (
+        {isShare && primary?.kind === "share" ? (
+          /*
+           * The proportional pie: same column and same legend as the equal
+           * one, with each wedge's figure printed beside its label. The
+           * figures are the reason the wedges are allowed to differ, so
+           * showing them is not decoration -- it is what makes the shape
+           * checkable against the pricing page.
+           */
+          <div className="flex justify-end pt-5">
+            <div className="flex w-[17rem] flex-col items-center gap-5">
+              <ProfilePie
+                count={primary.series.length}
+                weights={primary.series.map((x) => x.value)}
+              />
+              <ul className="flex w-full flex-col gap-2.5">
+                {primary.series.slice(0, 4).map((item, i) => (
+                  <li key={item.label} className="flex items-center gap-3">
+                    <span
+                      aria-hidden="true"
+                      className={cn(
+                        "size-2.5 shrink-0 rounded-full",
+                        RING_DOTS[i % RING_DOTS.length]
+                      )}
+                    />
+                    <span className="text-[0.8125rem] text-ink">
+                      {item.label}
+                    </span>
+                    <span className="ml-auto font-heading text-[0.8125rem] font-bold text-ink-strong">
+                      {item.value}
+                    </span>
+                  </li>
+                ))}
+              </ul>
+              <p className="w-full pb-32 text-[0.75rem] text-subtle lg:pb-1">
+                {primary.unit}
+              </p>
+            </div>
+          </div>
+        ) : isScale && primary?.kind === "scale" ? (
           /*
            * Like the pie, the chart replaces the row list rather than sitting
            * in a band beneath it -- the client's note on the row-list layout

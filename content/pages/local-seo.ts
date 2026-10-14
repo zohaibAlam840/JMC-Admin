@@ -36,23 +36,37 @@ export const localSeoPage: PageContent = {
       eyebrow: "Local SEO Services",
       heading: "Get Found Where Your Customers Are Looking",
       body: "Local SEO is the work of appearing when somebody nearby searches for what you do. It runs across your Google Business Profile, your listings, your reviews and your service pages, and it is measured across your whole service area rather than as one number.",
-      primaryCta: { label: "Request a Visibility Review", href: "/contact" },
-      secondaryCta: {
+      /*
+       * One button, and it is the packages. From the client review on
+       * 2026-10-14: "I don't know that we want to A or B split them ... if
+       * they're already at the local SEO page, the first CTA should be view
+       * local SEO packages." The Visibility Review moves to the foot of the
+       * page as the escape hatch for a reader a package does not suit.
+       */
+      primaryCta: {
         label: "View Local SEO Packages",
         href: "/monthly-seo-packages#local",
       },
-      // Coverage first, which gives the hero panel the service-area motif
-      // rather than the reporting bars used on the homepage.
+      /*
+       * A pie of one Citywide month, by task count. Every figure is a
+       * published deliverable on that tier -- 12 profile posts, up to 15
+       * citations, 4 review requests, up to 20 replies -- so the wedges can
+       * be unequal without claiming anything a reader cannot check on the
+       * pricing page. It is scope, not results.
+       *
+       * Keep it in step with the Citywide package if those numbers change.
+       */
       showcase: [
         {
-          kind: "coverage",
-          label: "Where you appear",
-          title: "Local Surfaces",
-          items: [
-            "Google Search results",
-            "Google Maps and the map pack",
-            "Service-area searches",
-            "The profile panel itself",
+          kind: "share",
+          label: "A month of Citywide",
+          title: "Where the Work Goes",
+          unit: "tasks in a Citywide month, at the published maximums",
+          series: [
+            { label: "Review replies", value: 20 },
+            { label: "Citations", value: 15 },
+            { label: "Profile posts", value: 12 },
+            { label: "Review requests", value: 4 },
           ],
         },
         {
@@ -128,7 +142,10 @@ export const localSeoPage: PageContent = {
           body: "What was tracked, what moved and what did not, in language that does not need translating.",
         },
         {
-          title: "Monthly Project Recap (via Loom or video call)",
+          // The delivery method came off the title in review: the recap
+          // happens on a call as often as it arrives as a video, so naming
+          // one of them on the card was wrong as well as long.
+          title: "Monthly Project Recap",
           icon: "message-square",
           body: "A person walking through the month rather than a file dropped into an inbox, with room to ask questions.",
         },
@@ -174,7 +191,11 @@ export const localSeoPage: PageContent = {
           title: "Local Search Grid Tracking",
           icon: "map-pin",
           body: "Visibility measured across a grid of points in your service area rather than as one blended rank, so you can see where you are strong and where you are not.",
-          visual: "searchGrid",
+          // The grid illustration was removed in review. It made this card
+          // roughly twice the height of the one beside it, which left an
+          // obvious hole in the row -- "we've got all this blank space,
+          // that's clearly an error" -- and the client would rather send a
+          // real example himself than have the site draw an invented one.
         },
         {
           title: "Strategic SEO Pages",
@@ -184,13 +205,33 @@ export const localSeoPage: PageContent = {
       ],
     },
 
+    /*
+     * Moved up from the foot of the page, and the section it replaced was
+     * "Where JMC Is". Both halves of that are the client's: "remove the
+     * where-is-JMC section and replace it with the Monthly Recap section
+     * that is at the bottom of the page", because the page does not need to
+     * repeat that JMC is in League City, and because the recap is the thing
+     * worth reading before the prices rather than after them.
+     *
+     * The four answers are longer than they were. He asked for "more details
+     * to each card so it isn't just a fluffy section", and at one line each
+     * they were four restatements of the heading.
+     */
     {
-      id: "houston",
-      type: "fullWidthText",
+      id: "monthly-recap",
+      type: "reportingBlock",
       tone: "white",
-      eyebrow: "Where JMC Is",
-      heading: "Based in League City, Working Across the Houston Area",
-      body: "JMC is a Houston-area agency and most of its clients are within reach of it. Local SEO is not limited to the Houston area, though, and the work is the same wherever a business competes for customers in a defined patch.",
+      eyebrow: "Reporting",
+      heading: "The Monthly Recap",
+      body: "Four questions, every month, in the same order. It arrives as a short video or on a call, whichever suits you, with the written version alongside it.",
+      did: "Every task completed, named individually rather than summarised: the pages written or rewritten, the listings corrected and where they were corrected, the posts published, the reviews replied to, and the technical fixes made.",
+      why: "The reasoning behind the order the work ran in. Which problem was costing the most visibility, what it was expected to affect, and what was deliberately left for later.",
+      changed: "Grid visibility across the service area compared with last month, point by point rather than as one blended rank, alongside profile actions and what arrived through the site. Including the months where little moved, and why.",
+      next: "What is queued for the coming month and in what order, written down before it starts, so the next recap is measured against something you already agreed to.",
+      cta: {
+        label: "See How JMC Reports SEO Progress",
+        href: "/seo-reporting",
+      },
     },
 
     {
@@ -230,30 +271,17 @@ export const localSeoPage: PageContent = {
     {
       id: "sprint-callout",
       type: "calloutBanner",
-      tone: "surface",
+      // White band, tinted box. Moving the recap up left packages, the
+      // custom-scope callout and this one as three tinted sections in a
+      // row, which is the same undifferentiated run the client flagged on
+      // the Traditional page. On white the callout box reads as a box.
+      tone: "white",
       heading: "Or Start With a Launch Sprint",
       body: "The Neighborhood Launch Sprint is $799, one-time, completed within 30 days. It builds the local foundation and finishes with a 30-day roadmap. Begin monthly service within 30 days of the sprint finishing and the onboarding fee on any Local package is waived, up to $649.",
       primaryCta: { label: "View Launch Sprints", href: "/launch-sprints" },
       secondaryCta: {
         label: "View Local SEO Packages",
         href: "/monthly-seo-packages#local",
-      },
-    },
-
-    {
-      id: "monthly-recap",
-      type: "reportingBlock",
-      tone: "white",
-      eyebrow: "Reporting",
-      heading: "The Monthly Recap",
-      body: "Four questions, every month, in the same order.",
-      did: "The pages rewritten, the listings corrected, the posts published, named individually.",
-      why: "Why that work was the priority ahead of everything else in the queue.",
-      changed: "Grid visibility across the service area, compared with last month, including the quiet ones.",
-      next: "What is queued for the coming month, written down before it starts.",
-      cta: {
-        label: "See How JMC Reports SEO Progress",
-        href: "/seo-reporting",
       },
     },
 
@@ -304,15 +332,21 @@ export const localSeoPage: PageContent = {
     },
 
     {
+      /*
+       * The escape hatch, in the client's words: "we can throw this a little
+       * bit later on, kind of like 'not sure if a package makes sense, let's
+       * get a visibility review together first' ... let that be their escape
+       * hatch." The hero sells the packages; this catches the reader those
+       * did not fit.
+       */
       id: "final-cta",
       type: "finalCta",
-      heading: "Start With a Visibility Review",
-      body: "Where you appear across your service area today, what is holding it back, and which of those gaps is worth closing first.",
+      heading: "Not Sure a Package Fits?",
+      // One button here too. The packages are already the hero's ask and
+      // appear twice more above this; offering them again beside the review
+      // would put the escape hatch back into the A-or-B it exists to avoid.
+      body: "Start with a visibility review instead. Where you appear across your service area today, what is holding it back, and which of those gaps is worth closing first — before anything is bought.",
       primaryCta: { label: "Request a Visibility Review", href: "/contact" },
-      secondaryCta: {
-        label: "View Local SEO Packages",
-        href: "/monthly-seo-packages#local",
-      },
     },
   ],
 };

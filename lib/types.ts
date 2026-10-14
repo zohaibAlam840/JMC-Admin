@@ -157,6 +157,21 @@ export type HeroShowcaseCard =
    * lift. If a figure cannot be checked against something already published,
    * it does not belong in this card.
    */
+  /**
+   * A pie with real proportions -- the `profile` card's shape with the
+   * `scale` card's licence to carry numbers, and it inherits both rules.
+   *
+   * Unequal wedges are a claim about proportion, so the figures behind them
+   * have to be checkable. The only figures that qualify are published scope:
+   * what a named package includes each month, printed on the pricing page.
+   * Never results, and never a blend of a package with anything estimated.
+   */
+  | (ShowcaseBase & {
+      kind: "share";
+      /** What the figures count. Drawn under the legend. */
+      unit: string;
+      series: { label: string; value: number }[];
+    })
   | (ShowcaseBase & {
       kind: "scale";
       /** What the figures count, e.g. "tracked keywords". Drawn under them. */

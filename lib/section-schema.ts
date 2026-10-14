@@ -117,6 +117,7 @@ const showcaseCards: Field = {
         { value: "channels", label: "Channels — where visibility is worked" },
         { value: "profile", label: "Profile — a pie, one wedge per line" },
         { value: "scale", label: "Scale — a bar chart of published figures" },
+        { value: "share", label: "Share — a pie of published figures" },
         { value: "stat", label: "Stats — three figures with labels" },
       ],
     },
@@ -131,6 +132,26 @@ const showcaseCards: Field = {
     growth: [{ name: "items", label: "Stages", kind: "stringList" }],
     channels: [{ name: "items", label: "Channels", kind: "stringList" }],
     profile: [{ name: "items", label: "Parts", kind: "stringList" }],
+    share: [
+      {
+        name: "unit",
+        label: "What the figures count",
+        kind: "text",
+        help: "Drawn under the legend, e.g. \"tasks in a Citywide month\".",
+      },
+      {
+        name: "series",
+        label: "Wedges",
+        kind: "repeater",
+        itemLabel: "Wedge",
+        max: 4,
+        help: "Published scope only. Unequal wedges claim a proportion, so every figure has to be one a reader can check on the pricing page.",
+        fields: [
+          { name: "label", label: "Label", kind: "text" },
+          { name: "value", label: "Value", kind: "text" },
+        ],
+      },
+    ],
     scale: [
       {
         name: "unit",

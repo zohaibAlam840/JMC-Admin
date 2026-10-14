@@ -108,7 +108,13 @@ export function IconTile({ name }: { name: IconName }) {
   return (
     // 40px icon in a teal-tinted circle: the recurring card motif, Build
     // Spec §10. One library, one stroke weight, one circle, everywhere.
-    <span className="mb-5 inline-flex size-10 items-center justify-center rounded-full bg-teal/12 text-teal-ink transition-colors duration-200 group-hover:bg-teal/20">
+    // Hover lights the tile up with the brand gradient instead of nudging
+    // the tint from 12% to 20%, which the client could not see happening:
+    // "something closer to the brand colour, and definitely something that
+    // lights up the icons". At rest it stays quiet -- this tile is on most
+    // cards on the site, and a page of saturated circles would be louder
+    // than anything on it.
+    <span className="mb-5 inline-flex size-10 items-center justify-center rounded-full bg-teal/12 text-teal-ink transition-all duration-300 ease-out-soft group-hover:bg-[linear-gradient(135deg,var(--color-teal),var(--color-blue))] group-hover:text-white group-hover:shadow-[0_6px_16px_rgba(54,209,220,0.35)]">
       <Icon name={name} size={24} />
     </span>
   );
