@@ -636,6 +636,14 @@ function Timeline({ section }: { section: TimelineSection }) {
 
 function FullWidthText({ section }: { section: FullWidthTextSection }) {
   /*
+   * A blank line in the body survives as a real paragraph break, the same way
+   * it does in FeatureSplit. It did not before, which was a quiet trap: the
+   * admin editor offers a textarea, so someone types two paragraphs, and the
+   * renderer silently welds them into one wall of text with no clue why.
+   */
+  const paragraphs = section.body.split(/\n\s*\n/).filter(Boolean);
+
+  /*
    * Page Spec 01 §3. Solid ink, not the gradient: white on #2C2C2C is 13.97:1,
    * which removes the contrast constraint entirely, and a flat dark band suits
    * a statement about clarity better than a gradient does. Teal is available
@@ -667,9 +675,14 @@ function FullWidthText({ section }: { section: FullWidthTextSection }) {
               {section.heading}
             </h2>
 
-            <p className="max-w-[60ch] text-[1.0625rem] leading-relaxed text-white/75">
-              {section.body}
-            </p>
+            {paragraphs.map((paragraph) => (
+              <p
+                key={paragraph.slice(0, 40)}
+                className="max-w-[60ch] text-[1.0625rem] leading-relaxed text-white/75"
+              >
+                {paragraph}
+              </p>
+            ))}
 
             {section.cta ? (
               <Link
@@ -698,9 +711,14 @@ function FullWidthText({ section }: { section: FullWidthTextSection }) {
         <h2 className="text-[1.875rem] sm:text-[2.25rem] lg:text-[2.625rem]">
           {section.heading}
         </h2>
-        <p className="max-w-[68ch] text-[1.0625rem] leading-relaxed text-subtle">
-          {section.body}
-        </p>
+        {paragraphs.map((paragraph) => (
+          <p
+            key={paragraph.slice(0, 40)}
+            className="max-w-[68ch] text-[1.0625rem] leading-relaxed text-subtle"
+          >
+            {paragraph}
+          </p>
+        ))}
         {section.cta ? (
           <div className="mt-3">
             <Button href={section.cta.href} variant="secondary" size="lg">

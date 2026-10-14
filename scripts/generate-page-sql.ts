@@ -1,7 +1,8 @@
 /**
- * Generate an apply script for ONE page.
+ * Generate an apply script for one page, or for every page under a prefix.
  *
  *   npm run sql:page -- /monthly-seo-packages
+ *   npm run sql:page -- /industries/          # all eight, one file
  *
  * Why this exists: the full apply script is ~190KB across five part files,
  * and pasting all five into the Supabase SQL editor to change one page is
@@ -9,9 +10,9 @@
  * edited, the parts do not get run, and the site still shows the old copy
  * because it renders from the database rather than from these files.
  *
- * This slices the generated script down to the statements that touch one
- * page: its own row, its sections, and any package the page's pricing cards
- * reference. Nothing else in the database is touched.
+ * This slices the generated script down to the statements that touch the
+ * pages asked for: their own rows, their sections, and any package their
+ * pricing cards reference. Nothing else is touched.
  *
  * Run `npm run sql:apply` first — this reads that script's output rather
  * than re-deriving anything, so the two can never drift.
@@ -65,7 +66,7 @@ function body(statement: string): string {
 
 const arg = process.argv[2];
 if (!arg) {
-  console.error("Usage: npm run sql:page -- /slug");
+  console.error("Usage: npm run sql:page -- /slug   (or /prefix/ for a set)");
   process.exit(1);
 }
 
@@ -76,27 +77,60 @@ if (!arg) {
  * remember MSYS_NO_PATHCONV, accept the slug with a slash, without one, or
  * buried at the end of a mangled path.
  */
-const normalised = arg.replace(/\\/g, "/");
-const page =
-  filePages.find((p) => p.slug === normalised) ??
-  filePages.find((p) => p.slug === "/" + normalised) ??
-  filePages.find((p) => normalised.endsWith(p.slug));
+function recoverSlug(raw: string): string {
+  const path = raw.replace(/\\/g, "/");
+  if (path.startsWith("/")) return path;
 
-if (!page) {
+  // Known first segments, e.g. "industries", "about", "contact".
+  const roots = new Set(
+    filePages.map((p) => p.slug.split("/").filter(Boolean)[0]).filter(Boolean)
+  );
+  const parts = path.split("/").filter(Boolean);
+  const at = parts.findIndex((p) => roots.has(p));
+  if (at < 0) return path;
+
+  return "/" + parts.slice(at).join("/") + (path.endsWith("/") ? "/" : "");
+}
+
+const normalised = recoverSlug(arg);
+
+/*
+ * A trailing slash means "everything below this": `-- /industries/` emits one
+ * file covering all eight industry pages. That matters because review notes
+ * tend to apply to a whole set at once — the layout rule, the lane routing —
+ * and eight files to paste is how a batch of changes ends up half-applied.
+ */
+const isPrefix = normalised.endsWith("/") && normalised !== "/";
+
+type Page = (typeof filePages)[number];
+
+const matches: Page[] = isPrefix
+  ? filePages.filter(
+      (p) => p.slug.startsWith(normalised) && p.slug !== normalised.slice(0, -1)
+    )
+  : ([
+      filePages.find((p) => p.slug === normalised) ??
+        filePages.find((p) => p.slug === "/" + normalised) ??
+        filePages.find((p) => normalised.endsWith(p.slug)),
+    ].filter(Boolean) as Page[]);
+
+if (matches.length === 0) {
   console.error(`No page matching "${arg}". Known slugs:`);
   for (const p of filePages) console.error("  " + p.slug);
   process.exit(1);
 }
-const slug = page.slug;
 
-/** Packages this page's pricing cards point at, so their rows come along. */
+/** Packages any matched page's pricing cards point at, so their rows come too. */
 const packageIds = new Set<string>();
-for (const section of page.sections) {
-  if (section.type === "pricingCards") {
-    for (const id of section.packageIds) packageIds.add(id);
+for (const page of matches) {
+  for (const section of page.sections) {
+    if (section.type === "pricingCards") {
+      for (const id of section.packageIds) packageIds.add(id);
+    }
   }
 }
 
+const slugs = matches.map((p) => p.slug);
 const src = readFileSync(SOURCE, "utf8");
 const kept: string[] = [];
 
@@ -104,7 +138,7 @@ for (const statement of statements(src)) {
   const sql = body(statement);
   if (!/^(insert|update|delete)\b/i.test(sql)) continue;
 
-  const touchesPage = sql.includes(`slug = '${slug}'`);
+  const touchesPage = slugs.some((s) => sql.includes(`slug = '${s}'`));
   const touchesPackage =
     /insert into public\.packages/i.test(sql) &&
     [...packageIds].some((id) => sql.includes(`'${id}'`));
@@ -112,35 +146,52 @@ for (const statement of statements(src)) {
   if (touchesPage || touchesPackage) kept.push(sql);
 }
 
-const deletes = kept.filter((s) => /^delete\b/i.test(s)).length;
-if (deletes !== 1) {
-  // A missing delete is silent and destructive: the run looks fine and
-  // leaves the page with two of every section.
-  console.error(
-    `Expected exactly one section DELETE, found ${deletes}. Refusing to write.`
+/*
+ * Every page needs its own DELETE, before that page's inserts. A missing one
+ * is silent and destructive: the run reports success and leaves the page with
+ * two of every section.
+ */
+for (const slug of slugs) {
+  const del = kept.findIndex(
+    (s) => /^delete\b/i.test(s) && s.includes(`slug = '${slug}'`)
   );
-  process.exit(1);
-}
-if (!/^delete\b/i.test(kept[0])) {
-  console.error("The DELETE is not the first statement. Refusing to write.");
-  process.exit(1);
+  if (del < 0) {
+    console.error(`No section DELETE for ${slug}. Refusing to write.`);
+    process.exit(1);
+  }
+  const firstInsert = kept.findIndex(
+    (s) =>
+      /^insert into public\.sections/i.test(s) && s.includes(`slug = '${slug}'`)
+  );
+  if (firstInsert >= 0 && firstInsert < del) {
+    console.error(`DELETE for ${slug} comes after its inserts. Refusing.`);
+    process.exit(1);
+  }
 }
 
-const name = slug.replace(/^\//, "").replace(/\//g, "-") || "home";
+const sectionCount = matches.reduce((n, p) => n + p.sections.length, 0);
+const name = isPrefix
+  ? normalised.replace(/^\//, "").replace(/\/$/, "").replace(/\//g, "-") + "-all"
+  : matches[0].slug.replace(/^\//, "").replace(/\//g, "-") || "home";
 const target = join(process.cwd(), "supabase", `apply-${name}.sql`);
+
+const title =
+  matches.length === 1
+    ? `${matches[0].label} only`
+    : `${matches.length} pages under ${normalised}`;
 
 const out = [
   "-- ======================================================================",
-  `--  JMC — ${page.label} only`,
+  `--  JMC — ${title}`,
   "--",
   "--  GENERATED by `npm run sql:page`. Do not hand-edit: regenerate it.",
   "--",
-  `--  A focused subset of the full apply script: the ${slug} page row, its`,
-  `--  ${page.sections.length} sections${packageIds.size ? `, and the ${packageIds.size} packages its pricing cards use` : ""}.`,
+  `--  A focused subset of the full apply script: ${matches.length} page row(s) and`,
+  `--  ${sectionCount} sections${packageIds.size ? `, plus ${packageIds.size} packages their pricing cards use` : ""}.`,
   "--  Nothing else in the database is touched.",
   "--",
-  "--  Paste and run in one go. Safe to run more than once — the delete",
-  "--  below clears this page's section rows before they are rebuilt.",
+  "--  Paste and run in one go. Safe to run more than once — the deletes",
+  "--  below clear each page's section rows before they are rebuilt.",
   "-- ======================================================================",
   "",
   "begin;",
@@ -154,5 +205,5 @@ const out = [
 writeFileSync(target, out);
 console.log(`Wrote ${target}`);
 console.log(
-  `  ${kept.length} statements · ${page.sections.length} sections · ${packageIds.size} packages`
+  `  ${kept.length} statements · ${matches.length} page(s) · ${sectionCount} sections · ${packageIds.size} packages`
 );

@@ -29,34 +29,90 @@ import type { IconName, PageContent, Section } from "@/lib/types";
 
 /* ------------------------------------------------------ shared sections -- */
 
-/** §4. Both lanes on all eight pages: no industry is pre-assigned to one. */
-function howJmcWorks(industry: string): Section {
+/**
+ * §4. Which lane, or lanes, this industry actually routes to.
+ *
+ * Originally both on all eight, on the reasoning that pre-assigning an
+ * industry to a lane was a claim about that industry. The client corrected
+ * that in review on 2026-10-14, industry by industry, and he is describing
+ * what he will actually sell rather than making a claim:
+ *
+ *   "They're going to be traditional SEO. We're not going to be running a
+ *    local SEO campaign for them. So we can remove local."    — Energy
+ *   "For maritime, we're going to keep it traditional."        — Maritime
+ *   "Aerospace has no local. It's only going to be traditional SEO."
+ *   "We will let it be local and traditional on this page."    — Construction
+ *   "The only one so far that's going to stay both is hospitality."
+ *
+ * Offering a lane JMC will not run is worse than narrowing the page: it
+ * invites an enquiry that gets redirected on the first call, which is the
+ * precise experience the transparency pillar exists to avoid.
+ *
+ * Three pages stay on both because he explicitly deferred them — "I'm
+ * actually going to leave this for now, but we'll work it a little bit
+ * later" (home services, healthcare, professional services). They are
+ * deferred, not decided, and all three sounded like they are heading
+ * somewhere narrower.
+ */
+type Lanes = "both" | "local" | "traditional";
+
+const LANE_COPY = {
+  local: {
+    title: "Local SEO",
+    icon: "map-pin" as IconName,
+    body: "For businesses competing for customers in a defined area, however many locations they run in it.",
+    cta: { label: "Explore Local SEO", href: "/local-seo-services" },
+  },
+  traditional: {
+    title: "Traditional SEO",
+    icon: "globe" as IconName,
+    body: "For businesses competing across multiple markets, multiple service lines, or genuinely competitive search.",
+    cta: {
+      label: "Explore Traditional SEO",
+      href: "/traditional-seo-services",
+    },
+  },
+};
+
+function howJmcWorks(industry: string, lanes: Lanes): Section {
+  const lower = industry.toLowerCase();
+
+  if (lanes === "both") {
+    return {
+      id: "how-it-works",
+      type: "cardGrid",
+      tone: "surface",
+      variant: "cards",
+      columns: 2,
+      eyebrow: "Where to Start",
+      heading: "Two Ways In, Sorted by Reach",
+      body: `The method does not change with the industry. What changes is the search language, the priorities, and what a single lead is worth. Which service fits a ${lower} business comes down to where it competes, not how big it is.`,
+      cards: [LANE_COPY.local, LANE_COPY.traditional],
+    };
+  }
+
+  /*
+   * One lane gets a statement, not a lone card in a two-column grid.
+   *
+   * It also answers the question the two-card version leaves open — why not
+   * the other one — which is the "something a little more elaborative" the
+   * client asked for when he said describing the two ways in needed more
+   * than it had.
+   */
+  const only = LANE_COPY[lanes];
+  const because =
+    lanes === "traditional"
+      ? `${industry} buyers are not searching inside a drive-time radius. The work is specification, capability and procurement language across a region or a country, so a local campaign would optimise for a map pack that the people making these decisions never open.`
+      : `${industry} businesses win and lose inside a defined area. The map pack and the profile decide most of it, so the work belongs in local search rather than spread thin across markets this business does not sell into.`;
+
   return {
     id: "how-it-works",
-    type: "cardGrid",
+    type: "fullWidthText",
     tone: "surface",
-    variant: "cards",
-    columns: 2,
     eyebrow: "Where to Start",
-    heading: "Two Ways In, Sorted by Reach",
-    body: `The method does not change with the industry. What changes is the search language, the priorities, and what a single lead is worth. Which service fits a ${industry.toLowerCase()} business comes down to where it competes, not how big it is.`,
-    cards: [
-      {
-        title: "Local SEO",
-        icon: "map-pin",
-        body: "For businesses competing for customers in a defined area, however many locations they run in it.",
-        cta: { label: "Explore Local SEO", href: "/local-seo-services" },
-      },
-      {
-        title: "Traditional SEO",
-        icon: "globe",
-        body: "For businesses competing across multiple markets, multiple service lines, or genuinely competitive search.",
-        cta: {
-          label: "Explore Traditional SEO",
-          href: "/traditional-seo-services",
-        },
-      },
-    ],
+    heading: `This Work Sits in ${only.title}`,
+    body: `The method does not change with the industry. What changes is the search language, the priorities, and what a single lead is worth.\n\n${because}`,
+    cta: only.cta,
   };
 }
 
@@ -142,9 +198,9 @@ type Industry = {
     /** §2 heading and layout. Rotated so no two neighbours look alike. */
     audienceHeading: string;
     audienceVariant: "cards" | "compact" | "numbered" | "split";
-    /** §3 copy side, alternated down the set. */
-    searchAlign: "left" | "right";
   };
+  /** §4. Which service lane, or lanes, this page routes to. See howJmcWorks. */
+  lanes: Lanes;
   /** §2. One card per child business type. Counts are fixed by the spec. */
   children: { title: string; body: string; icon: IconName }[];
   /** §3. The section that earns each page its separate existence. */
@@ -189,8 +245,9 @@ const industries: Industry[] = [
       },
       audienceHeading: "The Trades This Applies To",
       audienceVariant: "cards",
-      searchAlign: "left",
     },
+    /* Deferred, not decided: "more often than not... all actually going to fall into the local SEO space. We are probably not going to do a traditional SEO campaign for them. So I am actually going to leave this for now, but we will work it a little bit later." */
+    lanes: "both",
     children: [
       {
         title: "HVAC & Climate Control",
@@ -289,8 +346,9 @@ const industries: Industry[] = [
       },
       audienceHeading: "Practices This Applies To",
       audienceVariant: "compact",
-      searchAlign: "right",
     },
+    /* Deferred: "they are probably going to be local SEO, not traditional, or something custom." */
+    lanes: "both",
     children: [
       {
         title: "Mental & Behavioral Health Professionals",
@@ -385,8 +443,9 @@ const industries: Industry[] = [
       },
       audienceHeading: "Places This Applies To",
       audienceVariant: "cards",
-      searchAlign: "left",
     },
+    /* Confirmed both: "the only one so far that is going to stay both is hospitality and attractions." */
+    lanes: "both",
     children: [
       {
         title: "RV Parks & Campground Resorts",
@@ -480,8 +539,9 @@ const industries: Industry[] = [
       },
       audienceHeading: "Firms This Applies To",
       audienceVariant: "numbered",
-      searchAlign: "right",
     },
+    /* Deferred: "usually going to be regional, statewide kind of things... we will leave it for now, but we will work it later." */
+    lanes: "both",
     children: [
       {
         title: "Law Firms & Legal Services",
@@ -570,8 +630,9 @@ const industries: Industry[] = [
       },
       audienceHeading: "Suppliers and Service Firms",
       audienceVariant: "split",
-      searchAlign: "left",
     },
+    /* "They are going to be traditional SEO. We are not going to be running a local SEO campaign for them. So we can remove local." */
+    lanes: "traditional",
     children: [
       {
         title: "Oil & Gas Field Services & Logistics",
@@ -661,8 +722,9 @@ const industries: Industry[] = [
       },
       audienceHeading: "Operators This Applies To",
       audienceVariant: "compact",
-      searchAlign: "right",
     },
+    /* "For maritime, we are going to keep it traditional, just because I do not think local is a proper function." */
+    lanes: "traditional",
     children: [
       {
         title: "Port Services & Stevedoring",
@@ -752,8 +814,9 @@ const industries: Industry[] = [
       },
       audienceHeading: "Contractors and Suppliers",
       audienceVariant: "numbered",
-      searchAlign: "left",
     },
+    /* Confirmed both: "we will let it be local and traditional on this page." */
+    lanes: "both",
     children: [
       {
         title: "Commercial & Industrial Subcontractors",
@@ -842,8 +905,9 @@ const industries: Industry[] = [
       },
       audienceHeading: "Suppliers This Applies To",
       audienceVariant: "split",
-      searchAlign: "right",
     },
+    /* "Aerospace has no local. It is only going to be traditional SEO." */
+    lanes: "traditional",
     children: [
       {
         title: "Aviation Services & Hangar Operations",
@@ -952,14 +1016,27 @@ function industryPage(industry: Industry): PageContent {
         id: "search-behaviour",
         type: "featureSplit",
         tone: "white",
-        align: industry.style.searchAlign,
+        /*
+         * Copy left, points right, on all eight. Fixed rather than a
+         * per-industry field, because the client was unambiguous: "This is
+         * the layout that I want on every single page right here... I want
+         * this layout, not the other way around. I like this better because
+         * we read from left to right here in the US."
+         *
+         * It used to alternate down the set so no two neighbouring pages
+         * looked alike. That was solving a problem nobody reported — these
+         * pages are landed on one at a time from search, not read in
+         * sequence — at the cost of the reading order being inconsistent on
+         * the one section that carries each page's actual argument.
+         */
+        align: "left",
         eyebrow: "Search Behaviour",
         heading: industry.search.heading,
         body: industry.search.body,
         groups: industry.search.points,
       },
 
-      howJmcWorks(industry.name),
+      howJmcWorks(industry.name, industry.lanes),
       monthlyRecap,
 
       {
