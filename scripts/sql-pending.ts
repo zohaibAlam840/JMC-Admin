@@ -17,6 +17,12 @@
  *
  * Read-only against Supabase, using the same publishable key the site uses.
  * It cannot write: that is what the SQL editor is for.
+ *
+ * The statements it hands you are sliced out of apply-page-specs-02-09.sql,
+ * which is itself generated. So `npm run sql:pending` regenerates that file
+ * first, and it has to stay that way: run this against a stale source and it
+ * will confidently write SQL that reinstates a section you just deleted,
+ * which is how a removed section came back once already.
  */
 
 import { readFileSync, writeFileSync, existsSync, unlinkSync } from "node:fs";

@@ -933,7 +933,7 @@ export const SECTION_SCHEMAS = [
       heading: "Get a free look at your profile",
       body: "A written audit of the profile and the site behind it.",
       note: "No call required.",
-      submitLabel: "Get a Free Visibility Audit",
+      submitLabel: "Get a Free Google Business Profile Audit",
       profileHelp: "Optional. Paste the map listing link if handy.",
       source: "Free Visibility Audit",
     },

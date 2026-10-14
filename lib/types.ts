@@ -130,6 +130,18 @@ export type HeroShowcaseCard =
    */
   | (ShowcaseBase & { kind: "growth"; items: string[] })
   | (ShowcaseBase & { kind: "channels"; items: string[] })
+  /**
+   * Same card, drawn as a ring divided into one arc per item. Asked for in
+   * the Google Business Profile review ("use the pie chart, that will look
+   * nice in here"), and it is the one card here that is a diagram of parts
+   * rather than a shape suggesting movement.
+   *
+   * The arcs are equal on purpose. A pie with unequal slices is a claim about
+   * proportion, and there is no honest source for one of those at launch --
+   * Page Spec 01 §1 forbids exactly that. Equal arcs say "this thing is made
+   * of these four parts", which is true and is all the card is asserting.
+   */
+  | (ShowcaseBase & { kind: "profile"; items: string[] })
   | (ShowcaseBase & {
       kind: "stat";
       stats: { value: string; label: string }[];

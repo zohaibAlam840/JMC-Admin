@@ -1182,18 +1182,6 @@ function Faq({ section }: { section: FaqSection }) {
             <h2 className="text-[1.875rem] sm:text-[2.25rem] lg:text-[2.625rem]">
               {section.heading}
             </h2>
-            {section.cta ? (
-              <div className="mt-3 hidden lg:block">
-                <Button href={section.cta.href} className="group">
-                  {section.cta.label}
-                  <ArrowRight
-                    size={16}
-                    aria-hidden="true"
-                    className="transition-transform duration-300 ease-out-soft group-hover:translate-x-1"
-                  />
-                </Button>
-              </div>
-            ) : null}
           </div>
         </Reveal>
 
@@ -1222,6 +1210,30 @@ function Faq({ section }: { section: FaqSection }) {
           ) : null}
         </Reveal>
       </div>
+
+      {/*
+       * Under the questions and centred, rather than beside the heading.
+       *
+       * It used to sit in the sticky left column, which left a lone filled
+       * button floating in an otherwise empty half of the section -- "it
+       * looks kind of crazy off to the side", in the 2026-10-14 review, and
+       * it did. It was also `hidden lg:block`, so every phone reader reached
+       * the end of the FAQ and was offered nothing at all. Both problems go
+       * away by putting it where a reader who has finished reading will be
+       * looking.
+       */}
+      {section.cta ? (
+        <Reveal className="mt-12 flex justify-center">
+          <Button href={section.cta.href} size="lg" className="group">
+            {section.cta.label}
+            <ArrowRight
+              size={16}
+              aria-hidden="true"
+              className="transition-transform duration-300 ease-out-soft group-hover:translate-x-1"
+            />
+          </Button>
+        </Reveal>
+      ) : null}
     </Band>
   );
 }

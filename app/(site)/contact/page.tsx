@@ -312,7 +312,7 @@ export default async function Page({ searchParams }: PageProps<"/contact">) {
               href="/google-business-profile-optimization#free-audit"
               className="font-semibold text-teal-ink underline decoration-teal/40 underline-offset-4 transition-colors hover:decoration-teal"
             >
-              Get a Free Visibility Audit
+              Get a Free Google Business Profile Audit
             </Link>
           </p>
         </Reveal>

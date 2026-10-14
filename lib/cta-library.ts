@@ -38,7 +38,7 @@ export const CTA_LIBRARY = {
     "View Launch Sprints",
     "See How JMC Reports SEO Progress",
     "Explore Industries",
-    "Get a Free Visibility Audit",
+    "Get a Free Google Business Profile Audit",
     "Learn More About JMC",
   ],
 
@@ -88,6 +88,15 @@ export const RETIRED_CTAS: Record<string, string> = {
   "Talk Through Your SEO Growth Goals": "Request a Visibility Review",
   "Talk Through Your SEO Starting Point": "Request a Visibility Review",
   "Explore Real Estate SEO": "(retired with Real Estate SEO)",
+  /*
+   * Retired 2026-10-14. The free audit lives on one page, and the client
+   * renamed it there: "the CTA will change on this page to a Google Business
+   * Profile Audit ... the main thing on this page is explaining it and giving
+   * them a free audit, not to sell local SEO." A generic "visibility audit"
+   * also collided with the sitewide Visibility Review, which is a different
+   * thing with a different form and a different lead source.
+   */
+  "Get a Free Visibility Audit": "Get a Free Google Business Profile Audit",
   "Request a Real Estate Visibility Review": "(retired with Real Estate SEO)",
   "View Real Estate SEO Options": "(retired with Real Estate SEO)",
 };

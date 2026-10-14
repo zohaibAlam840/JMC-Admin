@@ -18,6 +18,14 @@ import type { PageContent } from "@/lib/types";
  * real profile, a star rating, a review count or a statistic about local
  * search, because none of those could be shown honestly at launch.
  *
+ * The "Two Ways In" section (§6, one-time setup beside ongoing management)
+ * was removed in the client review on 2026-10-14: "let's remove this section
+ * altogether, because for the optimization I want it to be more educational
+ * than the other service pages." Both routes are still reachable -- the FAQ
+ * answers the one-time question, and the nav carries both services -- but
+ * this page no longer asks a reader to choose a package. Everything it offers
+ * is the free audit.
+ *
  * Copy is DRAFT. The Step 4 copy deck replaces it.
  */
 export const gbpOptimizationPage: PageContent = {
@@ -33,14 +41,18 @@ export const gbpOptimizationPage: PageContent = {
       eyebrow: "Google Business Profile Optimization",
       heading: "Your Google Business Profile Is Doing More Work Than Your Website",
       body: "For most local searches the profile is what people see, read and act on, often without ever opening a website. Getting it right is the fastest visibility work available to a local business.",
-      // The free audit, not the sitewide Visibility Review. An in-page anchor
-      // to a five-field form converts far better here than a link to a
-      // contact page, and §1 calls for exactly that swap.
-      primaryCta: { label: "Get a Free Visibility Audit", href: "#free-audit" },
-      secondaryCta: { label: "Explore Local SEO", href: "/local-seo-services" },
+      // One button, and it is the audit. §1 already swapped the sitewide
+      // Visibility Review for the in-page form here; the client review on
+      // 2026-10-14 took the second button off as well ("I think we need one
+      // or the other"), because "Explore Local SEO" was selling the service
+      // on the one page that is meant to teach and then offer the audit.
+      primaryCta: { label: "Get a Free Google Business Profile Audit", href: "#free-audit" },
       showcase: [
         {
-          kind: "coverage",
+          // A ring of four arcs, one per row below. The client asked for a
+          // different visual here and for a pie chart specifically; the arcs
+          // are equal because a proportion would have to be invented.
+          kind: "profile",
           label: "What gets worked",
           title: "The Profile Itself",
           items: [
@@ -136,9 +148,9 @@ export const gbpOptimizationPage: PageContent = {
     {
       id: "free-audit",
       type: "auditForm",
-      eyebrow: "Free Visibility Audit",
-      heading: "Get a Free Look at Your Profile",
-      body: "A written audit of the profile and the site behind it, built on the same four headings as the monthly recap: what is there, why it matters, what is working and what is not, and what to do next.",
+      eyebrow: "Free Profile Audit",
+      heading: "Get a Free Google Business Profile Audit",
+      body: "A written audit of the profile, and of the site behind it, built on the same four headings as the monthly recap: what is there, why it matters, what is working and what is not, and what to do next.",
       covers: [
         "Categories, services and business information",
         "Listing consistency across the web",
@@ -146,9 +158,11 @@ export const gbpOptimizationPage: PageContent = {
         "Where the profile is visible across the service area",
       ],
       note: "No call required.",
-      submitLabel: "Get a Free Visibility Audit",
+      submitLabel: "Get a Free Google Business Profile Audit",
       profileHelp: "Optional. Paste the map listing link if you have it handy.",
-      source: "Free Visibility Audit",
+      // The CRM tag. Renamed with the rest, but note that leads captured
+      // before 2026-10-14 carry the old "Free Visibility Audit" string.
+      source: "Free Profile Audit",
     },
 
     {
@@ -159,9 +173,12 @@ export const gbpOptimizationPage: PageContent = {
       columns: 3,
       eyebrow: "The Work",
       heading: "What JMC Does to a Profile",
-      body: "Three things once, and three things every month. Which of the two you need is the whole of the choice below.",
-      // The split is load-bearing: §6 offers one path for each half, and the
-      // two cards there only make sense to a reader who has seen this.
+      body: "Three things once, and three things every month, on a profile you own throughout.",
+      // The split is still load-bearing, but it no longer leads anywhere: the
+      // "Two Ways In" section that used to pick up each half was removed in
+      // the 2026-10-14 review. The body sentence pointing down at it went
+      // with it, because a page that promises a choice below and then does
+      // not offer one reads as a missing section.
       groupLabels: [
         { at: 0, label: "One-time foundation" },
         { at: 3, label: "Ongoing every month" },
@@ -199,34 +216,6 @@ export const gbpOptimizationPage: PageContent = {
           visual: "searchGrid",
         },
       ],
-    },
-
-    {
-      id: "two-ways",
-      type: "cardGrid",
-      tone: "white",
-      variant: "cards",
-      columns: 2,
-      eyebrow: "Two Ways In",
-      heading: "One-Time Setup, or Ongoing Management",
-      body: "The foundation work can be bought once on its own. The monthly work only makes sense as an ongoing engagement.",
-      cards: [
-        {
-          title: "One-Time Setup",
-          icon: "rocket",
-          meta: "Neighborhood Launch Sprint, $799",
-          body: "Completed within 30 days. Covers the profile audit and core optimization, a citation audit and a single standard for your business information, and a 30-day roadmap for the whole picture rather than the profile alone. Start monthly service within 30 days and the onboarding fee on any Local package is waived.",
-          cta: { label: "View Launch Sprints", href: "/launch-sprints" },
-        },
-        {
-          title: "Ongoing Management",
-          icon: "layers",
-          meta: "Local SEO packages, from $875 a month",
-          body: "Monthly profile posts, review requests and replies, citation work, local search grid tracking, and the monthly recap that says what changed. The profile work sits inside the wider local engagement rather than beside it.",
-          cta: { label: "Explore Local SEO", href: "/local-seo-services" },
-        },
-      ],
-      cta: { label: "Request a Visibility Review", href: "/contact" },
     },
 
     {
@@ -284,16 +273,22 @@ export const gbpOptimizationPage: PageContent = {
             "Yes. A service-area business hides its address and is ranked against the area it covers, which makes categories, service definitions and listing consistency do more of the work. JMC is a service-area business itself and does not publish a street address.",
         },
       ],
-      cta: { label: "Get a Free Visibility Audit", href: "#free-audit" },
+      cta: { label: "Get a Free Google Business Profile Audit", href: "#free-audit" },
     },
 
     {
       id: "final-cta",
       type: "finalCta",
       heading: "Start With the Profile",
-      body: "A visibility review covers the profile, the site behind it, and which of the two is holding the other back.",
-      primaryCta: { label: "Request a Visibility Review", href: "/contact" },
-      secondaryCta: { label: "View Launch Sprints", href: "/launch-sprints" },
+      /*
+       * One button, and the same one the page opened with. It used to be a
+       * Visibility Review beside a Launch Sprint, which the client rejected
+       * on two counts in the 2026-10-14 review: it was a choice between two
+       * paid things on a page that is meant to be educational, and it asked
+       * for something different from the offer made three times above it.
+       */
+      body: "The audit says what the profile is missing, what it is costing, and what to do about it first. It is the same four headings as the monthly recap, written before anyone has paid for anything.",
+      primaryCta: { label: "Get a Free Google Business Profile Audit", href: "#free-audit" },
     },
   ],
 };
