@@ -103,7 +103,7 @@ function howJmcWorks(industry: string, lanes: Lanes): Section {
   const because =
     lanes === "traditional"
       ? `${industry} buyers are not searching inside a drive-time radius. The work is specification, capability and procurement language across a region or a country, so a local campaign would optimise for a map pack that the people making these decisions never open.`
-      : `${industry} businesses win and lose inside a defined area. The map pack and the profile decide most of it, so the work belongs in local search rather than spread thin across markets this business does not sell into.`;
+      : `${industry} businesses compete inside a defined area, and the profile, the map pack and the reviews attached to them decide most of it. The work belongs in local search rather than spread thin across markets the business does not sell into.`;
 
   return {
     id: "how-it-works",
@@ -116,23 +116,127 @@ function howJmcWorks(industry: string, lanes: Lanes): Section {
   };
 }
 
-/** §5. Identical on all eight pages, titles and supporting lines alike. */
-const monthlyRecap: Section = {
-  id: "monthly-recap",
-  type: "reportingBlock",
-  tone: "white",
-  eyebrow: "Reporting",
-  heading: "The Monthly Recap",
-  body: "The same four questions every month, whatever the industry.",
-  did: "The specific work completed that month, named task by task.",
-  why: "Why that work was the priority ahead of everything else in the queue.",
-  changed: "What moved, reported honestly, including the months where little did.",
-  next: "Next month's priorities, so nothing in the following recap is a surprise.",
-  cta: {
-    label: "See How JMC Reports SEO Progress",
-    href: "/seo-reporting",
+/**
+ * §5. The recap, written per industry.
+ *
+ * It used to be one identical block on all eight pages. The client cut that
+ * in review: "every monthly reporting recap section needs to be geared
+ * towards the industry so that we're creating credibility in that section,
+ * and not just regurgitating the same thing."
+ *
+ * The line each of these has to walk: say something specific about reporting
+ * for this sector without claiming experience in it. Page Spec 09 forbids
+ * sector expertise claims, and the shared FAQ on every one of these pages
+ * says in as many words that JMC does not specialise in the industry. So
+ * none of these describe past work, results or clients. Each describes what
+ * gets measured and reported for a business that searches the way this
+ * industry's §3 section has already established that it does — which is a
+ * statement about the buyer, not about JMC.
+ *
+ * The four question titles are untouched and must stay that way: "What We
+ * Did / Why We Did It / What Changed / Where We're Headed" are final per the
+ * build brief. Only the supporting line under each one varies.
+ *
+ * Every "what changed" entry keeps the admission that some months move
+ * little. That sentence is the whole reason this block is the site's
+ * differentiator, and it is the first thing that would quietly go missing in
+ * a rewrite for credibility.
+ */
+type Recap = {
+  body: string;
+  did: string;
+  why: string;
+  changed: string;
+  next: string;
+};
+
+const RECAPS: Record<string, Recap> = {
+  "home-services-trades": {
+    body: "The same four questions every month. For a trades business the answers are about map pack position, the service area, and whether you were visible before the season turned.",
+    did: "The work completed that month, named task by task: profile posts, service-area pages, citation corrections, and the seasonal content queued before its season rather than during it.",
+    why: "Why that work came first, which is usually either a service about to peak or a part of the service area ranking well behind the rest of it.",
+    changed: "Map pack position across the service area, which urgent-intent searches moved, and call volume wherever it is being tracked. Reported honestly, including the months where little moved.",
+    next: "Next month's priorities, with the following seasonal spike already in the plan instead of noticed once it has started.",
+  },
+
+  "healthcare-wellness": {
+    body: "The same four questions every month. For a practice the answers are about symptom language, reputation, and whether the booking path survives the click.",
+    did: "The work completed that month, named task by task: condition and symptom pages, profile and review work, and fixes to the path between a search and a booked appointment.",
+    why: "Why that work came first, which is usually a condition the practice should be found for and is not, or a step in the booking path losing people who had already chosen it.",
+    changed: "Which symptom and condition searches moved, how the profile and reviews are tracking, and where appointment enquiries arrived from. Reported honestly, including the months where little moved.",
+    next: "Next month's priorities in order, so the practice is never the last to find out what is being worked on.",
+  },
+
+  "hospitality-attractions": {
+    body: "The same four questions every month. For a venue the answers run on two clocks at once: tonight's searches and the ones happening six weeks out.",
+    did: "The work completed that month, named task by task: listing detail, photographs and hours, event and seasonal pages, and the content built for bookings that get planned well in advance.",
+    why: "Why that work came first, which is usually a season approaching or a listing detail quietly costing clicks that the ranking had already earned.",
+    changed: "What moved on the immediate searches and on the planning-ahead ones separately, because they rarely move together. Reported honestly, including the months where little moved.",
+    next: "Next month's priorities, with the next booking window already accounted for rather than arriving as a surprise.",
+  },
+
+  "professional-services": {
+    body: "The same four questions every month. For a firm the answers arrive more slowly than most, because the consideration does.",
+    did: "The work completed that month, named task by task: practice-area pages, the location pairings that go with them, and the material doing the work of credibility before anyone picks up a phone.",
+    why: "Why that work came first, which is usually a practice area with no page behind it, or one competing against firms that have published far more.",
+    changed: "Which practice-area and location searches moved, and what enquiry volume did. Reported honestly, including the months where little moved, which is ordinary in a consideration cycle measured in weeks.",
+    next: "Next month's priorities in order, with the reasoning behind the order rather than just the list.",
+  },
+
+  "energy-petrochemical": {
+    body: "The same four questions every month. For a technical buyer the answers are about specification coverage rather than keyword counts.",
+    did: "The work completed that month, named task by task: capability and specification pages, the technical detail that makes them findable, and the fixes that let a procurement search reach them at all.",
+    why: "Why that work came first, which is usually a capability the business sells and cannot be found for, or a page written in adjectives where the search was written in specifications.",
+    changed: "Which specification and capability searches moved, and what the enquiries that did arrive were actually looking for. Reported honestly, including the months where little moved.",
+    next: "Next month's priorities in order, on a cycle measured in months rather than weeks, because the buying is.",
+  },
+
+  "maritime-logistics": {
+    body: "The same four questions every month. For a logistics business the answers are organised by route, mode and capability, because that is how the searches are.",
+    did: "The work completed that month, named task by task: route and capability pages, the certification and coverage detail that gets searched for by name, and the technical work behind both.",
+    why: "Why that work came first, which is usually a lane or a capability with no page behind it, or a certification buyers search for that the site never actually states.",
+    changed: "What moved across route, mode and capability searches, and on the urgent ones that only appear when something is down. Reported honestly, including the months where little moved.",
+    next: "Next month's priorities in order, so nothing in the following recap arrives as a surprise.",
+  },
+
+  "commercial-construction-infrastructure": {
+    body: "The same four questions every month. For a contractor the answers are about being qualified, which happens long before anybody calls.",
+    did: "The work completed that month, named task by task: project-type pages, the evidence in text that a qualifying reader is looking for, and the technical work sitting behind both.",
+    why: "Why that work came first, which is usually a project type the business bids on with nothing published about it, or a page that ranks and then fails to qualify the reader who lands on it.",
+    changed: "Which project-type searches moved, and what the enquiries that arrived were bidding on. Reported honestly, including the months where little moved.",
+    next: "Next month's priorities in order, aligned to the project types actually being bid rather than to a content calendar.",
+  },
+
+  "aerospace-aviation": {
+    body: "The same four questions every month. In aerospace the answers start with approvals, because that is the first filter a buyer applies.",
+    did: "The work completed that month, named task by task: capability and approval pages, part and service detail made findable, and the technical work that lets a very narrow search reach it.",
+    why: "Why that work came first, which is usually an approval or a capability buyers filter on that the site does not state in a form search can read.",
+    changed: "Which part, capability and approval searches moved, and what the enquiries that arrived were qualified against. Reported honestly, including the months where little moved.",
+    next: "Next month's priorities in order, on a procurement cycle that does not reward rushing.",
   },
 };
+
+function monthlyRecap(slug: string): Section {
+  const recap = RECAPS[slug];
+  if (!recap) {
+    // A new industry without its own recap would silently inherit nothing.
+    // Failing here is cheaper than shipping a page with an empty block.
+    throw new Error(`No recap copy for industry "${slug}". Add one to RECAPS.`);
+  }
+
+  return {
+    id: "monthly-recap",
+    type: "reportingBlock",
+    tone: "white",
+    eyebrow: "Reporting",
+    heading: "The Monthly Recap",
+    ...recap,
+    cta: {
+      label: "See How JMC Reports SEO Progress",
+      href: "/seo-reporting",
+    },
+  };
+}
 
 /** §7. Identical on all eight pages. */
 const finalCta: Section = {
@@ -246,8 +350,8 @@ const industries: Industry[] = [
       audienceHeading: "The Trades This Applies To",
       audienceVariant: "cards",
     },
-    /* Deferred, not decided: "more often than not... all actually going to fall into the local SEO space. We are probably not going to do a traditional SEO campaign for them. So I am actually going to leave this for now, but we will work it a little bit later." */
-    lanes: "both",
+    /* "More often than not, home services and these tradespeople are all actually going to fall into the local SEO space. We are probably not going to do a traditional SEO campaign for them." He then said to leave it for now; acting on the conclusion rather than the pause. One word to revert. */
+    lanes: "local",
     children: [
       {
         title: "HVAC & Climate Control",
@@ -347,8 +451,8 @@ const industries: Industry[] = [
       audienceHeading: "Practices This Applies To",
       audienceVariant: "compact",
     },
-    /* Deferred: "they are probably going to be local SEO, not traditional, or something custom." */
-    lanes: "both",
+    /* "They are probably going to be local SEO, not traditional, or something custom." Same deferral as home services, same reasoning applied. One word to revert. */
+    lanes: "local",
     children: [
       {
         title: "Mental & Behavioral Health Professionals",
@@ -540,8 +644,8 @@ const industries: Industry[] = [
       audienceHeading: "Firms This Applies To",
       audienceVariant: "numbered",
     },
-    /* Deferred: "usually going to be regional, statewide kind of things... we will leave it for now, but we will work it later." */
-    lanes: "both",
+    /* "All of these are usually going to be regional, statewide kind of things. We are going to be tackling a much larger area than any local search function is really going to want to tackle from a local grid." Same deferral; acting on the conclusion. One word to revert. */
+    lanes: "traditional",
     children: [
       {
         title: "Law Firms & Legal Services",
@@ -1037,7 +1141,7 @@ function industryPage(industry: Industry): PageContent {
       },
 
       howJmcWorks(industry.name, industry.lanes),
-      monthlyRecap,
+      monthlyRecap(industry.slug),
 
       {
         id: "faq",

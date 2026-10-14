@@ -10,6 +10,18 @@
 
 begin;
 insert into public.packages (id, group_key, name, price, price_unit, onboarding_fee, term, positioning, timeline, best_fit, deliverables, cta_label, cta_href, featured, visible, pricing_pending, position) values (
+  'sprint-regional', 'sprint', 'Regional Launch Sprint', '$1,495', 'one-time', NULL, NULL, NULL, '45 days',
+  'For businesses targeting a broader service region or multiple markets that want a strong foundation before starting monthly service.', ARRAY['Kickoff and access setup', 'Technical and on-page SEO audit', 'Regional keyword and competitor analysis', 'Google Search Console and Bing setup or verification', 'Schema, sitemap, and robots.txt review', 'Titles and meta descriptions for up to 10 priority pages', 'Backlink audit', '30-Day Roadmap and next-step recommendations']::text[],
+  'Start the Regional Sprint', '/contact?type=sprint', false, true, false, 10)
+on conflict (id) do update set
+  name = excluded.name, price = excluded.price,
+  price_unit = excluded.price_unit, onboarding_fee = excluded.onboarding_fee,
+  term = excluded.term, positioning = excluded.positioning,
+  timeline = excluded.timeline, best_fit = excluded.best_fit,
+  deliverables = excluded.deliverables,
+  cta_label = excluded.cta_label, cta_href = excluded.cta_href,
+  featured = excluded.featured;
+insert into public.packages (id, group_key, name, price, price_unit, onboarding_fee, term, positioning, timeline, best_fit, deliverables, cta_label, cta_href, featured, visible, pricing_pending, position) values (
   'sprint-national', 'sprint', 'National Launch Sprint', '$2,295', 'one-time', NULL, NULL, NULL, '45 days',
   'For businesses that need foundational technical and on-page SEO work in place before starting a national monthly campaign.', ARRAY['Kickoff and access setup', 'Technical and on-page SEO audit', 'National keyword and competitor analysis', 'Google Search Console and Bing setup or verification', 'Schema, sitemap, and robots.txt review', 'Titles and meta descriptions for up to 15 priority pages', 'Backlink audit', '30-Day Roadmap and next-step recommendations']::text[],
   'Start the National Sprint', '/contact?type=sprint', false, true, false, 11)
@@ -25,44 +37,44 @@ on conflict (id) do update set
 -- Rebuilt wholesale. Every industry item and the Pricing dropdown changed
 -- address, so a merge would leave half the menu pointing at dead URLs.
 delete from public.nav_items;
-insert into public.nav_items (id, location, parent_id, label, href, position) values ('20ca85ff-209d-4c02-bb1d-ea49e51f0dfb', 'main', null, 'Home', '/', 0);
-insert into public.nav_items (id, location, parent_id, label, href, position) values ('ead97f4f-ecec-4e95-b6bf-c49a5df6c0c5', 'main', null, 'SEO Services', '/local-seo-services', 1);
-insert into public.nav_items (id, location, parent_id, label, href, position) values ('1776a764-8a62-4b5e-b4b8-7c5cf035028e', 'main', 'ead97f4f-ecec-4e95-b6bf-c49a5df6c0c5', 'Local SEO Services', '/local-seo-services', 0);
-insert into public.nav_items (id, location, parent_id, label, href, position) values ('11673d0c-b7a5-40e4-88f8-634c33b3e605', 'main', 'ead97f4f-ecec-4e95-b6bf-c49a5df6c0c5', 'Traditional SEO Services', '/traditional-seo-services', 1);
-insert into public.nav_items (id, location, parent_id, label, href, position) values ('28f629b9-2e1d-4cd1-8538-c250bf3b9760', 'main', 'ead97f4f-ecec-4e95-b6bf-c49a5df6c0c5', 'Google Business Profile Optimization', '/google-business-profile-optimization', 2);
-insert into public.nav_items (id, location, parent_id, label, href, position) values ('2c25fc0f-a403-449e-a0c9-b6d520f556d5', 'main', null, 'Industries', '/industries', 2);
-insert into public.nav_items (id, location, parent_id, label, href, position) values ('76496ea9-3e1d-42cb-825f-0ed7b9e22a3f', 'main', '2c25fc0f-a403-449e-a0c9-b6d520f556d5', 'Home Services & Trades', '/industries/home-services-trades', 0);
-insert into public.nav_items (id, location, parent_id, label, href, position) values ('ed0af019-7a09-4630-a03e-d3b908eb6a15', 'main', '2c25fc0f-a403-449e-a0c9-b6d520f556d5', 'Healthcare & Wellness', '/industries/healthcare-wellness', 1);
-insert into public.nav_items (id, location, parent_id, label, href, position) values ('7f457217-b284-4b6e-9186-94d4a86ce297', 'main', '2c25fc0f-a403-449e-a0c9-b6d520f556d5', 'Hospitality & Attractions', '/industries/hospitality-attractions', 2);
-insert into public.nav_items (id, location, parent_id, label, href, position) values ('59818404-98c1-4e94-94ab-a0cecb6a9833', 'main', '2c25fc0f-a403-449e-a0c9-b6d520f556d5', 'Professional Services', '/industries/professional-services', 3);
-insert into public.nav_items (id, location, parent_id, label, href, position) values ('54e98aa3-6a5d-4aef-9261-43bac722e362', 'main', '2c25fc0f-a403-449e-a0c9-b6d520f556d5', 'Energy & Petrochemical', '/industries/energy-petrochemical', 4);
-insert into public.nav_items (id, location, parent_id, label, href, position) values ('f44779e9-d62e-4141-80fc-8ce537c9842a', 'main', '2c25fc0f-a403-449e-a0c9-b6d520f556d5', 'Maritime & Logistics', '/industries/maritime-logistics', 5);
-insert into public.nav_items (id, location, parent_id, label, href, position) values ('303ad3c9-7047-4c35-8962-e1d4ae82e920', 'main', '2c25fc0f-a403-449e-a0c9-b6d520f556d5', 'Commercial Construction & Infrastructure', '/industries/commercial-construction-infrastructure', 6);
-insert into public.nav_items (id, location, parent_id, label, href, position) values ('d52c85af-7d2c-4cf0-bf27-52fbbb8a962a', 'main', '2c25fc0f-a403-449e-a0c9-b6d520f556d5', 'Aerospace & Aviation', '/industries/aerospace-aviation', 7);
-insert into public.nav_items (id, location, parent_id, label, href, position) values ('4eaaa812-9094-4a32-9a33-012f831938ba', 'main', null, 'Pricing', '/monthly-seo-packages', 3);
-insert into public.nav_items (id, location, parent_id, label, href, position) values ('294f6ab0-1304-4f47-98ef-47ed7bdca140', 'main', '4eaaa812-9094-4a32-9a33-012f831938ba', 'Monthly SEO Packages', '/monthly-seo-packages', 0);
-insert into public.nav_items (id, location, parent_id, label, href, position) values ('a6127034-4609-446a-8aea-32ddd49abb65', 'main', '4eaaa812-9094-4a32-9a33-012f831938ba', 'Launch Sprints', '/launch-sprints', 1);
-insert into public.nav_items (id, location, parent_id, label, href, position) values ('a9c34d6b-ac6c-4b5e-8a19-5055635d435c', 'main', null, 'About', '/about', 4);
-insert into public.nav_items (id, location, parent_id, label, href, position) values ('f518c8af-7e27-4888-80b4-9666989b15d5', 'main', null, 'Contact', '/contact', 5);
-insert into public.nav_items (id, location, parent_id, label, href, position) values ('6c2ce5ad-4ff7-4d05-bffd-879a8a731711', 'footer', null, 'SEO Services', '', 0);
-insert into public.nav_items (id, location, parent_id, label, href, position) values ('487b206f-9924-4928-a34f-53854b137454', 'footer', '6c2ce5ad-4ff7-4d05-bffd-879a8a731711', 'Local SEO Services', '/local-seo-services', 0);
-insert into public.nav_items (id, location, parent_id, label, href, position) values ('0479f16b-ec17-4ec0-a91f-67214925246c', 'footer', '6c2ce5ad-4ff7-4d05-bffd-879a8a731711', 'Traditional SEO Services', '/traditional-seo-services', 1);
-insert into public.nav_items (id, location, parent_id, label, href, position) values ('56f712e2-47df-4e6b-9097-0fce814537fa', 'footer', '6c2ce5ad-4ff7-4d05-bffd-879a8a731711', 'Google Business Profile Optimization', '/google-business-profile-optimization', 2);
-insert into public.nav_items (id, location, parent_id, label, href, position) values ('c30afa8f-c2d6-4df9-a400-e5cd6bdc8b59', 'footer', '6c2ce5ad-4ff7-4d05-bffd-879a8a731711', 'SEO Reporting', '/seo-reporting', 3);
-insert into public.nav_items (id, location, parent_id, label, href, position) values ('49d60d74-094b-4ac0-b5a4-9d492edbafff', 'footer', null, 'Industries', '', 1);
-insert into public.nav_items (id, location, parent_id, label, href, position) values ('b8635872-7687-47fc-ab61-bb026f771d26', 'footer', '49d60d74-094b-4ac0-b5a4-9d492edbafff', 'Home Services & Trades', '/industries/home-services-trades', 0);
-insert into public.nav_items (id, location, parent_id, label, href, position) values ('8f339d4a-b1a4-4837-b491-2901f28dc310', 'footer', '49d60d74-094b-4ac0-b5a4-9d492edbafff', 'Healthcare & Wellness', '/industries/healthcare-wellness', 1);
-insert into public.nav_items (id, location, parent_id, label, href, position) values ('594f0002-f118-4107-b0c7-25f900511351', 'footer', '49d60d74-094b-4ac0-b5a4-9d492edbafff', 'Hospitality & Attractions', '/industries/hospitality-attractions', 2);
-insert into public.nav_items (id, location, parent_id, label, href, position) values ('6fec3c92-0e86-47a9-8cdc-f563d04408c4', 'footer', '49d60d74-094b-4ac0-b5a4-9d492edbafff', 'Professional Services', '/industries/professional-services', 3);
-insert into public.nav_items (id, location, parent_id, label, href, position) values ('d92c772a-f6cc-46fc-b7a2-7f39643aa888', 'footer', '49d60d74-094b-4ac0-b5a4-9d492edbafff', 'Energy & Petrochemical', '/industries/energy-petrochemical', 4);
-insert into public.nav_items (id, location, parent_id, label, href, position) values ('36c66208-4371-441d-a4bc-f696b4db9099', 'footer', '49d60d74-094b-4ac0-b5a4-9d492edbafff', 'Maritime & Logistics', '/industries/maritime-logistics', 5);
-insert into public.nav_items (id, location, parent_id, label, href, position) values ('83c99281-298b-4185-839f-a8aacf5c2932', 'footer', '49d60d74-094b-4ac0-b5a4-9d492edbafff', 'Commercial Construction & Infrastructure', '/industries/commercial-construction-infrastructure', 6);
-insert into public.nav_items (id, location, parent_id, label, href, position) values ('823a6f79-7b1f-4325-927c-6adcfc27a201', 'footer', '49d60d74-094b-4ac0-b5a4-9d492edbafff', 'Aerospace & Aviation', '/industries/aerospace-aviation', 7);
-insert into public.nav_items (id, location, parent_id, label, href, position) values ('83e1d3ab-9edf-4428-86c7-acfd24beabd3', 'footer', null, 'Company', '', 2);
-insert into public.nav_items (id, location, parent_id, label, href, position) values ('7322e9c9-81e6-4a65-8b17-d3a45a9a4349', 'footer', '83e1d3ab-9edf-4428-86c7-acfd24beabd3', 'Monthly SEO Packages', '/monthly-seo-packages', 0);
-insert into public.nav_items (id, location, parent_id, label, href, position) values ('eeeaf7be-1d05-4399-b49f-23e6634d76a5', 'footer', '83e1d3ab-9edf-4428-86c7-acfd24beabd3', 'Launch Sprints', '/launch-sprints', 1);
-insert into public.nav_items (id, location, parent_id, label, href, position) values ('e403d877-16c8-4fd8-8128-2047b8d6d77f', 'footer', '83e1d3ab-9edf-4428-86c7-acfd24beabd3', 'About', '/about', 2);
-insert into public.nav_items (id, location, parent_id, label, href, position) values ('8a869d48-dd1c-4bb5-96a2-5fb2a2d6029d', 'footer', '83e1d3ab-9edf-4428-86c7-acfd24beabd3', 'Contact', '/contact', 3);
+insert into public.nav_items (id, location, parent_id, label, href, position) values ('29405e57-086e-456b-a51c-58f2822c9189', 'main', null, 'Home', '/', 0);
+insert into public.nav_items (id, location, parent_id, label, href, position) values ('e71a5b75-b828-40d7-a237-c8e993eea1bb', 'main', null, 'SEO Services', '/local-seo-services', 1);
+insert into public.nav_items (id, location, parent_id, label, href, position) values ('302755fa-df20-4319-a0da-cd41b6ac97e6', 'main', 'e71a5b75-b828-40d7-a237-c8e993eea1bb', 'Local SEO Services', '/local-seo-services', 0);
+insert into public.nav_items (id, location, parent_id, label, href, position) values ('389ff470-d84e-4b5c-8b8a-22cfd9fa1795', 'main', 'e71a5b75-b828-40d7-a237-c8e993eea1bb', 'Traditional SEO Services', '/traditional-seo-services', 1);
+insert into public.nav_items (id, location, parent_id, label, href, position) values ('8a82f0ec-628e-4576-9af1-c290c6ffd446', 'main', 'e71a5b75-b828-40d7-a237-c8e993eea1bb', 'Google Business Profile Optimization', '/google-business-profile-optimization', 2);
+insert into public.nav_items (id, location, parent_id, label, href, position) values ('3200c766-9ea5-42c6-ba5e-4f839e8fd88f', 'main', null, 'Industries', '/industries', 2);
+insert into public.nav_items (id, location, parent_id, label, href, position) values ('62672904-27eb-437a-8b3d-33639df607b3', 'main', '3200c766-9ea5-42c6-ba5e-4f839e8fd88f', 'Home Services & Trades', '/industries/home-services-trades', 0);
+insert into public.nav_items (id, location, parent_id, label, href, position) values ('63d00efd-0c02-4dc5-a14f-ae95f857042f', 'main', '3200c766-9ea5-42c6-ba5e-4f839e8fd88f', 'Healthcare & Wellness', '/industries/healthcare-wellness', 1);
+insert into public.nav_items (id, location, parent_id, label, href, position) values ('f89ece4f-47e1-4597-b834-ee3841658e93', 'main', '3200c766-9ea5-42c6-ba5e-4f839e8fd88f', 'Hospitality & Attractions', '/industries/hospitality-attractions', 2);
+insert into public.nav_items (id, location, parent_id, label, href, position) values ('0dad0eee-6fc5-4803-bb42-9b5c061e8de8', 'main', '3200c766-9ea5-42c6-ba5e-4f839e8fd88f', 'Professional Services', '/industries/professional-services', 3);
+insert into public.nav_items (id, location, parent_id, label, href, position) values ('42a69f83-4c86-4e76-9541-cc2c05cdb1a2', 'main', '3200c766-9ea5-42c6-ba5e-4f839e8fd88f', 'Energy & Petrochemical', '/industries/energy-petrochemical', 4);
+insert into public.nav_items (id, location, parent_id, label, href, position) values ('b1dc19fd-884d-4d72-8432-2131e44e090a', 'main', '3200c766-9ea5-42c6-ba5e-4f839e8fd88f', 'Maritime & Logistics', '/industries/maritime-logistics', 5);
+insert into public.nav_items (id, location, parent_id, label, href, position) values ('62faaa90-9fbe-454e-96f1-686560c0828b', 'main', '3200c766-9ea5-42c6-ba5e-4f839e8fd88f', 'Commercial Construction & Infrastructure', '/industries/commercial-construction-infrastructure', 6);
+insert into public.nav_items (id, location, parent_id, label, href, position) values ('76511558-a853-4f4d-be97-e6091b0a8781', 'main', '3200c766-9ea5-42c6-ba5e-4f839e8fd88f', 'Aerospace & Aviation', '/industries/aerospace-aviation', 7);
+insert into public.nav_items (id, location, parent_id, label, href, position) values ('95be9f0d-dc8d-4369-ba10-f0aac84b0f89', 'main', null, 'Pricing', '/monthly-seo-packages', 3);
+insert into public.nav_items (id, location, parent_id, label, href, position) values ('1aa2641f-50df-4576-b17d-f8d46bad0935', 'main', '95be9f0d-dc8d-4369-ba10-f0aac84b0f89', 'Monthly SEO Packages', '/monthly-seo-packages', 0);
+insert into public.nav_items (id, location, parent_id, label, href, position) values ('845d1eab-8f52-4bb6-9e17-bfdea7e41d8a', 'main', '95be9f0d-dc8d-4369-ba10-f0aac84b0f89', 'Launch Sprints', '/launch-sprints', 1);
+insert into public.nav_items (id, location, parent_id, label, href, position) values ('09559896-3bf7-495d-9a6a-8a65600e34dd', 'main', null, 'About', '/about', 4);
+insert into public.nav_items (id, location, parent_id, label, href, position) values ('39b7328c-18f6-4795-a1bf-0284c6cd2bb1', 'main', null, 'Contact', '/contact', 5);
+insert into public.nav_items (id, location, parent_id, label, href, position) values ('a4de9bb7-fac2-450d-bdfe-e7bca2286fed', 'footer', null, 'SEO Services', '', 0);
+insert into public.nav_items (id, location, parent_id, label, href, position) values ('445d1520-aead-494a-b6ab-036f1d1ccb89', 'footer', 'a4de9bb7-fac2-450d-bdfe-e7bca2286fed', 'Local SEO Services', '/local-seo-services', 0);
+insert into public.nav_items (id, location, parent_id, label, href, position) values ('be4273e1-5068-4daf-90eb-c9f9fe8ebc83', 'footer', 'a4de9bb7-fac2-450d-bdfe-e7bca2286fed', 'Traditional SEO Services', '/traditional-seo-services', 1);
+insert into public.nav_items (id, location, parent_id, label, href, position) values ('f7dda2a0-2265-4477-83e4-828c224663aa', 'footer', 'a4de9bb7-fac2-450d-bdfe-e7bca2286fed', 'Google Business Profile Optimization', '/google-business-profile-optimization', 2);
+insert into public.nav_items (id, location, parent_id, label, href, position) values ('7b78f031-b2b8-4e78-8eae-e026f23b8b28', 'footer', 'a4de9bb7-fac2-450d-bdfe-e7bca2286fed', 'SEO Reporting', '/seo-reporting', 3);
+insert into public.nav_items (id, location, parent_id, label, href, position) values ('28843a4e-56ab-478b-8356-6fbc4459adee', 'footer', null, 'Industries', '', 1);
+insert into public.nav_items (id, location, parent_id, label, href, position) values ('8a526d47-3358-427c-a3a4-157b1bd9a89e', 'footer', '28843a4e-56ab-478b-8356-6fbc4459adee', 'Home Services & Trades', '/industries/home-services-trades', 0);
+insert into public.nav_items (id, location, parent_id, label, href, position) values ('608ad8ac-3b25-414c-8f40-7892f412f8ea', 'footer', '28843a4e-56ab-478b-8356-6fbc4459adee', 'Healthcare & Wellness', '/industries/healthcare-wellness', 1);
+insert into public.nav_items (id, location, parent_id, label, href, position) values ('4ed6984a-51b2-4aae-85ce-75556d877522', 'footer', '28843a4e-56ab-478b-8356-6fbc4459adee', 'Hospitality & Attractions', '/industries/hospitality-attractions', 2);
+insert into public.nav_items (id, location, parent_id, label, href, position) values ('0b13dc08-94a8-4873-a40c-e9484394d6d7', 'footer', '28843a4e-56ab-478b-8356-6fbc4459adee', 'Professional Services', '/industries/professional-services', 3);
+insert into public.nav_items (id, location, parent_id, label, href, position) values ('3e895f93-b631-453c-84f1-9055279df530', 'footer', '28843a4e-56ab-478b-8356-6fbc4459adee', 'Energy & Petrochemical', '/industries/energy-petrochemical', 4);
+insert into public.nav_items (id, location, parent_id, label, href, position) values ('9379fd52-38b8-456b-a9ff-7305ffbc2e17', 'footer', '28843a4e-56ab-478b-8356-6fbc4459adee', 'Maritime & Logistics', '/industries/maritime-logistics', 5);
+insert into public.nav_items (id, location, parent_id, label, href, position) values ('452a58e5-3224-4732-9476-7ceeeacd9888', 'footer', '28843a4e-56ab-478b-8356-6fbc4459adee', 'Commercial Construction & Infrastructure', '/industries/commercial-construction-infrastructure', 6);
+insert into public.nav_items (id, location, parent_id, label, href, position) values ('8efde981-7cab-44df-bfc0-052745987364', 'footer', '28843a4e-56ab-478b-8356-6fbc4459adee', 'Aerospace & Aviation', '/industries/aerospace-aviation', 7);
+insert into public.nav_items (id, location, parent_id, label, href, position) values ('235e6c4c-b9f9-4ef6-bfae-f05a3de41346', 'footer', null, 'Company', '', 2);
+insert into public.nav_items (id, location, parent_id, label, href, position) values ('dc619db7-82f6-4f38-bc19-c271b26e1e53', 'footer', '235e6c4c-b9f9-4ef6-bfae-f05a3de41346', 'Monthly SEO Packages', '/monthly-seo-packages', 0);
+insert into public.nav_items (id, location, parent_id, label, href, position) values ('e3b88f5b-1ac7-437b-abe2-c0913d90cfdb', 'footer', '235e6c4c-b9f9-4ef6-bfae-f05a3de41346', 'Launch Sprints', '/launch-sprints', 1);
+insert into public.nav_items (id, location, parent_id, label, href, position) values ('28626ecb-ce2f-456b-a15c-584c5098d5dc', 'footer', '235e6c4c-b9f9-4ef6-bfae-f05a3de41346', 'About', '/about', 2);
+insert into public.nav_items (id, location, parent_id, label, href, position) values ('e01a0791-47b2-4dfc-9fc9-8c40f2d06089', 'footer', '235e6c4c-b9f9-4ef6-bfae-f05a3de41346', 'Contact', '/contact', 3);
 -- ------------------------------------------------------ homepage links ----
 -- Only the sections whose destinations or card counts changed. The rest of
 -- the homepage, including any copy edited in /admin, is left alone.

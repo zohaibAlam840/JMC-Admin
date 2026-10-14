@@ -128,8 +128,14 @@ export const aboutPage: PageContent = {
      * that explains something: how long he has done it, and where the
      * insistence on plain reporting came from.
      *
-     * "Twelve years" is his own figure and the only hard number here, so it
-     * is the one line to confirm before this page goes live.
+     * It reads "more than a decade" rather than "twelve years". Twelve was
+     * his own figure, but it came via an AI summary of his LinkedIn rather
+     * than from him directly, and a hard number is the one thing on this page
+     * that is either right or wrong with nothing in between. "More than a
+     * decade" is true at eleven, twelve or fifteen, and it ages without
+     * anyone having to remember to edit it. If he confirms the exact figure
+     * it is worth putting back — a specific number is better copy — but not
+     * at the cost of being the one checkable claim on the page and wrong.
      */
     {
       id: "narrowing",
@@ -147,7 +153,7 @@ export const aboutPage: PageContent = {
         // he sent, and a page that spends its length declining to make claims
         // about seniority should not open its one caption with two of them.
         role: "Founder",
-        bio: "Wendell has spent twelve years running a digital marketing agency, the last several of them on SEO alone. He came to it from sales and business development, which is where the insistence on plain reporting comes from: he spent years explaining numbers to people who did not want a dashboard.",
+        bio: "Wendell has spent more than a decade running a digital marketing agency, the last several years of it on SEO alone. He came to the work from sales and business development, which is where the insistence on plain reporting comes from: he spent years explaining numbers to people who did not want a dashboard.",
       },
       groups: [],
     },
