@@ -1,3 +1,5 @@
+import { Search } from "lucide-react";
+
 import { cn } from "@/lib/utils";
 import type { HeroShowcaseCard } from "@/lib/types";
 
@@ -41,6 +43,12 @@ import type { HeroShowcaseCard } from "@/lib/types";
  * server and the client hydrates mismatched, and a chart that redraws itself
  * on every render is noise rather than structure.
  */
+function hash(seed: string) {
+  let h = 0;
+  for (let i = 0; i < seed.length; i++) h = (h * 31 + seed.charCodeAt(i)) >>> 0;
+  return h.toString(36);
+}
+
 function pick<T>(options: T[], seed: string): T {
   let hash = 0;
   for (let i = 0; i < seed.length; i++) {
@@ -270,11 +278,21 @@ function Motif({
   kind,
   bars,
   seed,
+  idScope = "panel",
 }: {
   kind: HeroShowcaseCard["kind"];
   bars: number[];
   /** Varies the drawn shape between pages that share a motif. */
   seed: string;
+  /**
+   * Distinguishes two instances of the SAME card, which the collage hero
+   * has by construction: it renders every card twice, once floating for
+   * lg and once stacked below it. Seeding the gradient ids from the card
+   * alone gave both copies the same id, the visible one referenced the
+   * hidden one's definition, and the line did not paint -- leaving the
+   * endpoint dot, which is an HTML span, hanging on its own.
+   */
+  idScope?: string;
 }) {
   if (kind === "coverage") {
     // A service area, strongest around the middle. The same idea as the
@@ -317,6 +335,20 @@ function Motif({
      * chart would be built. A tooltip implies there is a value underneath to
      * read, and there is not.
      */
+    /*
+     * Gradient ids are per instance, not fixed strings.
+     *
+     * The collage hero renders its cards twice -- once absolutely
+     * positioned for lg and once as a grid below it -- and only one of the
+     * two is ever displayed. With a fixed id both copies declared the same
+     * gradient, the second referenced the first, and on a phone the first
+     * is inside a `hidden` subtree: the line simply did not paint. The
+     * endpoint dot is an HTML span, so it still showed, which made it look
+     * like a chart with its data missing.
+     */
+    const uid = hash(seed + "|" + idScope);
+    const lineId = `jmc-growth-line-${uid}`;
+    const fillId = `jmc-growth-fill-${uid}`;
     const ys = pick(GROWTH_CURVES, seed);
     const points = ys.map((y, i) => [(i * 200) / (ys.length - 1), y]);
     const line = points.map(([x, y]) => `${x},${y}`).join(" ");
@@ -333,11 +365,11 @@ function Motif({
           className="absolute inset-0 size-full overflow-visible"
         >
           <defs>
-            <linearGradient id="jmc-growth-line" x1="0" y1="0" x2="1" y2="0">
+            <linearGradient id={lineId} x1="0" y1="0" x2="1" y2="0">
               <stop offset="0" stopColor="var(--color-teal)" />
               <stop offset="1" stopColor="var(--color-blue)" />
             </linearGradient>
-            <linearGradient id="jmc-growth-fill" x1="0" y1="0" x2="0" y2="1">
+            <linearGradient id={fillId} x1="0" y1="0" x2="0" y2="1">
               <stop
                 offset="0"
                 stopColor="var(--color-teal)"
@@ -347,11 +379,11 @@ function Motif({
             </linearGradient>
           </defs>
 
-          <polygon points={`0,72 ${line} 200,72`} fill="url(#jmc-growth-fill)" />
+          <polygon points={`0,72 ${line} 200,72`} fill={`url(#${fillId})`} />
           <polyline
             points={line}
             fill="none"
-            stroke="url(#jmc-growth-line)"
+            stroke={`url(#${lineId})`}
             strokeWidth={2}
             strokeLinecap="round"
             strokeLinejoin="round"
@@ -682,29 +714,62 @@ export function HeroCardStack({ cards }: { cards: HeroShowcaseCard[] }) {
  * Deliberately smaller and plainer than the main hero panel: five of these
  * surround a headline, so each one is a glance rather than something to read.
  */
-function CollageCard({ card }: { card: HeroShowcaseCard }) {
-  const rows = "items" in card ? card.items.slice(0, 3) : [];
+/** A grey placeholder bar, standing in for a line of text in a wireframe. */
+function Ghost({ className }: { className?: string }) {
+  return <span className={cn("block rounded-full bg-surface-2", className)} />;
+}
+
+/**
+ * A wireframe of a search results page.
+ *
+ * The centrepiece of the collage, and the thing that makes the hero read as
+ * being about search rather than about dashboards. Everything in it is
+ * structure: a field, one result, a map pack. The body copy is grey bars
+ * rather than invented sentences.
+ *
+ * No third-party marks anywhere in it. The reference leans on Google's logo
+ * and colours, which are not JMC's to use and would imply an association
+ * that does not exist.
+ */
+function SerpMock({ card }: { card: HeroShowcaseCard & { kind: "serp" } }) {
+  const [title, url, ...rows] = card.items;
 
   return (
-    <div className="w-full rounded-card border border-line bg-white p-4 shadow-[0_10px_30px_rgba(16,24,40,0.10)]">
-      <span className="text-[0.625rem] font-semibold uppercase tracking-[0.08em] text-subtle">
-        {card.label}
-      </span>
-      <p className="mt-1 font-heading text-[0.9375rem] font-bold leading-tight text-ink-strong">
-        {card.title}
-      </p>
+    <div className="w-full overflow-hidden rounded-bento border border-line bg-white shadow-[0_18px_44px_rgba(16,24,40,0.14)]">
+      {/* The search field. */}
+      <div className="flex items-center gap-2 border-b border-line px-4 py-3">
+        <Search size={14} className="shrink-0 text-subtle" aria-hidden="true" />
+        <Ghost className="h-2 w-28" />
+        <span
+          aria-hidden="true"
+          className="ml-auto size-5 rounded-full bg-[linear-gradient(135deg,var(--color-teal),var(--color-blue))]"
+        />
+      </div>
 
-      {card.kind === "share" ? (
-        <div className="mt-3 flex items-center gap-3">
-          <div className="shrink-0 [&>svg]:size-12">
-            <ProfilePie
-              count={card.series.length}
-              weights={card.series.map((x) => x.value)}
-            />
+      <div className="flex flex-col gap-3 p-4">
+        {/* One organic result. */}
+        <div>
+          <p className="text-[0.8125rem] font-semibold leading-tight text-blue-ink">
+            {title}
+          </p>
+          <p className="mt-0.5 text-[0.6875rem] text-teal-ink">{url}</p>
+          <div className="mt-2 flex flex-col gap-1.5">
+            <Ghost className="h-1.5 w-full" />
+            <Ghost className="h-1.5 w-4/5" />
           </div>
-          <ul className="flex flex-col gap-1">
-            {card.series.slice(0, 3).map((item, i) => (
-              <li key={item.label} className="flex items-center gap-2">
+        </div>
+
+        {/* The map pack under it. */}
+        {rows.length ? (
+          <div className="rounded-card border border-line">
+            {rows.map((row, i) => (
+              <div
+                key={row}
+                className={cn(
+                  "flex items-center gap-2.5 px-3 py-2",
+                  i > 0 && "border-t border-line"
+                )}
+              >
                 <span
                   aria-hidden="true"
                   className={cn(
@@ -712,31 +777,149 @@ function CollageCard({ card }: { card: HeroShowcaseCard }) {
                     RING_DOTS[i % RING_DOTS.length]
                   )}
                 />
-                <span className="text-[0.6875rem] text-ink">{item.label}</span>
+                <span className="text-[0.6875rem] text-ink">{row}</span>
+                <Ghost className="ml-auto h-1.5 w-10" />
+              </div>
+            ))}
+          </div>
+        ) : null}
+      </div>
+    </div>
+  );
+}
+
+/**
+ * One floating panel in the collage.
+ *
+ * Each kind gets its own treatment rather than all of them being a title
+ * over a bullet list. That was the first version, and the client's note on
+ * it was that the reference is "not cards that we are showing" -- the panels
+ * there are each a different sort of widget, which is what stops the
+ * composition reading as a grid that happens to be scattered.
+ */
+function CollageCard({
+  card,
+  scope,
+}: {
+  card: HeroShowcaseCard;
+  /** Which of the two collage layouts this copy belongs to. */
+  scope: string;
+}) {
+  if (card.kind === "serp") return <SerpMock card={card} />;
+
+  const rows = "items" in card ? card.items.slice(0, 3) : [];
+  /* A tinted header strip, as on the reference's one coloured panel. */
+  const crowned = card.kind === "coverage";
+
+  return (
+    <div className="w-full overflow-hidden rounded-card border border-line bg-white shadow-[0_10px_30px_rgba(16,24,40,0.10)]">
+      {crowned ? (
+        <div className="bg-[linear-gradient(135deg,var(--color-teal),var(--color-blue))] px-4 py-2">
+          <span className="text-[0.625rem] font-semibold uppercase tracking-[0.08em] text-white">
+            {card.label}
+          </span>
+        </div>
+      ) : null}
+
+      <div className="p-4">
+        {crowned ? null : (
+          <span className="text-[0.625rem] font-semibold uppercase tracking-[0.08em] text-subtle">
+            {card.label}
+          </span>
+        )}
+        <p
+          className={cn(
+            "font-heading text-[0.9375rem] font-bold leading-tight text-ink-strong",
+            crowned ? "" : "mt-1"
+          )}
+        >
+          {card.title}
+        </p>
+
+        {card.kind === "share" ? (
+          <div className="mt-3 flex items-center gap-3">
+            <div className="shrink-0 [&>svg]:size-12">
+              <ProfilePie
+                count={card.series.length}
+                weights={card.series.map((x) => x.value)}
+              />
+            </div>
+            <ul className="flex flex-col gap-1">
+              {card.series.slice(0, 3).map((item, i) => (
+                <li key={item.label} className="flex items-center gap-2">
+                  <span
+                    aria-hidden="true"
+                    className={cn(
+                      "size-1.5 shrink-0 rounded-full",
+                      RING_DOTS[i % RING_DOTS.length]
+                    )}
+                  />
+                  <span className="text-[0.6875rem] text-ink">{item.label}</span>
+                </li>
+              ))}
+            </ul>
+          </div>
+        ) : card.kind === "scale" ? (
+          <div className="mt-3">
+            <ScaleChart series={card.series} unit={card.unit} compact />
+          </div>
+        ) : card.kind === "growth" ? (
+          /* A rising line, the way the reference's small stat panels carry
+             one. No axis and no figure: direction is all it claims. */
+          <div className="mt-3 flex flex-col gap-2">
+            <Motif kind="growth" bars={[]} seed={card.title} idScope={scope} />
+            <div className="flex flex-wrap gap-1">
+              {rows.map((row) => (
+                <span
+                  key={row}
+                  className="rounded-sm bg-surface px-1.5 py-0.5 text-[0.625rem] font-medium text-ink"
+                >
+                  {row}
+                </span>
+              ))}
+            </div>
+          </div>
+        ) : card.kind === "channels" ? (
+          /* Chips, so this panel is not another bullet list. */
+          <div className="mt-3 flex flex-wrap gap-1.5">
+            {rows.map((row) => (
+              <span
+                key={row}
+                className="rounded-sm bg-surface px-2 py-1 text-[0.6875rem] font-medium text-ink"
+              >
+                {row}
+              </span>
+            ))}
+          </div>
+        ) : card.kind === "roadmap" ? (
+          /* Numbered, with a rule down the side: a sequence, not a list. */
+          <ol className="mt-3 flex flex-col gap-2 border-l border-line pl-3">
+            {rows.map((row, i) => (
+              <li key={row} className="flex items-center gap-2">
+                <span className="font-heading text-[0.625rem] font-bold text-teal-ink">
+                  {String(i + 1).padStart(2, "0")}
+                </span>
+                <span className="text-[0.75rem] text-ink">{row}</span>
+              </li>
+            ))}
+          </ol>
+        ) : rows.length ? (
+          <ul className="mt-3 flex flex-col gap-1.5">
+            {rows.map((row, i) => (
+              <li key={row} className="flex items-center gap-2">
+                <span
+                  aria-hidden="true"
+                  className={cn(
+                    "size-1.5 shrink-0 rounded-full",
+                    RING_DOTS[i % RING_DOTS.length]
+                  )}
+                />
+                <span className="text-[0.75rem] text-ink">{row}</span>
               </li>
             ))}
           </ul>
-        </div>
-      ) : card.kind === "scale" ? (
-        <div className="mt-3">
-          <ScaleChart series={card.series} unit={card.unit} compact />
-        </div>
-      ) : rows.length ? (
-        <ul className="mt-3 flex flex-col gap-1.5">
-          {rows.map((row, i) => (
-            <li key={row} className="flex items-center gap-2">
-              <span
-                aria-hidden="true"
-                className={cn(
-                  "size-1.5 shrink-0 rounded-full",
-                  RING_DOTS[i % RING_DOTS.length]
-                )}
-              />
-              <span className="text-[0.75rem] text-ink">{row}</span>
-            </li>
-          ))}
-        </ul>
-      ) : null}
+        ) : null}
+      </div>
     </div>
   );
 }
@@ -774,32 +957,45 @@ const COLLAGE_SLOTS = [
   // it. A percentage is circular here: the padding that makes room for this
   // card also makes the frame taller, which pushes the card down again, and
   // the first version of it hung 98px past the end of the band.
-  "lg:bottom-2 lg:left-1/2 lg:w-[15rem] lg:-translate-x-1/2",
+  // The centre panel is the search mock, so it is wider than the rest.
+  "lg:bottom-2 lg:left-1/2 lg:w-[20rem] lg:-translate-x-1/2",
 ];
 
-export function HeroCollage({ cards }: { cards: HeroShowcaseCard[] }) {
-  const shown = cards.slice(0, COLLAGE_SLOTS.length);
-
+/**
+ * The floating layer: cards placed around the copy, lg and up only.
+ *
+ * Rendered before the copy so it sits behind it, and absolutely
+ * positioned so it takes no space in the flow.
+ */
+export function HeroCollageFloating({ cards }: { cards: HeroShowcaseCard[] }) {
   return (
-    <>
-      {/* lg and up: floating. */}
-      <div
-        aria-hidden="true"
-        className="pointer-events-none absolute inset-0 hidden lg:block"
-      >
-        {shown.map((card, i) => (
-          <div key={card.title} className={cn("absolute", COLLAGE_SLOTS[i])}>
-            <CollageCard card={card} />
-          </div>
-        ))}
-      </div>
+    <div
+      aria-hidden="true"
+      className="pointer-events-none absolute inset-0 hidden lg:block"
+    >
+      {cards.slice(0, COLLAGE_SLOTS.length).map((card, i) => (
+        <div key={card.title} className={cn("absolute", COLLAGE_SLOTS[i])}>
+          <CollageCard card={card} scope="float" />
+        </div>
+      ))}
+    </div>
+  );
+}
 
-      {/* Below lg: a plain grid under the copy. */}
-      <div className="mt-12 grid w-full gap-4 sm:grid-cols-2 lg:hidden">
-        {shown.map((card) => (
-          <CollageCard key={card.title} card={card} />
-        ))}
-      </div>
-    </>
+/**
+ * The same cards as an ordinary stack, below lg.
+ *
+ * A separate component from the floating layer, and that is the whole
+ * point: it has to render AFTER the hero copy. When both layouts lived in
+ * one component the stacked cards came out above the headline, so a phone
+ * opened the site on four panels with the H1 somewhere below them.
+ */
+export function HeroCollageStack({ cards }: { cards: HeroShowcaseCard[] }) {
+  return (
+    <div className="mt-12 grid w-full gap-4 sm:grid-cols-2 lg:hidden">
+      {cards.slice(0, COLLAGE_SLOTS.length).map((card) => (
+        <CollageCard key={card.title} card={card} scope="stack" />
+      ))}
+    </div>
   );
 }

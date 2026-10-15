@@ -17,6 +17,21 @@ export async function restGet<T>(
 ): Promise<T | null> {
   if (!supabaseConfigured) return null;
 
+  /*
+   * Localhost always reads live.
+   *
+   * In production this cache is the point: a tagged read invalidated the
+   * moment an admin hits Publish. In development it is a trap. Content on
+   * this project is applied by pasting SQL into the Supabase editor, which
+   * nothing in the app knows about, so the cached copy stayed for five
+   * minutes -- and because it is written to .next/cache it survived
+   * restarting the dev server, which is the obvious thing to try. The
+   * symptom is a page that keeps showing old content after the SQL has
+   * definitely been run, which on this project is indistinguishable from
+   * the SQL not having been run. That has cost hours.
+   */
+  const live = process.env.NODE_ENV === "development";
+
   try {
     const res = await fetch(`${SUPABASE_URL}/rest/v1/${path}`, {
       headers: {
@@ -24,8 +39,9 @@ export async function restGet<T>(
         Authorization: `Bearer ${SUPABASE_ANON_KEY}`,
         Accept: "application/json",
       },
-      cache: "force-cache",
-      next: { tags, revalidate },
+      ...(live
+        ? { cache: "no-store" as const }
+        : { cache: "force-cache" as const, next: { tags, revalidate } }),
     });
 
     if (!res.ok) return null;

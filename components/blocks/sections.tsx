@@ -28,7 +28,10 @@ import { SearchGrid } from "@/components/blocks/search-grid";
 import { FourQuestions } from "@/components/blocks/four-questions";
 import { RecapExample } from "@/components/blocks/recap-example";
 import { AuditForm } from "@/components/blocks/audit-form";
-import { HeroCollage } from "@/components/blocks/hero-card-stack";
+import {
+  HeroCollageFloating,
+  HeroCollageStack,
+} from "@/components/blocks/hero-card-stack";
 import { WaiverMatrix } from "@/components/blocks/waiver-matrix";
 import { LinkStack } from "@/components/blocks/link-stack";
 import { TabbedList } from "@/components/blocks/tabbed-list";
@@ -148,7 +151,7 @@ function HeroCentered({ section }: { section: HeroCenteredSection }) {
         */}
         <div className="relative">
           {section.collage?.length ? (
-            <HeroCollage cards={section.collage} />
+            <HeroCollageFloating cards={section.collage} />
           ) : null}
         <div
           className={cn(
@@ -206,6 +209,13 @@ function HeroCentered({ section }: { section: HeroCenteredSection }) {
             </Reveal>
           ) : null}
         </div>
+
+          {/* Below lg the cards stack, and they must come after the copy:
+              rendered before it, a phone opens the site on four panels
+              with the headline somewhere underneath them. */}
+          {section.collage?.length ? (
+            <HeroCollageStack cards={section.collage} />
+          ) : null}
         </div>
       </Container>
     </section>

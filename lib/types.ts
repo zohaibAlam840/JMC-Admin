@@ -166,6 +166,22 @@ export type HeroShowcaseCard =
    * what a named package includes each month, printed on the pricing page.
    * Never results, and never a blend of a package with anything estimated.
    */
+  /**
+   * A wireframe of a search result, for the middle of the collage hero.
+   *
+   * The reference the client sent puts a mock search page at the centre of
+   * the composition, and it is the piece that makes the hero read as being
+   * about search rather than about dashboards. Drawn as a wireframe: a
+   * search field, one result, and a three-row map pack, with the body text
+   * as grey bars rather than invented copy.
+   *
+   * No third-party marks. The reference uses Google's logo and colours; this
+   * does not, because the site is not Google's and must not imply it is.
+   *
+   * items[0] is the result title, items[1] the URL line, and the rest are
+   * the map-pack rows.
+   */
+  | (ShowcaseBase & { kind: "serp"; items: string[] })
   | (ShowcaseBase & {
       kind: "share";
       /** What the figures count. Drawn under the legend. */

@@ -48,16 +48,27 @@ export const homePage: PageContent = {
       },
       collage: [
         {
+          // Top left: the recap, which is the site's whole argument.
           kind: "report",
           label: "Every month",
           title: "Monthly Recap",
           items: ["What was done", "Why it matters", "What changed"],
         },
         {
+          // Mid left, drawn as a rising line. Direction only -- no axis,
+          // no scale, no figure.
+          kind: "growth",
+          label: "Over time",
+          title: "Visibility Built",
+          items: ["Search", "Maps", "Local grid"],
+        },
+        {
+          // Top right, the one panel with a coloured header, standing in
+          // for the reference's orange card.
           kind: "coverage",
           label: "Where you appear",
-          title: "Search Visibility",
-          items: ["Search", "Maps", "Local grid"],
+          title: "Local Surfaces",
+          items: ["Map results", "Local search", "Profile panel"],
         },
         {
           kind: "roadmap",
@@ -66,23 +77,22 @@ export const homePage: PageContent = {
           items: ["Priorities set", "Content queued", "Fixes tracked"],
         },
         {
-          kind: "channels",
-          label: "Two paths",
-          title: "Sorted by Reach",
-          items: ["Local SEO", "Traditional SEO"],
-        },
-        {
-          // The one panel carrying figures, and they are published scope:
-          // the tracked-keyword ceiling on each Local tier, printed on the
-          // pricing page. Keep it in step with those packages.
-          kind: "scale",
-          label: "Local tiers",
-          title: "Tracked Keywords",
-          unit: "per month, up to",
-          series: [
-            { label: "Neighborhood", value: 30 },
-            { label: "Citywide", value: 45 },
-            { label: "Metro", value: 60 },
+          /*
+           * The centrepiece, under the buttons: a wireframe of a results
+           * page. The reference puts a mock search page here and it is the
+           * piece that makes the hero read as being about search. Drawn
+           * without any third-party logo -- the reference uses Google's,
+           * which is not JMC's to put on its own homepage.
+           */
+          kind: "serp",
+          label: "What a result looks like",
+          title: "Found, Then Chosen",
+          items: [
+            "Jordan Marketing Consultants",
+            "jordanmarketingconsultants.com",
+            "Map pack",
+            "Local search",
+            "Profile panel",
           ],
         },
       ],

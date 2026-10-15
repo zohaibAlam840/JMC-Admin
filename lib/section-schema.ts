@@ -118,6 +118,7 @@ const showcaseCards: Field = {
         { value: "profile", label: "Profile — a pie, one wedge per line" },
         { value: "scale", label: "Scale — a bar chart of published figures" },
         { value: "share", label: "Share — a pie of published figures" },
+        { value: "serp", label: "Search result — a wireframe of a results page" },
         { value: "stat", label: "Stats — three figures with labels" },
       ],
     },
@@ -132,6 +133,7 @@ const showcaseCards: Field = {
     growth: [{ name: "items", label: "Stages", kind: "stringList" }],
     channels: [{ name: "items", label: "Channels", kind: "stringList" }],
     profile: [{ name: "items", label: "Parts", kind: "stringList" }],
+    serp: [{ name: "items", label: "Result title, URL, then map-pack rows", kind: "stringList" }],
     share: [
       {
         name: "unit",
