@@ -91,7 +91,17 @@ export const traditionalSeoPage: PageContent = {
       columns: 4,
       eyebrow: "Is This You",
       heading: "Who Traditional SEO Is For",
-      body: "All four describe reach rather than size. One address selling nationally belongs here; seven addresses inside one metro does not.",
+      body: "The first four describe reach rather than size: one address selling nationally belongs here, seven addresses inside one metro does not. The four below them are the sectors that usually have that reach.",
+      /*
+       * "Common Fits" used to be a section of its own directly below this
+       * one. Merged on instruction, with a label rather than a second band:
+       * "included within the Is This You section just below the 4 cards,
+       * keeping all of it the same background colour."
+       */
+      groupLabels: [
+        { at: 0, label: "Who it is for" },
+        { at: 4, label: "Industries that usually land here" },
+      ],
       cards: [
         {
           title: "Multiple Markets",
@@ -113,7 +123,32 @@ export const traditionalSeoPage: PageContent = {
           icon: "clipboard-check",
           body: "Procurement, requests for quotes and research-heavy purchases rather than a phone call. Several people search for different things before one decision is made.",
         },
+        {
+          title: "Energy & Petrochemical",
+          icon: "lightning",
+          body: "Suppliers and service firms found by specification, standard and part number rather than by name.",
+          href: "/industries/energy-petrochemical",
+        },
+        {
+          title: "Maritime & Logistics",
+          icon: "ship",
+          body: "Port, freight and marine businesses searched by route, mode and capability.",
+          href: "/industries/maritime-logistics",
+        },
+        {
+          title: "Commercial Construction",
+          icon: "hard-hat",
+          body: "Contractors, civil firms and suppliers qualified on project type long before any bid conversation.",
+          href: "/industries/commercial-construction-infrastructure",
+        },
+        {
+          title: "Aerospace & Aviation",
+          icon: "plane",
+          body: "Manufacturers and service providers where certification is the first filter a buyer applies.",
+          href: "/industries/aerospace-aviation",
+        },
       ],
+      cta: { label: "Explore Industries", href: "/industries" },
     },
 
     {
@@ -156,63 +191,78 @@ export const traditionalSeoPage: PageContent = {
     },
 
     {
-      id: "industries",
-      type: "cardGrid",
+      id: "packages",
+      type: "pricingCards",
       tone: "surface",
-      variant: "cards",
-      columns: 4,
-      eyebrow: "Common Fits",
-      heading: "Industries That Usually Land Here",
-      body: "Businesses in other industries fit here too when they compete across several markets. Reach matters more than sector.",
-      cards: [
-        {
-          title: "Energy & Petrochemical",
-          icon: "lightning",
-          body: "Suppliers and service firms found by specification, standard and part number rather than by name.",
-          href: "/industries/energy-petrochemical",
-        },
-        {
-          title: "Maritime & Logistics",
-          icon: "ship",
-          body: "Port, freight and marine businesses searched by route, mode and capability.",
-          href: "/industries/maritime-logistics",
-        },
-        {
-          title: "Commercial Construction",
-          icon: "hard-hat",
-          body: "Contractors, civil firms and suppliers qualified on project type long before any bid conversation.",
-          href: "/industries/commercial-construction-infrastructure",
-        },
-        {
-          title: "Aerospace & Aviation",
-          icon: "plane",
-          body: "Manufacturers and service providers where certification is the first filter a buyer applies.",
-          href: "/industries/aerospace-aviation",
-        },
+      eyebrow: "Pricing",
+      heading: "Traditional SEO Packages",
+      body: "Three tiers, sized by footprint. Every tier includes all five deliverables above.",
+      packageIds: [
+        "traditional-regional",
+        "traditional-national",
+        "traditional-national-plus",
       ],
-      cta: { label: "Explore Industries", href: "/industries" },
     },
 
+    /*
+     * Callout A. Plain text below the cards, routing to /contact for a quote.
+     *
+     * It was one sentence and a button, which the client read as "a little
+     * naked ... too white-spaced", and the sentence covered so little that
+     * the section looked like two things happening rather than a real offer.
+     * It now says what actually happens and in what order, which is both the
+     * missing detail and the missing height.
+     *
+     * Still open: he wants a CTA here aimed at a larger engagement -- "the
+     * visibility request really ain't gonna do it ... something more like a
+     * request for proposal for traditional SEO" -- and noted the decisions
+     * record freezes the CTA set. That is a label decision, not a layout one,
+     * so the governed label stays until it is made.
+     */
     {
-      id: "footprint",
-      type: "featureSplit",
+      id: "custom-scope",
+      type: "fullWidthText",
+      tone: "surface",
+      heading: "Working With Something Bigger?",
+      body: "Some engagements do not fit a tier. Several brands under one owner, a dozen service lines, a migration running alongside the SEO work, or a footprint wider than National+ covers.\n\nThose get scoped rather than priced from a card. JMC looks at the sites, the markets and the competitive field, and comes back with what the work would involve, what it would cost, and what the first quarter would be spent on. The same monthly recap applies whatever the size.",
+      cta: { label: "Request a Visibility Review", href: "/contact" },
+    },
+
+    /*
+     * Callout B. Two sprints apply here and they map differently from the
+     * Local page, where one sprint unlocks all three tiers. Both rows have to
+     * be shown or the waiver reads as a blanket one.
+     */
+    {
+      id: "sprint-callout",
+      type: "waiverMatrix",
+      /*
+       * Tinted, and that is the fix for "this is just one long section ...
+       * we can create a bridge right here, or a gap, or a break right there".
+       * Three white sections ran together -- pricing, the custom-scope
+       * callout and this -- so the page read as one slab from the cards to
+       * the recap. The tone change is the break.
+       */
       tone: "white",
-      align: "left",
-      eyebrow: "Coverage",
-      heading: "Coverage That Scales With the Business",
-      body: "The three tiers are not different services. They are the same work applied to a wider footprint: more keywords tracked, more competitors watched, and more strategic pages produced each month.\n\nWhich one fits comes out of the visibility review rather than out of a headcount. A business competing in two states against four serious competitors is a different problem from one competing nationally against ten, and the coverage is what has to match.",
-      // The one permitted table on a service page. It compares scale rather
-      // than packages, which is exactly what keeps the pricing cards below it
-      // from having to carry the comparison themselves.
-      tableHeadings: ["", "Regional", "National", "National+"],
-      tableRows: [
-        { cells: ["Tracked keywords", "Up to 60", "Up to 75", "Up to 90"] },
-        { cells: ["Tracked competitors", "Up to 5", "Up to 8", "Up to 10"] },
+      eyebrow: "Another Way In",
+      heading: "Or Start With a Launch Sprint",
+      // "What's a sprint?" was the client's question against this copy, so
+      // the first sentence now answers it before the terms arrive.
+      body: "A Launch Sprint is a fixed-scope piece of work bought once rather than monthly: the audit, the technical foundation and the first set of pages, done in one pass so a campaign does not spend its first two months on groundwork.\n\nEach sprint is one-time, completed within 30 days, and finishes with a 30-day roadmap. Begin monthly service within 30 days of the sprint completing and the onboarding fee on the matching package is waived.",
+      sprintHeading: "Sprint",
+      priceHeading: "One-time",
+      waivesHeading: "Waives onboarding on",
+      rows: [
+        { sprint: "Regional Launch Sprint", price: "$1,495", waives: "Regional" },
         {
-          cells: ["Strategic pages a month", "Up to 2", "Up to 3", "Up to 4"],
+          sprint: "National Launch Sprint",
+          price: "$2,295",
+          waives: "National or National+",
         },
       ],
-      groups: [],
+      condition:
+        "Monthly service must begin within 30 calendar days of sprint completion.",
+      cta: { label: "View Launch Sprints", href: "/launch-sprints" },
     },
 
     {
@@ -244,101 +294,31 @@ export const traditionalSeoPage: PageContent = {
     },
 
     {
-      id: "packages",
-      type: "pricingCards",
+      id: "footprint",
+      type: "featureSplit",
       tone: "white",
-      eyebrow: "Pricing",
-      heading: "Traditional SEO Packages",
-      body: "Three tiers, sized by footprint. Every tier includes all five deliverables above.",
-      packageIds: [
-        "traditional-regional",
-        "traditional-national",
-        "traditional-national-plus",
-      ],
-    },
-
-    /*
-     * Callout A. Plain text below the cards, routing to /contact for a quote.
-     *
-     * It was one sentence and a button, which the client read as "a little
-     * naked ... too white-spaced", and the sentence covered so little that
-     * the section looked like two things happening rather than a real offer.
-     * It now says what actually happens and in what order, which is both the
-     * missing detail and the missing height.
-     *
-     * Still open: he wants a CTA here aimed at a larger engagement -- "the
-     * visibility request really ain't gonna do it ... something more like a
-     * request for proposal for traditional SEO" -- and noted the decisions
-     * record freezes the CTA set. That is a label decision, not a layout one,
-     * so the governed label stays until it is made.
-     */
-    {
-      id: "custom-scope",
-      type: "fullWidthText",
-      tone: "white",
-      heading: "Working With Something Bigger?",
-      body: "Some engagements do not fit a tier. Several brands under one owner, a dozen service lines, a migration running alongside the SEO work, or a footprint wider than National+ covers.\n\nThose get scoped rather than priced from a card. JMC looks at the sites, the markets and the competitive field, and comes back with what the work would involve, what it would cost, and what the first quarter would be spent on. The same monthly recap applies whatever the size.",
-      cta: { label: "Request a Visibility Review", href: "/contact" },
-    },
-
-    /*
-     * Callout B. Two sprints apply here and they map differently from the
-     * Local page, where one sprint unlocks all three tiers. Both rows have to
-     * be shown or the waiver reads as a blanket one.
-     */
-    {
-      id: "sprint-callout",
-      type: "waiverMatrix",
-      /*
-       * Tinted, and that is the fix for "this is just one long section ...
-       * we can create a bridge right here, or a gap, or a break right there".
-       * Three white sections ran together -- pricing, the custom-scope
-       * callout and this -- so the page read as one slab from the cards to
-       * the recap. The tone change is the break.
-       */
-      tone: "surface",
-      eyebrow: "Another Way In",
-      heading: "Or Start With a Launch Sprint",
-      // "What's a sprint?" was the client's question against this copy, so
-      // the first sentence now answers it before the terms arrive.
-      body: "A Launch Sprint is a fixed-scope piece of work bought once rather than monthly: the audit, the technical foundation and the first set of pages, done in one pass so a campaign does not spend its first two months on groundwork.\n\nEach sprint is one-time, completed within 30 days, and finishes with a 30-day roadmap. Begin monthly service within 30 days of the sprint completing and the onboarding fee on the matching package is waived.",
-      sprintHeading: "Sprint",
-      priceHeading: "One-time",
-      waivesHeading: "Waives onboarding on",
-      rows: [
-        { sprint: "Regional Launch Sprint", price: "$1,495", waives: "Regional" },
+      align: "left",
+      eyebrow: "Coverage",
+      heading: "Coverage That Scales With the Business",
+      body: "The three tiers are not different services. They are the same work applied to a wider footprint: more keywords tracked, more competitors watched, and more strategic pages produced each month.\n\nWhich one fits comes out of the visibility review rather than out of a headcount. A business competing in two states against four serious competitors is a different problem from one competing nationally against ten, and the coverage is what has to match.",
+      // The one permitted table on a service page. It compares scale rather
+      // than packages, which is exactly what keeps the pricing cards below it
+      // from having to carry the comparison themselves.
+      tableHeadings: ["", "Regional", "National", "National+"],
+      tableRows: [
+        { cells: ["Tracked keywords", "Up to 60", "Up to 75", "Up to 90"] },
+        { cells: ["Tracked competitors", "Up to 5", "Up to 8", "Up to 10"] },
         {
-          sprint: "National Launch Sprint",
-          price: "$2,295",
-          waives: "National or National+",
+          cells: ["Strategic pages a month", "Up to 2", "Up to 3", "Up to 4"],
         },
       ],
-      condition:
-        "Monthly service must begin within 30 calendar days of sprint completion.",
-      cta: { label: "View Launch Sprints", href: "/launch-sprints" },
-    },
-
-    {
-      id: "monthly-recap",
-      type: "reportingBlock",
-      tone: "surface",
-      eyebrow: "Reporting",
-      heading: "The Monthly Recap",
-      body: "Four questions, every month, in the same order.",
-      did: "The pages built, the technical issues fixed, the recommendations made, named individually.",
-      why: "Why that work was the priority ahead of everything else in the queue.",
-      changed: "Movement across the tracked keyword and competitor set, including the months where little moved.",
-      next: "What is queued for the coming month, written down before it starts.",
-      cta: {
-        label: "See How JMC Reports SEO Progress",
-        href: "/seo-reporting",
-      },
+      groups: [],
     },
 
     {
       id: "faq",
       type: "faq",
-      tone: "white",
+      tone: "surface",
       eyebrow: "Questions",
       heading: "Traditional SEO Questions",
       items: [

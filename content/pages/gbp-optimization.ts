@@ -146,26 +146,6 @@ export const gbpOptimizationPage: PageContent = {
     },
 
     {
-      id: "free-audit",
-      type: "auditForm",
-      eyebrow: "Free Profile Audit",
-      heading: "Get a Free Google Business Profile Audit",
-      body: "A written audit of the profile, and of the site behind it, built on the same four headings as the monthly recap: what is there, why it matters, what is working and what is not, and what to do next.",
-      covers: [
-        "Categories, services and business information",
-        "Listing consistency across the web",
-        "Profile activity, photos and reviews",
-        "Where the profile is visible across the service area",
-      ],
-      note: "No call required.",
-      submitLabel: "Get a Free Google Business Profile Audit",
-      profileHelp: "Optional. Paste the map listing link if you have it handy.",
-      // The CRM tag. Renamed with the rest, but note that leads captured
-      // before 2026-10-14 carry the old "Free Visibility Audit" string.
-      source: "Free Profile Audit",
-    },
-
-    {
       id: "what-jmc-does",
       type: "cardGrid",
       tone: "surface",
@@ -219,23 +199,6 @@ export const gbpOptimizationPage: PageContent = {
     },
 
     {
-      id: "monthly-recap",
-      type: "reportingBlock",
-      tone: "surface",
-      eyebrow: "Reporting",
-      heading: "The Monthly Recap",
-      body: "Profile work is easy to do invisibly, which is exactly why it gets reported the same way as everything else.",
-      did: "The posts published, the listings corrected, the reviews replied to, named individually.",
-      why: "Why that work was the priority, and what it was expected to affect.",
-      changed: "Grid visibility across the service area, compared with last month, including the quiet ones.",
-      next: "What is queued for the coming month, written down before it starts.",
-      cta: {
-        label: "See How JMC Reports SEO Progress",
-        href: "/seo-reporting",
-      },
-    },
-
-    {
       id: "faq",
       type: "faq",
       tone: "white",
@@ -277,18 +240,23 @@ export const gbpOptimizationPage: PageContent = {
     },
 
     {
-      id: "final-cta",
-      type: "finalCta",
-      heading: "Start With the Profile",
-      /*
-       * One button, and the same one the page opened with. It used to be a
-       * Visibility Review beside a Launch Sprint, which the client rejected
-       * on two counts in the 2026-10-14 review: it was a choice between two
-       * paid things on a page that is meant to be educational, and it asked
-       * for something different from the offer made three times above it.
-       */
-      body: "The audit says what the profile is missing, what it is costing, and what to do about it first. It is the same four headings as the monthly recap, written before anyone has paid for anything.",
-      primaryCta: { label: "Get a Free Google Business Profile Audit", href: "#free-audit" },
+      id: "free-audit",
+      type: "auditForm",
+      eyebrow: "Free Profile Audit",
+      heading: "Get a Free Google Business Profile Audit",
+      body: "A written audit of the profile, and of the site behind it, built on the same four headings as the monthly recap: what is there, why it matters, what is working and what is not, and what to do next.",
+      covers: [
+        "Categories, services and business information",
+        "Listing consistency across the web",
+        "Profile activity, photos and reviews",
+        "Where the profile is visible across the service area",
+      ],
+      note: "No call required.",
+      submitLabel: "Get a Free Google Business Profile Audit",
+      profileHelp: "Optional. Paste the map listing link if you have it handy.",
+      // The CRM tag. Renamed with the rest, but note that leads captured
+      // before 2026-10-14 carry the old "Free Visibility Audit" string.
+      source: "Free Profile Audit",
     },
   ],
 };

@@ -152,10 +152,61 @@ export const seoPackagesPage: PageContent = {
     {
       id: "local-custom",
       type: "fullWidthText",
+      treatment: "note",
       tone: "white",
       heading: "Bigger Than Metro?",
       body: "If the scope is bigger or more involved than what is here, JMC will look at it and put together a quote. That is still a Local engagement, however many locations are involved.",
       cta: { label: "Request a Visibility Review", href: "/contact" },
+    },
+
+    {
+      id: "local-onboarding",
+      type: "featureSplit",
+      tone: "white",
+      align: "left",
+      eyebrow: "The One-Time Fee",
+      heading: "What Local Onboarding Covers",
+      body: "Every Local tier carries a one-time onboarding fee, from $349 to $649. It pays for the work that has to happen once before the monthly work means anything: nothing built on an unaudited foundation is worth reporting on.",
+      groups: [
+        {
+          title: "Kickoff and access setup",
+          body: "Accounts, permissions and the handover needed before anything can be audited.",
+        },
+        {
+          title: "Local SEO audit",
+          body: "The current foundation reviewed end to end, with findings ranked by impact.",
+        },
+        {
+          title: "Local keyword and competitor snapshot",
+          body: "What the business should be found for, and who is currently being found instead.",
+        },
+        {
+          title: "Search Console and Bing setup",
+          body: "Set up or verified, so the reporting has something real behind it from month one.",
+        },
+        {
+          title: "Google Business Profile audit and core optimization",
+          body: "Categories, services, hours and the fields that decide whether the profile shows at all.",
+        },
+        {
+          title: "Citation audit and NAP standard",
+          body: "One agreed name, address and phone format, and a list of where it is currently wrong.",
+        },
+        {
+          title: "Schema, sitemap and robots.txt review",
+          body: "The technical files that decide what search engines can read.",
+        },
+        {
+          title: "Titles and meta descriptions",
+          body: "Written for the priority pages rather than generated across the whole site.",
+        },
+        {
+          title: "Local search grid baseline",
+          body: "Where the business ranks across the service area today, so later months have something to compare against.",
+        },
+          
+      ],
+      cta: { label: "Get Started", href: "/contact" },
     },
 
     {
@@ -233,6 +284,7 @@ export const seoPackagesPage: PageContent = {
     {
       id: "traditional-custom",
       type: "fullWidthText",
+      treatment: "note",
       tone: "surface",
       heading: "Bigger Than National+?",
       body: "If the footprint is wider or the search landscape more competitive than what is published here, JMC will look at the scope and put together a quote rather than forcing it into a tier that does not fit.",
@@ -241,123 +293,44 @@ export const seoPackagesPage: PageContent = {
 
 
     {
-      id: "onboarding",
+      id: "traditional-onboarding",
       type: "featureSplit",
-      tone: "white",
+      tone: "surface",
       align: "left",
       eyebrow: "The One-Time Fee",
-      heading: "What Onboarding Covers",
-      body: "Every tier carries a one-time onboarding fee, from $349 to $1,295 depending on the package. It pays for the work that has to happen once before the monthly work means anything: nothing built on an unaudited foundation is worth reporting on.\n\nThe two scopes are genuinely different rather than one generic setup with two price tags. Switch between them to see what each one actually covers.\n\nA Launch Sprint is this same work bought standalone, which is why it waives the fee rather than discounting it. The next section sets out which sprint waives which package.",
-      /*
-       * Replaces a two-row table, by instruction: "we'll be a little more
-       * detailed and explain exactly what onboarding is for each side...
-       * almost like a toggled table, where if it's on local SEO, it'll break
-       * down onboarding, and then if you toggle it over, traditional SEO."
-       *
-       * DRAFT CONTENT, and derived rather than invented. This page already
-       * argues that a Launch Sprint is "the onboarding work done standalone",
-       * so the two lists are the published sprint deliverables with the
-       * 30-Day Action Roadmap removed — the roadmap is what a sprint adds on
-       * top, and it is not part of onboarding on a monthly package.
-       *
-       * Local follows the Neighborhood sprint, Traditional follows Regional.
-       * That keeps this section consistent with the sprint page by
-       * construction: if those deliverables change, these should change with
-       * them. Worth Wendell confirming against what onboarding actually runs,
-       * since this is the one section where being wrong means charging for
-       * something that does not happen.
-       */
-      tabs: [
+      heading: "What Traditional Onboarding Covers",
+      body: "Every Traditional tier carries a one-time onboarding fee, from $895 to $1,295. The scope is genuinely different from Local rather than the same setup at a higher price: the audit covers a whole site across several markets, not a profile in one area.",
+      groups: [
         {
-          label: "Local SEO",
-          items: [
-            {
-              title: "Kickoff and access setup",
-              body: "Accounts, permissions and the handover needed before anything can be audited.",
-            },
-            {
-              title: "Local SEO audit",
-              body: "The current foundation reviewed end to end, with findings ranked by impact.",
-            },
-            {
-              title: "Local keyword and competitor snapshot",
-              body: "What the business should be found for, and who is currently being found instead.",
-            },
-            {
-              title: "Search Console and Bing setup",
-              body: "Set up or verified, so the reporting has something real behind it from month one.",
-            },
-            {
-              title: "Google Business Profile audit and core optimization",
-              body: "Categories, services, hours and the fields that decide whether the profile shows at all.",
-            },
-            {
-              title: "Citation audit and NAP standard",
-              body: "One agreed name, address and phone format, and a list of where it is currently wrong.",
-            },
-            {
-              title: "Schema, sitemap and robots.txt review",
-              body: "The technical files that decide what search engines can read.",
-            },
-            {
-              title: "Titles and meta descriptions",
-              body: "Written for the priority pages rather than generated across the whole site.",
-            },
-            {
-              title: "Local search grid baseline",
-              body: "Where the business ranks across the service area today, so later months have something to compare against.",
-            },
-          ],
+          title: "Kickoff and access setup",
+          body: "Accounts, permissions and the handover needed before anything can be audited.",
         },
         {
-          label: "Traditional SEO",
-          items: [
-            {
-              title: "Kickoff and access setup",
-              body: "Accounts, permissions and the handover needed before anything can be audited.",
-            },
-            {
-              title: "Technical and on-page SEO audit",
-              body: "A full review across the site rather than a local profile, since the competition is not in one area.",
-            },
-            {
-              title: "Keyword and competitor analysis",
-              body: "Across every market and service line in scope, not a single radius.",
-            },
-            {
-              title: "Search Console and Bing setup",
-              body: "Set up or verified, so the reporting has something real behind it from month one.",
-            },
-            {
-              title: "Schema, sitemap and robots.txt review",
-              body: "The technical files that decide what search engines can read.",
-            },
-            {
-              title: "Titles and meta descriptions",
-              body: "Written for the priority pages rather than generated across the whole site.",
-            },
-            {
-              title: "Backlink audit",
-              body: "What authority already exists and what is actively working against it.",
-            },
-          ],
+          title: "Technical and on-page SEO audit",
+          body: "A full review across the site rather than a local profile, since the competition is not in one area.",
         },
+        {
+          title: "Keyword and competitor analysis",
+          body: "Across every market and service line in scope, not a single radius.",
+        },
+        {
+          title: "Search Console and Bing setup",
+          body: "Set up or verified, so the reporting has something real behind it from month one.",
+        },
+        {
+          title: "Schema, sitemap and robots.txt review",
+          body: "The technical files that decide what search engines can read.",
+        },
+        {
+          title: "Titles and meta descriptions",
+          body: "Written for the priority pages rather than generated across the whole site.",
+        },
+        {
+          title: "Backlink audit",
+          body: "What authority already exists and what is actively working against it.",
+        },
+          
       ],
-      groups: [],
-      /*
-       * "Not the right CTA here. We need something like a get started."
-       *
-       * It was "View Launch Sprints", which was wrong twice over. It pointed
-       * sideways at the moment the reader has just finished understanding
-       * what they are paying for, and the very next section is the sprint
-       * waiver carrying the same link — so the page asked twice and the first
-       * ask was the weaker one.
-       *
-       * "Get Started" is his wording. It is more generic than the labels
-       * elsewhere on this site, which are deliberately specific, but a
-       * generic label is right here: the reader has just read the scope and
-       * the question is whether they want to begin, not which page to visit.
-       */
       cta: { label: "Get Started", href: "/contact" },
     },
 

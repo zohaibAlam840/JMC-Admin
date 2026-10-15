@@ -338,8 +338,15 @@ export type FullWidthTextSection = Base & {
    * icons, large type, high contrast. Deliberately a treatment rather than a
    * tone: `tone` is constrained to white/surface by a check constraint in the
    * database, and the whole point of this band is that it is neither.
+   *
+   * "note" is the opposite end: a small inset card inside the band rather
+   * than a full-width block. It exists for the two custom-scope lines on
+   * the packages page -- "make the Bigger than Metro section smaller, and
+   * it needs the colour changed so it's clearly a new section". At full
+   * width and the same tone as the price list above it, it read as a
+   * footnote to the prices instead of as its own offer.
    */
-  treatment?: "default" | "statement";
+  treatment?: "default" | "statement" | "note";
 };
 
 /**

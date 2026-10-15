@@ -695,6 +695,42 @@ function FullWidthText({ section }: { section: FullWidthTextSection }) {
    * No cards and no icons, by instruction. This band is the visual peak of the
    * page it sits on, and the whitespace is doing the work.
    */
+  /*
+   * A small inset card, for a short aside that has to read as its own
+   * thing without taking a full band. Tinted against whichever tone the
+   * band carries, so it separates on a white section and on a grey one.
+   */
+  if (section.treatment === "note") {
+    return (
+      <Band id={section.id} tone={section.tone}>
+        <Reveal className="mx-auto flex max-w-[52rem] flex-col items-center gap-3 rounded-bento border border-line bg-white/70 px-6 py-7 text-center shadow-[0_6px_18px_rgba(16,24,40,0.05)] sm:px-10">
+          {section.eyebrow ? (
+            <p className="eyebrow eyebrow-dot">{section.eyebrow}</p>
+          ) : null}
+          <h2 className="text-[1.375rem] leading-tight sm:text-[1.5rem]">
+            {section.heading}
+          </h2>
+          <p className="max-w-[60ch] text-[0.95rem] leading-relaxed text-subtle">
+            {section.body}
+          </p>
+          {section.cta ? (
+            <Button
+              href={section.cta.href}
+              variant="secondary"
+              className="group mt-1"
+            >
+              {section.cta.label}
+              <ArrowRight
+                size={16}
+                aria-hidden="true"
+                className="transition-transform duration-300 ease-out-soft group-hover:translate-x-1"
+              />
+            </Button>
+          ) : null}
+        </Reveal>
+      </Band>
+    );
+  }
   if (section.treatment === "statement") {
     return (
       <section

@@ -102,34 +102,6 @@ export const seoReportingPage: PageContent = {
         "An example of the structure, not a real client report. No figures appear in it because none of them would be real, and a page about honest reporting is the worst possible place for an invented number.",
     },
 
-    {
-      id: "deliverables",
-      type: "cardGrid",
-      tone: "surface",
-      variant: "cards",
-      columns: 3,
-      eyebrow: "What Arrives",
-      heading: "What Arrives, and When",
-      body: "Three deliverables, included in every package in both service lines.",
-      cards: [
-        {
-          title: "Monthly Reporting",
-          icon: "bar-chart",
-          body: "Detailed reporting on the work and the tracked keyword and competitor set. Traditional SEO packages add dashboard reporting on top of it.",
-        },
-        {
-          title: "Monthly Project Recap",
-          icon: "message-square",
-          body: "Delivered by Loom or a video call. A person walking through what happened and answering questions, rather than a file dropped into an inbox.",
-        },
-        {
-          title: "Quarterly Project Update",
-          icon: "calendar",
-          body: "A wider look every three months: what the quarter changed, what it taught, and where the next one is pointed.",
-        },
-      ],
-    },
-
     /*
      * Stacked rather than two columns, and considerably longer than it was.
      *
@@ -169,6 +141,68 @@ export const seoReportingPage: PageContent = {
             label: "Explore Traditional SEO",
             href: "/traditional-seo-services",
           },
+        },
+      ],
+    },
+
+    {
+      id: "deliverables",
+      type: "cardGrid",
+      tone: "white",
+      variant: "cards",
+      columns: 3,
+      eyebrow: "What Arrives",
+      heading: "What Arrives, and When",
+      body: "Three deliverables, included in every package in both service lines.",
+      cards: [
+        {
+          title: "Monthly Reporting",
+          icon: "bar-chart",
+          body: "Detailed reporting on the work and the tracked keyword and competitor set. Traditional SEO packages add dashboard reporting on top of it.",
+        },
+        {
+          title: "Monthly Project Recap",
+          icon: "message-square",
+          body: "Delivered by Loom or a video call. A person walking through what happened and answering questions, rather than a file dropped into an inbox.",
+        },
+        {
+          title: "Quarterly Project Update",
+          icon: "calendar",
+          body: "A wider look every three months: what the quarter changed, what it taught, and where the next one is pointed.",
+        },
+      ],
+    },
+
+    /*
+     * Removed after the video pass, then restored by the written note that
+     * came with it: "What Arrives, and When and Editorial Discipline What
+     * Gets Left Out will go below that". The two contradict each other --
+     * on the recording the line was "I don't really love it" -- and the
+     * note is the more specific instruction, so it is the one followed.
+     */
+    {
+      id: "standards",
+      type: "cardGrid",
+      tone: "surface",
+      // Numbered rather than icon tiles, so this section does not read as a
+      // second copy of the one directly above it.
+      variant: "numbered",
+      columns: 3,
+      eyebrow: "Editorial Discipline",
+      heading: "What Gets Left Out",
+      body: "A recap is more useful for what it leaves out than for what it piles in.",
+      cards: [
+        {
+          title: "Fewer Numbers, Better Ones",
+          body: "A figure earns its place by informing a decision. Metrics that look impressive without changing what happens next are left out on purpose.",
+        },
+        {
+          title: "Every Number Has a Reason",
+          body: "Nothing appears in a recap without an explanation of why it is there and what it means. A number with no reading is decoration.",
+        },
+        {
+          title: "Honest in Slow Months",
+          body: "SEO has quiet months. When one happens, the recap says so, says why, and says what is being done about it.",
         },
       ],
     },

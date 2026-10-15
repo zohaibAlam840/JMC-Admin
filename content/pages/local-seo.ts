@@ -158,83 +158,6 @@ export const localSeoPage: PageContent = {
     },
 
     {
-      id: "visibility-system",
-      type: "cardGrid",
-      tone: "surface",
-      variant: "cards",
-      // Five, laid out as 3 + 2 centred. Padding to six with a filler card is
-      // explicitly forbidden by §4.
-      columns: 5,
-      eyebrow: "The System",
-      heading: "The Local Visibility System",
-      body: "Five parts, worked together. Any one of them on its own tends to stall.",
-      cards: [
-        {
-          title: "Google Business Profile",
-          icon: "storefront",
-          body: "Categories, services, information, photos and posts. For many local searches the profile is what is being ranked.",
-          // The card is the click target; the title already says where it
-          // goes, so it carries no button label of its own.
-          href: "/google-business-profile-optimization",
-        },
-        {
-          title: "Citations & NAP Consistency",
-          icon: "shield-check",
-          body: "One standard for your name, address and phone number, applied across the listings that currently disagree with each other.",
-        },
-        {
-          title: "Reviews",
-          icon: "star",
-          body: "Requests to real customers and replies to what arrives. Nothing fabricated, nothing incentivised.",
-        },
-        {
-          title: "Local Search Grid Tracking",
-          icon: "map-pin",
-          body: "Visibility measured across a grid of points in your service area rather than as one blended rank, so you can see where you are strong and where you are not.",
-          // The grid illustration was removed in review. It made this card
-          // roughly twice the height of the one beside it, which left an
-          // obvious hole in the row -- "we've got all this blank space,
-          // that's clearly an error" -- and the client would rather send a
-          // real example himself than have the site draw an invented one.
-        },
-        {
-          title: "Strategic SEO Pages",
-          icon: "file-text",
-          body: "Pages built for the services and areas worth competing for, rather than one page trying to hold all of them.",
-        },
-      ],
-    },
-
-    /*
-     * Moved up from the foot of the page, and the section it replaced was
-     * "Where JMC Is". Both halves of that are the client's: "remove the
-     * where-is-JMC section and replace it with the Monthly Recap section
-     * that is at the bottom of the page", because the page does not need to
-     * repeat that JMC is in League City, and because the recap is the thing
-     * worth reading before the prices rather than after them.
-     *
-     * The four answers are longer than they were. He asked for "more details
-     * to each card so it isn't just a fluffy section", and at one line each
-     * they were four restatements of the heading.
-     */
-    {
-      id: "monthly-recap",
-      type: "reportingBlock",
-      tone: "white",
-      eyebrow: "Reporting",
-      heading: "The Monthly Recap",
-      body: "Four questions, every month, in the same order. It arrives as a short video or on a call, whichever suits you, with the written version alongside it.",
-      did: "Every task completed, named individually rather than summarised: the pages written or rewritten, the listings corrected and where they were corrected, the posts published, the reviews replied to, and the technical fixes made.",
-      why: "The reasoning behind the order the work ran in. Which problem was costing the most visibility, what it was expected to affect, and what was deliberately left for later.",
-      changed: "Grid visibility across the service area compared with last month, point by point rather than as one blended rank, alongside profile actions and what arrived through the site. Including the months where little moved, and why.",
-      next: "What is queued for the coming month and in what order, written down before it starts, so the next recap is measured against something you already agreed to.",
-      cta: {
-        label: "See How JMC Reports SEO Progress",
-        href: "/seo-reporting",
-      },
-    },
-
-    {
       id: "packages",
       type: "pricingCards",
       tone: "surface",
@@ -283,6 +206,54 @@ export const localSeoPage: PageContent = {
         label: "View Local SEO Packages",
         href: "/monthly-seo-packages#local",
       },
+    },
+
+    {
+      id: "visibility-system",
+      type: "cardGrid",
+      tone: "white",
+      variant: "cards",
+      // Five, laid out as 3 + 2 centred. Padding to six with a filler card is
+      // explicitly forbidden by §4.
+      columns: 5,
+      eyebrow: "The System",
+      heading: "The Local Visibility System",
+      body: "Five parts, worked together. Any one of them on its own tends to stall.",
+      cards: [
+        {
+          title: "Google Business Profile",
+          icon: "storefront",
+          body: "Categories, services, information, photos and posts. For many local searches the profile is what is being ranked.",
+          // The card is the click target; the title already says where it
+          // goes, so it carries no button label of its own.
+          href: "/google-business-profile-optimization",
+        },
+        {
+          title: "Citations & NAP Consistency",
+          icon: "shield-check",
+          body: "One standard for your name, address and phone number, applied across the listings that currently disagree with each other.",
+        },
+        {
+          title: "Reviews",
+          icon: "star",
+          body: "Requests to real customers and replies to what arrives. Nothing fabricated, nothing incentivised.",
+        },
+        {
+          title: "Local Search Grid Tracking",
+          icon: "map-pin",
+          body: "Visibility measured across a grid of points in your service area rather than as one blended rank, so you can see where you are strong and where you are not.",
+          // The grid illustration was removed in review. It made this card
+          // roughly twice the height of the one beside it, which left an
+          // obvious hole in the row -- "we've got all this blank space,
+          // that's clearly an error" -- and the client would rather send a
+          // real example himself than have the site draw an invented one.
+        },
+        {
+          title: "Strategic SEO Pages",
+          icon: "file-text",
+          body: "Pages built for the services and areas worth competing for, rather than one page trying to hold all of them.",
+        },
+      ],
     },
 
     {

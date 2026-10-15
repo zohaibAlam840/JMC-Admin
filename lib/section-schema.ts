@@ -434,6 +434,7 @@ export const SECTION_SCHEMAS = [
         options: [
           { value: "default", label: "Standard — on the section background" },
           { value: "statement", label: "Dark band — solid ink, large type, no icons" },
+        { value: "note", label: "Note — a small inset card" },
         ],
         help: "The dark band is meant to be rare. Two on one page and neither reads as a peak.",
       },
