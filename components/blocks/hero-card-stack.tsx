@@ -814,22 +814,22 @@ function CollageCard({
   return (
     <div className="w-full overflow-hidden rounded-card border border-line bg-white shadow-[0_10px_30px_rgba(16,24,40,0.10)]">
       {crowned ? (
-        <div className="bg-[linear-gradient(135deg,var(--color-teal),var(--color-blue))] px-4 py-2">
-          <span className="text-[0.625rem] font-semibold uppercase tracking-[0.08em] text-white">
+        <div className="bg-[linear-gradient(135deg,var(--color-teal),var(--color-blue))] px-3.5 py-1.5">
+          <span className="text-[0.5625rem] font-semibold uppercase tracking-[0.08em] text-white">
             {card.label}
           </span>
         </div>
       ) : null}
 
-      <div className="p-4">
+      <div className="p-3.5">
         {crowned ? null : (
-          <span className="text-[0.625rem] font-semibold uppercase tracking-[0.08em] text-subtle">
+          <span className="text-[0.5625rem] font-semibold uppercase tracking-[0.08em] text-subtle">
             {card.label}
           </span>
         )}
         <p
           className={cn(
-            "font-heading text-[0.9375rem] font-bold leading-tight text-ink-strong",
+            "font-heading text-[0.8125rem] font-bold leading-tight text-ink-strong",
             crowned ? "" : "mt-1"
           )}
         >
@@ -899,7 +899,7 @@ function CollageCard({
                 <span className="font-heading text-[0.625rem] font-bold text-teal-ink">
                   {String(i + 1).padStart(2, "0")}
                 </span>
-                <span className="text-[0.75rem] text-ink">{row}</span>
+                <span className="text-[0.6875rem] text-ink">{row}</span>
               </li>
             ))}
           </ol>
@@ -914,7 +914,7 @@ function CollageCard({
                     RING_DOTS[i % RING_DOTS.length]
                   )}
                 />
-                <span className="text-[0.75rem] text-ink">{row}</span>
+                <span className="text-[0.6875rem] text-ink">{row}</span>
               </li>
             ))}
           </ul>
@@ -948,17 +948,20 @@ function CollageCard({
  * although the cards ignore pointer events so the buttons still work, a card
  * sitting across a CTA looks like a bug.
  */
+/*
+ * Four corners, and nothing under the buttons.
+ *
+ * There was a fifth slot centred below the copy, holding the search
+ * mock. The client took it out: it sat directly under the two CTAs and
+ * pushed the fold down by most of a card. The slots are also narrower
+ * than they were, on the same note -- the panels should read as small
+ * things orbiting the headline, not as a second column of content.
+ */
 const COLLAGE_SLOTS = [
-  "lg:-left-6 lg:top-[1%] lg:w-[13.5rem]",
-  "lg:-left-2 lg:top-[55%] lg:w-[13rem]",
-  "lg:-right-6 lg:top-0 lg:w-[13.5rem]",
-  "lg:-right-2 lg:top-[52%] lg:w-[13rem]",
-  // Anchored to the bottom of the frame rather than to a percentage of
-  // it. A percentage is circular here: the padding that makes room for this
-  // card also makes the frame taller, which pushes the card down again, and
-  // the first version of it hung 98px past the end of the band.
-  // The centre panel is the search mock, so it is wider than the rest.
-  "lg:bottom-2 lg:left-1/2 lg:w-[20rem] lg:-translate-x-1/2",
+  "lg:-left-8 lg:top-[2%] lg:w-[11.5rem]",
+  "lg:-left-4 lg:top-[56%] lg:w-[11rem]",
+  "lg:-right-8 lg:top-[1%] lg:w-[11.5rem]",
+  "lg:-right-4 lg:top-[53%] lg:w-[11rem]",
 ];
 
 /**

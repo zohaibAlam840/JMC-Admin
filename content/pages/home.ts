@@ -76,25 +76,6 @@ export const homePage: PageContent = {
           title: "SEO Roadmap",
           items: ["Priorities set", "Content queued", "Fixes tracked"],
         },
-        {
-          /*
-           * The centrepiece, under the buttons: a wireframe of a results
-           * page. The reference puts a mock search page here and it is the
-           * piece that makes the hero read as being about search. Drawn
-           * without any third-party logo -- the reference uses Google's,
-           * which is not JMC's to put on its own homepage.
-           */
-          kind: "serp",
-          label: "What a result looks like",
-          title: "Found, Then Chosen",
-          items: [
-            "Jordan Marketing Consultants",
-            "jordanmarketingconsultants.com",
-            "Map pack",
-            "Local search",
-            "Profile panel",
-          ],
-        },
       ],
     },
 

@@ -137,9 +137,13 @@ function HeroCentered({ section }: { section: HeroCenteredSection }) {
         // The bottom padding is sized for the button row. On the pages that
         // open without one — About, the Industries hub — keeping it leaves a
         // gap the width of a hero between the subhead and the next section.
-        section.primaryCta
-          ? "pb-20 sm:pb-24 lg:pb-28"
-          : "pb-12 sm:pb-14 lg:pb-16"
+        // A collage hero already ends in a row of cards hanging below the
+        // button row, so the band does not need its usual tail as well.
+        section.collage?.length
+          ? "pb-10 sm:pb-12 lg:pb-14"
+          : section.primaryCta
+            ? "pb-20 sm:pb-24 lg:pb-28"
+            : "pb-12 sm:pb-14 lg:pb-16"
       )}
     >
       <HeroBackdrop chart={section.backdrop === "chart"} />
@@ -157,9 +161,9 @@ function HeroCentered({ section }: { section: HeroCenteredSection }) {
           className={cn(
             "relative z-10 mx-auto flex max-w-3xl flex-col items-center gap-6 text-center",
             // Narrower, to keep the headline clear of the cards either
-            // side, and deep enough underneath that the lowest card has
-            // somewhere to hang without being clipped by the band.
-            section.collage?.length && "lg:max-w-[34rem] lg:pb-[17rem]"
+            // side. The deep bottom padding went with the centre card:
+            // what is left only has to clear the lower pair.
+            section.collage?.length && "lg:max-w-[34rem] lg:pb-24"
           )}
         >
           <Reveal direction="none" duration={0.5}>
