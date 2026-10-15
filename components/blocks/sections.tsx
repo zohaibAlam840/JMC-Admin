@@ -28,6 +28,7 @@ import { SearchGrid } from "@/components/blocks/search-grid";
 import { FourQuestions } from "@/components/blocks/four-questions";
 import { RecapExample } from "@/components/blocks/recap-example";
 import { AuditForm } from "@/components/blocks/audit-form";
+import { HeroCollage } from "@/components/blocks/hero-card-stack";
 import { WaiverMatrix } from "@/components/blocks/waiver-matrix";
 import { LinkStack } from "@/components/blocks/link-stack";
 import { TabbedList } from "@/components/blocks/tabbed-list";
@@ -141,7 +142,23 @@ function HeroCentered({ section }: { section: HeroCenteredSection }) {
       <HeroBackdrop chart={section.backdrop === "chart"} />
 
       <Container className="relative">
-        <div className="mx-auto flex max-w-3xl flex-col items-center gap-6 text-center">
+        {/*
+          The frame the collage positions against. Without cards it adds
+          nothing, so every other centred hero is unaffected.
+        */}
+        <div className="relative">
+          {section.collage?.length ? (
+            <HeroCollage cards={section.collage} />
+          ) : null}
+        <div
+          className={cn(
+            "relative z-10 mx-auto flex max-w-3xl flex-col items-center gap-6 text-center",
+            // Narrower, to keep the headline clear of the cards either
+            // side, and deep enough underneath that the lowest card has
+            // somewhere to hang without being clipped by the band.
+            section.collage?.length && "lg:max-w-[34rem] lg:pb-[17rem]"
+          )}
+        >
           <Reveal direction="none" duration={0.5}>
             <Badge variant="soft" size="md">
               <Sparkles size={11} strokeWidth={2.5} aria-hidden="true" />
@@ -188,6 +205,7 @@ function HeroCentered({ section }: { section: HeroCenteredSection }) {
               </div>
             </Reveal>
           ) : null}
+        </div>
         </div>
       </Container>
     </section>

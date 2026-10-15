@@ -18,8 +18,21 @@ export const homePage: PageContent = {
     "Houston-area SEO from Jordan Marketing Consultants. Local and traditional SEO, content planning, and a plain monthly recap of what changed, and why it did.",
   sections: [
     {
+      /*
+       * Centred, with the panels floating around the copy rather than
+       * stacked beside it. The client sent a reference for this layout on
+       * 2026-10-14 and asked for the homepage to open that way.
+       *
+       * The reference printed a figure on every panel -- "98.8k", "32,00
+       * tracked keywords", "30,872 visitors", "88% views". None of those are
+       * here and none of their equivalents are either: Page Spec 01 §1
+       * forbids fabricated metrics presented as real client data, and a
+       * number on a hero panel is the most load-bearing claim on the site.
+       * What is borrowed is the composition, which is the part he was
+       * pointing at.
+       */
       id: "hero",
-      type: "heroSplit",
+      type: "heroCentered",
       eyebrow: "SEO for local, regional, and industrial businesses",
       // LOCKED — Page Spec 01 §1. The retired H1 was "We Know Your Market, Not
       // Just Your Keywords", which claimed vertical expertise and contradicted
@@ -33,17 +46,12 @@ export const homePage: PageContent = {
         label: "See How JMC Reports SEO Progress",
         href: "/seo-reporting",
       },
-      showcase: [
+      collage: [
         {
           kind: "report",
           label: "Every month",
           title: "Monthly Recap",
-          items: [
-            "What was done",
-            "Why it matters",
-            "What changed",
-            "What comes next",
-          ],
+          items: ["What was done", "Why it matters", "What changed"],
         },
         {
           kind: "coverage",
@@ -55,10 +63,26 @@ export const homePage: PageContent = {
           kind: "roadmap",
           label: "The plan",
           title: "SEO Roadmap",
-          items: [
-            "Priorities set",
-            "Content queued",
-            "Technical fixes tracked",
+          items: ["Priorities set", "Content queued", "Fixes tracked"],
+        },
+        {
+          kind: "channels",
+          label: "Two paths",
+          title: "Sorted by Reach",
+          items: ["Local SEO", "Traditional SEO"],
+        },
+        {
+          // The one panel carrying figures, and they are published scope:
+          // the tracked-keyword ceiling on each Local tier, printed on the
+          // pricing page. Keep it in step with those packages.
+          kind: "scale",
+          label: "Local tiers",
+          title: "Tracked Keywords",
+          unit: "per month, up to",
+          series: [
+            { label: "Neighborhood", value: 30 },
+            { label: "Citywide", value: 45 },
+            { label: "Metro", value: 60 },
           ],
         },
       ],
@@ -114,38 +138,53 @@ export const homePage: PageContent = {
       tone: "white",
       eyebrow: "SEO Services",
       heading: "SEO Work Built Around Strategy, Visibility, and Accountability",
-      body: "JMC focuses on the pieces of SEO that help businesses become easier to find, easier to understand, and easier to trust in search.",
+      body: "Strategy and the monthly recap are the same whichever lane you are in. Underneath them the work splits, because competing in one area and competing across several are not the same problem.",
       columns: 3,
+      /*
+       * Split by lane, which the client asked for after seeing the six
+       * panels undifferentiated: "if we're going to title this SEO
+       * services, then we need another part of this section for traditional
+       * SEO ... technical SEO monitoring and the other things that we do for
+       * traditional versus local."
+       *
+       * Three each. Strategy and reporting used to take two of the six and
+       * belong to neither lane; they are in the section's own body now, and
+       * reporting has a section of its own further down the page.
+       */
+      groupLabels: [
+        { at: 0, label: "Local SEO" },
+        { at: 3, label: "Traditional SEO" },
+      ],
       cards: [
         {
-          title: "SEO Strategy",
-          icon: "target",
-          body: "Keyword priorities, search intent, competitor visibility, and roadmap planning.",
-        },
-        {
-          title: "Local Optimization",
-          icon: "map-pin",
-          body: "Local search improvements that support visibility in Google Search, Google Maps, and service-area searches.",
-        },
-        {
-          title: "Google Business Profile Support",
+          title: "Google Business Profile",
           icon: "star",
-          body: "Profile optimization, post strategy, service alignment, and activity that supports local trust.",
+          body: "Categories, services, posts and review activity. For a lot of local searches the profile is what is being ranked, not the site.",
         },
         {
-          title: "SEO Content Planning",
+          title: "Citations & Listings",
+          icon: "shield-check",
+          body: "One standard for your name, address and phone number, applied across the listings that currently disagree with each other.",
+        },
+        {
+          title: "Local Grid Tracking",
+          icon: "map-pin",
+          body: "Visibility measured across a spread of points in the service area rather than as one blended rank, because local results change street by street.",
+        },
+        {
+          title: "Strategic SEO Pages",
           icon: "file-text",
-          body: "Strategic SEO pages, content roadmaps, service page improvements, and search-focused messaging.",
+          body: "Pages built for specific searches worth competing for, produced to a schedule rather than when there is time.",
         },
         {
           title: "Technical SEO Monitoring",
           icon: "wrench",
-          body: "Ongoing review of technical issues that can affect crawling, indexing, visibility, and site performance.",
+          body: "Crawling, indexing and site health watched month to month, so a redirect chain or a stray noindex is found before it costs a quarter.",
         },
         {
-          title: "Reporting and Monthly Recaps",
-          icon: "bar-chart",
-          body: "Clear monthly updates that explain progress, priorities, and next steps without burying you in jargon.",
+          title: "Authority Recommendations",
+          icon: "network",
+          body: "What would genuinely strengthen the site's standing and why, including the parts you are best placed to do yourself. Advice, not bought placements.",
         },
       ],
       cta: { label: "Explore Local SEO", href: "/local-seo-services" },
@@ -259,7 +298,23 @@ export const homePage: PageContent = {
       heading: "SEO Options Built for Different Growth Stages",
       body: "JMC offers structured SEO options for businesses that need ongoing monthly support or a focused starting point before moving into a longer campaign.",
       columns: 3,
+      /*
+       * Lightest to heaviest, left to right: the one-time sprint at $799,
+       * then Local from $875 a month, then Traditional from $2,295. The
+       * client reordered these in review -- "move launch to where local is,
+       * move local to where traditional is, and traditional replaces launch,
+       * because we want to go from the lightest to the heaviest" -- and the
+       * old order opened with a monthly commitment and buried the cheapest
+       * way in at the end of the row.
+       */
       cards: [
+        {
+          title: "Launch Sprints",
+          icon: "compass",
+          meta: "From $799 one-time",
+          body: "For businesses that need a fixed-scope SEO foundation before deciding on monthly service.",
+          cta: { label: "View Launch Sprints", href: "/launch-sprints" },
+        },
         {
           title: "Monthly Local SEO",
           icon: "map-pin",
@@ -279,13 +334,6 @@ export const homePage: PageContent = {
             label: "View Traditional SEO Packages",
             href: "/monthly-seo-packages#traditional",
           },
-        },
-        {
-          title: "Launch Sprints",
-          icon: "compass",
-          meta: "From $799 one-time",
-          body: "For businesses that need a fixed-scope SEO foundation before deciding on monthly service.",
-          cta: { label: "View Launch Sprints", href: "/launch-sprints" },
         },
       ],
     },

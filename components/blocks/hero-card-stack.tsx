@@ -191,22 +191,31 @@ function ProfilePie({
 function ScaleChart({
   series,
   unit,
+  compact = false,
 }: {
   series: { label: string; value: number }[];
   unit: string;
+  /** Short bars, for the collage card, where the full height collides with
+   *  the hero's button row. */
+  compact?: boolean;
 }) {
   const bars = series.slice(0, 4);
   const peak = Math.max(...bars.map((b) => b.value), 1);
 
   return (
     <div className="flex flex-col gap-3">
-      <div className="flex h-32 items-stretch gap-3">
+      <div className={cn("flex items-stretch gap-3", compact ? "h-20" : "h-32")}>
         {bars.map((bar, i) => (
           <div
             key={bar.label}
             className="flex h-full flex-1 flex-col items-center gap-2"
           >
-            <span className="font-heading text-[0.9375rem] font-bold leading-none text-ink-strong">
+            <span
+              className={cn(
+                "font-heading font-bold leading-none text-ink-strong",
+                compact ? "text-[0.8125rem]" : "text-[0.9375rem]"
+              )}
+            >
               {bar.value}
             </span>
             {/*
@@ -236,13 +245,23 @@ function ScaleChart({
         {bars.map((bar) => (
           <span
             key={bar.label}
-            className="flex-1 text-center text-[0.75rem] text-subtle"
+            className={cn(
+              "flex-1 text-center text-subtle",
+              compact ? "text-[0.6875rem]" : "text-[0.75rem]"
+            )}
           >
             {bar.label}
           </span>
         ))}
       </div>
-      <p className="text-center text-[0.75rem] text-subtle">{unit}</p>
+      <p
+        className={cn(
+          "text-center text-subtle",
+          compact ? "text-[0.6875rem]" : "text-[0.75rem]"
+        )}
+      >
+        {unit}
+      </p>
     </div>
   );
 }
@@ -652,5 +671,135 @@ export function HeroCardStack({ cards }: { cards: HeroShowcaseCard[] }) {
         </div>
       ) : null}
     </div>
+  );
+}
+
+/* -------------------------------------------------------------------------- */
+
+/**
+ * One small floating panel in the collage hero.
+ *
+ * Deliberately smaller and plainer than the main hero panel: five of these
+ * surround a headline, so each one is a glance rather than something to read.
+ */
+function CollageCard({ card }: { card: HeroShowcaseCard }) {
+  const rows = "items" in card ? card.items.slice(0, 3) : [];
+
+  return (
+    <div className="w-full rounded-card border border-line bg-white p-4 shadow-[0_10px_30px_rgba(16,24,40,0.10)]">
+      <span className="text-[0.625rem] font-semibold uppercase tracking-[0.08em] text-subtle">
+        {card.label}
+      </span>
+      <p className="mt-1 font-heading text-[0.9375rem] font-bold leading-tight text-ink-strong">
+        {card.title}
+      </p>
+
+      {card.kind === "share" ? (
+        <div className="mt-3 flex items-center gap-3">
+          <div className="shrink-0 [&>svg]:size-12">
+            <ProfilePie
+              count={card.series.length}
+              weights={card.series.map((x) => x.value)}
+            />
+          </div>
+          <ul className="flex flex-col gap-1">
+            {card.series.slice(0, 3).map((item, i) => (
+              <li key={item.label} className="flex items-center gap-2">
+                <span
+                  aria-hidden="true"
+                  className={cn(
+                    "size-1.5 shrink-0 rounded-full",
+                    RING_DOTS[i % RING_DOTS.length]
+                  )}
+                />
+                <span className="text-[0.6875rem] text-ink">{item.label}</span>
+              </li>
+            ))}
+          </ul>
+        </div>
+      ) : card.kind === "scale" ? (
+        <div className="mt-3">
+          <ScaleChart series={card.series} unit={card.unit} compact />
+        </div>
+      ) : rows.length ? (
+        <ul className="mt-3 flex flex-col gap-1.5">
+          {rows.map((row, i) => (
+            <li key={row} className="flex items-center gap-2">
+              <span
+                aria-hidden="true"
+                className={cn(
+                  "size-1.5 shrink-0 rounded-full",
+                  RING_DOTS[i % RING_DOTS.length]
+                )}
+              />
+              <span className="text-[0.75rem] text-ink">{row}</span>
+            </li>
+          ))}
+        </ul>
+      ) : null}
+    </div>
+  );
+}
+
+/**
+ * Cards scattered around a centred headline.
+ *
+ * The client sent a reference for the homepage: a headline in the middle
+ * with small panels floating either side of it, which is a livelier opening
+ * than a block of copy beside one big panel.
+ *
+ * Two layouts rather than one set of positions. At lg the cards are placed
+ * absolutely down the left and right gutters, which is what produces the
+ * scattered look and also what makes it unusable narrower than that -- there
+ * are no gutters on a phone. Below lg they become an ordinary two-column
+ * grid underneath the copy, in the same order.
+ *
+ * The copy sits above them in the stacking order and the cards do not take
+ * pointer events, so a long headline can overlap a card without the card
+ * eating a click meant for the button.
+ */
+/*
+ * Four around the copy and one below it, pushed into the container's own
+ * padding so they clear the headline and the button row. The lower pair sit
+ * past the halfway mark on purpose: above that they land on the buttons, and
+ * although the cards ignore pointer events so the buttons still work, a card
+ * sitting across a CTA looks like a bug.
+ */
+const COLLAGE_SLOTS = [
+  "lg:-left-6 lg:top-[1%] lg:w-[13.5rem]",
+  "lg:-left-2 lg:top-[55%] lg:w-[13rem]",
+  "lg:-right-6 lg:top-0 lg:w-[13.5rem]",
+  "lg:-right-2 lg:top-[52%] lg:w-[13rem]",
+  // Anchored to the bottom of the frame rather than to a percentage of
+  // it. A percentage is circular here: the padding that makes room for this
+  // card also makes the frame taller, which pushes the card down again, and
+  // the first version of it hung 98px past the end of the band.
+  "lg:bottom-2 lg:left-1/2 lg:w-[15rem] lg:-translate-x-1/2",
+];
+
+export function HeroCollage({ cards }: { cards: HeroShowcaseCard[] }) {
+  const shown = cards.slice(0, COLLAGE_SLOTS.length);
+
+  return (
+    <>
+      {/* lg and up: floating. */}
+      <div
+        aria-hidden="true"
+        className="pointer-events-none absolute inset-0 hidden lg:block"
+      >
+        {shown.map((card, i) => (
+          <div key={card.title} className={cn("absolute", COLLAGE_SLOTS[i])}>
+            <CollageCard card={card} />
+          </div>
+        ))}
+      </div>
+
+      {/* Below lg: a plain grid under the copy. */}
+      <div className="mt-12 grid w-full gap-4 sm:grid-cols-2 lg:hidden">
+        {shown.map((card) => (
+          <CollageCard key={card.title} card={card} />
+        ))}
+      </div>
+    </>
   );
 }

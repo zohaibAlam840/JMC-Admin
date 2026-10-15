@@ -214,6 +214,18 @@ export type HeroCenteredSection = Base & {
   primaryCta?: CTA;
   secondaryCta?: CTA;
   /**
+   * Cards scattered around the centred copy, as in the reference the client
+   * sent for the homepage: a headline in the middle with small panels
+   * floating either side of it.
+   *
+   * Up to five. They are the same showcase cards the split hero uses, so
+   * everything in them is scope rather than a claimed result -- the
+   * reference printed invented figures on every panel ("98.8k", "30,872
+   * visitors", "88% views") and those are exactly what Page Spec 01 §1
+   * forbids. What is borrowed is the composition.
+   */
+  collage?: HeroShowcaseCard[];
+  /**
    * Draw a reporting chart behind the copy instead of the plain grid wash.
    * One page uses it, by request: the SEO Reporting hero, where the client
    * wanted "the graphic behind everything" with the words over the top.

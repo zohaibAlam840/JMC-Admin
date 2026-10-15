@@ -322,10 +322,19 @@ for (const key of HOME_SECTIONS) {
     tone?: "white" | "surface";
   };
   void id;
-  void type;
-  void tone;
+  /*
+   * type and tone go in the UPDATE, not just data.
+   *
+   * They used to be discarded, on the assumption that a patch only ever
+   * changes copy. That broke the moment the homepage hero changed from
+   * heroSplit to heroCentered: the row kept its old type, so the database
+   * would have rendered a split hero holding centred-hero data -- a hero
+   * with no panel and no collage, which is to say a blank right half.
+   * Nothing would have errored.
+   */
   w(
-    `update public.sections set data = ${jsonb(data)} ` +
+    `update public.sections set data = ${jsonb(data)}, ` +
+      `type = ${lit(type)}, tone = ${tone ? lit(tone) : "null"} ` +
       `where key = ${lit(key)} and page_id = (select id from public.pages where slug = '/');`
   );
 }
