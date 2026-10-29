@@ -15,7 +15,7 @@ export const homePage: PageContent = {
   label: "Homepage",
   seoTitle: "Houston-Area SEO Agency | Jordan Marketing Consultants",
   metaDescription:
-    "Houston-area SEO from Jordan Marketing Consultants. Local and traditional SEO, content planning, and a plain monthly recap of what changed, and why it did.",
+    "Transparent Houston-area SEO with clear strategy, visible work, and a plain monthly recap of what changed and why, delivered by Jordan Marketing Consultants.",
   sections: [
     {
       /*
@@ -48,33 +48,30 @@ export const homePage: PageContent = {
       },
       collage: [
         {
-          // Top left: the recap, which is the site's whole argument.
+          // Decorative only. These panels describe abstract signals rather
+          // than pretending to be a report, dashboard, or client result.
           kind: "report",
-          label: "Every month",
-          title: "Monthly Recap",
-          items: ["What was done", "Why it matters", "What changed"],
+          label: "Search patterns",
+          title: "Signals",
+          items: ["Pages", "Profiles", "Markets"],
         },
         {
-          // Mid left, drawn as a rising line. Direction only -- no axis,
-          // no scale, no figure.
           kind: "growth",
-          label: "Over time",
-          title: "Visibility Built",
-          items: ["Search", "Maps", "Local grid"],
+          label: "Direction",
+          title: "Momentum",
+          items: ["Foundation", "Progress", "Next"],
         },
         {
-          // Top right, the one panel with a coloured header, standing in
-          // for the reference's orange card.
           kind: "coverage",
-          label: "Where you appear",
-          title: "Local Surfaces",
-          items: ["Map results", "Local search", "Profile panel"],
+          label: "Market shape",
+          title: "Coverage",
+          items: ["Local", "Regional", "Industry"],
         },
         {
           kind: "roadmap",
-          label: "The plan",
-          title: "SEO Roadmap",
-          items: ["Priorities set", "Content queued", "Fixes tracked"],
+          label: "Work in motion",
+          title: "Sequence",
+          items: ["Assess", "Prioritize", "Build"],
         },
       ],
     },
@@ -92,12 +89,22 @@ export const homePage: PageContent = {
           title: "Local SEO",
           icon: "map-pin",
           body: "For businesses that need stronger visibility in Google Search, Google Maps, and local service-area searches.",
+          items: [
+            "Google Search and Maps",
+            "Defined service areas",
+            "Profile and listing work",
+          ],
           cta: { label: "Explore Local SEO", href: "/local-seo-services" },
         },
         {
           title: "Traditional SEO",
           icon: "trending-up",
           body: "For regional, national, and industry-focused companies competing across larger search markets.",
+          items: [
+            "Multiple markets",
+            "Strategic SEO pages",
+            "Technical and authority work",
+          ],
           cta: {
             label: "Explore Traditional SEO",
             href: "/traditional-seo-services",
@@ -115,8 +122,8 @@ export const homePage: PageContent = {
       // proof. They are separate by decision and must not be merged.
       heading:
         "No Mystery SEO. No Confusing Reports. No Guessing What You Paid For.",
-      // DRAFT, 47 words. Transparency as an operating principle, not a feature.
-      body: "Most agencies keep the work behind a login and the reasoning to themselves. JMC does the opposite. You see what was done, why it was done, and what it changed, in language that does not need translating. That is how the work is run, not a reporting add-on.",
+      // DRAFT, 46 words. Transparency as an operating principle, not a feature.
+      body: "JMC makes the work visible from the start. Every month, clients see what was done, why it mattered, what changed, and what comes next, in language built for decisions rather than interpretation. Clear reasoning, visible priorities, and an accountable recap are the standard on every engagement.",
       cta: {
         label: "See How JMC Reports SEO Progress",
         href: "/seo-reporting",
@@ -125,60 +132,35 @@ export const homePage: PageContent = {
 
     {
       id: "services",
-      type: "cardGrid",
+      type: "featureSplit",
       tone: "white",
       eyebrow: "SEO Services",
       heading: "SEO Work Built Around Strategy, Visibility, and Accountability",
-      body: "Strategy and the monthly recap are the same whichever lane you are in. Underneath them the work splits, because competing in one area and competing across several are not the same problem.",
-      columns: 3,
-      /*
-       * Split by lane, which the client asked for after seeing the six
-       * panels undifferentiated: "if we're going to title this SEO
-       * services, then we need another part of this section for traditional
-       * SEO ... technical SEO monitoring and the other things that we do for
-       * traditional versus local."
-       *
-       * Three each. Strategy and reporting used to take two of the six and
-       * belong to neither lane; they are in the section's own body now, and
-       * reporting has a section of its own further down the page.
-       */
-      groupLabels: [
-        { at: 0, label: "Local SEO" },
-        { at: 3, label: "Traditional SEO" },
-      ],
-      cards: [
+      body: "In 2022, JMC narrowed from a full-service agency to one discipline: SEO. That focus keeps every engagement centered on the work that builds search visibility, with a clear roadmap and an accountable monthly recap. The result is a tighter scope and a clear explanation of each priority.",
+      align: "left",
+      groups: [
         {
-          title: "Google Business Profile",
-          icon: "star",
-          body: "Categories, services, posts and review activity. For a lot of local searches the profile is what is being ranked, not the site.",
+          title: "Strategy & Roadmap",
+          icon: "compass",
+          body: "Priorities set in order, with the reason for that order made clear.",
         },
         {
-          title: "Citations & Listings",
-          icon: "shield-check",
-          body: "One standard for your name, address and phone number, applied across the listings that currently disagree with each other.",
-        },
-        {
-          title: "Local Grid Tracking",
-          icon: "map-pin",
-          body: "Visibility measured across a spread of points in the service area rather than as one blended rank, because local results change street by street.",
-        },
-        {
-          title: "Strategic SEO Pages",
+          title: "On-Page & Content",
           icon: "file-text",
-          body: "Pages built for specific searches worth competing for, produced to a schedule rather than when there is time.",
+          body: "Pages and written content built around the searches worth competing for.",
         },
         {
-          title: "Technical SEO Monitoring",
+          title: "Technical Monitoring",
           icon: "wrench",
-          body: "Crawling, indexing and site health watched month to month, so a redirect chain or a stray noindex is found before it costs a quarter.",
+          body: "Crawling, indexing, and site health watched throughout the engagement.",
         },
         {
-          title: "Authority Recommendations",
-          icon: "network",
-          body: "What would genuinely strengthen the site's standing and why, including the parts you are best placed to do yourself. Advice, not bought placements.",
+          title: "Reporting & Recap",
+          icon: "bar-chart",
+          body: "The work, reasoning, movement, and next priorities explained every month.",
         },
       ],
-      cta: { label: "Explore Local SEO", href: "/local-seo-services" },
+      cta: { label: "Learn More About JMC", href: "/about" },
     },
 
     {
@@ -190,7 +172,7 @@ export const homePage: PageContent = {
       // pointed", never "we are experts in aerospace" — that would contradict
       // the industry-agnostic method the rest of the page argues for.
       heading: "Where This Method Gets Pointed",
-      body: "One method, aimed at two different kinds of search problem.",
+      body: "One transparent method, adapted to how buyers search in each sector.",
       groups: [
         {
           /*
@@ -245,7 +227,7 @@ export const homePage: PageContent = {
               href: "/industries/maritime-logistics",
             },
             {
-              title: "Commercial Construction",
+              title: "Commercial Construction & Infrastructure",
               icon: "hard-hat",
               body: "Contractors and infrastructure firms bidding well outside one city.",
               href: "/industries/commercial-construction-infrastructure",
@@ -304,6 +286,7 @@ export const homePage: PageContent = {
           icon: "compass",
           meta: "From $799 one-time",
           body: "For businesses that need a fixed-scope SEO foundation before deciding on monthly service.",
+          items: ["Fixed scope", "One-time pricing", "30-day action roadmap"],
           cta: { label: "View Launch Sprints", href: "/launch-sprints" },
         },
         {
@@ -311,6 +294,11 @@ export const homePage: PageContent = {
           icon: "map-pin",
           meta: "From $875/mo",
           body: "For businesses that need consistent local visibility support across search, maps, content, reviews, and reporting.",
+          items: [
+            "Search and Maps visibility",
+            "Profile, listings, and reviews",
+            "Monthly reporting and recap",
+          ],
           cta: {
             label: "View Local SEO Packages",
             href: "/monthly-seo-packages#local",
@@ -321,6 +309,11 @@ export const homePage: PageContent = {
           icon: "trending-up",
           meta: "From $2,295/mo",
           body: "For businesses targeting regional, national, or competitive industry visibility with a larger search footprint.",
+          items: [
+            "Multi-market strategy",
+            "Strategic pages and technical work",
+            "Monthly reporting and recap",
+          ],
           cta: {
             label: "View Traditional SEO Packages",
             href: "/monthly-seo-packages#traditional",
@@ -354,7 +347,6 @@ export const homePage: PageContent = {
           body: "You receive a clear summary of what was completed, what changed, and what should happen next.",
         },
       ],
-      cta: { label: "Request a Visibility Review", href: "/contact" },
     },
 
     {
@@ -382,17 +374,19 @@ export const homePage: PageContent = {
       tone: "surface",
       eyebrow: "Houston-Area SEO Agency",
       heading: "Rooted in League City. Built for Houston-Area Growth.",
-      body: "JMC is based in League City and works with businesses across the Houston area that need practical SEO strategy, stronger search visibility, and clearer reporting. Whether the goal is local visibility, regional growth, or a more focused real estate SEO strategy, the work starts with understanding where your business is trying to grow.",
-      cta: { label: "Learn More About JMC", href: "/about" },
+      body: "JMC is based in League City and works with businesses across the Houston area that need practical SEO strategy, stronger search visibility, and clearer reporting. Whether the goal is local visibility or regional growth, the work starts with understanding where the business is trying to grow.",
     },
 
     {
       id: "final-cta",
       type: "finalCta",
-      heading: "Not Sure Where Your SEO Is Stuck? Start with a Visibility Review.",
+      heading: "Start With a Visibility Review",
       body: "A review identifies visibility gaps, priority opportunities, and the best next step for your business, market, and goals.",
       primaryCta: { label: "Request a Visibility Review", href: "/contact" },
-      secondaryCta: { label: "View SEO Packages", href: "/monthly-seo-packages" },
+      secondaryCta: {
+        label: "View Monthly SEO Packages",
+        href: "/monthly-seo-packages",
+      },
     },
   ],
 };

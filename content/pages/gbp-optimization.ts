@@ -46,7 +46,7 @@ export const gbpOptimizationPage: PageContent = {
       // 2026-10-14 took the second button off as well ("I think we need one
       // or the other"), because "Explore Local SEO" was selling the service
       // on the one page that is meant to teach and then offer the audit.
-      primaryCta: { label: "Get a Free Google Business Profile Audit", href: "#free-audit" },
+      primaryCta: { label: "Get a Free Visibility Audit", href: "#free-audit" },
       showcase: [
         {
           // A ring of four arcs, one per row below. The client asked for a
@@ -146,6 +146,24 @@ export const gbpOptimizationPage: PageContent = {
     },
 
     {
+      id: "free-audit",
+      type: "auditForm",
+      eyebrow: "Free Visibility Audit",
+      heading: "Get a Free Visibility Audit",
+      body: "A written audit of the profile, and of the site behind it, built on the same four headings as the monthly recap: what is there, why it matters, what is working and what is not, and what to do next.",
+      covers: [
+        "Categories, services and business information",
+        "Listing consistency across the web",
+        "Profile activity, photos and reviews",
+        "Where the profile is visible across the service area",
+      ],
+      note: "No call required.",
+      submitLabel: "Get a Free Visibility Audit",
+      profileHelp: "Optional. Paste the map listing link if you have it handy.",
+      source: "Free Visibility Audit",
+    },
+
+    {
       id: "what-jmc-does",
       type: "cardGrid",
       tone: "surface",
@@ -177,7 +195,7 @@ export const gbpOptimizationPage: PageContent = {
         {
           title: "NAP & Citation Consistency",
           icon: "shield-check",
-          body: "Name, address and phone standardised, then corrected across the listings that carry an older version of them.",
+          body: "Name, address and phone standardized, then corrected across the listings that carry an older version of them.",
         },
         {
           title: "Ongoing Profile Posts",
@@ -187,7 +205,7 @@ export const gbpOptimizationPage: PageContent = {
         {
           title: "Review Requests & Replies",
           icon: "star",
-          body: "Requests sent to real customers and replies written to what arrives, positive and negative alike. Nothing is fabricated or incentivised.",
+          body: "Requests sent to real customers and replies written to what arrives, positive and negative alike. Nothing is fabricated or incentivized.",
         },
         {
           title: "Local Search Grid Tracking",
@@ -196,6 +214,23 @@ export const gbpOptimizationPage: PageContent = {
           visual: "searchGrid",
         },
       ],
+    },
+
+    {
+      id: "monthly-recap",
+      type: "reportingBlock",
+      tone: "surface",
+      eyebrow: "Reporting",
+      heading: "The Monthly Recap",
+      body: "Profile work is easy to do invisibly, which is exactly why it gets reported the same way as everything else.",
+      did: "The posts published, the listings corrected, the reviews replied to, named individually.",
+      why: "Why that work was the priority, and what it was expected to affect.",
+      changed: "Grid visibility across the service area, compared with last month, including the quiet ones.",
+      next: "What is queued for the coming month, written down before it starts.",
+      cta: {
+        label: "See How JMC Reports SEO Progress",
+        href: "/seo-reporting",
+      },
     },
 
     {
@@ -236,27 +271,15 @@ export const gbpOptimizationPage: PageContent = {
             "Yes. A service-area business hides its address and is ranked against the area it covers, which makes categories, service definitions and listing consistency do more of the work. JMC is a service-area business itself and does not publish a street address.",
         },
       ],
-      cta: { label: "Get a Free Google Business Profile Audit", href: "#free-audit" },
+      cta: { label: "Get a Free Visibility Audit", href: "#free-audit" },
     },
 
     {
-      id: "free-audit",
-      type: "auditForm",
-      eyebrow: "Free Profile Audit",
-      heading: "Get a Free Google Business Profile Audit",
-      body: "A written audit of the profile, and of the site behind it, built on the same four headings as the monthly recap: what is there, why it matters, what is working and what is not, and what to do next.",
-      covers: [
-        "Categories, services and business information",
-        "Listing consistency across the web",
-        "Profile activity, photos and reviews",
-        "Where the profile is visible across the service area",
-      ],
-      note: "No call required.",
-      submitLabel: "Get a Free Google Business Profile Audit",
-      profileHelp: "Optional. Paste the map listing link if you have it handy.",
-      // The CRM tag. Renamed with the rest, but note that leads captured
-      // before 2026-10-14 carry the old "Free Visibility Audit" string.
-      source: "Free Profile Audit",
+      id: "final-cta",
+      type: "finalCta",
+      heading: "Start With the Profile",
+      body: "The audit says what the profile is missing, what it is costing, and what to do about it first. It is the same four headings as the monthly recap, written before anyone has paid for anything.",
+      primaryCta: { label: "Get a Free Visibility Audit", href: "#free-audit" },
     },
   ],
 };

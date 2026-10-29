@@ -33,6 +33,20 @@ import type { PageContent, Section } from "../lib/types";
 const SOURCE = join(process.cwd(), "supabase", "apply-page-specs-02-09.sql");
 const TARGET = join(process.cwd(), "supabase", "apply-pending.sql");
 
+/**
+ * These live pages contain approved dashboard structures that intentionally
+ * differ from the fallback files. Rebuilding them from file content would
+ * remove or merge valid sections. Their October audit fields are updated by
+ * `apply-client-audit-surgical.sql`; SEO Reporting is already a live pass.
+ */
+const SURGICAL_ONLY = new Set([
+  "/traditional-seo-services",
+  "/monthly-seo-packages",
+  "/launch-sprints",
+  "/about",
+  "/seo-reporting",
+]);
+
 /* ------------------------------------------------------------- env ------ */
 
 function env(): { url: string; key: string } {
@@ -183,6 +197,29 @@ async function main() {
     console.log(`      ${reason}`);
   }
 
+  const rebuildable = drifted.filter(({ page }) => !SURGICAL_ONLY.has(page.slug));
+  const preserved = drifted.filter(({ page }) => SURGICAL_ONLY.has(page.slug));
+
+  if (preserved.length > 0) {
+    console.log(
+      "\nExcluded from destructive pending SQL because their live dashboard structure is preserved:"
+    );
+    for (const { page } of preserved) console.log(`  ${page.slug}`);
+    console.log(
+      "  Use apply-client-audit-surgical.sql for the audited fields on these pages."
+    );
+  }
+
+  if (rebuildable.length === 0) {
+    if (existsSync(TARGET)) unlinkSync(TARGET);
+    for (let i = 1; i <= 20; i++) {
+      const stale = join(process.cwd(), "supabase", `apply-pending-${i}.sql`);
+      if (existsSync(stale)) unlinkSync(stale);
+    }
+    console.log("\nNo page is eligible for an automatic rebuild.");
+    return;
+  }
+
   /* ------------------------------------------------- the SQL to fix it ---- */
 
   function statements(src: string): string[] {
@@ -212,9 +249,9 @@ async function main() {
       .trim();
   }
 
-  const slugs = drifted.map((d) => d.page.slug);
+  const slugs = rebuildable.map((d) => d.page.slug);
   const packageIds = new Set<string>();
-  for (const { page } of drifted) {
+  for (const { page } of rebuildable) {
     for (const section of page.sections) {
       if (section.type === "pricingCards") {
         for (const pid of section.packageIds) packageIds.add(pid);
@@ -274,7 +311,7 @@ async function main() {
      * slug" says yes while the sections that actually drifted may be none of
      * the six — which would have this report success and change nothing.
      */
-    const entry = drifted.find((d) => d.page.slug === slug);
+    const entry = rebuildable.find((d) => d.page.slug === slug);
     const sectionIds = entry?.reason.match(/differ: (.+)$/)?.[1]?.split(", ") ?? [];
     const missing = sectionIds.filter(
       (sectionId) =>

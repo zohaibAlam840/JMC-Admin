@@ -200,6 +200,13 @@ export async function getPackages(): Promise<Package[]> {
 
 /* --------------------------------------------------------------- articles -- */
 
+/**
+ * Resources is built but intentionally unpublished. Keeping the gate here
+ * prevents a dashboard test article from leaking through a direct URL, RSS,
+ * related-post block, static params, or the sitemap.
+ */
+const resourcesPublished = process.env.RESOURCES_PUBLISHED === "true";
+
 type PostRow = {
   id: string;
   slug: string;
@@ -257,6 +264,8 @@ export async function getPosts({
 }: { limit?: number; category?: string; excludeSlug?: string } = {}): Promise<
   PostSummary[]
 > {
+  if (!resourcesPublished) return [];
+
   const filters = [
     "published=is.true",
     `select=${SUMMARY_SELECT}`,
@@ -291,6 +300,8 @@ export async function getPosts({
 }
 
 export async function getPost(slug: string): Promise<Post | null> {
+  if (!resourcesPublished) return null;
+
   const rows = await restGet<PostRow[]>(
     `posts?slug=eq.${encodeURIComponent(slug)}&select=*&limit=1`,
     { tags: [tags.posts, tags.post(slug)] }
@@ -304,6 +315,8 @@ export async function getPost(slug: string): Promise<Post | null> {
 export async function getPublishedPostSlugs(): Promise<
   { slug: string; updatedAt: string }[]
 > {
+  if (!resourcesPublished) return [];
+
   const rows = await restGet<{ slug: string; updated_at: string }[]>(
     "posts?published=is.true&select=slug,updated_at&order=published_at.desc",
     { tags: [tags.posts] }

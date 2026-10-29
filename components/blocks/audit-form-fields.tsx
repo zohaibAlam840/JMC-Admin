@@ -1,13 +1,12 @@
 "use client";
 
-import * as React from "react";
 import { useActionState } from "react";
 import { useFormStatus } from "react-dom";
-import { usePathname } from "next/navigation";
 import { ArrowRight, Loader2 } from "lucide-react";
 import { submitAudit, type LeadState } from "@/app/actions/lead";
 import { Input, Label } from "@/components/ui/form-controls";
 import { Button } from "@/components/ui/button";
+import { LEAD_LIMITS } from "@/lib/leads/validation";
 
 /**
  * The five fields of the Free Visibility Audit — Page Spec 04 §4.
@@ -61,23 +60,22 @@ function FieldError({ id, message }: { id: string; message?: string }) {
 export function AuditFormFields({
   submitLabel,
   profileHelp,
-  source,
+  formToken,
 }: {
   submitLabel: string;
   profileHelp?: string;
-  source: string;
+  formToken: string;
 }) {
-  const pathname = usePathname();
-  const [renderedAt] = React.useState(() => String(Date.now()));
-  const [state, action] = useActionState<LeadState, FormData>(submitAudit, {});
+  const [state, action, pending] = useActionState<LeadState, FormData>(
+    submitAudit,
+    {}
+  );
   const v = state.values ?? {};
   const e = state.errors ?? {};
 
   return (
-    <form action={action} className="flex flex-col gap-5">
-      <input type="hidden" name="sourceCta" value={source} />
-      <input type="hidden" name="sourcePage" value={pathname} />
-      <input type="hidden" name="renderedAt" value={renderedAt} />
+    <form action={action} className="flex flex-col gap-5" aria-busy={pending}>
+      <input type="hidden" name="formToken" value={formToken} />
 
       {/* Honeypot. Hidden from people, irresistible to bots. */}
       <div aria-hidden="true" className="absolute left-[-9999px]">
@@ -108,6 +106,8 @@ export function AuditFormFields({
           id="audit-business"
           name="business"
           required
+          autoComplete="organization"
+          maxLength={LEAD_LIMITS.business}
           defaultValue={v.business}
           aria-invalid={Boolean(e.business)}
           aria-describedby={e.business ? "audit-business-error" : undefined}
@@ -126,6 +126,8 @@ export function AuditFormFields({
           inputMode="url"
           placeholder="https://"
           required
+          autoComplete="url"
+          maxLength={LEAD_LIMITS.url}
           defaultValue={v.website}
           aria-invalid={Boolean(e.website)}
           aria-describedby={e.website ? "audit-website-error" : undefined}
@@ -143,14 +145,27 @@ export function AuditFormFields({
         <Input
           id="audit-profile"
           name="profile"
+          type="url"
+          inputMode="url"
+          autoComplete="url"
+          maxLength={LEAD_LIMITS.url}
           defaultValue={v.profile}
-          aria-describedby={profileHelp ? "audit-profile-help" : undefined}
+          aria-invalid={Boolean(e.profile)}
+          aria-describedby={
+            [
+              profileHelp ? "audit-profile-help" : "",
+              e.profile ? "audit-profile-error" : "",
+            ]
+              .filter(Boolean)
+              .join(" ") || undefined
+          }
         />
         {profileHelp ? (
           <p id="audit-profile-help" className="text-[0.8rem] text-white/60">
             {profileHelp}
           </p>
         ) : null}
+        <FieldError id="audit-profile-error" message={e.profile} />
       </div>
 
       <div className="grid gap-5 sm:grid-cols-2">
@@ -163,6 +178,8 @@ export function AuditFormFields({
             name="email"
             type="email"
             required
+            autoComplete="email"
+            maxLength={LEAD_LIMITS.email}
             defaultValue={v.email}
             aria-invalid={Boolean(e.email)}
             aria-describedby={e.email ? "audit-email-error" : undefined}
@@ -182,8 +199,13 @@ export function AuditFormFields({
             name="phone"
             type="tel"
             inputMode="tel"
+            autoComplete="tel"
+            maxLength={LEAD_LIMITS.phone}
             defaultValue={v.phone}
+            aria-invalid={Boolean(e.phone)}
+            aria-describedby={e.phone ? "audit-phone-error" : undefined}
           />
+          <FieldError id="audit-phone-error" message={e.phone} />
         </div>
       </div>
 

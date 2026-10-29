@@ -10,7 +10,7 @@ import type { HeroShowcaseCard } from "@/lib/types";
  * recap: a header bar, a few labelled rows, and one simple bar shape.
  *
  * Built in HTML and CSS rather than as an image, for three reasons the spec
- * gives: there is then no LCP image to optimise (§16), it sidesteps the SaaS-04
+ * gives: there is then no LCP image to optimize (§16), it sidesteps the SaaS-04
  * asset licensing problem entirely (§1.5), and it stays crisp at any size.
  *
  * Deliberately abstract. Page Spec 01 §1: "No fabricated metrics presented as

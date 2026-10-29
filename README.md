@@ -55,15 +55,32 @@ page in `/admin` and it has to work without a deploy.
 
 ## Security model
 
-There is no service role key. Admin writes run as the signed-in user and are
-bounded by row level security in Postgres, so the key in the browser bundle
-cannot edit anything. `proxy.ts` gates `/admin` optimistically for the sake of a
-clean redirect; `requireAdmin()` and RLS are what actually enforce it.
+Admin writes run as the signed-in user and are bounded by row level security in
+Postgres. `proxy.ts` gates `/admin` optimistically for the sake of a clean
+redirect; `requireAdmin()` and RLS are what actually enforce it.
+
+Public forms use a separate, server-only boundary. A signed render token proves
+the minimum completion time, the server validates and normalizes every field,
+and a service-only Postgres function applies replay protection and a five-per-15
+minute rate limit before writing the lead. The service role key never reaches
+the browser. Anonymous visitors have no direct insert permission on `leads`.
+
+After storage succeeds, Resend sends the notification in the background. Its
+result is recorded on the inquiry and failed or unconfigured messages can be
+retried from `/admin/leads`. Conversion events receive a signed marker only
+after the database commit, so direct Thank You visits and discarded spam are
+not counted as leads.
+
+Before deploying the form changes to an existing database, run
+[`supabase/migrations/011_secure_lead_submissions.sql`](./supabase/migrations/011_secure_lead_submissions.sql)
+in Supabase, then configure the server-only and Resend values documented in
+[`.env.example`](./.env.example).
 
 ## Still open
 
 - Copy on five pages is draft and needs Wendell's approval.
 - Real Estate SEO pricing does not exist yet — those two packages ship flagged
   as "pricing not set" and read "Contact for pricing".
-- Lead notification email (Resend) and GA4 / GTM.
+- Production Resend, Supabase service-role and lead-security environment values.
+- GA4 / GTM.
 - The full inventory of legacy URLs from the old site, for the redirect map.

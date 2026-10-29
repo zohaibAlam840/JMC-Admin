@@ -6,6 +6,7 @@ import { adminClient, requireAdmin } from "@/lib/admin/guard";
 import { createSupabaseServerClient } from "@/lib/supabase/server";
 import { tags } from "@/lib/supabase/rest";
 import { getSectionSchema } from "@/lib/section-schema";
+import { deliverLeadNotification } from "@/lib/leads/delivery";
 import {
   draftPageSlugs,
   filePages,
@@ -680,6 +681,13 @@ export async function deleteLead(form: FormData): Promise<void> {
   const supabase = await adminClient();
   await supabase.from("leads").delete().eq("id", text(form, "id"));
   redirect("/admin/leads");
+}
+
+export async function retryLeadNotification(form: FormData): Promise<void> {
+  await requireAdmin();
+  const id = text(form, "id");
+  if (id) await deliverLeadNotification(id);
+  redirect("/admin/leads?delivery=attempted");
 }
 
 /* ------------------------------------------------------------------ seed -- */

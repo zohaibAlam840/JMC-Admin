@@ -34,20 +34,6 @@ export const seoPackagesPage: PageContent = {
       eyebrow: "Monthly SEO Packages",
       heading: "The Prices Are on This Page",
       body: "Six monthly packages across two service lines, with what each one includes and what it costs. Nothing here is behind a call, because a price you have to ask for is a price that changes depending on who is asking.",
-      /*
-       * A button here after all. The original note said the path selector
-       * below was the action and a hero button would be noise; the client
-       * disagreed in review — "I still want a CTA up here" — and he is
-       * closer to how his buyers arrive than the spec is.
-       *
-       * One button, not two. The page's whole argument is that the prices are
-       * right here, so a second button competing with the price list would
-       * work against it.
-       */
-      primaryCta: {
-        label: "Request a Visibility Review",
-        href: "/contact",
-      },
     },
 
     {
@@ -419,7 +405,7 @@ export const seoPackagesPage: PageContent = {
         {
           question: "Does this include blog content?",
           answer:
-            "Yes. Strategic SEO Pages covers all written SEO content, blog posts included. Early phases usually prioritise local and industry pages first, simply because blog content needs somewhere to point before it does much good.",
+            "Yes. Strategic SEO Pages covers all written SEO content, blog posts included. Early phases usually prioritize local and industry pages first, simply because blog content needs somewhere to point before it does much good.",
         },
         {
           question: "What is not included?",
@@ -448,7 +434,7 @@ export const seoPackagesPage: PageContent = {
     {
       id: "final-cta",
       type: "finalCta",
-      heading: "Not Sure Which One Fits?",
+      heading: "Start With a Visibility Review",
       body: "A visibility review covers where you appear now, what is holding it back, and which package or sprint actually matches the problem.",
       primaryCta: { label: "Request a Visibility Review", href: "/contact" },
       secondaryCta: { label: "View Launch Sprints", href: "/launch-sprints" },

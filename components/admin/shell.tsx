@@ -28,7 +28,7 @@ const nav = [
   { href: "/admin/media", label: "Images", icon: Images },
   { href: "/admin/packages", label: "Packages & pricing", icon: Tags },
   { href: "/admin/navigation", label: "Navigation", icon: Navigation },
-  { href: "/admin/leads", label: "Enquiries", icon: Inbox },
+  { href: "/admin/leads", label: "Inquiries", icon: Inbox },
   { href: "/admin/redirects", label: "Redirects", icon: Signpost },
   { href: "/admin/sitemap", label: "Sitemap", icon: Share2 },
   { href: "/admin/settings", label: "Site details", icon: Settings },

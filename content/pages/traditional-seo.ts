@@ -136,7 +136,7 @@ export const traditionalSeoPage: PageContent = {
           href: "/industries/maritime-logistics",
         },
         {
-          title: "Commercial Construction",
+          title: "Commercial Construction & Infrastructure",
           icon: "hard-hat",
           body: "Contractors, civil firms and suppliers qualified on project type long before any bid conversation.",
           href: "/industries/commercial-construction-infrastructure",
@@ -316,9 +316,26 @@ export const traditionalSeoPage: PageContent = {
     },
 
     {
+      id: "monthly-recap",
+      type: "reportingBlock",
+      tone: "surface",
+      eyebrow: "Reporting",
+      heading: "The Monthly Recap",
+      body: "Four questions, every month, in the same order.",
+      did: "The pages built, the technical issues fixed, the recommendations made, named individually.",
+      why: "Why that work was the priority ahead of everything else in the queue.",
+      changed: "Movement across the tracked keyword and competitor set, including the months where little moved.",
+      next: "What is queued for the coming month, written down before it starts.",
+      cta: {
+        label: "See How JMC Reports SEO Progress",
+        href: "/seo-reporting",
+      },
+    },
+
+    {
       id: "faq",
       type: "faq",
-      tone: "surface",
+      tone: "white",
       eyebrow: "Questions",
       heading: "Traditional SEO Questions",
       items: [
@@ -336,6 +353,11 @@ export const traditionalSeoPage: PageContent = {
           question: "What does the onboarding fee cover?",
           answer:
             "The technical and on-page audit, tracking setup across markets, competitor analysis, and the foundational fixes that have to happen once before the monthly work means anything.",
+        },
+        {
+          question: "What are Strategic SEO Pages?",
+          answer:
+            "Strategic SEO Pages are written for specific searches worth competing for. Each page has one clear role in the roadmap and is planned, written, and optimized as part of the monthly scope.",
         },
         {
           question: "Do you build links?",

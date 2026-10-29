@@ -13,6 +13,7 @@ import { Icon } from "@/components/blocks/icon";
 import { LeadForm } from "@/components/blocks/lead-form";
 import { JsonLd, faqSchema } from "@/components/seo/json-ld";
 import { getSiteConfig } from "@/lib/content";
+import { createFormToken } from "@/lib/leads/security";
 import type { FaqItem, IconName } from "@/lib/types";
 
 /**
@@ -87,15 +88,15 @@ const review: Copy = {
       body: "The current setup is reviewed before the call, so the time is spent on substance rather than on gathering facts.",
     },
     {
-      title: "No Obligation",
+      title: "A Clear Recommendation",
       icon: "clipboard-check",
-      body: "No commitment attached. If JMC is not the right fit, that gets said.",
+      body: "The conversation ends with a candid recommendation. Any next step is the business's choice.",
     },
   ],
 };
 
 /*
- * Sprint. A sprint enquiry is a different conversation: a fixed scope inside a
+ * Sprint. A sprint inquiry is a different conversation: a fixed scope inside a
  * fixed window, where the first question is which of the three sprints matches
  * the problem. Landing it on the review copy would describe the wrong thing.
  */
@@ -134,7 +135,7 @@ const sprint: Copy = {
  */
 const NEXT_STEPS = [
   {
-    title: "The enquiry is read by a person",
+    title: "The inquiry is read by a person",
     body: "Not an autoresponder, and not a sales sequence.",
   },
   {
@@ -151,7 +152,7 @@ const faqItems: FaqItem[] = [
   {
     question: "What happens after this form is sent?",
     answer:
-      "The enquiry is read by a person. The current setup gets a short review before any conversation, so the call is spent on priorities rather than on collecting basic facts. Then a conversation about what is worth doing first.",
+      "The inquiry is read by a person. The current setup gets a short review before any conversation, so the call is spent on priorities rather than on collecting basic facts. Then a conversation about what is worth doing first.",
   },
   {
     question: "Is the Visibility Review free?",
@@ -177,6 +178,7 @@ export default async function Page({ searchParams }: PageProps<"/contact">) {
 
   const copy = rawType === "sprint" ? sprint : review;
   const tierLabel = TIER_LABELS[rawTier] ?? null;
+  const formToken = createFormToken("contact");
 
   // Contact details are editable in /admin, so they are read rather than
   // imported. This page is where a stale phone number costs the most, and §4
@@ -225,7 +227,7 @@ export default async function Page({ searchParams }: PageProps<"/contact">) {
 
             {/*
              * The tier context line. A short statement of which package
-             * prompted the enquiry, so a visitor does not have to restate it —
+             * prompted the inquiry, so a visitor does not have to restate it —
              * and not a preselected dropdown, so they are not locked into it
              * either.
              */}
@@ -244,7 +246,7 @@ export default async function Page({ searchParams }: PageProps<"/contact">) {
                */}
               <Suspense fallback={null}>
                 <LeadForm
-                  sourceCta={copy.submitLabel}
+                  formToken={formToken}
                   submitLabel={copy.submitLabel}
                 />
               </Suspense>
@@ -257,7 +259,7 @@ export default async function Page({ searchParams }: PageProps<"/contact">) {
               <ol className="flex flex-col gap-5">
                 {NEXT_STEPS.map((step, i) => (
                   <li key={step.title} className="flex gap-4">
-                    <span className="gradient-text font-display text-xl font-bold leading-none">
+                    <span className="font-display text-xl font-bold leading-none text-teal-ink">
                       {String(i + 1).padStart(2, "0")}
                     </span>
                     <div>
@@ -312,7 +314,7 @@ export default async function Page({ searchParams }: PageProps<"/contact">) {
               href="/google-business-profile-optimization#free-audit"
               className="font-semibold text-teal-ink underline decoration-teal/40 underline-offset-4 transition-colors hover:decoration-teal"
             >
-              Get a Free Google Business Profile Audit
+              Get a Free Visibility Audit
             </Link>
           </p>
         </Reveal>

@@ -1,8 +1,13 @@
 import type { Metadata } from "next";
+import { cookies } from "next/headers";
 import { Check } from "lucide-react";
 import { Band, Card, Container, SectionHeader } from "@/components/ui/layout";
 import { Stagger, StaggerItem } from "@/components/motion/reveal";
 import { ConversionEvent } from "@/components/blocks/conversion-event";
+import {
+  CONVERSION_COOKIE_NAME,
+  verifyConversionToken,
+} from "@/lib/leads/security";
 
 /**
  * Conversion confirmation — Page Spec 13.
@@ -48,7 +53,7 @@ const review: Variant = {
   event: "lead_visibility_review",
   steps: [
     {
-      title: "The enquiry is read",
+      title: "The inquiry is read",
       body: "By a person, not an autoresponder, and not the start of a sales sequence.",
     },
     {
@@ -81,17 +86,17 @@ const review: Variant = {
 
 /*
  * Sprint, reached from a Launch Sprints CTA carrying ?type=sprint. A sprint
- * enquiry is a different conversation from a visibility review, and landing it
+ * inquiry is a different conversation from a visibility review, and landing it
  * on the generic confirmation would describe the wrong next step.
  */
 const sprint: Variant = {
-  heading: "Sprint Enquiry Received",
+  heading: "Sprint Inquiry Received",
   intro:
-    "The enquiry arrived and a person will read it. A Launch Sprint is a fixed scope inside a fixed window, so the first step is agreeing exactly what is in it.",
+    "The inquiry arrived and a person will read it. A Launch Sprint is a fixed scope inside a fixed window, so the first step is agreeing exactly what is in it.",
   event: "lead_sprint_consultation",
   steps: [
     {
-      title: "The enquiry is read",
+      title: "The inquiry is read",
       body: "By a person, along with a look at which of the three sprints matches the problem described.",
     },
     {
@@ -148,7 +153,7 @@ const audit: Variant = {
     },
     {
       title: "It arrives by email",
-      body: "No call required, and no obligation attached to reading it.",
+      body: "It is ready to review by email, on the business's own time.",
     },
   ],
   onward: [
@@ -173,13 +178,29 @@ const audit: Variant = {
 export default async function Page({ searchParams }: PageProps<"/thank-you">) {
   const params = await searchParams;
   const type = typeof params.type === "string" ? params.type : "";
-  const tier = typeof params.tier === "string" ? params.tier : undefined;
 
   const variant = type === "audit" ? audit : type === "sprint" ? sprint : review;
+  const expectedLeadType =
+    type === "audit"
+      ? "gbp_audit"
+      : type === "sprint"
+        ? "sprint_consultation"
+        : "visibility_review";
+  const conversion = verifyConversionToken(
+    (await cookies()).get(CONVERSION_COOKIE_NAME)?.value ?? ""
+  );
+  const verifiedConversion =
+    conversion?.leadType === expectedLeadType ? conversion : null;
 
   return (
     <>
-      <ConversionEvent event={variant.event} tier={tier} />
+      {verifiedConversion ? (
+        <ConversionEvent
+          conversionId={verifiedConversion.leadId}
+          event={variant.event}
+          tier={verifiedConversion.tier}
+        />
+      ) : null}
 
       {/*
        * A clear statement, set well. No confetti, no animated checkmark: the
@@ -209,16 +230,14 @@ export default async function Page({ searchParams }: PageProps<"/thank-you">) {
        * the cards and nothing in a caption either.
        */}
       <Band tone="surface">
-        <SectionHeader eyebrow="What happens next" heading="Three Steps, No Dates" />
+        <SectionHeader eyebrow="What happens next" heading="The Next Three Steps" />
 
         <Stagger className="mt-12 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
           {variant.steps.map((step, i) => (
             <StaggerItem key={step.title} className="h-full">
               <Card className="gap-3">
-                <span className="inline-flex size-11 items-center justify-center rounded-card border border-line bg-surface font-display text-base font-bold leading-none">
-                  <span className="gradient-text">
-                    {String(i + 1).padStart(2, "0")}
-                  </span>
+                <span className="inline-flex size-11 items-center justify-center rounded-card border border-line bg-surface font-display text-base font-bold leading-none text-teal-ink">
+                  <span>{String(i + 1).padStart(2, "0")}</span>
                 </span>
                 <h2 className="text-[1.1875rem] leading-tight">{step.title}</h2>
                 <p className="text-[0.9rem] leading-relaxed text-subtle">

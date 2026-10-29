@@ -13,7 +13,7 @@ import { cn } from "@/lib/utils";
  * execution on every visitor's browser.
  *
  * Styling lives in the .article-body rules in globals.css; only the handful of
- * elements that need behaviour rather than looks are overridden here.
+ * elements that need behavior rather than looks are overridden here.
  */
 export function ArticleBody({
   markdown,

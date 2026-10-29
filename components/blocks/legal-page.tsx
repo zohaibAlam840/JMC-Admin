@@ -1,5 +1,5 @@
-import Script from "next/script";
 import { Container } from "@/components/ui/layout";
+import { TermageddonPolicy } from "@/components/blocks/termageddon-policy";
 import { site } from "@/content/site";
 import type { Policy } from "@/lib/legal";
 
@@ -16,10 +16,9 @@ import type { Policy } from "@/lib/legal";
  * Two things will bite on first deploy and are worth stating here rather than
  * discovering on production:
  *
- * The content-security policy has to allow Termageddon's script and frame
- * origins. A blocked embed renders a blank legal page with no error at all, and
- * CSP is usually stricter on production than locally, so each policy needs
- * checking on the live domain and not only in dev.
+ * A production content-security policy has to allow HTTPS connections to
+ * policies.termageddon.com. A blocked request renders an explicit fallback,
+ * but each policy still needs checking on the live domain and not only in dev.
  *
  * The "last updated" date comes from Termageddon's own output, inside the
  * embed. It is deliberately not rendered here from a build date or a file
@@ -43,31 +42,10 @@ export function LegalPage({ policy }: { policy: Policy }) {
       <section className="bg-white py-12 sm:py-16">
         <Container>
           <div className="mx-auto max-w-[68ch]">
-            {/*
-             * Termageddon's target container. The embed writes the policy body,
-             * its own heading structure and its own "last updated" line into
-             * this element.
-             *
-             * `legal-body` is styled in globals.css rather than with utilities:
-             * the markup arrives at runtime from a third party, so there is
-             * nothing here to put a class on.
-             */}
-            <div id="policy" className="legal-body" />
-
-            {/*
-             * afterInteractive: the policy is the whole point of the page, so it
-             * should not wait for everything else, but it also must not block
-             * first paint on a document nobody reads top to bottom.
-             *
-             * NOTE: confirm this URL shape against Termageddon's current
-             * integration documentation when the keys arrive. Their embed
-             * method has changed before, and a wrong URL fails silently to an
-             * empty page.
-             */}
-            <Script
-              id={`termageddon-${policy.slug.replace(/\W+/g, "-")}`}
-              src={`https://app.termageddon.com/api/policy/${policy.embedKey}`}
-              strategy="afterInteractive"
+            <TermageddonPolicy
+              key={policy.embedKey}
+              policyKey={policy.embedKey}
+              contactEmail={site.email}
             />
           </div>
         </Container>

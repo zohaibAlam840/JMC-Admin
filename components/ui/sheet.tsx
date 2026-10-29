@@ -57,7 +57,7 @@ function SheetContent({
         {children}
         <SheetPrimitive.Close
           aria-label="Close menu"
-          className="absolute right-5 top-5 rounded-pill p-2 text-ink-strong transition-colors hover:bg-surface"
+          className="absolute right-4 top-4 inline-flex size-11 items-center justify-center rounded-pill text-ink-strong transition-colors hover:bg-surface"
         >
           <X size={20} aria-hidden="true" />
         </SheetPrimitive.Close>

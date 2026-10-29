@@ -174,12 +174,12 @@ export const aboutPage: PageContent = {
       type: "cardGrid",
       tone: "white",
       eyebrow: "Scope",
-      heading: "What JMC Does, and What It Doesn't",
+      heading: "JMC's SEO Focus",
       body: "The boundary is the same on every engagement, and it is easier to point at than to describe.",
       columns: 2,
       cards: [
         {
-          title: "What JMC Does",
+          title: "SEO Work JMC Provides",
           icon: "search",
           items: [
             "Local SEO",
@@ -191,7 +191,7 @@ export const aboutPage: PageContent = {
           ],
         },
         {
-          title: "What JMC Doesn't Do",
+          title: "Services Outside the SEO Scope",
           icon: "layers",
           items: [
             "Paid ads",
@@ -253,7 +253,7 @@ export const aboutPage: PageContent = {
       tone: "white",
       eyebrow: "Based in League City",
       heading: "League City, Texas",
-      body: "JMC is based in League City and works with businesses across the Houston area and beyond. Being nearby helps with understanding a market. It has never been a limit on who the work is for.",
+      body: "JMC is based in League City, Texas.",
     },
 
     /*

@@ -121,11 +121,38 @@ export function SiteHeader({
             {mainNav.map((item) =>
               item.children?.length ? (
                 <NavigationMenuItem key={item.label}>
-                  <NavigationMenuTrigger
-                    className={cn(isActive(item.href) && ACTIVE_LINK)}
-                  >
-                    {item.label}
-                  </NavigationMenuTrigger>
+                  {item.href &&
+                  item.href !== "#" &&
+                  !item.children.some((child) => child.href === item.href) ? (
+                    <div className="flex items-center">
+                      <NavigationMenuLink asChild>
+                        <Link
+                          href={item.href}
+                          className={cn(
+                            navigationMenuTriggerStyle(),
+                            "rounded-r-none pr-1",
+                            isActive(item.href) && ACTIVE_LINK
+                          )}
+                        >
+                          {item.label}
+                        </Link>
+                      </NavigationMenuLink>
+                      <NavigationMenuTrigger
+                        aria-label={`Open ${item.label} menu`}
+                        className="rounded-l-none px-2 xl:px-2"
+                      >
+                        <span className="sr-only">
+                          Open {item.label} menu
+                        </span>
+                      </NavigationMenuTrigger>
+                    </div>
+                  ) : (
+                    <NavigationMenuTrigger
+                      className={cn(isActive(item.href) && ACTIVE_LINK)}
+                    >
+                      {item.label}
+                    </NavigationMenuTrigger>
+                  )}
                   <NavigationMenuContent>
                     <ul className="grid w-full gap-0.5">
                       {item.children.map((child) => (
@@ -193,12 +220,12 @@ export function SiteHeader({
           <Sheet open={mobileOpen} onOpenChange={setMobileOpen}>
           <SheetTrigger
             aria-label="Open menu"
-            className="rounded-pill p-2 text-ink-strong transition-colors hover:bg-surface lg:hidden"
+            className="inline-flex size-11 items-center justify-center rounded-pill text-ink-strong transition-colors hover:bg-surface lg:hidden"
           >
             <Menu size={22} aria-hidden="true" />
           </SheetTrigger>
 
-          <SheetContent side="right" className="w-full max-w-sm">
+          <SheetContent side="right" className="w-full max-w-none">
             <SheetTitle className="sr-only">Main menu</SheetTitle>
 
             <div className="flex items-center border-b border-line px-6 py-5">
@@ -224,7 +251,7 @@ export function SiteHeader({
                       <details>
                         <summary
                           className={cn(
-                            "flex cursor-pointer items-center justify-between py-2.5 font-heading text-lg font-bold",
+                            "flex min-h-11 cursor-pointer items-center justify-between py-2.5 font-heading text-lg font-bold",
                             isActive(item.href) ? "text-teal-ink" : "text-ink-strong"
                           )}
                         >
@@ -246,7 +273,7 @@ export function SiteHeader({
                                     isCurrent(child.href) ? "page" : undefined
                                   }
                                   className={cn(
-                                    "flex items-center gap-2 py-1.5 text-[0.88rem] transition-colors hover:text-teal-ink",
+                                    "flex min-h-11 items-center gap-2 py-2 text-[0.88rem] transition-colors hover:text-teal-ink",
                                     isCurrent(child.href)
                                       ? "font-semibold text-teal-ink"
                                       : "text-subtle"
@@ -275,7 +302,7 @@ export function SiteHeader({
                               <SheetClose asChild>
                                 <Link
                                   href={item.href}
-                                  className="block py-1.5 text-[0.88rem] font-semibold text-teal-ink"
+                                  className="flex min-h-11 items-center py-2 text-[0.88rem] font-semibold text-teal-ink"
                                 >
                                   View all {item.label.toLowerCase()}
                                 </Link>
@@ -294,7 +321,7 @@ export function SiteHeader({
                         <Link
                           href={item.href}
                           className={cn(
-                            "block py-2.5 font-heading text-lg font-bold transition-colors",
+                            "flex min-h-11 items-center py-2.5 font-heading text-lg font-bold transition-colors",
                             isActive(item.href) ? "text-teal-ink" : "text-ink-strong"
                           )}
                         >

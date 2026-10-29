@@ -46,6 +46,23 @@ function hrefsIn(value: unknown): string[] {
   return [];
 }
 
+/** Walk content values while retaining a useful path for copy QA errors. */
+function stringsIn(
+  value: unknown,
+  path: string
+): Array<{ path: string; value: string }> {
+  if (typeof value === "string") return [{ path, value }];
+  if (Array.isArray(value)) {
+    return value.flatMap((item, index) => stringsIn(item, `${path}[${index}]`));
+  }
+  if (value && typeof value === "object") {
+    return Object.entries(value).flatMap(([key, item]) =>
+      stringsIn(item, `${path}.${key}`)
+    );
+  }
+  return [];
+}
+
 /** Set while walking a draft page, so draft-to-draft links stay quiet. */
 let fromDraftPage = false;
 
@@ -98,6 +115,77 @@ for (const page of filePages) {
       checkHref(href, `${page.slug} §${section.id}`);
     }
   }
+}
+
+/* ------------------------------------------------------------- copy rules -- */
+
+const bannedCopy: Array<[RegExp, string]> = [
+  [/\u2014/, "em dash"],
+  [
+    /\b(?:specialise|specialised|prioritise|standardised|itemised|incentivised|behaviour|enquiry|enquiries|fortnight)\b/i,
+    "non-US spelling or phrasing",
+  ],
+  [/tidy-up/i, "non-US phrasing"],
+];
+
+for (const page of filePages) {
+  if (draftPageSlugs.has(page.slug)) continue;
+  for (const item of stringsIn(page, page.slug)) {
+    for (const [pattern, label] of bannedCopy) {
+      if (pattern.test(item.value)) {
+        problems.push(`${item.path}: ${label} found in published copy`);
+      }
+    }
+  }
+}
+
+function section(slug: string, id: string): Section | undefined {
+  return bySlug.get(slug)?.sections.find((item) => item.id === id);
+}
+
+const lockedHomeHeading =
+  "No Mystery SEO. No Confusing Reports. No Guessing What You Paid For.";
+const homeTransparency = section("/", "transparency") as
+  | (Section & { heading?: string })
+  | undefined;
+if (homeTransparency?.heading !== lockedHomeHeading) {
+  problems.push("/ §transparency: locked heading has changed");
+}
+
+for (const slug of [
+  "/traditional-seo-services",
+  "/google-business-profile-optimization",
+]) {
+  if (!bySlug.get(slug)?.sections.some((item) => item.type === "reportingBlock")) {
+    problems.push(`${slug}: required Monthly Recap reporting block is missing`);
+  }
+}
+
+const packagesHero = section("/monthly-seo-packages", "hero") as
+  | (Section & { primaryCta?: unknown; secondaryCta?: unknown })
+  | undefined;
+if (packagesHero?.primaryCta || packagesHero?.secondaryCta) {
+  problems.push("/monthly-seo-packages §hero: hero must not contain a CTA");
+}
+
+const gbpPage = bySlug.get("/google-business-profile-optimization");
+for (const item of gbpPage?.sections ?? []) {
+  for (const cta of ctasIn(item)) {
+    if (cta.href === "#free-audit" && cta.label !== "Get a Free Visibility Audit") {
+      problems.push(
+        `/google-business-profile-optimization §${item.id}: audit CTA must read "Get a Free Visibility Audit"`
+      );
+    }
+  }
+}
+const auditForm = section(
+  "/google-business-profile-optimization",
+  "free-audit"
+) as (Section & { submitLabel?: string }) | undefined;
+if (auditForm?.submitLabel !== "Get a Free Visibility Audit") {
+  problems.push(
+    "/google-business-profile-optimization §free-audit: submit label must read \"Get a Free Visibility Audit\""
+  );
 }
 
 fromDraftPage = false;

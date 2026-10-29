@@ -152,6 +152,21 @@ for (const statement of statements(src)) {
  * two of every section.
  */
 for (const slug of slugs) {
+  // Home is intentionally patched section by section in the full apply file
+  // so unrelated dashboard edits survive. It therefore has no wholesale
+  // section DELETE to validate.
+  if (slug === "/") {
+    const hasSectionUpdate = kept.some(
+      (s) =>
+        /^update public\.sections/i.test(s) && s.includes("slug = '/'")
+    );
+    if (!hasSectionUpdate) {
+      console.error("No homepage section updates found. Refusing to write.");
+      process.exit(1);
+    }
+    continue;
+  }
+
   const del = kept.findIndex(
     (s) => /^delete\b/i.test(s) && s.includes(`slug = '${slug}'`)
   );
@@ -167,9 +182,41 @@ for (const slug of slugs) {
     console.error(`DELETE for ${slug} comes after its inserts. Refusing.`);
     process.exit(1);
   }
+
+  /*
+   * The focused file is sliced from the last full generated apply file. If
+   * page source changed but `npm run sql:apply` was skipped, that file can be
+   * stale. A wholesale DELETE followed by a stale subset is destructive: it
+   * silently removes any newly restored section. Require exact section-key
+   * parity with the current page source before writing.
+   */
+  const page = matches.find((candidate) => candidate.slug === slug);
+  const expected = new Set(page?.sections.map((section) => section.id) ?? []);
+  const actual = new Set(
+    kept
+      .filter(
+        (s) =>
+          /^insert into public\.sections/i.test(s) &&
+          s.includes(`slug = '${slug}'`)
+      )
+      .map((s) => s.match(/select id, '([^']+)',/i)?.[1])
+      .filter((id): id is string => Boolean(id))
+  );
+  const missing = [...expected].filter((id) => !actual.has(id));
+  const extra = [...actual].filter((id) => !expected.has(id));
+  if (missing.length || extra.length) {
+    console.error(
+      `Generated SQL is stale for ${slug}. Run npm run sql:apply first.`
+    );
+    if (missing.length) console.error(`  Missing: ${missing.join(", ")}`);
+    if (extra.length) console.error(`  Extra: ${extra.join(", ")}`);
+    process.exit(1);
+  }
 }
 
-const sectionCount = matches.reduce((n, p) => n + p.sections.length, 0);
+const sectionCount = kept.filter((s) =>
+  /^(insert into|update) public\.sections/i.test(s)
+).length;
 const name = isPrefix
   ? normalised.replace(/^\//, "").replace(/\/$/, "").replace(/\//g, "-") + "-all"
   : matches[0].slug.replace(/^\//, "").replace(/\//g, "-") || "home";

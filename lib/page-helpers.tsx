@@ -21,6 +21,25 @@ export function buildMetadata(page: ResolvedPage): Metadata {
       title: page.seoTitle,
       description: page.metaDescription,
       url: page.slug,
+      images: [
+        {
+          url: "/opengraph-image/",
+          width: 1200,
+          height: 630,
+          alt: "Jordan Marketing Consultants, Houston-area SEO based in League City",
+        },
+      ],
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: page.seoTitle,
+      description: page.metaDescription,
+      images: [
+        {
+          url: "/twitter-image/",
+          alt: "Jordan Marketing Consultants, Houston-area SEO based in League City",
+        },
+      ],
     },
   };
 }

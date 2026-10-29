@@ -65,7 +65,7 @@ function NavigationMenuItem({
 }
 
 const navigationMenuTriggerStyle = cva(
-  "inline-flex items-center gap-1 whitespace-nowrap rounded-pill px-2.5 py-2 text-[0.85rem] font-medium text-ink outline-none transition-colors duration-200 hover:bg-surface hover:text-teal-ink focus-visible:bg-surface data-[state=open]:bg-surface data-[state=open]:text-teal-ink xl:px-3"
+  "inline-flex min-h-11 items-center gap-1 whitespace-nowrap rounded-pill px-2.5 py-2 text-[0.85rem] font-medium text-ink outline-none transition-colors duration-200 hover:bg-surface hover:text-teal-ink focus-visible:bg-surface data-[state=open]:bg-surface data-[state=open]:text-teal-ink xl:px-3"
 );
 
 function NavigationMenuTrigger({

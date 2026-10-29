@@ -17,7 +17,8 @@
 --  Security
 --  --------
 --  Every table has row level security on. The publishable key that ships to the
---  browser can only read published content and insert a lead. All writes
+--  browser can only read published content. Public form writes pass through a
+--  narrow service-only function added by migration 011; all dashboard writes
 --  require a signed-in user who is listed in `admins`.
 -- ============================================================================
 
@@ -212,23 +213,32 @@ create table if not exists public.redirects (
 
 -- =============================================================== leads ====
 create table if not exists public.leads (
-  id         uuid primary key default gen_random_uuid(),
-  name       text not null default '',
-  email      text not null default '',
-  phone      text,
-  company    text,
-  website    text,
-  service    text,
-  message    text,
+  id                          uuid primary key default gen_random_uuid(),
+  submission_id               uuid not null unique default gen_random_uuid(),
+  lead_type                   text not null default 'visibility_review'
+    check (lead_type in ('visibility_review', 'sprint_consultation', 'gbp_audit')),
+  name                        text not null default '',
+  email                       text not null default '',
+  phone                       text,
+  company                     text,
+  website                     text,
+  google_business_profile_url text,
+  service                     text,
+  message                     text,
   -- Which page and which button produced the request. Answers "what is
   -- actually converting" without needing analytics.
-  page_path  text,
-  source_cta text,
+  page_path                   text,
+  source_cta                  text,
   -- Which pricing card the visitor came from, via ?tier= on the CTA.
-  tier       text,
-  status     lead_status not null default 'new',
-  notes      text,
-  created_at timestamptz not null default now()
+  tier                        text,
+  status                      lead_status not null default 'new',
+  notes                       text,
+  notification_status         text not null default 'pending'
+    check (notification_status in ('pending', 'sent', 'failed', 'not_configured')),
+  notification_message_id     text,
+  notification_error          text,
+  notification_attempted_at   timestamptz,
+  created_at                  timestamptz not null default now()
 );
 
 create index if not exists leads_created_idx on public.leads (created_at desc);
@@ -308,11 +318,11 @@ create policy redirects_admin_write on public.redirects
   for all using (public.is_admin()) with check (public.is_admin());
 
 -- leads --------------------------------------------------------------------
--- Anyone may submit the contact form. Nobody but an admin may read one back:
--- there is deliberately no public select policy here.
+-- Public submissions use the service-only `submit_lead` function installed by
+-- migration 011. There is deliberately no anonymous table policy here, so the
+-- publishable key cannot bypass validation, spam checks, or the rate limit.
 drop policy if exists leads_public_insert on public.leads;
-create policy leads_public_insert on public.leads
-  for insert with check (true);
+revoke insert on table public.leads from public, anon;
 
 drop policy if exists leads_admin_read on public.leads;
 create policy leads_admin_read on public.leads

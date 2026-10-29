@@ -495,10 +495,8 @@ function CardGrid({ section }: { section: CardGridSection }) {
               ) : null}
 
               {variant === "numbered" ? (
-                <span className="mb-5 inline-flex size-11 items-center justify-center rounded-card border border-line bg-surface font-display text-base font-bold leading-none transition-colors duration-300 group-hover:border-transparent group-hover:bg-brand-black">
-                  <span className="gradient-text">
-                    {String(i + 1).padStart(2, "0")}
-                  </span>
+                <span className="mb-5 inline-flex size-11 items-center justify-center rounded-card border border-line bg-surface font-display text-base font-bold leading-none text-teal-ink transition-colors duration-300 group-hover:border-transparent group-hover:bg-brand-black group-hover:text-white">
+                  <span>{String(i + 1).padStart(2, "0")}</span>
                 </span>
               ) : card.icon ? (
                 <IconTile name={card.icon} />
@@ -1280,13 +1278,6 @@ function Faq({ section }: { section: FaqSection }) {
             ))}
           </Accordion>
 
-          {section.cta ? (
-            <div className="mt-8 lg:hidden">
-              <Button href={section.cta.href} size="lg" className="w-full">
-                {section.cta.label}
-              </Button>
-            </div>
-          ) : null}
         </Reveal>
       </div>
 
@@ -1401,7 +1392,7 @@ function PostList({
         <Reveal className="mt-10">
           <p className="rounded-bento border border-dashed border-line-strong px-6 py-12 text-center text-[0.95rem] text-subtle">
             {section.emptyMessage ??
-              "The first articles are being written now — check back shortly."}
+              "The first articles are being written now. Check back shortly."}
           </p>
         </Reveal>
       ) : (

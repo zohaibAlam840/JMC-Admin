@@ -63,15 +63,24 @@ export type AdminNavItem = {
 
 export type AdminLead = {
   id: string;
+  lead_type: "visibility_review" | "sprint_consultation" | "gbp_audit";
   name: string;
   email: string;
   phone: string | null;
   company: string | null;
   website: string | null;
+  google_business_profile_url: string | null;
   service: string | null;
   message: string | null;
   page_path: string | null;
+  source_cta: string | null;
+  tier: string | null;
   status: "new" | "contacted" | "qualified" | "archived";
+  notes: string | null;
+  notification_status: "pending" | "sent" | "failed" | "not_configured";
+  notification_message_id: string | null;
+  notification_error: string | null;
+  notification_attempted_at: string | null;
   created_at: string;
 };
 
@@ -148,11 +157,12 @@ export async function listNavItems(): Promise<AdminNavItem[]> {
 
 export async function listLeads(): Promise<AdminLead[]> {
   const supabase = await adminClient();
-  const { data } = await supabase
+  const { data, error } = await supabase
     .from("leads")
     .select("*")
     .order("created_at", { ascending: false })
     .limit(200);
+  if (error) throw new Error(`Could not load inquiries: ${error.message}`);
   return (data as AdminLead[]) ?? [];
 }
 

@@ -1,5 +1,7 @@
+import { cookies } from "next/headers";
 import { Container } from "@/components/ui/layout";
 import { AuditFormFields } from "@/components/blocks/audit-form-fields";
+import { createFormToken } from "@/lib/leads/security";
 import type { AuditFormSection } from "@/lib/types";
 
 /**
@@ -17,7 +19,13 @@ import type { AuditFormSection } from "@/lib/types";
  * would have to hold on the worst week rather than the average one, so the
  * reassurance moves to /thank-you?type=audit instead.
  */
-export function AuditForm({ section }: { section: AuditFormSection }) {
+export async function AuditForm({ section }: { section: AuditFormSection }) {
+  // This block can sit inside an otherwise static content page. Touching the
+  // request cookie store ensures the signed render time is minted per visitor
+  // instead of once during the build and then expiring for everyone.
+  await cookies();
+  const formToken = createFormToken("audit");
+
   return (
     <section id={section.id} className="scroll-mt-24 bg-ink py-16 md:py-20 lg:py-24">
       <Container>
@@ -65,7 +73,7 @@ export function AuditForm({ section }: { section: AuditFormSection }) {
             <AuditFormFields
               submitLabel={section.submitLabel}
               profileHelp={section.profileHelp}
-              source={section.source}
+              formToken={formToken}
             />
           </div>
         </div>

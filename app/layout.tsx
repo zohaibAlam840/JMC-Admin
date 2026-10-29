@@ -54,6 +54,23 @@ export const metadata: Metadata = {
     type: "website",
     locale: "en_US",
     siteName: "Jordan Marketing Consultants",
+    images: [
+      {
+        url: "/opengraph-image/",
+        width: 1200,
+        height: 630,
+        alt: "Jordan Marketing Consultants, Houston-area SEO based in League City",
+      },
+    ],
+  },
+  twitter: {
+    card: "summary_large_image",
+    images: [
+      {
+        url: "/twitter-image/",
+        alt: "Jordan Marketing Consultants, Houston-area SEO based in League City",
+      },
+    ],
   },
   robots: { index: true, follow: true },
 };

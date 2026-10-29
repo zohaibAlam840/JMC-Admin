@@ -108,8 +108,11 @@ const nextConfig: NextConfig = {
     return [
       ...LEGACY_REDIRECTS.map(({ source, destination }) => ({
         source,
-        destination,
-        permanent: true,
+        destination:
+          destination === "/" || destination.endsWith("/")
+            ? destination
+            : `${destination}/`,
+        statusCode: 301,
       })),
 
       /*
@@ -123,7 +126,7 @@ const nextConfig: NextConfig = {
       {
         source: "/resources",
         destination: "/",
-        permanent: false,
+        statusCode: 302,
       },
     ];
   },

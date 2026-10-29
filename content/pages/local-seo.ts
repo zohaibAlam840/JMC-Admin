@@ -1,7 +1,7 @@
 import type { PageContent } from "@/lib/types";
 
 /**
- * Local SEO Services — Page Spec 02. Nine sections.
+ * Local SEO Services — Page Spec 02. Eleven sections.
  *
  * Two things on this page are worth knowing before editing it.
  *
@@ -158,57 +158,6 @@ export const localSeoPage: PageContent = {
     },
 
     {
-      id: "packages",
-      type: "pricingCards",
-      tone: "surface",
-      eyebrow: "Pricing",
-      heading: "Local SEO Packages",
-      body: "Three tiers, sized by how much ground you are competing for. Every tier includes all six of the deliverables above.",
-      packageIds: ["local-neighborhood", "local-citywide", "local-metro"],
-    },
-
-    /*
-     * Callout A. Plain text under the three cards rather than a fourth card,
-     * by instruction: a card here would read as a hidden fourth tier.
-     *
-     * It routes to /contact for a quote and must never route to Traditional
-     * SEO. However many locations a business runs, if it competes in local
-     * results it is a Local buyer, and sending it to Traditional would put it
-     * in the wrong lane entirely.
-     */
-    {
-      id: "custom-scope",
-      type: "fullWidthText",
-      tone: "surface",
-      heading: "Working With Something Bigger?",
-      body: "If the scope is bigger or more involved than what is here, JMC will look at it and put together a quote. However many locations are involved, a business competing in local results is still a Local engagement.",
-      cta: { label: "Request a Visibility Review", href: "/contact" },
-    },
-
-    /*
-     * Callout B, the strongest conversion mechanic on the page. $799 buys a
-     * waiver worth up to $649, and the Neighborhood sprint unlocks it on all
-     * three Local tiers. A tinted box rather than the dark statement band:
-     * this is an offer beside the prices, not the visual peak of the page.
-     */
-    {
-      id: "sprint-callout",
-      type: "calloutBanner",
-      // White band, tinted box. Moving the recap up left packages, the
-      // custom-scope callout and this one as three tinted sections in a
-      // row, which is the same undifferentiated run the client flagged on
-      // the Traditional page. On white the callout box reads as a box.
-      tone: "white",
-      heading: "Or Start With a Launch Sprint",
-      body: "The Neighborhood Launch Sprint is $799, one-time, completed within 30 days. It builds the local foundation and finishes with a 30-day roadmap. Begin monthly service within 30 days of the sprint finishing and the onboarding fee on any Local package is waived, up to $649.",
-      primaryCta: { label: "View Launch Sprints", href: "/launch-sprints" },
-      secondaryCta: {
-        label: "View Local SEO Packages",
-        href: "/monthly-seo-packages#local",
-      },
-    },
-
-    {
       id: "visibility-system",
       type: "cardGrid",
       tone: "white",
@@ -236,17 +185,13 @@ export const localSeoPage: PageContent = {
         {
           title: "Reviews",
           icon: "star",
-          body: "Requests to real customers and replies to what arrives. Nothing fabricated, nothing incentivised.",
+          body: "Requests to real customers and replies to what arrives. Nothing fabricated, nothing incentivized.",
         },
         {
           title: "Local Search Grid Tracking",
           icon: "map-pin",
           body: "Visibility measured across a grid of points in your service area rather than as one blended rank, so you can see where you are strong and where you are not.",
-          // The grid illustration was removed in review. It made this card
-          // roughly twice the height of the one beside it, which left an
-          // obvious hole in the row -- "we've got all this blank space,
-          // that's clearly an error" -- and the client would rather send a
-          // real example himself than have the site draw an invented one.
+          visual: "searchGrid",
         },
         {
           title: "Strategic SEO Pages",
@@ -254,6 +199,69 @@ export const localSeoPage: PageContent = {
           body: "Pages built for the services and areas worth competing for, rather than one page trying to hold all of them.",
         },
       ],
+    },
+
+    {
+      id: "houston-positioning",
+      type: "fullWidthText",
+      tone: "surface",
+      eyebrow: "Houston-Area SEO",
+      heading: "Houston-Area SEO, Based in League City",
+      body: "JMC is based in League City and works with businesses across the Houston area.",
+    },
+
+    {
+      id: "packages",
+      type: "pricingCards",
+      tone: "surface",
+      eyebrow: "Pricing",
+      heading: "Local SEO Packages",
+      body: "Three tiers, sized by how much ground you are competing for. Every tier includes all six of the deliverables above.",
+      packageIds: ["local-neighborhood", "local-citywide", "local-metro"],
+    },
+
+    /*
+     * Plain text under the three cards rather than a fourth card: a card here
+     * would read as a hidden fourth tier. Larger local scopes still stay in
+     * the Local lane rather than being routed to Traditional SEO.
+     */
+    {
+      id: "custom-scope",
+      type: "fullWidthText",
+      tone: "surface",
+      heading: "Working With Something Bigger?",
+      body: "If the scope is bigger or more involved than what is here, JMC will look at it and put together a quote. However many locations are involved, a business competing in local results is still a Local engagement.",
+      cta: { label: "Request a Visibility Review", href: "/contact" },
+    },
+
+    {
+      id: "sprint-callout",
+      type: "calloutBanner",
+      tone: "white",
+      heading: "Or Start With a Launch Sprint",
+      body: "The Neighborhood Launch Sprint is $799, one-time, completed within 30 days. It builds the local foundation and finishes with a 30-day roadmap. Begin monthly service within 30 days of the sprint finishing and the onboarding fee on any Local package is waived, up to $649.",
+      primaryCta: { label: "View Launch Sprints", href: "/launch-sprints" },
+      secondaryCta: {
+        label: "View Local SEO Packages",
+        href: "/monthly-seo-packages#local",
+      },
+    },
+
+    {
+      id: "monthly-recap",
+      type: "reportingBlock",
+      tone: "white",
+      eyebrow: "Reporting",
+      heading: "The Monthly Recap",
+      body: "Four questions, every month, in the same order, with the written recap alongside a short video or call.",
+      did: "The profile, listing, review, content, and technical work completed that month.",
+      why: "Why that work was the priority for the business and its service area.",
+      changed: "What moved across Search, Maps, and the local visibility grid, including what did not move.",
+      next: "The next priorities in order, so the coming month starts with a clear plan.",
+      cta: {
+        label: "See How JMC Reports SEO Progress",
+        href: "/seo-reporting",
+      },
     },
 
     {
@@ -312,11 +320,11 @@ export const localSeoPage: PageContent = {
        */
       id: "final-cta",
       type: "finalCta",
-      heading: "Not Sure a Package Fits?",
+      heading: "Start With a Visibility Review",
       // One button here too. The packages are already the hero's ask and
       // appear twice more above this; offering them again beside the review
       // would put the escape hatch back into the A-or-B it exists to avoid.
-      body: "Start with a visibility review instead. Where you appear across your service area today, what is holding it back, and which of those gaps is worth closing first — before anything is bought.",
+      body: "See where the business appears across its service area today, what is holding it back, and which gaps are worth closing first before anything is bought.",
       primaryCta: { label: "Request a Visibility Review", href: "/contact" },
     },
   ],

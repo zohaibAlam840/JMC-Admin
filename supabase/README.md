@@ -34,6 +34,7 @@ Each is safe to run more than once.
 | [`migrations/007_lead_tier.sql`](./migrations/007_lead_tier.sql) | Which pricing card produced an enquiry, from `?tier=` on the CTA |
 | [`migrations/008_page_specs_02_09.sql`](./migrations/008_page_specs_02_09.sql) | Four block types for Page Specs 02 to 09: the expanded four questions, the example recap, the free audit form, and the waiver table |
 | [`migrations/009_package_positioning.sql`](./migrations/009_package_positioning.sql) | The positioning line and the term line on a package |
+| [`migrations/011_secure_lead_submissions.sql`](./migrations/011_secure_lead_submissions.sql) | Server-only lead submission, replay protection, rate limiting and email delivery state |
 
 ### One-off installers
 
@@ -43,6 +44,29 @@ Each is safe to run more than once.
 | [`apply-page-spec-01.sql`](./apply-page-spec-01.sql) | Rebuilds the homepage to the ten sections of Page Spec 01, in its order. Run **after** `005` and `006`, each in its own run. Replaces the homepage sections wholesale; touches nothing else. |
 | [`apply-page-meta.sql`](./apply-page-meta.sql) | Updates every page title and meta description to the §14 lengths. Sections untouched, so it cannot disturb admin edits. |
 | [`apply-page-specs-02-09.sql`](./apply-page-specs-02-09.sql) | Rebuilds the service and pricing pages to Page Specs 02 to 07, and creates SEO Reporting, the Industries hub and its eight industry pages. Also renames `/seo-packages` to `/monthly-seo-packages`, refreshes the packages, both menus and the legacy redirects, retunes every page title and description, and unpublishes Real Estate SEO. Run **after** `008` and `009`, each in its own run. Safe to re-run. Regenerate with `npm run sql:apply`. |
+
+### Focused client-audit updates
+
+For the October 2026 audit, prefer these focused files over the broad installer.
+Run each file as its own SQL Editor query, in this order:
+
+1. [`migrations/011_secure_lead_submissions.sql`](./migrations/011_secure_lead_submissions.sql)
+2. [`apply-footer.sql`](./apply-footer.sql)
+3. [`apply-home.sql`](./apply-home.sql)
+4. [`apply-local-seo-services.sql`](./apply-local-seo-services.sql)
+5. [`apply-google-business-profile-optimization.sql`](./apply-google-business-profile-optimization.sql)
+6. [`apply-industries.sql`](./apply-industries.sql)
+7. [`apply-industries-all.sql`](./apply-industries-all.sql)
+8. [`apply-client-audit-surgical.sql`](./apply-client-audit-surgical.sql)
+
+The surgical file is intentional. Traditional SEO, Monthly Packages, Launch
+Sprints, and About already have useful live dashboard structures that differ
+from the fallback files. It changes only the audited FAQ, label, spelling,
+emphasis, and About fields, so those live structures are not overwritten.
+
+The focused page generator now verifies that its section keys exactly match the
+source page before it writes a destructive rebuild. This prevents a stale
+script from silently removing a required section such as a Monthly Recap.
 
 ## 2. Create the first admin account
 
@@ -64,7 +88,7 @@ select id, email, 'editor' from auth.users where email = 'someone@example.com';
 
 ## 4. Import the launch content
 
-Either route loads the same thing: 20 pages, 154 sections, 12 packages, 42 menu
+Either route loads the same thing: 20 pages, 157 sections, 12 packages, 39 menu
 items, the site details, and the legacy redirects.
 
 **From the admin** — `/admin` offers an **Import launch content** button while
@@ -94,17 +118,31 @@ become the fallback the site serves if the database is ever unreachable.
 ```
 NEXT_PUBLIC_SUPABASE_URL=https://<project>.supabase.co
 NEXT_PUBLIC_SUPABASE_ANON_KEY=sb_publishable_...
+SUPABASE_SERVICE_ROLE_KEY=<server-only service role key>
+LEAD_SECURITY_SECRET=<at least 32 random characters>
 ```
 
-There is deliberately **no service role key**. Every admin write runs as the
-signed-in user and is bounded by row level security, so a leaked key from the
-browser bundle cannot be used to edit the site.
+The service role key is used only by server-side lead code and must never have a
+`NEXT_PUBLIC_` prefix. Admin editing still runs as the signed-in user and is
+bounded by row level security. Generate a separate random lead security secret;
+do not reuse a Supabase or Resend credential.
+
+For email notifications, also set `RESEND_API_KEY`,
+`LEAD_NOTIFICATION_EMAIL`, and `LEAD_NOTIFICATION_FROM`. The From address must
+use a domain verified in Resend. Multiple recipients may be comma-separated.
+The older reference site's `MAIL_TO` and `MAIL_FROM` names are accepted as
+fallback aliases.
+
+On an existing database, run migration `011` before deploying the matching app
+code. Until the migration and the two server-only values are present, public
+forms deliberately return a recoverable error instead of pretending a lead was
+captured.
 
 ## What the publishable key can do
 
 | Role | Read | Write |
 | --- | --- | --- |
-| Anonymous visitor | Published pages, visible sections, visible packages, navigation, site details | Insert a lead — nothing else |
+| Anonymous visitor | Published pages, visible sections, visible packages, navigation, site details | Nothing directly; forms use the validated server boundary |
 | Signed in, not in `admins` | Same as anonymous | Nothing |
 | Signed in, in `admins` | Everything, including drafts and enquiries | Everything |
 

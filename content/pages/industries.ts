@@ -14,7 +14,7 @@ import type { IconName, PageContent, Section } from "@/lib/types";
  * specialization claim. The argument is that the method transfers: the audit,
  * the technical work, the content approach and the reporting are the same, and
  * what changes is the search language, the buying cycle, and what a lead is
- * worth. Every §3 below describes an industry's search behaviour and never
+ * worth. Every §3 below describes an industry's search behavior and never
  * JMC's credentials in it.
  *
  * The group labels are descriptive only. "Consumer & Community" sells to
@@ -45,7 +45,7 @@ import type { IconName, PageContent, Section } from "@/lib/types";
  *   "The only one so far that's going to stay both is hospitality."
  *
  * Offering a lane JMC will not run is worse than narrowing the page: it
- * invites an enquiry that gets redirected on the first call, which is the
+ * invites an inquiry that gets redirected on the first call, which is the
  * precise experience the transparency pillar exists to avoid.
  *
  * Three pages stay on both because he explicitly deferred them — "I'm
@@ -102,7 +102,7 @@ function howJmcWorks(industry: string, lanes: Lanes): Section {
   const only = LANE_COPY[lanes];
   const because =
     lanes === "traditional"
-      ? `${industry} buyers are not searching inside a drive-time radius. The work is specification, capability and procurement language across a region or a country, so a local campaign would optimise for a map pack that the people making these decisions never open.`
+      ? `${industry} buyers are not searching inside a drive-time radius. The work is specification, capability and procurement language across a region or a country, so a local campaign would optimize for a map pack that the people making these decisions never open.`
       : `${industry} businesses compete inside a defined area, and the profile, the map pack and the reviews attached to them decide most of it. The work belongs in local search rather than spread thin across markets the business does not sell into.`;
 
   return {
@@ -126,8 +126,8 @@ function howJmcWorks(industry: string, lanes: Lanes): Section {
  *
  * The line each of these has to walk: say something specific about reporting
  * for this sector without claiming experience in it. Page Spec 09 forbids
- * sector expertise claims, and the shared FAQ on every one of these pages
- * says in as many words that JMC does not specialise in the industry. So
+ * sector expertise claims, and the tailored FAQ on each page explains the
+ * transferable method without claiming industry expertise. So
  * none of these describe past work, results or clients. Each describes what
  * gets measured and reported for a business that searches the way this
  * industry's §3 section has already established that it does — which is a
@@ -163,7 +163,7 @@ const RECAPS: Record<string, Recap> = {
     body: "The same four questions every month. For a practice the answers are about symptom language, reputation, and whether the booking path survives the click.",
     did: "The work completed that month, named task by task: condition and symptom pages, profile and review work, and fixes to the path between a search and a booked appointment.",
     why: "Why that work came first, which is usually a condition the practice should be found for and is not, or a step in the booking path losing people who had already chosen it.",
-    changed: "Which symptom and condition searches moved, how the profile and reviews are tracking, and where appointment enquiries arrived from. Reported honestly, including the months where little moved.",
+    changed: "Which symptom and condition searches moved, how the profile and reviews are tracking, and where appointment inquiries arrived from. Reported honestly, including the months where little moved.",
     next: "Next month's priorities in order, so the practice is never the last to find out what is being worked on.",
   },
 
@@ -179,7 +179,7 @@ const RECAPS: Record<string, Recap> = {
     body: "The same four questions every month. For a firm the answers arrive more slowly than most, because the consideration does.",
     did: "The work completed that month, named task by task: practice-area pages, the location pairings that go with them, and the material doing the work of credibility before anyone picks up a phone.",
     why: "Why that work came first, which is usually a practice area with no page behind it, or one competing against firms that have published far more.",
-    changed: "Which practice-area and location searches moved, and what enquiry volume did. Reported honestly, including the months where little moved, which is ordinary in a consideration cycle measured in weeks.",
+    changed: "Which practice-area and location searches moved, and what inquiry volume did. Reported honestly, including the months where little moved, which is ordinary in a consideration cycle measured in weeks.",
     next: "Next month's priorities in order, with the reasoning behind the order rather than just the list.",
   },
 
@@ -187,12 +187,12 @@ const RECAPS: Record<string, Recap> = {
     body: "The same four questions every month. For a technical buyer the answers are about specification coverage rather than keyword counts.",
     did: "The work completed that month, named task by task: capability and specification pages, the technical detail that makes them findable, and the fixes that let a procurement search reach them at all.",
     why: "Why that work came first, which is usually a capability the business sells and cannot be found for, or a page written in adjectives where the search was written in specifications.",
-    changed: "Which specification and capability searches moved, and what the enquiries that did arrive were actually looking for. Reported honestly, including the months where little moved.",
+    changed: "Which specification and capability searches moved, and what the inquiries that did arrive were actually looking for. Reported honestly, including the months where little moved.",
     next: "Next month's priorities in order, on a cycle measured in months rather than weeks, because the buying is.",
   },
 
   "maritime-logistics": {
-    body: "The same four questions every month. For a logistics business the answers are organised by route, mode and capability, because that is how the searches are.",
+    body: "The same four questions every month. For a logistics business the answers are organized by route, mode and capability, because that is how the searches are.",
     did: "The work completed that month, named task by task: route and capability pages, the certification and coverage detail that gets searched for by name, and the technical work behind both.",
     why: "Why that work came first, which is usually a lane or a capability with no page behind it, or a certification buyers search for that the site never actually states.",
     changed: "What moved across route, mode and capability searches, and on the urgent ones that only appear when something is down. Reported honestly, including the months where little moved.",
@@ -203,7 +203,7 @@ const RECAPS: Record<string, Recap> = {
     body: "The same four questions every month. For a contractor the answers are about being qualified, which happens long before anybody calls.",
     did: "The work completed that month, named task by task: project-type pages, the evidence in text that a qualifying reader is looking for, and the technical work sitting behind both.",
     why: "Why that work came first, which is usually a project type the business bids on with nothing published about it, or a page that ranks and then fails to qualify the reader who lands on it.",
-    changed: "Which project-type searches moved, and what the enquiries that arrived were bidding on. Reported honestly, including the months where little moved.",
+    changed: "Which project-type searches moved, and what the inquiries that arrived were bidding on. Reported honestly, including the months where little moved.",
     next: "Next month's priorities in order, aligned to the project types actually being bid rather than to a content calendar.",
   },
 
@@ -211,7 +211,7 @@ const RECAPS: Record<string, Recap> = {
     body: "The same four questions every month. In aerospace the answers start with approvals, because that is the first filter a buyer applies.",
     did: "The work completed that month, named task by task: capability and approval pages, part and service detail made findable, and the technical work that lets a very narrow search reach it.",
     why: "Why that work came first, which is usually an approval or a capability buyers filter on that the site does not state in a form search can read.",
-    changed: "Which part, capability and approval searches moved, and what the enquiries that arrived were qualified against. Reported honestly, including the months where little moved.",
+    changed: "Which part, capability and approval searches moved, and what the inquiries that arrived were qualified against. Reported honestly, including the months where little moved.",
     next: "Next month's priorities in order, on a procurement cycle that does not reward rushing.",
   },
 };
@@ -248,22 +248,6 @@ const finalCta: Section = {
   secondaryCta: { label: "Explore Industries", href: "/industries" },
 };
 
-/** FAQ slots 4 and 5. Written once, reused eight times. */
-function sharedFaq(industry: string) {
-  return [
-    {
-      question: "Which service fits a business like this?",
-      answer:
-        "It depends on reach rather than size. If the customers are in a defined area, that is Local SEO, however many locations are involved. If the business competes across several markets or service lines, that is Traditional SEO. A visibility review sorts it in one conversation.",
-    },
-    {
-      question: `Does JMC specialise in ${industry.toLowerCase()}?`,
-      answer:
-        "No, and that is deliberate. A specialist charges for pattern-matching from other clients in your sector, which JMC does not pretend to have yet. What is on offer instead is a method that works regardless of sector, and reporting clear enough that you can see whether it is working.",
-    },
-  ];
-}
-
 /* ------------------------------------------------------------- the eight -- */
 
 type Industry = {
@@ -296,10 +280,10 @@ type Industry = {
    */
   style: {
     motif: "report" | "coverage" | "roadmap" | "channels" | "growth";
-    /** The hero panel. Behaviour, never a claim, and never a number. */
+    /** The hero panel. Behavior, never a claim, and never a number. */
     panel: { label: string; title: string; items: string[] };
     aside: { label: string; title: string; items: string[] };
-    /** §2 heading and layout. Rotated so no two neighbours look alike. */
+    /** §2 heading and layout. Rotated so no two neighbors look alike. */
     audienceHeading: string;
     audienceVariant: "cards" | "compact" | "numbered" | "split";
   };
@@ -313,7 +297,7 @@ type Industry = {
     body: string;
     points: { title: string; body: string; icon: IconName }[];
   };
-  /** §6. Three industry-specific questions, before the two shared ones. */
+  /** §6. Five questions written specifically for this industry. */
   faq: { question: string; answer: string }[];
 };
 
@@ -326,7 +310,7 @@ const industries: Industry[] = [
     blurb: "Trades and home service businesses that get found at the moment something breaks.",
     h1: "SEO for Home Services and Trades",
     heroSub:
-      "Home service searches are urgent, local, and mostly made on a phone. Getting found in that moment is a different problem from ranking for a term someone researches over a fortnight.",
+      "Home service searches are urgent, local, and mostly made on a phone. Getting found in that moment is a different problem from ranking for a term someone researches over two weeks. Houston-area heat and storm seasons make that timing especially important for local trades.",
     seoTitle: "Home Services & Trades SEO | Houston Area",
     metaDescription:
       "SEO for HVAC, roofing, plumbing, electrical and landscaping businesses in the Houston area. Local visibility, profile work, and clear monthly reporting.",
@@ -381,7 +365,7 @@ const industries: Industry[] = [
     ],
     search: {
       heading: "What Search Looks Like in the Trades",
-      body: "Trades searches are mostly emergencies, and an emergency search behaves nothing like a considered one. Someone whose air conditioning has failed in August is on a phone, will call one of the first businesses they see, and will not open a second page of results. Storm damage does the same thing to roofing at a larger scale, and it happens with no notice.\n\nThe buying cycle is short, often minutes. That makes the map pack and the profile more valuable here than almost anywhere else, and it makes an incomplete listing an expensive problem rather than a tidy-up job. Competition is usually local, which is the good news: the field is the businesses inside the same drive-time radius, not every company in the state.",
+      body: "Trades searches are mostly emergencies, and an emergency search behaves nothing like a considered one. Someone whose air conditioning has failed in August is on a phone, will call one of the first businesses they see, and will not open a second page of results. Storm damage does the same thing to roofing at a larger scale, and it happens with no notice.\n\nThe buying cycle is short, often minutes. That makes the map pack and the profile more valuable here than almost anywhere else, and it makes an incomplete listing an expensive problem rather than a cleanup. Competition is usually local, which is the good news: the field is the businesses inside the same drive-time radius, not every company in the state.",
       points: [
         {
           title: "Phone first, and often after hours",
@@ -416,6 +400,16 @@ const industries: Industry[] = [
         answer:
           "Usually. Referrals get searched for by name before anyone calls, and a weak profile or a thin website loses jobs that were already won. That is often the cheapest fix on the list.",
       },
+      {
+        question: "What should a home service business fix first: its profile or its website?",
+        answer:
+          "The review follows the buyer's path. If calls are being lost in the map results, profile and listing work comes first. If the profile earns the click but the site does not explain the service or coverage, the website becomes the priority.",
+      },
+      {
+        question: "How does JMC keep a trades campaign accountable?",
+        answer:
+          "From its League City base, JMC grounds the work in Houston-area search conditions, then documents profile, service-area and seasonal priorities in the monthly recap so each change can be checked.",
+      },
     ],
   },
 
@@ -427,7 +421,7 @@ const industries: Industry[] = [
     blurb: "Practices and clinics where patients choose from a short list and book an appointment.",
     h1: "SEO for Healthcare and Wellness Practices",
     heroSub:
-      "Patients research before they book, and they usually stop at the first practice that looks credible and close. Visibility and reputation do the work together here.",
+      "Patients research before they book, and they usually stop at the first practice that looks credible and close. Visibility and reputation do the work together here. Dense Houston-area competition makes clear location and reputation signals especially important.",
     seoTitle: "Healthcare & Wellness SEO | Houston Area",
     metaDescription:
       "SEO for dental, medical, therapy and wellness practices in the Houston area. Local visibility, profile and review support, and reporting you can actually read.",
@@ -505,12 +499,22 @@ const industries: Industry[] = [
       {
         question: "How are patient reviews handled?",
         answer:
-          "Packages include review request sends and replies. Nothing is fabricated or incentivised, and no review is ever written on a practice's behalf, which would breach both the platform rules and the positioning this agency is built on.",
+          "Packages include review request sends and replies. Nothing is fabricated or incentivized, and no review is ever written on a practice's behalf, which would breach both the platform rules and the positioning this agency is built on.",
       },
       {
         question: "Does a multi-location practice need separate pages?",
         answer:
           "Usually yes. Each location needs its own profile, its own consistent listings, and enough of its own content that the two locations are not competing with each other in the same results.",
+      },
+      {
+        question: "Which search gap should a healthcare or wellness practice address first?",
+        answer:
+          "The first priority is the point where the patient path breaks. That may be a missing condition page, an incomplete profile, weak review signals or a booking step that loses people after they have already chosen the practice.",
+      },
+      {
+        question: "How does JMC report progress for a practice?",
+        answer:
+          "JMC combines its League City perspective on Houston-area search with the practice's own clinical review. The monthly recap tracks symptom and condition visibility, profile movement, reputation signals and the path to a booked appointment.",
       },
     ],
   },
@@ -524,7 +528,7 @@ const industries: Industry[] = [
     blurb: "Places people plan a visit to, from an evening out to a weekend away.",
     h1: "SEO for Hospitality and Attractions",
     heroSub:
-      "Hospitality search runs on two clocks at once: someone deciding where to eat in ten minutes, and someone planning a visit six weeks out. The same business has to be visible in both.",
+      "Hospitality search runs on two clocks at once: someone deciding where to eat in ten minutes, and someone planning a visit six weeks out. The same business has to be visible in both. Houston-area hospitality searches also span nearby visits and trips planned around the Gulf Coast.",
     seoTitle: "Hospitality & Attractions SEO | Houston Area",
     metaDescription:
       "SEO for hotels, restaurants, venues and attractions in the Houston area and beyond. Local and regional visibility, profile work, and clear monthly reporting.",
@@ -574,7 +578,7 @@ const industries: Industry[] = [
     ],
     search: {
       heading: "What Search Looks Like in Hospitality",
-      body: "Hospitality is two industries wearing one coat. A restaurant is found by someone standing on a street with ten minutes of patience, where hours, photographs and the map listing settle it before the website is opened. A venue or a hotel is found by someone planning weeks ahead, comparing options across a dozen tabs, and reading far more than a listing.\n\nThe second kind is where the reach question decides the service. A neighbourhood restaurant competes inside a few miles. A destination attraction or a wedding venue draws from a whole region and competes with businesses in other cities for the same visit, which is a different problem with a different set of pages behind it. Booking platforms sit on top of many of these results, so part of the work is finding the searches they do not dominate.",
+      body: "Hospitality is two industries wearing one coat. A restaurant is found by someone standing on a street with ten minutes of patience, where hours, photographs and the map listing settle it before the website is opened. A venue or a hotel is found by someone planning weeks ahead, comparing options across a dozen tabs, and reading far more than a listing.\n\nThe second kind is where the reach question decides the service. A neighborhood restaurant competes inside a few miles. A destination attraction or a wedding venue draws from a whole region and competes with businesses in other cities for the same visit, which is a different problem with a different set of pages behind it. Booking platforms sit on top of many of these results, so part of the work is finding the searches they do not dominate.",
       points: [
         {
           title: "Two clocks, one business",
@@ -597,7 +601,7 @@ const industries: Industry[] = [
       {
         question: "Is this a local or a regional problem?",
         answer:
-          "It depends on where guests come from. A neighbourhood restaurant is Local SEO. An attraction or venue that draws from across the region competes across markets, which points toward Traditional SEO. That question gets answered in the review rather than assumed from the category.",
+          "It depends on where guests come from. A neighborhood restaurant is Local SEO. An attraction or venue that draws from across the region competes across markets, which points toward Traditional SEO. That question gets answered in the review rather than assumed from the category.",
       },
       {
         question: "Can SEO compete with the booking platforms?",
@@ -608,6 +612,16 @@ const industries: Industry[] = [
         question: "How much does the Google Business Profile matter?",
         answer:
           "More than in almost any other sector. Hours, photographs, menu links and attributes are read directly in the results by people who never reach the website, so a stale profile costs visits outright.",
+      },
+      {
+        question: "Which booking window should a hospitality business target first?",
+        answer:
+          "The first target is the window with the clearest missed demand. That may be immediate map searches with incomplete hours and photos, or planning-stage searches where a venue, attraction or lodging business has no useful page to find.",
+      },
+      {
+        question: "How does JMC keep hospitality search work measurable?",
+        answer:
+          "From League City, JMC applies Houston-area context to immediate and planning-ahead searches separately. The monthly recap shows which listings, event pages and booking-stage terms changed, then names the next priority.",
       },
     ],
   },
@@ -620,7 +634,7 @@ const industries: Industry[] = [
     blurb: "Firms whose clients compare a shortlist before they ever make contact.",
     h1: "SEO for Professional Services Firms",
     heroSub:
-      "Professional services buyers research quietly and at length, then contact one or two firms. Most of the decision happens before anyone picks up a phone.",
+      "Professional services buyers research quietly and at length, then contact one or two firms. Most of the decision happens before anyone picks up a phone. Houston-area firms also compete on searches that pair a specific service with a place or industry.",
     seoTitle: "Professional Services SEO | Houston Area",
     metaDescription:
       "SEO for legal, accounting, financial and consulting firms in the Houston area. Strategy, content built for how clients search, and clear monthly reporting.",
@@ -665,12 +679,12 @@ const industries: Industry[] = [
     ],
     search: {
       heading: "What Search Looks Like in Professional Services",
-      body: "Buyers here are cautious and largely invisible. They read, they compare, they check credentials, and they often visit a firm's site several times over weeks without ever filling in a form. The consequence is that traffic and enquiries move on different timelines, and a report that only shows enquiries misses most of what changed.\n\nThe searches themselves are specific. People look for a practice area plus a place, or a situation described in plain language, and generic pages built around the firm rather than the problem do badly against them. Lead value is high, which changes the arithmetic: a small number of the right visitors is worth more than a large number of the wrong ones, and that is what the tracked keyword set should reflect.",
+      body: "Buyers here are cautious and largely invisible. They read, they compare, they check credentials, and they often visit a firm's site several times over weeks without ever filling in a form. The consequence is that traffic and inquiries move on different timelines, and a report that only shows inquiries misses most of what changed.\n\nThe searches themselves are specific. People look for a practice area plus a place, or a situation described in plain language, and generic pages built around the firm rather than the problem do badly against them. Lead value is high, which changes the arithmetic: a small number of the right visitors is worth more than a large number of the wrong ones, and that is what the tracked keyword set should reflect.",
       points: [
         {
           title: "A long, quiet consideration",
           icon: "clipboard-check",
-          body: "Several visits before contact is normal, so early traffic movement matters before enquiries do.",
+          body: "Several visits before contact is normal, so early traffic movement matters before inquiries do.",
         },
         {
           title: "Practice area plus place",
@@ -686,7 +700,7 @@ const industries: Industry[] = [
     },
     faq: [
       {
-        question: "Why do enquiries lag behind traffic in this sector?",
+        question: "Why do inquiries lag behind traffic in this sector?",
         answer:
           "Because the decision takes weeks and involves several visits. That is normal here, and it is one of the reasons the recap reports what changed in visibility as well as what came through the form.",
       },
@@ -700,6 +714,16 @@ const industries: Industry[] = [
         answer:
           "In the most contested categories, progress usually starts on more specific searches rather than the broadest term. That is a slower route but a real one, and the reporting is explicit about which stage the work is at.",
       },
+      {
+        question: "Should a professional firm organize pages by service, location or client problem?",
+        answer:
+          "Usually by a useful combination of all three. Each page should answer one recognizable need, state the service clearly and connect it to the market the firm actually serves instead of forcing every search into one broad overview.",
+      },
+      {
+        question: "How does JMC show progress before inquiries increase?",
+        answer:
+          "The method separates early visibility movement from later lead activity. From its League City base, JMC tracks Houston-area service and location searches, then uses the monthly recap to connect that movement with the pages and credibility work completed.",
+      },
     ],
   },
 
@@ -711,7 +735,7 @@ const industries: Industry[] = [
     blurb: "Suppliers and service firms selling into plants, operators and procurement teams.",
     h1: "SEO for Energy and Petrochemical Suppliers",
     heroSub:
-      "Buyers in this sector search by specification, not by adjective. The work is making a business findable in the exact technical language its customers already use.",
+      "Buyers in this sector search by specification, not by adjective. The work is making a business findable in the exact technical language its customers already use. In the Houston area, that often means connecting Gulf Coast capability with buyers searching across a regional or national market.",
     seoTitle: "Energy & Petrochemical SEO | Houston Area",
     metaDescription:
       "SEO for energy and petrochemical service firms, suppliers and consultancies. Search built around specifications, procurement cycles, and clear reporting.",
@@ -771,7 +795,7 @@ const industries: Industry[] = [
         {
           title: "Months, not minutes",
           icon: "calendar",
-          body: "A long cycle means early visibility work shows up in enquiries much later than it shows up in traffic.",
+          body: "A long cycle means early visibility work shows up in inquiries much later than it shows up in traffic.",
         },
       ],
     },
@@ -791,6 +815,16 @@ const industries: Industry[] = [
         answer:
           "Usually Traditional, because buyers are spread across markets. A field-service business working one area is a Local engagement, and location count never decides it. Reach does.",
       },
+      {
+        question: "What should be made searchable first on a technical supplier's site?",
+        answer:
+          "Start with the capabilities, specifications and standards that qualified buyers already use as filters. Existing datasheets and sales documentation usually reveal which details deserve a crawlable page first.",
+      },
+      {
+        question: "How does JMC keep an energy search engagement grounded?",
+        answer:
+          "The client's technical team supplies and approves the facts. JMC brings a documented search method, League City context for the Houston-area market and a monthly recap that connects each capability or specification page to measurable movement.",
+      },
     ],
   },
 
@@ -803,7 +837,7 @@ const industries: Industry[] = [
     blurb: "Port, freight and marine operators whose customers are other businesses.",
     h1: "SEO for Maritime and Logistics Operators",
     heroSub:
-      "Logistics buyers search by route, service and capability, often under time pressure. Being findable in that language is most of the job.",
+      "Logistics buyers search by route, service and capability, often under time pressure. Being findable in that language is most of the job. Houston-area port and Gulf Coast searches make route, coverage and capability especially important.",
     seoTitle: "Maritime & Logistics SEO | Houston Area",
     metaDescription:
       "SEO for port services, freight operators, and marine repair and fabrication firms. Search built around routes, capability, and how logistics buyers search.",
@@ -848,12 +882,12 @@ const industries: Industry[] = [
     ],
     search: {
       heading: "What Search Looks Like in Logistics",
-      body: "Logistics search sits between the urgency of a trade and the caution of a procurement purchase. A freight buyer looking for a route and a mode will compare several operators before making contact, but a vessel needing repair is an emergency with a daily cost attached, and those two searches want completely different pages.\n\nThe vocabulary is precise. Routes, ports, vessel types, cargo classes and certifications are the terms people use, and a site organised around company departments rather than around those terms is hard to find no matter how good the business is. Reach varies enormously: a single-yard repair business competes locally, while a freight operator moving cargo across the region competes with operators in other cities for the same contract.",
+      body: "Logistics search sits between the urgency of a trade and the caution of a procurement purchase. A freight buyer looking for a route and a mode will compare several operators before making contact, but a vessel needing repair is an emergency with a daily cost attached, and those two searches want completely different pages.\n\nThe vocabulary is precise. Routes, ports, vessel types, cargo classes and certifications are the terms people use, and a site organized around company departments rather than around those terms is hard to find no matter how good the business is. Reach varies enormously: a single-yard repair business competes locally, while a freight operator moving cargo across the region competes with operators in other cities for the same contract.",
       points: [
         {
           title: "Route, mode, capability",
           icon: "network",
-          body: "Pages organised by what customers ship and where, rather than by internal department.",
+          body: "Pages organized by what customers ship and where, rather than by internal department.",
         },
         {
           title: "Downtime makes some searches urgent",
@@ -879,9 +913,19 @@ const industries: Industry[] = [
           "Both, usually, because they are searched differently. A service page explains capability; a route or port page catches the searches that name a specific place.",
       },
       {
-        question: "How is an urgent repair enquiry handled differently?",
+        question: "How is an urgent repair inquiry handled differently?",
         answer:
           "Those searches need a fast, obvious path to a phone number and clear coverage information, which is closer to how a trades page works than to how a procurement page works.",
+      },
+      {
+        question: "How should a maritime operator separate urgent and planned searches?",
+        answer:
+          "Urgent repair searches need direct coverage, capability and contact information. Planned freight or port-service searches need fuller route, mode, certification and capacity pages that can support a longer comparison.",
+      },
+      {
+        question: "What does JMC report for maritime and logistics search?",
+        answer:
+          "JMC uses its League City base to ground Houston-area port relevance, then tracks route, service, certification and capability searches by intent. The monthly recap separates urgent movement from procurement-stage progress and names the next priority.",
       },
     ],
   },
@@ -895,7 +939,7 @@ const industries: Industry[] = [
     blurb: "Contractors, civil firms and suppliers working on commercial and public projects.",
     h1: "SEO for Commercial Construction Firms",
     heroSub:
-      "Commercial construction is won on capability, references and bid lists, but the shortlist is increasingly built by searching. Being on it starts with being findable.",
+      "Commercial construction is won on capability, references and bid lists, but the shortlist is increasingly built by searching. Being on it starts with being findable. Houston-area project searches still qualify firms by project type, scale and capability rather than proximity alone.",
     seoTitle: "Commercial Construction SEO | Houston Area",
     metaDescription:
       "SEO for commercial contractors, civil and infrastructure firms, and building products suppliers. Search built around project type and qualification work.",
@@ -903,7 +947,7 @@ const industries: Industry[] = [
       motif: "growth",
       panel: {
         label: "How buyers search",
-        title: "To Qualify, Not to Enquire",
+        title: "To Qualify, Not to Inquire",
         items: [
           "Project type and sector",
           "Scale and scope",
@@ -940,10 +984,10 @@ const industries: Industry[] = [
     ],
     search: {
       heading: "What Search Looks Like in Construction",
-      body: "The searches that matter here rarely look like lead generation. An architect looking for a product that meets a standard, a developer checking whether a contractor has done a project of a given type before, a procurement team qualifying a supplier: all of them are searching, and none of them will fill in a contact form on the first visit.\n\nThat makes the project and capability pages the working part of a construction site. Sector, project type, scale and qualification are the terms people search, and a portfolio organised as a photo gallery answers none of them. The cycle is measured in months, competition runs regional to national, and the value of a single project means a small volume of exactly the right visitors is the goal rather than traffic.",
+      body: "The searches that matter here rarely look like lead generation. An architect looking for a product that meets a standard, a developer checking whether a contractor has done a project of a given type before, a procurement team qualifying a supplier: all of them are searching, and none of them will fill in a contact form on the first visit.\n\nThat makes the project and capability pages the working part of a construction site. Sector, project type, scale and qualification are the terms people search, and a portfolio organized as a photo gallery answers none of them. The cycle is measured in months, competition runs regional to national, and the value of a single project means a small volume of exactly the right visitors is the goal rather than traffic.",
       points: [
         {
-          title: "Qualification, not enquiry",
+          title: "Qualification, not inquiry",
           icon: "clipboard-check",
           body: "Most visitors are checking whether you qualify. The site has to answer that without a conversation.",
         },
@@ -973,7 +1017,17 @@ const industries: Industry[] = [
       {
         question: "How long is the payback in this sector?",
         answer:
-          "Longer than in consumer categories, because the cycle itself is long. The recap tracks visibility and qualification-stage movement in the meantime rather than pretending an enquiry count tells the whole story.",
+          "Longer than in consumer categories, because the cycle itself is long. The recap tracks visibility and qualification-stage movement in the meantime rather than pretending an inquiry count tells the whole story.",
+      },
+      {
+        question: "When does a construction firm need Local SEO versus Traditional SEO?",
+        answer:
+          "A contractor serving a defined area may need Local SEO, especially when map visibility drives calls. A firm competing for projects across regions needs Traditional SEO built around project type, sector, capability and qualification.",
+      },
+      {
+        question: "How does JMC make construction search work accountable?",
+        answer:
+          "From its League City base, JMC connects Houston-area project searches with the firm's approved capability and project evidence. The monthly recap records which pages were built, why they came first, what moved and what follows.",
       },
     ],
   },
@@ -986,7 +1040,7 @@ const industries: Industry[] = [
     blurb: "Manufacturers, service providers and suppliers in a heavily qualified supply chain.",
     h1: "SEO for Aerospace and Aviation Suppliers",
     heroSub:
-      "Aerospace buyers search by part, standard and certification, and they qualify before they contact. The work is being findable and credible in that order.",
+      "Aerospace buyers search by part, standard and certification, and they qualify before they contact. The work is being findable and credible in that order. For Houston-area suppliers, local credibility supports a search process whose competitive reach is usually national.",
     seoTitle: "Aerospace & Aviation SEO | Houston Area",
     metaDescription:
       "SEO for aerospace manufacturers, MRO and ground service providers, and avionics suppliers. Search built around parts, certification and procurement work.",
@@ -1066,6 +1120,16 @@ const industries: Industry[] = [
         answer:
           "Almost always nationally, which puts most aerospace suppliers in the Traditional lane. A ground services business tied to one airport is the exception, and it is a Local engagement.",
       },
+      {
+        question: "What should an aerospace supplier make searchable first?",
+        answer:
+          "Start with public approvals, capabilities, parts and service ranges that buyers already use to qualify suppliers. Each detail needs a crawlable home and the client's technical approval before it becomes part of the search surface.",
+      },
+      {
+        question: "How does JMC report progress for an aerospace supplier?",
+        answer:
+          "JMC applies League City and Houston-area context where location matters, then measures the national part, capability and approval searches that drive qualification. The monthly recap ties every movement to completed, client-approved work.",
+      },
     ],
   },
 ];
@@ -1109,7 +1173,7 @@ function industryPage(industry: Industry): PageContent {
         columns,
         eyebrow: "Who This Is For",
         heading: industry.style.audienceHeading,
-        body: "The kinds of business this applies to. Naming a category is not a claim of expertise in it.",
+        body: "Examples of businesses that share this search pattern and buying cycle.",
         // Deliberately no cta on any card: the child pages are phase two, and
         // the card already accepts one, so shipping them later is content
         // entry rather than a template change.
@@ -1117,7 +1181,7 @@ function industryPage(industry: Industry): PageContent {
       },
 
       {
-        id: "search-behaviour",
+        id: "search-behavior",
         type: "featureSplit",
         tone: "white",
         /*
@@ -1127,14 +1191,14 @@ function industryPage(industry: Industry): PageContent {
          * this layout, not the other way around. I like this better because
          * we read from left to right here in the US."
          *
-         * It used to alternate down the set so no two neighbouring pages
+         * It used to alternate down the set so no two neighboring pages
          * looked alike. That was solving a problem nobody reported — these
          * pages are landed on one at a time from search, not read in
          * sequence — at the cost of the reading order being inconsistent on
          * the one section that carries each page's actual argument.
          */
         align: "left",
-        eyebrow: "Search Behaviour",
+        eyebrow: "Search Behavior",
         heading: industry.search.heading,
         body: industry.search.body,
         groups: industry.search.points,
@@ -1149,7 +1213,7 @@ function industryPage(industry: Industry): PageContent {
         tone: "surface",
         eyebrow: "Questions",
         heading: `${industry.shortName ?? industry.name} Questions`,
-        items: [...industry.faq, ...sharedFaq(industry.name)],
+        items: industry.faq,
         cta: { label: "Request a Visibility Review", href: "/contact" },
       },
 
@@ -1219,7 +1283,7 @@ export const industriesIndexPage: PageContent = {
       align: "left",
       eyebrow: "Pillar",
       heading: "What Stays the Same, and What Doesn't",
-      body: "The work is the same regardless of sector. The same audit, the same technical foundation, the same content approach, the same reporting. What changes is the search language buyers use, how long they take to decide, and what a single lead is worth.\n\nThat is a deliberate position rather than a gap. A specialist charges for pattern-matching from other clients in your sector, and JMC does not claim to have that yet. What it offers instead is a method that transfers, run on two tracks depending on whether a business competes in a defined area or across markets.",
+      body: "The work is the same regardless of sector. The same audit, the same technical foundation, the same content approach, the same reporting. What changes is the search language buyers use, how long they take to decide, and what a single lead is worth.\n\nThat consistency is deliberate. JMC brings a transferable method and clear reporting, while each client brings the technical knowledge of its market. Based in League City, the team can ground Houston-area work in local context and apply the same disciplined process to businesses competing across wider markets.",
       tableHeadings: ["Stays the same", "Varies by industry"],
       tableRows: [
         {
@@ -1282,9 +1346,9 @@ export const industriesIndexPage: PageContent = {
       heading: "Industry Questions",
       items: [
         {
-          question: "Does JMC specialise in a particular industry?",
+          question: "Does JMC specialize in a particular industry?",
           answer:
-            "No, and that is deliberate. A specialist charges for pattern-matching from other clients in your sector, which JMC cannot honestly offer yet. What it offers instead is a method that works regardless of sector, and reporting clear enough that you can see whether it is working.",
+            "JMC uses one transparent SEO method across sectors: start with how buyers search, build the right technical and content foundation, and report what changed. Its League City base provides Houston-area context, while each client's team supplies the technical knowledge behind the details.",
         },
         {
           question: "What if an industry isn't listed here?",

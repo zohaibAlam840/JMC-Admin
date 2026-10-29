@@ -1,13 +1,13 @@
 "use client";
 
-import * as React from "react";
 import { useActionState } from "react";
 import { useFormStatus } from "react-dom";
-import { usePathname, useSearchParams } from "next/navigation";
+import { useSearchParams } from "next/navigation";
 import { ArrowRight, Loader2 } from "lucide-react";
 import { submitLead, type LeadState } from "@/app/actions/lead";
 import { Input, Label, Textarea } from "@/components/ui/form-controls";
 import { Button } from "@/components/ui/button";
+import { LEAD_LIMITS } from "@/lib/leads/validation";
 
 function SubmitButton({ label }: { label: string }) {
   const { pending } = useFormStatus();
@@ -57,17 +57,16 @@ function FieldError({ id, message }: { id: string; message?: string }) {
  * mid-rebuild, is still a lead, and requiring it would turn away exactly the
  * prospects a rebuild-adjacent agency wants.
  *
- * What the visitor came from rides along as hidden fields — the page, the CTA
- * label, `type` and `tier`. None of them changes what is required.
+ * Only `type` and `tier` come from the URL. The server derives the page and CTA
+ * labels from the validated lead type so a browser cannot forge attribution.
  */
 export function LeadForm({
-  sourceCta = "Request a Visibility Review",
+  formToken,
   submitLabel = "Request a Visibility Review",
 }: {
-  sourceCta?: string;
+  formToken: string;
   submitLabel?: string;
 }) {
-  const pathname = usePathname();
   const params = useSearchParams();
   /*
    * Read here as well as on the server: the page renders the hero and the
@@ -76,20 +75,19 @@ export function LeadForm({
    */
   const type = params.get("type") === "sprint" ? "sprint" : "";
   const tier = params.get("tier") ?? "";
-  // Captured once on mount rather than read at submit time, so the value is
-  // the moment the form appeared rather than the moment it was sent.
-  const [renderedAt] = React.useState(() => String(Date.now()));
-  const [state, action] = useActionState<LeadState, FormData>(submitLead, {});
+  const [state, action, pending] = useActionState<LeadState, FormData>(
+    submitLead,
+    {}
+  );
   const v = state.values ?? {};
   const e = state.errors ?? {};
 
   return (
-    <form action={action} className="flex flex-col gap-6">
-      {/* Attribution — which CTA and page produced this request. */}
-      <input type="hidden" name="sourceCta" value={sourceCta} />
-      <input type="hidden" name="sourcePage" value={pathname} />
+    <form action={action} className="flex flex-col gap-6" aria-busy={pending}>
+      {/* Signed server render time plus the one-use submission id. */}
+      <input type="hidden" name="formToken" value={formToken} />
       {/*
-       * Lead type. Sprint enquiries have to stay separable from Visibility
+       * Lead type. Sprint inquiries have to stay separable from Visibility
        * Reviews in the CRM, and this is also what selects the confirmation the
        * visitor lands on.
        */}
@@ -99,12 +97,6 @@ export function LeadForm({
        * that carried through for attribution.
        */}
       <input type="hidden" name="tier" value={tier} />
-      {/*
-       * Paired with the honeypot, per §13: a form completed in under three
-       * seconds was not filled in by a person. No CAPTCHA.
-       */}
-      <input type="hidden" name="renderedAt" value={renderedAt} />
-
       {/* Honeypot. Hidden from people, tempting to bots. */}
       <div aria-hidden="true" className="absolute left-[-9999px]">
         <label htmlFor="company_website">Leave this field empty</label>
@@ -137,6 +129,7 @@ export function LeadForm({
             name="name"
             required
             autoComplete="name"
+            maxLength={LEAD_LIMITS.name}
             defaultValue={v.name}
             aria-invalid={Boolean(e.name)}
             aria-describedby={e.name ? "name-error" : undefined}
@@ -154,6 +147,7 @@ export function LeadForm({
             type="email"
             required
             autoComplete="email"
+            maxLength={LEAD_LIMITS.email}
             defaultValue={v.email}
             aria-invalid={Boolean(e.email)}
             aria-describedby={e.email ? "email-error" : undefined}
@@ -168,8 +162,12 @@ export function LeadForm({
             name="phone"
             type="tel"
             autoComplete="tel"
+            maxLength={LEAD_LIMITS.phone}
             defaultValue={v.phone}
+            aria-invalid={Boolean(e.phone)}
+            aria-describedby={e.phone ? "phone-error" : undefined}
           />
+          <FieldError id="phone-error" message={e.phone} />
         </div>
 
         <div className="flex flex-col gap-2">
@@ -181,6 +179,7 @@ export function LeadForm({
             name="business"
             required
             autoComplete="organization"
+            maxLength={LEAD_LIMITS.business}
             defaultValue={v.business}
             aria-invalid={Boolean(e.business)}
             aria-describedby={e.business ? "business-error" : undefined}
@@ -196,14 +195,19 @@ export function LeadForm({
             type="url"
             inputMode="url"
             autoComplete="url"
+            maxLength={LEAD_LIMITS.url}
             defaultValue={v.website}
-            aria-describedby="website-help"
+            aria-invalid={Boolean(e.website)}
+            aria-describedby={
+              e.website ? "website-help website-error" : "website-help"
+            }
           />
           {/* Helper text, not a placeholder. A placeholder is not a label and
               disappears the moment someone starts typing. */}
           <p id="website-help" className="text-[0.8rem] text-subtle">
             If there is one.
           </p>
+          <FieldError id="website-error" message={e.website} />
         </div>
       </div>
 
@@ -217,6 +221,7 @@ export function LeadForm({
           name="message"
           rows={4}
           required
+          maxLength={LEAD_LIMITS.message}
           defaultValue={v.message}
           aria-invalid={Boolean(e.message)}
           aria-describedby={e.message ? "message-error" : undefined}

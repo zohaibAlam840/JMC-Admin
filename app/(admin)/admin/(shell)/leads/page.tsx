@@ -1,6 +1,7 @@
 import {
   adminButton,
   EmptyState,
+  Notice,
   PageHeader,
   Panel,
   Pill,
@@ -8,9 +9,16 @@ import {
 } from "@/components/admin/ui";
 import { ConfirmButton } from "@/components/admin/confirm-button";
 import { listLeads, type AdminLead } from "@/lib/admin/data";
-import { deleteLead, setLeadStatus } from "../../actions";
+import {
+  deleteLead,
+  retryLeadNotification,
+  setLeadStatus,
+} from "../../actions";
+import { notificationConfigured } from "@/lib/notify";
+import { leadSecurityConfigured } from "@/lib/leads/security";
+import { leadServiceConfigured } from "@/lib/supabase/service";
 
-export const metadata = { title: "Enquiries" };
+export const metadata = { title: "Inquiries" };
 export const dynamic = "force-dynamic";
 
 const STATUSES: AdminLead["status"][] = [
@@ -20,7 +28,10 @@ const STATUSES: AdminLead["status"][] = [
   "archived",
 ];
 
-export default async function LeadsScreen() {
+export default async function LeadsScreen({
+  searchParams,
+}: PageProps<"/admin/leads">) {
+  const { delivery } = await searchParams;
   const leads = await listLeads();
   const active = leads.filter((l) => l.status !== "archived");
   const archived = leads.filter((l) => l.status === "archived");
@@ -28,14 +39,35 @@ export default async function LeadsScreen() {
   return (
     <div className="flex flex-col gap-6">
       <PageHeader
-        title="Enquiries"
-        description="Every Visibility Review request submitted through the site."
+        title="Inquiries"
+        description="Visibility Reviews, Sprint Consultations, and Free Visibility Audits submitted through the site."
       />
 
+      {delivery ? (
+        <Notice tone="success">
+          Notification delivery was attempted. Its current result appears on
+          the inquiry below.
+        </Notice>
+      ) : null}
+
+      {!leadServiceConfigured() || !leadSecurityConfigured() ? (
+        <Notice tone="error">
+          Public form storage is not ready. Add the server-only Supabase service
+          key and lead security secret before launch.
+        </Notice>
+      ) : null}
+
+      {!notificationConfigured() ? (
+        <Notice tone="warning">
+          Email notification is not configured. New inquiries can still be
+          stored once form storage is ready, but they will only appear here
+          until the Resend variables are added.
+        </Notice>
+      ) : null}
+
       {leads.length === 0 ? (
-        <EmptyState title="No enquiries yet">
-          Requests submitted through the contact form land here the moment they
-          are sent.
+        <EmptyState title="No inquiries yet">
+          Requests from both public forms land here the moment they are sent.
         </EmptyState>
       ) : (
         <>
@@ -75,10 +107,14 @@ function LeadCard({ lead }: { lead: AdminLead }) {
         <div className="min-w-0">
           <p className="flex flex-wrap items-center gap-2">
             <span className="font-display text-[1.05rem] uppercase leading-none text-ink-strong">
-              {lead.name || "No name given"}
+              {lead.name || lead.company || "Unnamed inquiry"}
             </span>
             <Pill tone={lead.status === "new" ? "live" : "neutral"}>
               {lead.status}
+            </Pill>
+            <Pill tone="neutral">{leadTypeLabel(lead.lead_type)}</Pill>
+            <Pill tone={notificationTone(lead.notification_status)}>
+              email {lead.notification_status.replace("_", " ")}
             </Pill>
           </p>
           <p className="mt-1 text-[0.8rem] text-subtle">{received}</p>
@@ -103,7 +139,7 @@ function LeadCard({ lead }: { lead: AdminLead }) {
             <input type="hidden" name="id" value={lead.id} />
             <ConfirmButton
               className={adminButton.tiny + " h-[38px] px-3"}
-              message="Delete this enquiry permanently?"
+              message="Delete this inquiry permanently?"
             >
               Delete
             </ConfirmButton>
@@ -139,9 +175,53 @@ function LeadCard({ lead }: { lead: AdminLead }) {
             </a>
           ) : null}
         </Detail>
+        <Detail label="Google Business Profile">
+          {lead.google_business_profile_url ? (
+            <a
+              href={lead.google_business_profile_url}
+              target="_blank"
+              rel="noreferrer"
+              className="break-all text-teal-ink hover:underline"
+            >
+              {lead.google_business_profile_url}
+            </a>
+          ) : null}
+        </Detail>
         <Detail label="Interested in">{lead.service}</Detail>
         <Detail label="Came from">{lead.page_path}</Detail>
+        <Detail label="Source button">{lead.source_cta}</Detail>
+        <Detail label="Package tier">{lead.tier}</Detail>
       </dl>
+
+      <div className="mt-4 flex flex-wrap items-start justify-between gap-3 rounded-[10px] border border-line bg-surface-2 p-3">
+        <div className="min-w-0">
+          <p className="text-[0.72rem] font-semibold uppercase tracking-[0.08em] text-subtle">
+            Email delivery
+          </p>
+          <p className="mt-1 text-[0.83rem] text-ink-strong">
+            {lead.notification_status === "sent"
+              ? "Sent to the configured recipient."
+              : lead.notification_status === "pending"
+                ? "Queued for delivery."
+                : lead.notification_status === "not_configured"
+                  ? "Resend is not configured."
+                  : "The last delivery attempt failed."}
+          </p>
+          {lead.notification_error ? (
+            <p className="mt-1 max-w-2xl break-words text-[0.76rem] text-destructive">
+              {lead.notification_error}
+            </p>
+          ) : null}
+        </div>
+        {lead.notification_status !== "sent" ? (
+          <form action={retryLeadNotification}>
+            <input type="hidden" name="id" value={lead.id} />
+            <button type="submit" className={adminButton.secondary}>
+              Retry email
+            </button>
+          </form>
+        ) : null}
+      </div>
 
       {lead.message ? (
         <div className="mt-4 rounded-[10px] border border-line bg-surface-2 p-3">
@@ -155,6 +235,20 @@ function LeadCard({ lead }: { lead: AdminLead }) {
       ) : null}
     </Panel>
   );
+}
+
+function leadTypeLabel(type: AdminLead["lead_type"]) {
+  if (type === "sprint_consultation") return "Sprint";
+  if (type === "gbp_audit") return "Free audit";
+  return "Visibility review";
+}
+
+function notificationTone(
+  status: AdminLead["notification_status"]
+): "neutral" | "live" | "draft" {
+  if (status === "sent") return "live";
+  if (status === "failed" || status === "not_configured") return "draft";
+  return "neutral";
 }
 
 function Detail({

@@ -135,7 +135,7 @@ w("--");
 w("--    - refreshes the packages, both menus, and the legacy redirects, since");
 w("--      /seo-packages is renamed to /monthly-seo-packages and every link to");
 w("--      it moved with it;");
-w("--    - updates six homepage sections and one on About, which is all that");
+w("--    - updates the changed homepage sections and one on About, which is all that");
 w("--      changed on those two pages;");
 w("--    - retunes every page title and description to the Build Spec lengths;");
 w("--    - unpublishes Real Estate SEO and hides its two tiers, which Page");
@@ -144,7 +144,7 @@ w("--");
 w("--  Sections on the rebuilt pages are REPLACED wholesale. Any edit made to");
 w("--  one of them in /admin is overwritten. Copy on the homepage and About,");
 w("--  outside the sections named above, is left alone, as are articles and");
-w("--  enquiries.");
+w("--  inquiries.");
 w("--");
 w("--  Safe to run more than once.");
 w("-- ==========================================================================");
@@ -285,7 +285,8 @@ footerNav.forEach((group, i) => {
 /* ---------------------------------------------------------- homepage bits -- */
 
 /*
- * Six homepage sections changed; nothing else on the page did.
+ * Only the homepage sections listed below are synchronized. The page is not
+ * rebuilt wholesale, so unrelated dashboard edits remain intact.
  *
  * The homepage is not rebuilt wholesale here on purpose: Page Spec 01 has its
  * own installer and the client may have edited copy since. These four are
@@ -307,6 +308,7 @@ const HOME_SECTIONS = [
   // Review") and the first-person "we" voice that check-voice rejects.
   "packages",       // cards linked to /seo-packages, now /monthly-seo-packages
   "process",        // retired CTA label, and "we" throughout the steps
+  "houston",        // stale Real Estate copy and a CTA moved to Services
   "final-cta",      // same dead link in the secondary button
 ];
 

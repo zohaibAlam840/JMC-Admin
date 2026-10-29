@@ -1,12 +1,10 @@
 import { notFound } from "next/navigation";
 import { Sections } from "@/components/blocks/sections";
-import { JsonLd, localBusinessSchema } from "@/components/seo/json-ld";
 import { buildMetadata } from "@/lib/page-helpers";
-import { getPackages, getPage, getPosts, getSiteConfig } from "@/lib/content";
+import { getPackages, getPage, getPosts } from "@/lib/content";
 
 /**
- * Home has its own route rather than going through the catch-all, because it
- * is the only page that emits LocalBusiness structured data. Its content is
+ * Home has its own route rather than going through the catch-all. Its content is
  * still fully editable in /admin — it is the page with slug "/".
  */
 export async function generateMetadata() {
@@ -15,18 +13,14 @@ export async function generateMetadata() {
 }
 
 export default async function Page() {
-  const [page, packages, posts, { site }] = await Promise.all([
+  const [page, packages, posts] = await Promise.all([
     getPage("/"),
     getPackages(),
     getPosts({ limit: 12 }),
-    getSiteConfig(),
   ]);
   if (!page) notFound();
 
   return (
-    <>
-      <JsonLd data={localBusinessSchema(site)} />
-      <Sections sections={page.sections} packages={packages} posts={posts} />
-    </>
+    <Sections sections={page.sections} packages={packages} posts={posts} />
   );
 }

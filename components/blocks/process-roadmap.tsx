@@ -130,12 +130,10 @@ export function ProcessRoadmap({ section }: { section: ProcessStepsSection }) {
                 )}
               >
                 <span
-                  className="relative z-10 flex shrink-0 items-center justify-center rounded-pill bg-white font-display text-base font-bold leading-none shadow-lift ring-8 ring-brand-black"
+                  className="relative z-10 flex shrink-0 items-center justify-center rounded-pill bg-white font-display text-base font-bold leading-none text-teal-ink shadow-lift ring-8 ring-brand-black"
                   style={{ width: MARKER, height: MARKER }}
                 >
-                  <span className="gradient-text">
-                    {String(i + 1).padStart(2, "0")}
-                  </span>
+                  <span>{String(i + 1).padStart(2, "0")}</span>
                 </span>
 
                 <div className="rounded-bento border border-white/10 bg-white/[0.04] p-5 backdrop-blur-sm transition-colors duration-300 hover:border-teal/40 hover:bg-white/[0.07] lg:mt-7">

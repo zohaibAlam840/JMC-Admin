@@ -128,7 +128,7 @@ export const launchSprintsPage: PageContent = {
       tone: "surface",
       eyebrow: "The Shape of It",
       heading: "What a Sprint Is",
-      body: "A Launch Sprint is a single piece of SEO work with a start date, an end date, and a list agreed before anything begins. It is not a trial of monthly service, and it is not a discounted version of it.\n\nIt is the foundational work — the audit, the technical and on-page fixes, the setup that should be in place before any ongoing campaign — done once, as its own job, with its own price.\n\nMost SEO engagements spend their first two months doing exactly this work inside a retainer while the invoice runs. A sprint separates it out and puts a finish date on it, so a business can buy the foundation without committing to a year of anything.\n\nAt the end you get the work itself and a written roadmap of what to do next. Whether that turns into monthly service, a job for an internal team, or nothing for a while is a real decision rather than a formality — the roadmap is written to be useful in all three cases.",
+      body: "A Launch Sprint is a single piece of SEO work with a start date, an end date, and a list agreed before anything begins. It is not a trial of monthly service, and it is not a discounted version of it.\n\nIt brings the foundational work into one defined engagement: the audit, technical and on-page fixes, and the setup that should be in place before ongoing work begins.\n\nThe scope and finish date are agreed at the start, so a business can establish the foundation without committing to a year of service.\n\nAt the end, the completed work and a written roadmap show what to do next. The roadmap remains useful whether the next step is monthly service, an internal team, or a pause.",
       groups: [
         {
           title: "One-Time",
@@ -240,7 +240,7 @@ export const launchSprintsPage: PageContent = {
         {
           title: "Completed Work",
           icon: "clipboard-check",
-          body: "Everything done during the sprint, itemised, so there is no gap between what was paid for and what is visible.",
+          body: "Everything done during the sprint, itemized, so there is no gap between what was paid for and what is visible.",
         },
         {
           title: "Recommended Next Steps",

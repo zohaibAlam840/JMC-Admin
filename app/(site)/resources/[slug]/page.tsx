@@ -123,7 +123,7 @@ export default async function ArticlePage({
               ) : null}
             </div>
 
-            <h1 className="mt-4 text-[2.3rem] leading-[0.98] sm:text-[3rem]">
+            <h1 className="mt-4 font-display text-[2.3rem] leading-[0.98] sm:text-[3rem]">
               {post.title}
             </h1>
 

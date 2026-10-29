@@ -1,5 +1,6 @@
 import { NextResponse, type NextRequest } from "next/server";
 import { createServerClient } from "@supabase/ssr";
+import { site } from "@/content/site";
 import { SUPABASE_ANON_KEY, SUPABASE_URL, supabaseConfigured } from "@/lib/supabase/config";
 
 /**
@@ -67,11 +68,19 @@ function normalise(path: string) {
   return trimmed === "" ? "/" : trimmed;
 }
 
+const CANONICAL_HOST = new URL(site.url).hostname.toLowerCase();
+
+/** Keep every preview and staging host out of search indexes. */
+function applyIndexingPolicy(response: NextResponse, request: NextRequest) {
+  if (request.nextUrl.hostname.toLowerCase() !== CANONICAL_HOST) {
+    response.headers.set("X-Robots-Tag", "noindex, nofollow, noarchive");
+  }
+  return response;
+}
+
 /* ----------------------------------------------------------------- proxy -- */
 export async function proxy(request: NextRequest) {
   const { pathname } = request.nextUrl;
-
-  if (!supabaseConfigured) return NextResponse.next();
 
   /*
    * Uppercase paths are 301'd to their lowercase form, per Build Spec §14.
@@ -81,19 +90,27 @@ export async function proxy(request: NextRequest) {
   if (/[A-Z]/.test(pathname)) {
     const url = request.nextUrl.clone();
     url.pathname = pathname.toLowerCase();
-    return NextResponse.redirect(url, 308);
+    return applyIndexingPolicy(NextResponse.redirect(url, 301), request);
   }
 
   // Redirects next — a legacy URL should never reach a route handler.
-  if (!pathname.startsWith("/admin")) {
+  if (supabaseConfigured && !pathname.startsWith("/admin")) {
     const hit = (await getRedirects()).get(normalise(pathname));
     if (hit) {
       const url = new URL(hit.destination, request.url);
-      return NextResponse.redirect(url, hit.permanent ? 308 : 307);
+      if (!url.search && request.nextUrl.search) {
+        url.search = request.nextUrl.search;
+      }
+      return applyIndexingPolicy(
+        NextResponse.redirect(url, hit.permanent ? 301 : 302),
+        request
+      );
     }
   }
 
-  let response = NextResponse.next({ request });
+  let response = applyIndexingPolicy(NextResponse.next({ request }), request);
+
+  if (!supabaseConfigured) return response;
 
   const supabase = createServerClient(SUPABASE_URL, SUPABASE_ANON_KEY, {
     cookies: {
@@ -104,7 +121,10 @@ export async function proxy(request: NextRequest) {
         for (const { name, value } of cookiesToSet) {
           request.cookies.set(name, value);
         }
-        response = NextResponse.next({ request });
+        response = applyIndexingPolicy(
+          NextResponse.next({ request }),
+          request
+        );
         for (const { name, value, options } of cookiesToSet) {
           response.cookies.set(name, value, options);
         }
@@ -127,7 +147,7 @@ export async function proxy(request: NextRequest) {
     const url = request.nextUrl.clone();
     url.pathname = "/admin/login";
     url.searchParams.set("next", pathname);
-    return NextResponse.redirect(url);
+    return applyIndexingPolicy(NextResponse.redirect(url), request);
   }
 
   return response;

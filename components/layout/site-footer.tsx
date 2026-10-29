@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { ArrowUpRight, Mail, MapPin, Phone } from "lucide-react";
+import { ArrowUpRight } from "lucide-react";
 import { Logo } from "@/components/ui/logo";
 import { Container } from "@/components/ui/layout";
 import { Reveal } from "@/components/motion/reveal";
@@ -13,7 +13,6 @@ export function SiteFooter({
   site: SiteConfig["site"];
   nav: SiteConfig["footerNav"];
 }) {
-  const year = new Date().getFullYear();
   /*
    * Build Spec §8 puts the legal links in the bottom bar. They appear only for
    * policies that can actually be served: a footer link to a 404 is worse than
@@ -36,30 +35,42 @@ export function SiteFooter({
               {site.footerBlurb}
             </p>
 
-            <div className="flex flex-col gap-2.5 text-[0.88rem]">
-              <a
-                href={`mailto:${site.email}`}
-                className="group inline-flex items-start gap-2.5 text-white/75 transition-colors hover:text-teal"
-              >
-                <Mail size={15} aria-hidden="true" className="mt-1 shrink-0" />
-                <span className="break-all">{site.email}</span>
-              </a>
-              <a
-                href={site.phoneHref}
-                className="inline-flex items-center gap-2.5 text-white/75 transition-colors hover:text-teal"
-              >
-                <Phone size={15} aria-hidden="true" className="shrink-0" />
-                {site.phone}
-              </a>
-              <p className="inline-flex items-center gap-2.5 text-white/45">
-                <MapPin size={15} aria-hidden="true" className="shrink-0" />
-                {site.locality}, {site.region}
-              </p>
-            </div>
+          </div>
+
+          <div className="divide-y divide-white/10 border-y border-white/10 md:hidden">
+            {footerNav.map((column) => (
+              <details key={column.heading} className="group">
+                <summary className="flex min-h-11 cursor-pointer list-none items-center justify-between py-3 font-heading text-[1rem] font-bold text-white marker:content-none">
+                  {column.heading}
+                  <span
+                    aria-hidden="true"
+                    className="text-lg text-teal transition-transform group-open:rotate-45"
+                  >
+                    +
+                  </span>
+                </summary>
+                <ul className="pb-3">
+                  {column.links.map((link) => (
+                    <li key={link.label}>
+                      <Link
+                        href={link.href}
+                        className="flex min-h-11 items-center text-[0.9rem] text-white/65 transition-colors hover:text-teal"
+                      >
+                        {link.label}
+                      </Link>
+                    </li>
+                  ))}
+                </ul>
+              </details>
+            ))}
           </div>
 
           {footerNav.map((column) => (
-            <nav key={column.heading} aria-label={column.heading}>
+            <nav
+              key={column.heading}
+              aria-label={column.heading}
+              className="hidden md:block"
+            >
               <h2 className="mb-5 font-heading text-[1rem] font-bold text-white">
                 {column.heading}
               </h2>
@@ -87,25 +98,24 @@ export function SiteFooter({
 
       <div className="relative border-t border-white/10">
         <Container className="flex flex-col gap-3 py-6 text-[0.8rem] text-white/40 sm:flex-row sm:items-center sm:justify-between">
-          <p>
-            &copy; {year} {site.name}. All rights reserved.
-          </p>
-
-          <div className="flex flex-wrap items-center gap-x-4 gap-y-2">
+          <div className="flex flex-wrap items-center gap-x-2">
+            <p>&copy; {site.name}</p>
             {policies.map((policy) => (
-              <Link
-                key={policy.slug}
-                href={policy.slug}
-                className="transition-colors hover:text-teal"
-              >
-                {policy.title}
-              </Link>
+              <span key={policy.slug} className="inline-flex items-center gap-2">
+                <span aria-hidden="true">&middot;</span>
+                <Link
+                  href={policy.slug}
+                  className="inline-flex min-h-11 items-center transition-colors hover:text-teal sm:min-h-0"
+                >
+                  {policy.title}
+                </Link>
+              </span>
             ))}
-            <p>
-              {site.locality}, {site.region} &middot; Serving the Greater
-              Houston area
-            </p>
           </div>
+          <p>
+            {site.locality}, {site.region} &middot; Serving the Greater Houston
+            area
+          </p>
         </Container>
       </div>
     </footer>

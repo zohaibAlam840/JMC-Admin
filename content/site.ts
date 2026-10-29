@@ -109,9 +109,8 @@ export const mainNav: NavItem[] = [
 /**
  * Footer columns two to four — Global Build Spec §8.
  *
- * Column one is the reversed logo, the positioning line, the phone number and
- * the email address. The footer component builds that from the site details
- * above rather than from a link list, so it is not represented here.
+ * Column one is the reversed logo and the positioning line. Contact details
+ * live in the Company column, following Decisions Record §4.
  *
  * SEO Reporting sits in column two and nowhere in the nav, by design.
  *
@@ -165,10 +164,11 @@ export const footerNav: {
   {
     heading: "Company",
     links: [
-      { label: "Monthly SEO Packages", href: "/monthly-seo-packages" },
-      { label: "Launch Sprints", href: "/launch-sprints" },
       { label: "About", href: "/about" },
       { label: "Contact", href: "/contact" },
+      { label: "Request a Visibility Review", href: "/contact" },
+      { label: site.email, href: `mailto:${site.email}` },
+      { label: site.phone, href: site.phoneHref },
     ],
   },
 ];

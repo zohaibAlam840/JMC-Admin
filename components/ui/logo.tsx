@@ -71,7 +71,7 @@ export function Logo({
   return (
     <Link
       href="/"
-      aria-label="Jordan Marketing Consultants — home"
+      aria-label="Jordan Marketing Consultants, home"
       className={cn(
         // w-fit stops the mark stretching when it sits in a flex column (the
         // footer), since an explicit width beats align-items: stretch. Do NOT

@@ -11,6 +11,7 @@
     "sql:bundle": "tsx scripts/bundle-sql.ts",
     "sql:apply": "tsx scripts/generate-apply.ts",
     "check": "tsx scripts/check-content.ts",
+    "check:forms": "tsx scripts/check-forms.ts",
     "sql:page": "tsx scripts/generate-page-sql.ts",
     "sql:pending": "tsx scripts/generate-apply.ts && tsx scripts/sql-pending.ts"
   },

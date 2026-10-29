@@ -26,7 +26,7 @@ export function JsonLd({ data }: { data: object }) {
 export function localBusinessSchema(site: SiteDetails = fileSite) {
   return {
     "@context": "https://schema.org",
-    "@type": "ProfessionalService",
+    "@type": ["Organization", "LocalBusiness"],
     "@id": `${site.url}/#organization`,
     name: site.name,
     description: site.positioning,

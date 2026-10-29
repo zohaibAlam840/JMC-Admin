@@ -190,6 +190,14 @@ const showcaseCards: Field = {
   },
 };
 
+const collageCards: Field = {
+  ...showcaseCards,
+  name: "collage",
+  label: "Floating hero cards",
+  max: 5,
+  help: "Optional abstract cards around the centered hero copy. Describe scope only, never claimed results.",
+};
+
 /* --------------------------------------------------------------- schemas -- */
 
 export const SECTION_SCHEMAS = [
@@ -240,6 +248,7 @@ export const SECTION_SCHEMAS = [
         help: "Leave empty where the section directly below the hero is the action, as on the Industries hub.",
       },
       { name: "secondaryCta", label: "Secondary button", kind: "cta", optional: true },
+      collageCards,
     ],
     defaults: {
       eyebrow: "Eyebrow",
@@ -318,7 +327,26 @@ export const SECTION_SCHEMAS = [
             help: "Shown above the body in the accent colour. Keep it to a price or a short qualifier.",
           },
           { name: "body", label: "Body", kind: "textarea", optional: true },
+          {
+            name: "items",
+            label: "Bullet points",
+            kind: "stringList",
+            optional: true,
+            help: "One short, scannable point per line.",
+          },
           { name: "icon", label: "Icon", kind: "icon", optional: true },
+          {
+            name: "visual",
+            label: "Card illustration",
+            kind: "select",
+            optional: true,
+            options: [
+              {
+                value: "searchGrid",
+                label: "Local search grid (illustration only)",
+              },
+            ],
+          },
           {
             name: "href",
             label: "Whole card links to",
@@ -972,7 +1000,7 @@ export const SECTION_SCHEMAS = [
         name: "source",
         label: "Lead source tag",
         kind: "text",
-        help: "How this form is labelled in the enquiry list. Keep it different from the Visibility Review form so the two lead types stay separable.",
+        help: "How this form is labeled in the inquiry list. Keep it different from the Visibility Review form so the two lead types stay separable.",
       },
     ],
     defaults: {
@@ -980,7 +1008,7 @@ export const SECTION_SCHEMAS = [
       heading: "Get a free look at your profile",
       body: "A written audit of the profile and the site behind it.",
       note: "No call required.",
-      submitLabel: "Get a Free Google Business Profile Audit",
+      submitLabel: "Get a Free Visibility Audit",
       profileHelp: "Optional. Paste the map listing link if handy.",
       source: "Free Visibility Audit",
     },

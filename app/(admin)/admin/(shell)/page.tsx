@@ -126,7 +126,7 @@ export default async function AdminHome({ searchParams }: PageProps<"/admin">) {
           href="/admin/leads"
           icon={<Inbox size={17} />}
           value={overview.leads}
-          label="Enquiries"
+          label="Inquiries"
           note={overview.newLeads ? `${overview.newLeads} new` : "None new"}
         />
       </div>

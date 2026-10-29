@@ -151,7 +151,9 @@
   h1,
   h2,
   h3,
-  h4 {
+  h4,
+  h5,
+  h6 {
     font-family: var(--font-heading);
     font-variation-settings: "wdth" 80;
     color: var(--color-ink-strong);
@@ -198,7 +200,9 @@
 
   .article-body h2,
   .article-body h3,
-  .article-body h4 {
+  .article-body h4,
+  .article-body h5,
+  .article-body h6 {
     line-height: 1.15;
   }
 
