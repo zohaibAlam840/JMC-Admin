@@ -104,6 +104,14 @@ const nextConfig: NextConfig = {
    */
   trailingSlash: true,
 
+  /*
+   * Next's built-in slash redirect runs before the legacy redirect map. That
+   * turns a request such as /seo-packages into a 308 followed by the intended
+   * 301. The proxy below owns the generic slash redirect instead, after it
+   * has had a chance to send legacy paths straight to their final URL.
+   */
+  skipTrailingSlashRedirect: true,
+
   async redirects() {
     return [
       ...LEGACY_REDIRECTS.map(({ source, destination }) => ({

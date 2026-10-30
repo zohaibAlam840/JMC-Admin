@@ -37,8 +37,8 @@ export function NotFoundBody() {
   return (
     <>
       {/*
-       * noindex, set here rather than through the metadata API: a not-found
-       * boundary cannot export metadata, and React hoists this into the head.
+       * noindex is also emitted inline as a defensive fallback. The catch-all
+       * segment layout supplies the 404 title and robots metadata.
        */}
       <meta name="robots" content="noindex" />
 

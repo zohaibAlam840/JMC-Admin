@@ -45,8 +45,28 @@ where key = 'faq'
     where item ->> 'question' = 'What are Strategic SEO Pages?'
   );
 
--- Monthly Packages: neutral middle-tier emphasis and US spelling, while
--- preserving the live single onboarding section.
+-- Monthly Packages: keep the hero informational, use the approved positive
+-- closing heading, retain neutral middle-tier emphasis, and use US spelling.
+-- These field-level updates preserve the live single onboarding section.
+update public.sections
+set data = data - 'primaryCta' - 'secondaryCta' - 'cta'
+where key = 'hero'
+  and page_id = (
+    select id from public.pages where slug = '/monthly-seo-packages'
+  );
+
+update public.sections
+set data = jsonb_set(
+  data,
+  '{heading}',
+  to_jsonb('Start With a Visibility Review'::text),
+  true
+)
+where key = 'final-cta'
+  and page_id = (
+    select id from public.pages where slug = '/monthly-seo-packages'
+  );
+
 update public.packages
 set featured = (id = 'traditional-national')
 where id in (
@@ -63,7 +83,28 @@ where key = 'faq'
     select id from public.pages where slug = '/monthly-seo-packages'
   );
 
--- Launch Sprints: the audited US-spelling correction only.
+-- Launch Sprints: replace the remaining older comparison-heavy paragraph and
+-- apply the audited US-spelling correction without rebuilding the page.
+update public.sections
+set data = jsonb_set(
+  data,
+  '{body}',
+  to_jsonb(
+    $copy$A Launch Sprint is a single piece of SEO work with a start date, an end date, and a list agreed before anything begins. It is not a trial of monthly service, and it is not a discounted version of it.
+
+It brings the foundational work into one defined engagement: the audit, technical and on-page fixes, and the setup that should be in place before ongoing work begins.
+
+The scope and finish date are agreed at the start, so a business can establish the foundation without committing to a year of service.
+
+At the end, the completed work and a written roadmap show what to do next. The roadmap remains useful whether the next step is monthly service, an internal team, or a pause.$copy$::text
+  ),
+  true
+)
+where key = 'what-a-sprint-is'
+  and page_id = (
+    select id from public.pages where slug = '/launch-sprints'
+  );
+
 update public.sections
 set data = replace(data::text, 'itemised', 'itemized')::jsonb
 where data::text like '%itemised%'

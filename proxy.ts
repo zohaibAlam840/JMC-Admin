@@ -108,6 +108,26 @@ export async function proxy(request: NextRequest) {
     }
   }
 
+  /*
+   * Keep the site's trailing-slash convention without introducing a redirect
+   * before the legacy map. Only safe document requests are redirected here;
+   * file-like paths are left alone and POST bodies are never redirected.
+   */
+  const isDocumentRequest = request.method === "GET" || request.method === "HEAD";
+  const isFilePath = /\/[^/]+\.[^/]+$/.test(pathname);
+  if (
+    isDocumentRequest &&
+    pathname !== "/" &&
+    !pathname.endsWith("/") &&
+    !isFilePath
+  ) {
+    // A plain URL is intentional here. NextURL keeps the incoming pathname's
+    // trailing-slash state and can serialize `/contact/` back to `/contact`.
+    const url = new URL(request.url);
+    url.pathname = `${pathname}/`;
+    return applyIndexingPolicy(NextResponse.redirect(url, 308), request);
+  }
+
   let response = applyIndexingPolicy(NextResponse.next({ request }), request);
 
   if (!supabaseConfigured) return response;

@@ -27,7 +27,13 @@ function toSlug(segments: string[]) {
 export async function generateMetadata({ params }: PageProps<"/[...slug]">) {
   const { slug } = await params;
   const page = await getPage(toSlug(slug));
-  return page ? buildMetadata(page) : {};
+  return page
+    ? buildMetadata(page)
+    : {
+        title: "Page Not Found | Jordan Marketing Consultants",
+        description: "The requested page could not be found.",
+        robots: { index: false, follow: false },
+      };
 }
 
 export default async function Page({ params }: PageProps<"/[...slug]">) {
