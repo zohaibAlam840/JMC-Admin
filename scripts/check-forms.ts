@@ -6,7 +6,6 @@ import {
   verifyFormToken,
 } from "../lib/leads/security";
 import {
-  hasHoneypotValue,
   validateAuditLead,
   validateContactLead,
 } from "../lib/leads/validation";
@@ -87,10 +86,6 @@ const badAudit = validateAuditLead(
 assert(!badAudit.lead);
 assert(badAudit.errors.website);
 
-assert(
-  hasHoneypotValue(data({ company_website: "https://spam.example" })),
-  "the honeypot must be detected server-side"
-);
 
 const now = 1_800_000_000_000;
 const submissionId = "018f1f0e-7b2b-4d0a-8f4d-f4f935862f09";
@@ -102,8 +97,8 @@ assert.deepEqual(verifyFormToken(validToken, "contact", now), {
 assert.equal(
   verifyFormToken(createFormToken("contact", now, submissionId), "contact", now)
     .ok,
-  false,
-  "sub-three-second submissions must fail the signed timing check"
+  true,
+  "a freshly issued signed token is valid immediately"
 );
 assert.equal(
   verifyFormToken(validToken, "audit", now).ok,

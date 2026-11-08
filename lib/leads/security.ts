@@ -5,7 +5,6 @@ import {
 } from "node:crypto";
 import type { LeadType, PackageTier } from "./validation";
 
-const MINIMUM_COMPLETION_MS = 3000;
 const MAXIMUM_FORM_AGE_MS = 24 * 60 * 60 * 1000;
 const CONVERSION_LIFETIME_MS = 10 * 60 * 1000;
 
@@ -21,7 +20,7 @@ type FormTokenPayload = {
 
 export type FormTokenResult =
   | { ok: true; submissionId: string }
-  | { ok: false; reason: "unconfigured" | "invalid" | "too_fast" | "expired" };
+  | { ok: false; reason: "unconfigured" | "invalid" | "expired" };
 
 type ConversionPayload = {
   leadId: string;
@@ -106,7 +105,6 @@ export function verifyFormToken(
   }
 
   const age = now - payload.issuedAt;
-  if (age < MINIMUM_COMPLETION_MS) return { ok: false, reason: "too_fast" };
   if (age > MAXIMUM_FORM_AGE_MS) return { ok: false, reason: "expired" };
 
   return { ok: true, submissionId: payload.submissionId };

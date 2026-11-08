@@ -97,18 +97,6 @@ export function LeadForm({
        * that carried through for attribution.
        */}
       <input type="hidden" name="tier" value={tier} />
-      {/* Honeypot. Hidden from people, tempting to bots. */}
-      <div aria-hidden="true" className="absolute left-[-9999px]">
-        <label htmlFor="company_website">Leave this field empty</label>
-        <input
-          id="company_website"
-          name="company_website"
-          type="text"
-          tabIndex={-1}
-          autoComplete="off"
-        />
-      </div>
-
       {/* Whole-form failure — the request could not be stored at all. */}
       {e.form ? (
         <p

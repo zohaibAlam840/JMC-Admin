@@ -228,7 +228,3 @@ export function validateAuditLead(formData: FormData): LeadValidation {
     },
   };
 }
-
-export function hasHoneypotValue(formData: FormData): boolean {
-  return Boolean(formString(formData, "company_website"));
-}

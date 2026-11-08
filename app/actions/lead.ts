@@ -12,7 +12,6 @@ import {
 } from "@/lib/leads/security";
 import { storeLead } from "@/lib/leads/store";
 import {
-  hasHoneypotValue,
   validateAuditLead,
   validateContactLead,
   type LeadValues,
@@ -103,9 +102,6 @@ export async function submitLead(
   const isSprint = formString(formData, "type") === "sprint";
   const confirmation = isSprint ? "/thank-you?type=sprint" : "/thank-you";
 
-  // Honeypot traffic receives an ordinary success-shaped response but is never
-  // stored, emailed, or counted as a conversion.
-  if (hasHoneypotValue(formData)) redirect(confirmation);
 
   const validation = validateContactLead(formData);
   if (!validation.lead) {
@@ -114,14 +110,27 @@ export async function submitLead(
 
   const token = verifyFormToken(formString(formData, "formToken"), "contact");
   if (!token.ok) {
-    if (token.reason === "too_fast") redirect(confirmation);
+    console.warn("[lead] form token rejected", { reason: token.reason });
     return tokenError(token.reason, validation.values);
   }
 
   const stored = await persistValidatedLead(validation.lead, token.submissionId);
   if (!stored.ok) {
-    if (stored.reason === "rate_limited" || stored.reason === "duplicate") {
-      redirect(confirmation);
+    console.warn("[lead] submission not saved", {
+      type: validation.lead.leadType,
+      reason: stored.reason,
+    });
+    if (stored.reason === "rate_limited") {
+      return {
+        errors: { form: "Too many requests. Please wait 15 minutes and try again." },
+        values: validation.values,
+      };
+    }
+    if (stored.reason === "duplicate") {
+      return {
+        errors: { form: "This form was already submitted. Reload it to send a new request." },
+        values: validation.values,
+      };
     }
     return storageError(validation.values);
   }
@@ -139,7 +148,6 @@ export async function submitAudit(
   formData: FormData
 ): Promise<LeadState> {
   const confirmation = "/thank-you?type=audit";
-  if (hasHoneypotValue(formData)) redirect(confirmation);
 
   const validation = validateAuditLead(formData);
   if (!validation.lead) {
@@ -148,14 +156,27 @@ export async function submitAudit(
 
   const token = verifyFormToken(formString(formData, "formToken"), "audit");
   if (!token.ok) {
-    if (token.reason === "too_fast") redirect(confirmation);
+    console.warn("[lead] form token rejected", { reason: token.reason });
     return tokenError(token.reason, validation.values);
   }
 
   const stored = await persistValidatedLead(validation.lead, token.submissionId);
   if (!stored.ok) {
-    if (stored.reason === "rate_limited" || stored.reason === "duplicate") {
-      redirect(confirmation);
+    console.warn("[lead] submission not saved", {
+      type: validation.lead.leadType,
+      reason: stored.reason,
+    });
+    if (stored.reason === "rate_limited") {
+      return {
+        errors: { form: "Too many requests. Please wait 15 minutes and try again." },
+        values: validation.values,
+      };
+    }
+    if (stored.reason === "duplicate") {
+      return {
+        errors: { form: "This form was already submitted. Reload it to send a new request." },
+        values: validation.values,
+      };
     }
     return storageError(validation.values);
   }

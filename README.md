@@ -59,8 +59,7 @@ Admin writes run as the signed-in user and are bounded by row level security in
 Postgres. `proxy.ts` gates `/admin` optimistically for the sake of a clean
 redirect; `requireAdmin()` and RLS are what actually enforce it.
 
-Public forms use a separate, server-only boundary. A signed render token proves
-the minimum completion time, the server validates and normalizes every field,
+Public forms use a separate, server-only boundary. The server verifies a signed form token, validates and normalizes every field,
 and a service-only Postgres function applies replay protection and a five-per-15
 minute rate limit before writing the lead. The service role key never reaches
 the browser. Anonymous visitors have no direct insert permission on `leads`.

@@ -77,18 +77,6 @@ export function AuditFormFields({
     <form action={action} className="flex flex-col gap-5" aria-busy={pending}>
       <input type="hidden" name="formToken" value={formToken} />
 
-      {/* Honeypot. Hidden from people, irresistible to bots. */}
-      <div aria-hidden="true" className="absolute left-[-9999px]">
-        <label htmlFor="audit-company-website">Company website</label>
-        <input
-          id="audit-company-website"
-          type="text"
-          name="company_website"
-          tabIndex={-1}
-          autoComplete="off"
-        />
-      </div>
-
       {e.form ? (
         <p
           role="alert"
